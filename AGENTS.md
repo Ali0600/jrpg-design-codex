@@ -135,7 +135,28 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   persists in `localStorage` under key `jrpg_codex_v1`, merged over the base arrays at
   runtime via `store.overrides`. Export/Import backup buttons serialize this to JSON.
   IMPORTANT: base-array edits are safe; renaming/removing IDs breaks user overrides.
-- Tabs: Mechanics / Minigames / Games / Design Pillars / How to Use.
+- Tabs: Mechanics / Minigames / Games / **My Game** / Design Pillars / How to Use.
+- **My Game tab** — the codex's output surface. Every effective `want:"Yes"` mechanic
+  (plus `Maybe` behind a toggle) is placed into one of six system buckets defined by
+  the `BUCKETS` const (discovery / combat / progress / venues / world / parked), each
+  with a free-text design note. Persists as `store.myGame = {assign:{mechId->bucket},
+  notes:{bucket->text}}`. **`normalizeStore()` backfills every store slot on load AND
+  on import** — backups predate newer keys, and without it a restored v1 backup makes
+  the board throw on `store.myGame.assign`. Add new store keys THERE, not just to the
+  literal, or import breaks.
+- **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
+  (like CATS). Mechanics carry an optional `verbs:[...]`; 32 are tagged, seeded from
+  the brief's own verb->mechanic table so the mapping is sourced, not invented. Filter
+  chips live in a collapsed `<details>` on the Mechanics tab.
+- **`LINEAGES`** — chains of mechanics where each game answers the previous one.
+  Rendered under the Design Pillars tab; clicking a node jumps to that mechanic. An
+  optional `counter:"<id>"` marks a chain's counter-example (Tetra Master ends the
+  collection chain) — it renders RED and moves the green "worth stealing" marker to
+  the previous node. Without that flag the styling asserts the opposite of the note.
+- Minigame videos: base rows never hardcode a video id (they rot). The owner can pin
+  a specific URL per minigame, stored in `store.overrides[gID].yt` and validated by
+  `cleanYt()` — https + a real YouTube host + an actual video id, so a stray paste
+  can't put a `javascript:` URL behind a link they'll click later.
 - Minigame cards link to YouTube via `ytLink()` (search-query URLs, never hardcoded
   video IDs — they don't rot).
 
