@@ -233,6 +233,49 @@
   }
   .pillar .test b{color:var(--gold); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; display:block; margin-bottom:3px;}
 
+  /* ---------- discovery verbs ---------- */
+  .verb-box{margin-top:10px; border-top:1px solid var(--line-soft); padding-top:10px;}
+  .verb-box summary{
+    cursor:pointer; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-faint); list-style:none; user-select:none;
+  }
+  .verb-box summary::-webkit-details-marker{display:none;}
+  .verb-box summary::before{content:"▸ "; color:var(--steel);}
+  .verb-box[open] summary::before{content:"▾ ";}
+  .verb-box summary:hover{color:var(--ink-dim);}
+  .verb-box .vhint{text-transform:none; letter-spacing:0; font-size:12px; color:var(--ink-faint);}
+  .verb-box .frow{margin-top:10px;}
+  .chip.verb.on{background:#2a2140; border-color:var(--purple); color:#fff;}
+  .verb-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:7px;}
+  .verb-tag{
+    font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--purple); border:1px solid #4a3a72; border-radius:4px; padding:2px 7px;
+  }
+
+  /* ---------- lineages ---------- */
+  .section-h{
+    font-family:"Palatino Linotype", Palatino, Georgia, serif;
+    font-size:22px; margin:30px 0 4px; color:#eef3ff;
+  }
+  .lineage{padding:18px 20px; margin-bottom:16px;}
+  .lineage h3{font-size:17px; color:#eef3ff; margin-bottom:4px;}
+  .lineage .chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; margin:12px 0 4px;}
+  .lin-node{
+    background:#0e1526; border:1px solid var(--line); border-radius:7px;
+    padding:8px 11px; min-width:0; flex:1 1 140px;
+    font:inherit; color:var(--ink); text-align:left; cursor:pointer;
+  }
+  .lin-node:hover{border-color:var(--steel); background:#131c31;}
+  .lin-node .lin-game{font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-faint);}
+  .lin-node .lin-name{font-size:13px; color:var(--ink); margin-top:2px;}
+  .lin-node.last{border-color:var(--green);}
+  .lin-node.last .lin-name{color:var(--green);}
+  .lin-node.counter{border-color:#5f2b2b; background:rgba(248,113,113,.05);}
+  .lin-node.counter .lin-name{color:var(--red);}
+  .lin-tag{font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin-top:3px;}
+  .lin-arrow{align-self:center; color:var(--steel); font-size:13px;}
+  @media (max-width:640px){ .lin-arrow{display:none;} }
+
   /* ---------- my game ---------- */
   .mine-strip{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;}
   .mine-tally{
@@ -333,6 +376,10 @@
         </select>
       </div>
       <div class="frow" id="catChips"></div>
+      <details class="verb-box">
+        <summary>Filter by discovery verb <span class="vhint">— how the reward is found, not what it is</span></summary>
+        <div class="frow" id="verbChips"></div>
+      </details>
     </div>
 
     <div class="toolbar">
@@ -423,7 +470,12 @@
   </section>
 
   <!-- ================= PILLARS ================= -->
-  <section class="view" id="view-pillars"><div id="pillarCards"></div></section>
+  <section class="view" id="view-pillars">
+    <div id="pillarCards"></div>
+    <h2 class="section-h">Lineages</h2>
+    <p class="count-note">Chains where each game answers the one before it. Green marks the node worth stealing from; red marks a counter-example. Click any node to open that mechanic.</p>
+    <div id="lineageCards"></div>
+  </section>
 
   <!-- ================= GUIDE ================= -->
   <section class="view guide" id="view-guide">
@@ -468,6 +520,38 @@ const CATS = {
   "Meta & Replayability":"#9aa8c8"
 };
 const FF="Final Fantasy VII Rebirth", ER="Elden Ring";
+
+/* The 15 discovery verbs from GAME_PROMPT_V2 §3. The rule they exist to serve:
+   the player must never be able to predict the SHAPE of the next reward. Filter
+   by one to see every game that already solved it. */
+const VERBS = {
+  "Visible but unreachable":"You can see it — the route is the puzzle.",
+  "Latent geometry":"Something reveals a path or platform that wasn't there.",
+  "Guarded":"An elite sits on it.",
+  "Traded":"An NPC wants something you found somewhere else.",
+  "The wanderer":"An NPC who moves; find them again and hand in your running total.",
+  "Challenge gauntlet":"An escalating arena — cash out early or push deeper.",
+  "Heard, not seen":"Led by sound or warmth rather than sight.",
+  "Tool-gated":"Only reachable once you own the tool, mount or verb.",
+  "Vista sketch":"A picture of a real place; recognise the vantage and go stand in it.",
+  "Inscription deduction":"A clue states a rule; you apply it somewhere else.",
+  "Consequence":"Helping someone changes what exists in the world.",
+  "A second layer":"A mirrored map — go beneath, above, or into another time.",
+  "The fleeing rare":"A rare creature that bolts; catch it for something good.",
+  "Shop stock":"Merchants rotate rare goods — every shop is a pull.",
+  "Mastery reveal":"Level the act of exploring, and it shows you more.",
+};
+
+/* Chains where one game clearly answers another. Rendered on the Design Pillars
+   tab; the last node of a chain is usually the one worth stealing from. */
+const LINEAGES = [
+  {name:"The timing lineage", ids:["M198","M133","M163","M080","M161"],
+   note:"Super Mario RPG invented the timed hit in 1996 and every entry since has asked what else the button press can pay for. Legend of Dragoon made it a chain you can drop; Shadow Hearts put every action on one ring; Sea of Stars made the timing generate mana. Clair Obscur is the one that matters here — it moved the skill expression to DEFENCE, so knowing a boss's whole moveset converts directly into resources."},
+  {name:"The place that becomes yours", ids:["M137","M122","M109","M201","M166","M221","M224","M083","M233"],
+   note:"Your strongest cluster. All nine turn exploration into construction, but they differ in what the world reads back: Suikoden II and Xenoblade grow a place, Dark Cloud 2 and Legend of Mana let you author its layout, and Ys VIII goes furthest — the village population is a NUMBER the map itself checks, so rescuing people is literally the traversal upgrade."},
+  {name:"Collection that converts into power", ids:["M212","M214","M146","M158","M235","M160","M131"], counter:"M131",
+   note:"The test you apply to every collectible: does owning it change what you can DO? Golden Sun gets four systems out of one creature; Clair Obscur's Pictos hand the ability to the whole party and give the slot back. Tetra Master sits at the end as the counter-example — hundreds of cards that never convert into anything, which is the failure to design against."},
+];
 
 const BASE_MECHS = [
 {id:"M001",game:FF,name:"Materia System",cat:"Progression & Upgrades",
@@ -543,7 +627,7 @@ notes:"Great \u201corganic guide\u201d pattern: instead of map markers, a living
 how:"Rare elite monster variants roam the overworld. Each fight has 3 optional objectives (e.g., stagger it, win before a certain move) that multiply the rewards and unlock combat simulator content.",
 loop:"Optional challenge tiers inside the encounter → skilled play is directly paid → the same content rewards casual and expert players differently.",
 rating:0,want:"",notes:""},
-{id:"M016",game:FF,name:"Classified Intel (regional secret boss)",cat:"Exploration & Rewards",
+{id:"M016",verbs:["Guarded"],game:FF,name:"Classified Intel (regional secret boss)",cat:"Exploration & Rewards",
 how:"Completing all lifesprings in a region reveals a hidden legendary monster. It drops materials found nowhere else and unlocks new enemy-skill learning fights.",
 loop:"Thorough exploration → an exclusive climactic challenge → exclusive rewards → completionism gets a boss fight as its trophy.",
 rating:0,want:"Maybe",
@@ -567,7 +651,7 @@ notes:"Pattern: local collectibles that also feed ONE big global prize."},
 how:"Hidden moogle houses with a herding minigame. Each clear raises your Emporium level, unlocking new stock (manuscripts, materia, gear) purchasable with Moogle Medals earned from minigames.",
 loop:"Find a secret spot → play a toy challenge → a SHOP grows → the reward is expanded purchasing options, which chain into further upgrades.",
 rating:0,want:"",notes:""},
-{id:"M021",game:FF,name:"Chocobo Intel (regional mounts with unique traversal)",cat:"Traversal",
+{id:"M021",verbs:["Tool-gated"],game:FF,name:"Chocobo Intel (regional mounts with unique traversal)",cat:"Traversal",
 how:"Each region has a stealth challenge to capture its native chocobo, which has a region-specific traversal power (gliding, wall-climbing, water-walking) required to reach that region's secrets.",
 loop:"Earn the mount → previously visible-but-unreachable places open up → the map itself is an upgrade tree.",
 rating:5,want:"Yes",
@@ -600,12 +684,12 @@ notes:"Reminder for your design: \u201creward\u201d can be story, intimacy, and 
 how:"Finishing the game unlocks chapter select with all progress retained. Hard mode bans items, gives bosses new moves, and drops exclusive manuscripts needed to max folios.",
 loop:"Full character completion REQUIRES mastering hard mode → replay is an upgrade path, not a reset.",
 rating:0,want:"",notes:""},
-{id:"M028",game:ER,name:"Paintings → vista treasure",cat:"Exploration & Rewards",
+{id:"M028",verbs:["Vista sketch"],game:ER,name:"Paintings → vista treasure",cat:"Exploration & Rewards",
 how:"Find a painting in a ruin; it depicts a real location somewhere in the world. Travel there, identify the painted vantage point, and a ghost appears with a reward on the spot.",
 loop:"Discovery creates a riddle → the WORLD is the answer key → solving it with your own eyes pays off with an item. A reward for paying attention to scenery.",
 rating:5,want:"Yes",
 notes:"You flagged this as a favorite. The genius: it rewards knowing the world, not clearing a marker. Your version could use sketches, photos, songs, or NPC rumors that describe places visually."},
-{id:"M029",game:ER,name:"Unmarked world density (every landmark pays off)",cat:"Exploration & Rewards",
+{id:"M029",verbs:["Visible but unreachable"],game:ER,name:"Unmarked world density (every landmark pays off)",cat:"Exploration & Rewards",
 how:"No quest markers or checklists. Every ruin, cave, and odd silhouette on the horizon reliably contains SOMETHING — a boss, a talisman, a crafting book, an NPC. Trust is built through consistency.",
 loop:"See an interesting shape → go there → always rewarded → curiosity itself becomes the quest log.",
 rating:0,want:"Maybe",
@@ -654,7 +738,7 @@ how:"Each character's ultimate weapon is found in the world, then powered up by 
 loop:"Find the legend → chase its two keys through wildly different world challenges → the strongest weapons exist only for players who engage with the whole world.",
 rating:0,want:"Maybe",
 notes:"Ultimate gear as a scavenger hunt across every system. Caution: FFX's versions are infamously frustrating (lightning dodging) — keep the structure, tune the challenges."},
-{id:"M039",game:"Final Fantasy X",name:"Al Bhed Primers (language collectible)",cat:"Exploration & Rewards",
+{id:"M039",verbs:["Inscription deduction"],game:"Final Fantasy X",name:"Al Bhed Primers (language collectible)",cat:"Exploration & Rewards",
 how:"26 primer volumes scattered across the world each permanently translate one letter of the Al Bhed language. NPC dialogue written in Al Bhed gradually becomes readable as you collect them.",
 loop:"Explore → find a primer → the world's dialogue literally becomes more comprehensible → knowledge itself is the loot.",
 rating:0,want:"Yes",
@@ -729,7 +813,7 @@ how:"Party members equip Hero classes and rank them up; ranks unlock that class'
 loop:"Master a class → its pieces become permanent LEGO for every other build → story quests raise the ceiling.",
 rating:0,want:"",
 notes:"Progression whose payoff is build-crafting freedom: mastered content converts into reusable components."},
-{id:"M054",game:"Xenoblade Chronicles 3",name:"Traversal skills taught by Heroes",cat:"Traversal",
+{id:"M054",verbs:["Tool-gated"],game:"Xenoblade Chronicles 3",name:"Traversal skills taught by Heroes",cat:"Traversal",
 how:"Field skills — wall climbing, rope sliding, scree walking, hazard neutralization — are taught by specific recruited Heroes. Terrain throughout the world is gated by them; containers and paths visibly tease locked routes.",
 loop:"Recruit → the map's locked verbs open → revisit old regions with new reach.",
 rating:0,want:"Yes",
@@ -804,7 +888,7 @@ how:"Hundreds of caves each hide exactly one glowing Bubbulfrog; its gems trade 
 loop:"Spot a cave → always find one glowing creature → dedicated currency → exclusive shop. A guaranteed prize makes every cave worth entering.",
 rating:0,want:"",
 notes:"The “exactly one per cave” rule creates perfect trust: players always know there's a payoff and when they're done."},
-{id:"M069",game:"The Legend of Zelda: Tears of the Kingdom",name:"Depths + Lightroots (mirrored map knowledge)",cat:"Exploration & Rewards",
+{id:"M069",verbs:["A second layer"],game:"The Legend of Zelda: Tears of the Kingdom",name:"Depths + Lightroots (mirrored map knowledge)",cat:"Exploration & Rewards",
 how:"A vast dark underworld mirrors the surface: every Lightroot below sits exactly beneath a surface shrine. Discovering either hints the other's location, and Lightroots illuminate the darkness as fast-travel nodes.",
 loop:"Learn one layer → automatically gain knowledge of the other → map mastery compounds across dimensions.",
 rating:0,want:"Maybe",
@@ -869,7 +953,7 @@ how:"Difficulty modifiers are physical relics bought or found in the world — f
 loop:"Find/buy a relic → own your difficulty settings as in-world objects → accessibility and challenge both become collectibles rather than menu shame.",
 rating:0,want:"Yes",
 notes:"Genius reframe: difficulty options as explorable LOOT. Players who want ease or pain both get rewarded paths. Trivial to build, memorable to players."},
-{id:"M082",game:"Sea of Stars",name:"Rainbow Conches → tiered trade-in",cat:"Exploration & Rewards",
+{id:"M082",verbs:["Traded"],game:"Sea of Stars",name:"Rainbow Conches → tiered trade-in",cat:"Exploration & Rewards",
 how:"60 conches hide across every area (none missable); handing them to a collector NPC pays out escalating reward tiers, and the full set grants the Rainbow Star, a requirement for the true ending.",
 loop:"Peek everywhere → conch → tiered prizes at the collector → the complete set gates the TRUE ENDING → thorough explorers get the real story.",
 rating:0,want:"Maybe",
@@ -879,7 +963,7 @@ how:"Building plans found through exploration and conch rewards construct facili
 loop:"Find plans + people → your home base physically grows → each building unlocks services and relics → exploration builds a place that's YOURS.",
 rating:0,want:"Yes",
 notes:"A base that grows from exploration loot is a powerful visible progress monument — the town is a trophy room you live in (compare Johnny's Trove)."},
-{id:"M084",game:"Sea of Stars",name:"Falcon-Eyed Parrot (earned completion tracker)",cat:"Meta & Replayability",
+{id:"M084",verbs:["Mastery reveal"],game:"Sea of Stars",name:"Falcon-Eyed Parrot (earned completion tracker)",cat:"Meta & Replayability",
 how:"A relic earned via conch trade-ins adds a parrot to the world map that reports which collectibles remain on any selected island and where.",
 loop:"Invest in exploration → unlock a tool that makes finishing exploration pleasant → completionists are given respect, not wikis.",
 rating:0,want:"Yes",
@@ -895,7 +979,7 @@ how:"Weapons, armor, and accessories each contain abilities. While a piece is eq
 loop:"Find or buy gear → wear it to study it → keep its skills forever → every piece of equipment is a school, not a stat stick, and old shops stay interesting.",
 rating:0,want:"Yes",
 notes:"The direct ancestor of FF7 Rebirth's weapon-proficiency system you love. Note the Magic Stone twist: learned passives are infinite, but SLOTTING them is budgeted — collection plus loadout decisions."},
-{id:"M087",game:"Final Fantasy IX",name:"Chocobo Hot & Cold + Chocographs",cat:"Exploration & Rewards",
+{id:"M087",verbs:["Heard, not seen","Vista sketch"],game:"Final Fantasy IX",name:"Chocobo Hot & Cold + Chocographs",cat:"Exploration & Rewards",
 how:"A digging minigame in chocobo forests uncovers Chocographs — treasure PICTURES showing a real location somewhere in the world. Deciphering the image and digging at the actual spot yields major treasure, and key finds upgrade your chocobo (reef → mountain → sea → sky forms), each form unlocking new terrain, more chocographs, and eventually the hidden Chocobo's Paradise.",
 loop:"Dig up a picture-riddle → recognize the place from its scenery → travel and dig → treasure + mount upgrades that open MORE of the map → discovery chains into traversal chains into discovery.",
 rating:0,want:"Yes",
@@ -950,7 +1034,7 @@ how:"Materia levels up with AP; when a materia reaches MASTER level, it spawns a
 loop:"Invest in an orb → master it → it reproduces → growth literally compounds, and generosity to your future self is built into the system.",
 rating:0,want:"Maybe",
 notes:"The original's twist that Rebirth dropped: upgrades that REPRODUCE at mastery. A beautiful compounding-reward idea for long games."},
-{id:"M098",game:"Final Fantasy VII (1997)",name:"Chocobo catching, racing & breeding",cat:"Exploration & Rewards",
+{id:"M098",verbs:["The fleeing rare"],game:"Final Fantasy VII (1997)",name:"Chocobo catching, racing & breeding",cat:"Exploration & Rewards",
 how:"Catch wild chocobos, race them at the Gold Saucer to raise their class, and breed pairs with rare nuts across generations to produce colored offspring — blue (rivers), green (mountains), black (both), and finally gold (cross oceans). Each color reaches otherwise-inaccessible caves holding the game's best materia (Knights of Round, Mime).",
 loop:"Catch → race → breed across generations → each generation unlocks new terrain → the ultimate rewards live behind a full husbandry-and-racing metagame.",
 rating:0,want:"Maybe",
@@ -1121,7 +1205,7 @@ how:"An arrow-based card battler playable against nearly any NPC, with a collect
 loop:"Win matches → grow a collection → ... and that's where it stops. The hunt is fun; the payoff shelf is empty.",
 rating:0,want:"Maybe",
 notes:"You hoped to find this here — and its absence of rewards is exactly the lesson. Compare FF8's Triple Triad (cards refine into best-in-game items) and Witcher 3's Gwent: a card hunt thrives when new cards visibly POWER UP the deck and the collection converts into something. Steal Tetra Master's ubiquity (everyone plays), fix its economy."},
-{id:"M132",game:"The Witcher 3",name:"Gwent (shop-hunted deck building)",cat:"Side Content & Minigames",
+{id:"M132",verbs:["Shop stock"],game:"The Witcher 3",name:"Gwent (shop-hunted deck building)",cat:"Side Content & Minigames",
 how:"A lane-based card game where your starting deck is deliberately weak and grows ONLY through acquisition: nearly every innkeeper and merchant sells a few cards, most named NPCs play exactly once for a unique card, and quests and tournaments award the rares. Checking every shop's card stock becomes second nature.",
 loop:"Enter any town → check the shopkeeper → sometimes a new card → deck visibly stronger → shops become treasure chests and the world becomes a booster box.",
 rating:0,want:"Yes",
@@ -1136,7 +1220,7 @@ how:"Landing Additions fills a Spirit Point gauge; at 100 SP a character can tra
 loop:"Fight well → earn SP → spend it to transform now OR bank it to raise the Dragoon Level → a second character sheet that grows on its own currency.",
 rating:0,want:"",
 notes:"The codex-worthy part isn't the transformation, it's that it rides a PARALLEL progression track fuelled by a different currency than XP — play skilfully and your Dragoon out-levels your character; grind trash and it barely moves. Give a marquee system its own growth meter that only fills through engaged play — perfect timing, exploration finds — so curiosity and skill are what upgrade it, not passive level-ups."},
-{id:"M135",game:"The Legend of Dragoon",name:"Stardust Collection",cat:"Exploration & Rewards",
+{id:"M135",verbs:["The wanderer"],game:"The Legend of Dragoon",name:"Stardust Collection",cat:"Exploration & Rewards",
 how:"Fifty Stardust are hidden in the scenery of nearly every town — inside wells, fireplaces, barrels and shop clutter — found only by searching, never signposted. A wandering NPC, Martel, takes your running total and hands back a unique accessory for every 10 collected. The count is world-wide and cumulative. Tiers: 10 = Physical Ring (+50% max HP); 20 = Amulet (double max MP); 30 = Wargod Sash (+50% SP gain); 40 = Rainbow Earring (immunity to all status); 50 = Vanishing Stone (unlocks the optional Disc-4 superboss Faust).",
 loop:"Search the scenery in every town → find hidden Stardust → hand your total to Martel → each 10 buys a permanent power spike → exploring the world IS the upgrade path.",
 rating:0,want:"Yes",
@@ -1156,7 +1240,7 @@ how:"Specific character pairs or trios perform a joint Unite attack when in the 
 loop:"Collect the right characters → field them together → discover a hidden combo → recruiting doubles as a combat-power treasure hunt.",
 rating:0,want:"",
 notes:"Turns the roster itself into a discovery space. You don't buy Unite attacks, you stumble onto them by having found and paired the right two people. Cheap high-value pattern: hidden synergies between collectibles (party members, cards, tools) that reward players who experiment with combinations."},
-{id:"M139",game:"Grandia",name:"Use-Based Growth: Weapon Skills & Mana-Egg Magic",cat:"Progression & Upgrades",
+{id:"M139",verbs:["Mastery reveal"],game:"Grandia",name:"Use-Based Growth: Weapon Skills & Mana-Egg Magic",cat:"Progression & Upgrades",
 how:"Weapons and magic level through USE, not shared XP. Each weapon TYPE — sword, mace, axe, whip, knife — earns its own Skill Level as you attack with it, and rising levels unlock that class's special Moves, learned by spending Skill Points won in battle. Magic mirrors this: trade a found Mana Egg to learn an element (Fire/Water/Wind/Earth), cast it repeatedly to raise that element's level, and mastering two elements together unlocks combined magic — Lightning (Fire+Wind), Blizzard (Wind+Water), Forest (Water+Earth), Explosion (Earth+Fire).",
 loop:"Swing a weapon type / cast an element → its own skill level quietly rises → unlock new Moves and combined-element spells → every attack you make is leveling a second, parallel upgrade track you never had to open a menu to feed.",
 rating:0,want:"Yes",
@@ -1201,7 +1285,7 @@ how:"The world is smothered by the Mist, which drives Seru berserk and seals reg
 loop:"Reach a withered Genesis Tree → revive it → the Mist lifts and a new region opens → the next tree becomes reachable → the map visibly heals as you push forward.",
 rating:0,want:"",
 notes:"Your 'world rewards exploration' macro-loop with a 'discovery breeds discovery' beat — each revived tree opens the path to the next, and the world transforms as tangible proof of progress. Honest caveat: Legaia gates this fairly linearly (one tree at a time via scripted events), so it reads more as story-gating than open exploration. Take the 'revive a node → the map physically changes and hints at the next' feel, but let players choose WHICH node to chase — pull it toward Elden Ring's openness."},
-{id:"M148",game:"Wild ARMs",name:"Tools (Field Gadgets)",cat:"Traversal",
+{id:"M148",verbs:["Tool-gated"],game:"Wild ARMs",name:"Tools (Field Gadgets)",cat:"Traversal",
 how:"Each of the three heroes carries their own set of four field Tools — Rudy's Bombs and Radar, Jack's Grappling Hook and Lighter, Cecilia's Rod and Pocket Watch — found inside dungeons or handed over during events. You switch the party leader to a Tool's owner to use it, and Tools are the game's real keys: they solve dungeon puzzles, some gate story progress, others open optional treasure. Getting the Radar even makes hidden item and Gella spots appear across the overworld you'd already crossed.",
 loop:"Explore a dungeon → pull out a hero's new Tool → puzzles, sealed chests and overworld secrets you walked past now open → the whole world quietly becomes more solvable with every gadget you own.",
 rating:0,want:"Yes",
@@ -1216,7 +1300,7 @@ how:"Jack's ~17 Fast Draw sword techniques aren't bought or auto-unlocked by lev
 loop:"Spot or stumble onto a hidden condition somewhere in the world → permanently learn a named sword skill → every entry on Jack's technique list becomes a souvenir of a place you actually cracked.",
 rating:0,want:"Yes",
 notes:"Elden Ring world-knowledge DNA fused straight into combat progression — 'knowledge is a reward' made literal, since the reward for reading the world correctly is a permanent new ability. Make your STRONGEST abilities discoveries, not shop purchases or level-up auto-grants. Caveat WA1 got wrong and you should fix: the acquisitions are so cryptic most players miss the majority — keep the discovery, but hint it (a rumor, a visible-but-unreachable cue) so 'obscure' reads as 'earned', not 'invisible'."},
-{id:"M151",game:"Alundra",name:"Dreamwalking (Dream-Dive Dungeons)",cat:"Exploration & Rewards",
+{id:"M151",verbs:["Consequence"],game:"Alundra",name:"Dreamwalking (Dream-Dive Dungeons)",cat:"Exploration & Rewards",
 how:"As an Elna Dreamwalker, Alundra can enter the dreams and nightmares of Inoa's villagers, and each becomes a self-contained dungeon themed to that person's psyche — the timid twin's half rendered in cautious blues, his brash brother's in fevered reds. Clearing the nightmare is the only way to lift the curse killing the sleeper, so every dungeon doubles as a rescue. The tone is famously dark: even a flawlessly solved nightmare can end with the villager dying moments after you leave their mind.",
 loop:"Enter a villager's nightmare → solve the dungeon shaped to their soul → save (or fail to save) a named person → each dive advances the town's unfolding fate.",
 rating:0,want:"Yes",
@@ -1271,7 +1355,7 @@ how:"Turn-based on your side, real-time on theirs. On an enemy's turn you dodge,
 loop:"Learn an enemy's tells → parry the whole string instead of eating it → get AP back AND a free counter → knowing the fight IS the damage bonus.",
 rating:0,want:"Yes",
 notes:"The 2025 descendant of LoD's Additions (M133) and Sea of Stars' Locks (M079) — your favourite lineage. What it adds: DEFENSE is the skill expression. The boss's moveset is the puzzle, and mastery converts directly into resource (AP) and damage (the counter). For your game, make each enemy's attack string a readable rhythm the player can eventually play perfectly, and pay perfection in the currency your offence needs. Note the accessibility design too — QTEs can be switched off, which is Sea of Stars' relics idea (M081) as a setting."},
-{id:"M162",game:"Clair Obscur: Expedition 33",name:"Esquie's magic rocks (traversal tied to a companion)",cat:"Traversal",
+{id:"M162",verbs:["Tool-gated"],game:"Clair Obscur: Expedition 33",name:"Esquie's magic rocks (traversal tied to a companion)",cat:"Traversal",
 how:"Your companion Esquie carries the party across the world map, and each 'magic rock' you recover permanently adds a traversal verb: Florrie lets him swim, Dorrie lets him smash through coral while swimming, Soarrie lets him fly with the Expedition aboard. Each rock is a story-beat reward, and each converts water or sky you had only been able to look at into somewhere you can now go.",
 loop:"Recover a rock → a whole LAYER of the map (sea, then reefs, then sky) opens → every coastline you already walked past turns into a door.",
 rating:0,want:"Yes",
@@ -1311,7 +1395,7 @@ how:"King Trode gives the Hero a repaired Alchemy Pot; you drop in 2 (later 3) i
 loop:"Explore for a recipe and gather its ingredients → walk while the pot boils → pull out gear worth more than the sum of its parts → feed that result back in as an ingredient for the NEXT tier.",
 rating:0,want:"Yes",
 notes:"The FF7-Rebirth-style layered upgrade you love, but the layering runs through the WORLD: recipe KNOWLEDGE is found by exploring (bookshelves, NPCs, four hide-and-seek notes) — 'knowledge is a reward' + 'world rewards exploration' made literal. The killer trait to steal is 'every result is also an ingredient,' so upgrades never dead-end (e.g. Short Bow + Chain Whip → Hunter's Bow → Eros' Bow → Cheiron's Bow → Odin's Bow, a 4-tier climb; even a worthless Rusty Old Sword becomes the endgame Liquid Metal Sword)."},
-{id:"M170",game:"Dragon Quest VIII",name:"Monster Arena (Infamous Monster Recruitment)",cat:"Side Content & Minigames",
+{id:"M170",verbs:["Guarded","Challenge gauntlet"],game:"Dragon Quest VIII",name:"Monster Arena (Infamous Monster Recruitment)",cat:"Side Content & Minigames",
 how:"Roaming 'Infamous Monsters' are the only special visible encounters in the world; defeat one and you recruit that species onto Morrie's monster team. Build a 3-monster team and climb ranked cups G → S, each rank granting a fixed equipment prize plus a permanent perk. After clearing Rank E you unlock Call Team, summoning a monster team to fight in place of your party in REAL battles. Recruited monsters auto-scale to the Hero's level so nothing you collect goes obsolete.",
 loop:"Hunt a specific monster roaming the map → beat it to add its species to your roster → slot it into a team and win a rank → your collection becomes a summonable combat power you actually deploy.",
 rating:0,want:"Yes",
@@ -1381,7 +1465,7 @@ how:"Exactly 176 named NPCs living across Radiata City and its world can be recr
 loop:"Find an NPC's specific condition → satisfy it → they join your Friends List and party → the entire living city becomes a roster you assemble by hand.",
 rating:0,want:"Yes",
 notes:"Your Suikoden II love at even larger scale, and a strong codex fit: the world itself IS the collection, and recruiting is the progression. One honest caveat against your 'everything has upgrades' pillar — a Radiata recruit brings ONE fixed skill, learns nothing new, and can't be re-equipped, so recruiting-for-a-new-ability is the ONLY growth. Adapt by keeping the scale and world-embedded recruiting but letting recruits genuinely upgrade (level their skill, swap gear), so collection converts to compounding power rather than a static portrait gallery."},
-{id:"M184",game:"Radiata Stories",name:"Simulated Day/Night NPC Schedules",cat:"Exploration & Rewards",
+{id:"M184",verbs:["The wanderer"],game:"Radiata Stories",name:"Simulated Day/Night NPC Schedules",cat:"Exploration & Rewards",
 how:"Every NPC runs a persistent daily routine under the Day/Night system — sleeping, working, eating, walking fixed routes between specific buildings. The town is genuinely simulated rather than static, so the person (or item) you need only exists at a particular place at a particular hour. Jack can also comedically kick almost anything to knock loose items or dagols (the currency).",
 loop:"Learn an NPC's routine → show up at the right place at the right time → catch them to recruit or trigger their event → the schedule knowledge itself is the key that unlocks the reward.",
 rating:0,want:"Yes",
@@ -1416,7 +1500,7 @@ how:"Each character earns Personal Skill points equal to their level (a level-30
 loop:"Collect Mediums and accessories → spend level-granted points to compose a custom passive loadout → deepen each skill through 4 tiers → your build is a dial you keep re-tuning, because leveling literally buys more customization.",
 rating:0,want:"Yes",
 notes:"WA3's distinct answer, NOT WA1's Crest Sorcery or Tools already in the codex: a renewable, level-fed point budget poured into stacked passive upgrades, each with four escalating levels. Same 'every slot is a build decision' pull as the FF7 Rebirth materia layering you love — but the currency is the character's own level, so getting stronger and getting more customizable are the same act. Have rewards drop PS-style points plus skills-bound-to-gear so 'everything has upgrades' means a loadout the player keeps re-composing."},
-{id:"M191",game:"Wild ARMs 3",name:"Search System (clue-gated world-map discovery)",cat:"Exploration & Rewards",
+{id:"M191",verbs:["Inscription deduction"],game:"Wild ARMs 3",name:"Search System (clue-gated world-map discovery)",cat:"Exploration & Rewards",
 how:"Nothing is marked on the world map until you earn it twice over. First you must obtain a CLUE to a location (from NPCs or by examining signposts); only then do you travel to the spot and press Square to emit a search wave that reveals the hidden town or dungeon. Buying the World Screen surfaces X/Y coordinates, and the Map Scope puts them on-screen so a clue becomes a tractable coordinate hunt.",
 loop:"Earn a clue (knowledge) → travel to the coordinates and search → the hidden town/dungeon materializes → the map fills in only as fast as you learn, so knowledge itself is the key that unlocks the world.",
 rating:0,want:"Yes",
@@ -1446,7 +1530,7 @@ how:"Equipping a piece of magicite teaches its spell list: each battle grants 1-
 loop:"Wear an esper to study it → spells become permanently yours → and WHO you wear while leveling silently sculpts your stat spread → equipment is both a school and a diet.",
 rating:0,want:"Yes",
 notes:"FF9's 'gear is a school' (already in the codex) with a second layer you should steal outright: the choice of what to equip while LEVELING has permanent, invisible-until-later consequences. That is knowledge-as-reward — a player who understands the system builds a measurably different character from one who doesn't, with no extra grinding. Pair the per-spell learn RATES with it: they make each esper a deliberate curriculum rather than a pile."},
-{id:"M197",game:"Final Fantasy VI",name:"World of Ruin (an optional second half)",cat:"Exploration & Rewards",
+{id:"M197",verbs:["A second layer"],game:"Final Fantasy VI",name:"World of Ruin (an optional second half)",cat:"Exploration & Rewards",
 how:"The world is destroyed at the midpoint and the game reopens as a broken, largely non-linear map with almost the entire cast scattered and missing. Only a handful of party members are needed to reach the ending; the rest — along with their dungeons, stories and best equipment — are found purely by exploring, and the game will let you finish without ever meeting them.",
 loop:"Wander a ruined world → stumble onto a lost companion and their personal dungeon → gain a character, a story, and their gear → the cast itself is the treasure, and the ending never demands you find it.",
 rating:0,want:"Yes",
@@ -1456,7 +1540,7 @@ how:"Every attack and every defence has a timing window: press the button at the
 loop:"Watch the animation instead of the menu → hit the beat on offence AND defence → the same party hits harder in better hands → turn-based combat becomes a performance.",
 rating:0,want:"Yes",
 notes:"This is the ORIGIN of the lineage you love — 1996, six years before Shadow Hearts' Judgement Ring and decades before Sea of Stars and Clair Obscur. Two things to steal that the descendants confirmed: (1) put timing on DEFENCE as well as offence, so every turn is active, and (2) make the bonus a post-calculation multiplier rather than a stat, so skill never breaks the numbers. Note the elegance of doing this with ONE button — no combo strings, no learning curve, all depth in the window."},
-{id:"M199",game:"Super Mario RPG",name:"Hidden Treasure Boxes (room-scale curiosity)",cat:"Exploration & Rewards",
+{id:"M199",verbs:["Latent geometry"],game:"Super Mario RPG",name:"Hidden Treasure Boxes (room-scale curiosity)",cat:"Exploration & Rewards",
 how:"Invisible treasure blocks hang in the air throughout the world, revealed only by jumping in the right empty space. They sit in ordinary rooms — shops, houses, corridors — so the reward for idly jumping around a mundane interior is real loot. Nothing signposts them; the game simply trusts that a Mario player jumps constantly.",
 loop:"Jump in a room for no reason → a hidden block appears → loot → the habit of playing with the world becomes the search mechanic.",
 rating:0,want:"Yes",
@@ -1491,7 +1575,7 @@ how:"Abilities are bought directly with yen rather than earned through combat ex
 loop:"Do literally anything in the city → earn cash → spend it straight into abilities → there is no 'wrong' way to get stronger.",
 rating:0,want:"Yes",
 notes:"One currency unifying every activity is the reason this city feels dense rather than scattered: the player never has to choose between having fun and progressing. Adapt it as a single meta-currency (your Lumen) that EVERY system pays into, so a player who only fishes and a player who only fights both advance — while reserving unique, non-purchasable rewards for the specific systems, so money never flattens the distinctions."},
-{id:"M206",game:"Final Fantasy XII",name:"The Hunts (a bounty board as a content spine)",cat:"Exploration & Rewards",
+{id:"M206",verbs:["Guarded"],game:"Final Fantasy XII",name:"The Hunts (a bounty board as a content spine)",cat:"Exploration & Rewards",
 how:"Forty-five hunts exist, posted as bills by ordinary people whose lives a monster is ruining. You accept a bill, seek out the petitioner to learn where and how the Mark behaves, track it down — often in a corner of the map you had no other reason to visit — and are paid in License Points, equipment and rare loot. Some hunts bring an NPC along for the fight, and Elite Marks sit far above the curve for when they first appear.",
 loop:"Read a bill → talk to a stranger about their problem → hunt a named monster somewhere off the path → LP, gear and loot → the sidequest board is a map-exploration engine wearing a story hat.",
 rating:0,want:"Yes",
@@ -1501,12 +1585,12 @@ how:"Nothing can be used until its licence is bought: every spell, technick, aug
 loop:"Kill anything → earn LP → unlock a square that permits a weapon, spell or passive → your party's roles are drawn by hand on a shared grid.",
 rating:0,want:"Yes",
 notes:"By Hiroyuki Ito, who also designed FF6's relics — the same instinct that gear should be a decision. The original's one-board-for-everyone is the interesting version for you: with no classes, differentiation comes purely from player choice, which is maximum freedom and maximum rope. Note the honest tension the sequels admitted by adding job boards — total freedom made every character converge. If you build an open board, add scarcity (slots, mutually exclusive branches) or players will simply buy everything."},
-{id:"M208",game:"Final Fantasy XII",name:"Loot -> Bazaar economy",cat:"Economy & Currency",
+{id:"M208",verbs:["Shop stock"],game:"Final Fantasy XII",name:"Loot -> Bazaar economy",cat:"Economy & Currency",
 how:"Monsters drop loot with no use except selling. But selling ENOUGH of specific loot combinations silently unlocks new Bazaar goods in every shop in the world — discounted item bundles and rare equipment available nowhere else, including some ultimate weapons. Quantities sold are tracked globally, so it doesn't matter which merchant you use.",
 loop:"Sell your junk → hidden thresholds tick over → a shop suddenly stocks something extraordinary → vendor trash becomes a crafting system in disguise.",
 rating:0,want:"Yes",
 notes:"This is your 'collection converts to power' rule applied to the stuff players usually ignore, and it makes the SHOP the discovery surface — your Gwent instinct again. Two lessons: (1) never let loot be pure gil, give it a hidden recipe role; (2) the thresholds being invisible is what makes a new bazaar entry feel like a gift rather than a checklist — though it's also why players needed guides, so consider a hint system (a merchant who says 'bring me three more of those')."},
-{id:"M209",game:"Skies of Arcadia",name:"Discoveries (exploration that literally pays)",cat:"Exploration & Rewards",
+{id:"M209",verbs:["Inscription deduction"],game:"Skies of Arcadia",name:"Discoveries (exploration that literally pays)",cat:"Exploration & Rewards",
 how:"Eighty-nine Discoveries are hidden across the skies — wonders, wrecks, creatures and landmarks found by flying your airship to unmarked coordinates, including above and below the cloud layers. Finding one records it in your log; the INFORMATION is then sold at Sailors' Guilds in any city. A discovery's value is set by how well-hidden it was and by how much time has passed since it first became findable — dawdle, and it is worth less.",
 loop:"Fly somewhere nobody sent you → spot a wonder → sell the knowledge at a guild → exploring is not rewarded WITH money, exploring IS the profession.",
 rating:0,want:"Yes",
@@ -1521,12 +1605,12 @@ how:"A hidden reputation stat tracks how boldly you play: it rises when you take
 loop:"Play boldly → the world's dialogue quietly changes tone toward you → a title and a recruit are gated behind having lived up to the fantasy.",
 rating:0,want:"",
 notes:"A cheap, high-charm system: it costs almost nothing (dialogue variants + one gate) and makes the world feel like it is watching. The lesson is that reputation doesn't need mechanical teeth to be worth building — being ADDRESSED differently is its own reward, which is your 'knowledge is a reward' pillar pointed at the player's identity. Keep at most one real unlock behind it, as they did."},
-{id:"M212",game:"Golden Sun",name:"Djinn (a collection that rewrites your class)",cat:"Progression & Upgrades",
+{id:"M212",verbs:["Guarded"],game:"Golden Sun",name:"Djinn (a collection that rewrites your class)",cat:"Progression & Upgrades",
 how:"Djinn are elemental creatures collected across the world — often behind a fight or a puzzle. SET to a character they modify stats, and the COMBINATION of elements a character carries changes their CLASS outright, granting a different spell list. In battle a set Djinni can be UNLEASHED for an attack, buff or heal, which drops it to Standby; Standby Djinn are the fuel for Summons; after summoning they enter Recovery and set themselves again automatically.",
 loop:"Find a Djinni → set it and your class and spells change → unleash it for an effect → spend it on a summon → it cycles back → one collectible is simultaneously a stat stick, a class system, a battle move and a summon economy.",
 rating:0,want:"Yes",
 notes:"The most layered collection in the codex — four systems from one collectible, which is your 'rewards are layered' pillar taken to its limit. The design gem is the STATE MACHINE (Set → Standby → Recovery → Set): using a Djinni's power temporarily costs you the class it was granting, so every unleash is a real trade against your build. Steal that: make a collectible's active use temporarily remove its passive benefit, and the player is choosing every single turn instead of just once at the menu."},
-{id:"M213",game:"Golden Sun",name:"Psynergy as world verbs",cat:"Traversal",
+{id:"M213",verbs:["Tool-gated"],game:"Golden Sun",name:"Psynergy as world verbs",cat:"Traversal",
 how:"The same magic used in combat doubles as the field toolkit: Psynergy moves pillars, lifts rocks, freezes puddles into steps, grows vines and reveals what is hidden, and environmental puzzles across the world are built around it. Several utility Psynergies come from equippable ITEMS rather than levels, so the tool is a piece of gear you carry.",
 loop:"Learn or equip a Psynergy → puzzles and blocked routes you walked past become solvable → the world reopens with every new verb.",
 rating:0,want:"Yes",
@@ -1616,7 +1700,7 @@ how:"Each of the eight travelers carries TWO path actions — one usable only in
 loop:"Meet any stranger → pick which of sixteen verbs to use on them → money, gear, secrets, or a person who fights for you → every NPC in the world is a container with several different keys.",
 rating:0,want:"Yes",
 notes:"This is the answer to the 'variety of discovery' principle you pulled out of Elden Ring, applied to PEOPLE instead of terrain: the same NPC yields different rewards depending on who you bring and what time it is, so the world's population is a puzzle box rather than dialogue. Two things to steal — (1) pair each verb with an opposed one (buy vs steal, hire vs coerce) so the player chooses a METHOD with consequences, and (2) let some NPCs become summonable allies, which turns 'I talked to a guy' into lasting capability. Note the honest guardrail they used: duel/knockout actions are blocked on children."},
-{id:"M231",game:"Octopath Traveler II",name:"Day / Night as a switchable world state",cat:"Traversal",
+{id:"M231",verbs:["A second layer"],game:"Octopath Traveler II",name:"Day / Night as a switchable world state",cat:"Traversal",
 how:"The player can flip the world between day and night at will. Nighttime path actions are entirely new to the series rather than reskins, so the same town holds a different set of possibilities after dark — different NPCs awake, different verbs available, different information obtainable.",
 loop:"Walk a town by day and learn it → flip to night → the same streets offer a different set of interactions → one map is two maps.",
 rating:0,want:"Yes",
@@ -1626,12 +1710,12 @@ how:"A per-character gauge fills as that character deals damage and breaks enemi
 loop:"Fight well with a character → their personal gauge fills → spend it on an ability only they have → engagement, not just turns, powers your trump cards.",
 rating:0,want:"",
 notes:"Worth noting mainly as contrast: this is a THIRD resource layered onto Break and Boost, and it fills from playing the break-and-boost game correctly rather than from time passing. The transferable rule is that a special-move meter should fill from doing the game's core skill well, not from taking damage or waiting — that way your best move is a reward for mastery. Compare Bravely Default's turn banking, already in the codex: same instinct, different currency."},
-{id:"M233",game:"Ys VIII: Lacrimosa of Dana",name:"Castaway Village (population as the key to the map)",cat:"Exploration & Rewards",
+{id:"M233",verbs:["Consequence"],game:"Ys VIII: Lacrimosa of Dana",name:"Castaway Village (population as the key to the map)",cat:"Exploration & Rewards",
 how:"Shipwrecked on an uncharted island, Adol's task is finding the other survivors — scattered mid-dungeon, on beaches and behind bosses, never posted on a quest board. Each rescue moves into the settlement and opens their trade as a facility (a forge that synthesises weapons, a tailor, a workshop that also breaks gear back into materials, a clinic, a trading post). Crucially the population is a NUMBER the world reads: routes across the island are blocked by fallen trees, boulders, landslides and stone pillars that clear only once the village holds enough people — verified thresholds run from 5 up through 8, 14, 20, 21 and 23 — at which point the villagers turn out as a work party and physically open the way.",
 loop:"Rescue a stranger anywhere on the island → your village gains a shop AND one more body on the headcount → a boulder that stopped you for hours gets moved → saving people IS the traversal upgrade.",
 rating:0,want:"Yes",
 notes:"Steal this wholesale. It is Suikoden II's castle and Dark Cloud 2's Georama with the upgrade both lack: the population is a number the WORLD consumes, so 'go find a person' and 'go open the map' stop being parallel tracks and become one verb. Note there is no gold cost — the game has no currency at all, it barters — so the gate is purely social. For your Waystation: put recruits IN the world rather than on a board, gate a share of regions on headcount instead of key items, and surface the required number on the map so the player can plan a rescue route (Ys VIII hides it until you are standing at the obstacle, which is its one real misstep)."},
-{id:"M234",game:"Ys VIII: Lacrimosa of Dana",name:"Cartography rewards (exploring pays you in more exploring)",cat:"Exploration & Rewards",
+{id:"M234",verbs:["Mastery reveal"],game:"Ys VIII: Lacrimosa of Dana",name:"Cartography rewards (exploring pays you in more exploring)",cat:"Exploration & Rewards",
 how:"The captain commissions Adol to chart the island, and every 10% of fog erased is turned in for a reward — ten in all, of which four (a Gale Feather, the Mountain Guide, a Spirit Necklace and the Ares Seal) exist nowhere else in the game. The 60% reward, the Mountain Guide, grants a permanent extra Adventuring Gear slot. Running alongside it, an artist in the village pays for the island's 24 scenic Landmarks, and reaching twelve earns the Eagle Eye Orb — a gear that widens the radius at which you clear fog.",
 loop:"Walk into the fog → hand the filled-in map in every 10% → earn gear that makes you map faster, wider, and in more slots at once → the reward for exploring is more exploring.",
 rating:0,want:"Yes",
@@ -1646,7 +1730,7 @@ how:"On the first two routes, dying strips every non-system chip from your loado
 loop:"Die → your actual BUILD is lying on the floor across the map → race back to reclaim it → a loadout system doubles as a risk system.",
 rating:0,want:"",
 notes:"Interesting mostly as a caution: the stakes are real, but the game does not autosave on death, so a player can simply reload and undo the loss — which quietly makes the whole system optional and toothless for anyone who notices. If you want stakes, they must be unavoidable or they are theatre. Note also that they REMOVE the mechanic after route B: escalating stakes are not always the right curve, and retiring a system once it has made its point is a legitimate design move."},
-{id:"M237",game:"Ni no Kuni: Wrath of the White Witch",name:"Familiars (tame, feed, metamorphose)",cat:"Progression & Upgrades",
+{id:"M237",verbs:["The fleeing rare"],game:"Ni no Kuni: Wrath of the White Witch",name:"Familiars (tame, feed, metamorphose)",cat:"Progression & Upgrades",
 how:"Most creatures in the world can be tamed: weaken one in battle and hearts may appear above it, at which point Esther must Serenade it before it flees. A tamed familiar fights in its owner's place, sharing that character's HP and MP and running on a stamina timer that forces rotation. Familiars then EVOLVE through Metamorphosis by feeding them a stone matching their sign — twice over — and the final metamorphosis offers a CHOICE between two forms, so the last step is a build decision rather than a stat bump.",
 loop:"Weaken a monster and catch the moment → raise and feed it → metamorphose it twice → choose which of two final forms it becomes → a creature you caught becomes a creature you designed.",
 rating:0,want:"Yes",
@@ -1656,7 +1740,7 @@ how:"Once you prove yourself a wizard you unlock the cauldron. Recipes are earne
 loop:"Read, guess, or earn a recipe → throw ingredients in the cauldron → discover something the game never told you about → knowledge you worked out is the reward.",
 rating:0,want:"Yes",
 notes:"The purest 'knowledge is a reward' crafting design in the batch: most games gate recipes behind unlocks, this one lets deduction beat progression. That is Elden-Ring-riddle logic applied to an economy. For your game, allow a crafting system to accept ANY combination and quietly reward the correct undocumented ones — the cost is a lookup table, and the payoff is players teaching each other secrets, which is exactly the culture you want around your Edicts and hidden Arts."},
-{id:"M239",game:"CrossCode",name:"Elemental modes as world verbs (with an overload tax)",cat:"Traversal",
+{id:"M239",verbs:["Tool-gated"],game:"CrossCode",name:"Elemental modes as world verbs (with an overload tax)",cat:"Traversal",
 how:"Four elements — Heat, Cold, Shock and Wave — exist as MODES; only one is active at a time but you can swap whenever you can act. The active mode imbues every attack, and imbued shots are REQUIRED to solve certain environmental puzzles, so elements are as much a traversal toolkit as a damage type. The catch is Elemental Load: attacking in a mode fills a gauge that decays slowly, and hitting 100% triggers Elemental Overload — you are dumped back to Neutral and locked out of ALL elements until it fully drains.",
 loop:"Switch to the element a puzzle demands → solve it and fight with that imbued damage → watch the load gauge → rotate before you overload → your world-verbs are a resource you can exhaust.",
 rating:0,want:"Yes",
@@ -2287,7 +2371,26 @@ document.querySelectorAll(".tab").forEach(t=>{
 });
 
 /* ============================= FILTERS ============================= */
-let fCat = "";
+let fCat = "", fVerb = "";
+function buildVerbChips(){
+  const box = $("#verbChips"); box.innerHTML = "";
+  const tagged = allMechs().filter(m=>(m.verbs||[]).length).length;
+  const all = document.createElement("button");
+  all.className = "chip" + (fVerb===""?" on":"");
+  all.textContent = "Any verb";
+  all.title = tagged + " mechanics are tagged so far";
+  all.onclick = ()=>{ fVerb=""; buildVerbChips(); renderCards(); };
+  box.appendChild(all);
+  Object.entries(VERBS).forEach(([v,desc])=>{
+    const n = allMechs().filter(m=>(m.verbs||[]).includes(v)).length;
+    const b = document.createElement("button");
+    b.className = "chip verb" + (fVerb===v?" on":"");
+    b.textContent = v + (n?" " + n:"");
+    b.title = desc;
+    b.onclick = ()=>{ fVerb = (fVerb===v ? "" : v); buildVerbChips(); renderCards(); };
+    box.appendChild(b);
+  });
+}
 function buildFilters(){
   const chipBox = $("#catChips"); chipBox.innerHTML = "";
   const all = document.createElement("button");
@@ -2315,6 +2418,7 @@ function renderCards(){
   const list = allMechs().filter(m=>{
     if(g && m.game!==g) return false;
     if(fCat && m.cat!==fCat) return false;
+    if(fVerb && !(m.verbs||[]).includes(fVerb)) return false;
     if(w==="__undecided"){ if(m.want) return false; }
     else if(w && m.want!==w) return false;
     if(q){
@@ -2344,6 +2448,7 @@ function renderCards(){
         <div class="field"><div class="flabel">How it works</div><p>${esc(m.how)}</p></div>
         <div class="field loop"><div class="flabel">Reward loop</div><p>${esc(m.loop)}</p></div>
         ${m.notes?`<div class="field"><div class="flabel">Adaptation notes</div><p class="notes-p">${esc(m.notes)}</p></div>`:""}
+        ${(m.verbs||[]).length?`<div class="field"><div class="flabel">Discovery verb</div><div class="verb-tags">${m.verbs.map(v=>`<span class="verb-tag" title="${esc(VERBS[v]||"")}">${esc(v)}</span>`).join("")}</div></div>`:""}
         <div class="controls">
           <span><span class="ctl-label">Rating</span><span class="stars">${[1,2,3,4,5].map(i=>`<button class="star ${m.rating>=i?"lit":""}" data-r="${i}" aria-label="Rate ${i} of 5">★</button>`).join("")}</span></span>
           <span><span class="ctl-label">In my game?</span><span class="want-group">${["Yes","Maybe","No"].map(v=>`<button class="wbtn ${m.want===v?"on-"+v:""}" data-w="${v}">${v}</button>`).join("")}</span></span>
@@ -2531,6 +2636,44 @@ $("#pillarCards").innerHTML = PILLARS.map(p=>`
   </article>`).join("");
 $("#legend").innerHTML = Object.entries(CATS).map(([c,color])=>`<span class="chip"><span class="orb" style="--c:${color}"></span>${esc(c)}</span>`).join("");
 
+/* ============================= LINEAGES ============================= */
+/* Clicking a node jumps to that mechanic with the filters cleared, so the chain
+   is a way INTO the data rather than a picture of it. */
+function renderLineages(){
+  const byId = Object.fromEntries(allMechs().map(m=>[m.id, m]));
+  $("#lineageCards").innerHTML = LINEAGES.map(l=>{
+    const nodes = l.ids.map(id=>byId[id]).filter(Boolean);
+    // A chain may end on a counter-example. Highlighting that green as "the payoff"
+    // would say the opposite of the note, so it gets its own warning style and the
+    // green marker moves to the last node that is actually worth copying.
+    const counterIdx = l.counter ? nodes.findIndex(m=>m.id===l.counter) : -1;
+    const lastIdx = counterIdx === nodes.length-1 ? nodes.length-2 : nodes.length-1;
+    return `<article class="card lineage">
+      <h3>${esc(l.name)}</h3>
+      <div class="chain">${nodes.map((m,i)=>
+        `<button class="lin-node${i===counterIdx?" counter":i===lastIdx?" last":""}" data-goto="${esc(m.id)}" title="Show this mechanic">
+           <div class="lin-game">${esc(m.game)}</div>
+           <div class="lin-name">${esc(m.name)}</div>
+           ${i===counterIdx?'<div class="lin-tag">the counter-example</div>':""}
+         </button>` + (i<nodes.length-1 ? `<span class="lin-arrow">${i+1===counterIdx?"✕":"→"}</span>` : "")
+      ).join("")}</div>
+      <p style="color:var(--ink-dim); margin-top:10px">${esc(l.note)}</p>
+    </article>`;
+  }).join("");
+
+  $("#lineageCards").querySelectorAll("[data-goto]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.dataset.goto, m = byId[id];
+      if(!m) return;
+      fCat = ""; fVerb = "";
+      $("#q").value = m.name; $("#fGame").value = ""; $("#fWant").value = "";
+      buildFilters(); buildVerbChips(); openSet.add(id); renderCards();
+      document.querySelector('.tab[data-view="mechanics"]').click();
+      window.scrollTo({top:0});
+    });
+  });
+}
+
 /* ============================= STATS ============================= */
 function renderStats(){
   const ms = allMechs(), gs = allGames();
@@ -2562,7 +2705,7 @@ $("#importFile").addEventListener("change", e=>{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
       store = normalizeStore(data.store);
-      persist(); buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame();
+      persist(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages();
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };
@@ -2575,9 +2718,26 @@ function buildMgFilters(){
   sel.innerHTML = '<option value="">All games</option>' +
     [...new Set(MINIGAMES.map(m=>m.g))].map(g=>`<option${g===cur?" selected":""}>${esc(g)}</option>`).join("");
 }
+/* Base rows never hardcode a video id — those rot. A search URL always resolves.
+   The owner can pin a specific video they liked; the pin lives in their own store. */
 function ytLink(m){
+  const pinned = (store.overrides[m.id]||{}).yt;
+  if(pinned) return pinned;
   const name = m.n.replace(/\s*\(.*?\)\s*/g, " ").trim();
   return "https://www.youtube.com/results?search_query=" + encodeURIComponent(m.g + " " + name + " minigame gameplay");
+}
+/* Only accept a real YouTube watch/share link, so a stray paste can't put a
+   javascript: or data: URL behind a link the owner will click later. */
+function cleanYt(url){
+  const s = String(url||"").trim();
+  if(!s) return "";
+  let u;
+  try{ u = new URL(s); }catch(e){ return null; }
+  if(u.protocol !== "https:") return null;
+  const host = u.hostname.replace(/^www\./, "");
+  if(!["youtube.com","m.youtube.com","youtu.be"].includes(host)) return null;
+  if(host === "youtu.be" ? !u.pathname.slice(1) : !u.searchParams.get("v")) return null;
+  return u.href;
 }
 function renderMinigames(){
   const q = $("#mgq").value.trim().toLowerCase();
@@ -2596,12 +2756,14 @@ function renderMinigames(){
   if(!list.length){ box.innerHTML = '<div class="empty">Nothing matches. Clear the filters to see the full arcade.</div>'; return; }
   list.forEach(m=>{
     const fav = !!store.minigameFavs[m.id];
+    const pinned = !!(store.overrides[m.id]||{}).yt;
     const card = document.createElement("article");
     card.className = "card mg-card";
     card.innerHTML = `
       <div class="mg-top">
         <h3>${esc(m.n)}</h3><span class="mg-game">${esc(m.g)}</span>
-        <a class="wbtn ytbtn" href="${ytLink(m)}" target="_blank" rel="noopener">▶ Watch</a>
+        <a class="wbtn ytbtn" href="${esc(ytLink(m))}" target="_blank" rel="noopener">${pinned?"▶ Watch (pinned)":"▶ Search"}</a>
+        <button class="wbtn pinbtn" title="${pinned?"Change or remove the pinned video":"Pin a specific video to this minigame"}">${pinned?"✎ Pin":"📌 Pin"}</button>
         <button class="wbtn favbtn ${fav?"on-Maybe":""}">${fav?"★ Idea saved":"☆ Save idea"}</button>
       </div>
       <p class="mg-play">${esc(m.p)}</p>
@@ -2614,6 +2776,16 @@ function renderMinigames(){
     card.querySelector(".favbtn").addEventListener("click", ()=>{
       if(store.minigameFavs[m.id]) delete store.minigameFavs[m.id];
       else store.minigameFavs[m.id] = true;
+      persist(); renderMinigames();
+    });
+    card.querySelector(".pinbtn").addEventListener("click", ()=>{
+      const cur = (store.overrides[m.id]||{}).yt || "";
+      const input = prompt("Paste a YouTube link for “" + m.n + "”.\nLeave empty to go back to a search.", cur);
+      if(input === null) return;                       // cancelled
+      const url = cleanYt(input);
+      if(url === null){ alert("That doesn't look like a YouTube video link."); return; }
+      store.overrides[m.id] = Object.assign(store.overrides[m.id]||{}, {yt: url});
+      if(!url) delete store.overrides[m.id].yt;
       persist(); renderMinigames();
     });
     box.appendChild(card);
@@ -2727,7 +2899,7 @@ function renderMyGame(){
 ["myq","myMaybe"].forEach(id=> $("#"+id).addEventListener("input", renderMyGame));
 
 /* ============================= INIT ============================= */
-buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame();
+buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages();
 if(!canSave) flashSave("Local saving unavailable — use Export backup");
 </script>
 </body>

@@ -31,8 +31,14 @@ worse than none, because it reads as verified.
   Radiata Stories +9, Suikoden II +8)
 - **Research pipeline** on the Games tab: cards sort Researching → To Research →
   Researched, and queued games carry a written brief for the question they should answer
-- **Your own layer** — ratings, want/skip decisions, notes and custom entries save to
-  `localStorage`, with JSON export/import for backup
+- **My Game board** — everything you mark *Yes* collects into a workspace and gets placed
+  into one of six systems of the game you're designing, each with its own design notes
+- **Discovery verbs** — a 15-verb taxonomy of *how* a reward is found (guarded, traded,
+  tool-gated, a second layer…), so you can ask "who else solved this shape?"
+- **Lineages** — chains where each game answers the one before it, ending on the node
+  worth stealing from, or on a counter-example worth designing against
+- **Your own layer** — ratings, want/skip decisions, notes, pinned videos and custom
+  entries save to `localStorage`, with JSON export/import for backup
 
 > Browser storage is **per origin**, so edits made on the hosted site and edits made by
 > opening the local file are separate. Use **Export backup** / **Import backup** to move

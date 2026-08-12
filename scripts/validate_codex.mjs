@@ -206,6 +206,10 @@ export function validate(html, docs = {}) {
       for (const id of l.ids ?? []) {
         if (!mechIds.has(id)) errors.push(`lineage ${JSON.stringify(l.name)}: references missing mechanic ${id}`);
       }
+      // A counter-example must be a node of its own chain, or it renders as nothing.
+      if (l.counter != null && !(l.ids ?? []).includes(l.counter)) {
+        errors.push(`lineage ${JSON.stringify(l.name)}: counter ${l.counter} is not in its own ids list`);
+      }
     }
   }
   if (VERBS) {
@@ -309,6 +313,12 @@ const SABOTAGES = [
   // being researched, so the first `why:"BRIEF:` in the file is not a queued one.
   { name: "queued game with no research brief", expect: /need a `why` research brief/,
     apply: s => replaceFirst(s, /(title:"Live A Live"[\s\S]{0,900}?why:")[^"]*"/, '$1"', "queued game with no research brief") },
+  { name: "unknown discovery verb", expect: /unknown discovery verb/,
+    apply: s => replaceFirst(s, /verbs:\["([^"]+)"/, 'verbs:["Not A Real Verb"', "unknown discovery verb") },
+  { name: "lineage pointing at a missing mechanic", expect: /references missing mechanic/,
+    apply: s => replaceFirst(s, /ids:\["M\d+"/, 'ids:["M999"', "lineage pointing at a missing mechanic") },
+  { name: "counter-example outside its own chain", expect: /is not in its own ids list/,
+    apply: s => replaceFirst(s, /counter:"M\d+"/, 'counter:"M001"', "counter-example outside its own chain") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
 ];
