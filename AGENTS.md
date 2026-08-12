@@ -161,8 +161,33 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   Metacritic's "not enough ratings to publish" sentinel, not a real zero. Run
   `python3 scripts/fetch_scores.py --selftest` to prove the range guards still reject
   out-of-range values before trusting a refresh.
-- After any edit, sanity-check by extracting the <script> block and parsing it
-  (e.g. `node -e 'new Function(require("fs").readFileSync("JRPG_Design_Codex.html","utf8").match(/<script>([\s\S]*)<\/script>/)[1])'`).
+- After any edit, run `node scripts/validate_codex.mjs --selftest` (it supersedes the
+  old hand-rolled parse check — see the CI section below).
+
+## Deployment & CI — main is a PRODUCTION TRIGGER
+Live at **https://ali0600.github.io/jrpg-design-codex/** (public repo `Ali0600/jrpg-design-codex`).
+`.github/workflows/validate.yml` runs on every push and PR; the Pages deploy job is
+gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-pinned.
+
+- **A push to `main` deploys the site.** Codex/app/workflow changes therefore go
+  branch -> PR -> merge on green. Docs-only edits may still land directly on main.
+- `node scripts/validate_codex.mjs` checks: script parses; M/g IDs sequential and
+  unique; every `cat` in CATS; `want` and `status` enums; every mechanic `game` has a
+  BASE_GAMES row; minigame `g` refs likewise EXCEPT the 8 unrostered FF titles
+  allowlisted in the script (the FF minigame survey is broader than the mechanics
+  roster — a new orphan outside that list is treated as a typo); score ranges (the
+  fetch_scores guard re-asserted at rest); `rt` rows non-empty; queued games have a
+  `why` brief; and **the counts quoted in CLAUDE.md match the data**, with AGENTS.md
+  byte-identical to CLAUDE.md. The last two make the doc drift that bit us before into
+  a build failure — so when counts change, update CLAUDE.md and re-copy AGENTS.md in
+  the SAME commit or CI goes red.
+- `--selftest` mutates the data in memory and requires all 14 checks to fire. Two
+  fixture rules learned the hard way: a sabotage must land INSIDE the data region (an
+  early `/us:\d+/` fixture matched `border-radius:4px` in the CSS and tested nothing),
+  and the "queued game needs a brief" fixture must target an actually-queued row —
+  five RESEARCHED games kept their `BRIEF:`-style `why` text.
+- Optional `LINEAGES` / `VERBS` structures are validated only if present, so the
+  validator does not need editing when they land.
 
 ## Research playbook (the system for "research <game>")
 The Games tab is a pipeline: cards sort Researching -> To Research -> Researched, each
