@@ -9,3 +9,8 @@ __pycache__/
 # Scratch / generated
 *.bak
 scores.json
+
+# Personal overlay exported from the app (ratings, notes, private design ideas).
+# This repo is public — the backup must never be committed.
+jrpg-codex-backup.json
+jrpg-codex-backup*.json
