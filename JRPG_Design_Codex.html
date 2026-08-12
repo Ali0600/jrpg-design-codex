@@ -233,6 +233,35 @@
   }
   .pillar .test b{color:var(--gold); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; display:block; margin-bottom:3px;}
 
+  /* ---------- my game ---------- */
+  .mine-strip{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;}
+  .mine-tally{
+    background:var(--panel); border:1px solid var(--line-soft); border-radius:8px;
+    padding:7px 12px; font-size:12px; color:var(--ink-faint); letter-spacing:.04em;
+  }
+  .mine-tally b{color:var(--ink); font-size:15px; margin-right:6px;}
+  .mine-tally.empty-b b{color:var(--ink-faint);}
+  .bucket{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--radius); padding:16px 18px; margin-bottom:16px;
+  }
+  .bucket.is-unsorted{border-style:dashed; background:transparent;}
+  .bucket h3{font-size:16px; color:#eef3ff; display:flex; align-items:baseline; gap:9px;}
+  .bucket h3 .bcount{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); font-weight:400;}
+  .bucket .bdesc{color:var(--ink-faint); font-size:13px; margin-top:2px;}
+  .mine-row{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:11px 0; border-top:1px solid var(--line-soft); margin-top:11px;
+  }
+  .mine-row .orb{margin-top:6px;}
+  .mine-main{flex:1; min-width:0;}
+  .mine-main h4{font-size:14.5px; font-weight:600; color:#eef3ff;}
+  .mine-main .notes-p{font-size:13.5px; margin-top:4px;}
+  .mine-row select{width:auto; max-width:180px; font-size:12.5px; padding:5px 8px; flex:none;}
+  .bucket-note{width:100%; margin-top:13px; min-height:60px; resize:vertical; font-size:14px;}
+  .bucket-note::placeholder{color:var(--ink-faint); font-style:italic;}
+  @media (max-width:640px){ .mine-row{flex-wrap:wrap;} .mine-row select{max-width:none; width:100%;} }
+
   .guide h2{font-family:"Palatino Linotype", Palatino, Georgia, serif; font-size:22px; margin:26px 0 10px; color:#eef3ff;}
   .guide p, .guide li{color:var(--ink-dim); max-width:76ch;}
   .guide ol{padding-left:22px;} .guide li{margin-bottom:8px;}
@@ -284,6 +313,7 @@
   <button class="tab" role="tab" aria-selected="true" data-view="mechanics">Mechanics</button>
   <button class="tab" role="tab" aria-selected="false" data-view="minigames">Minigames</button>
   <button class="tab" role="tab" aria-selected="false" data-view="games">Games</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="mygame">My Game</button>
   <button class="tab" role="tab" aria-selected="false" data-view="pillars">Design Pillars</button>
   <button class="tab" role="tab" aria-selected="false" data-view="guide">How to Use</button>
 </div></div></nav>
@@ -378,6 +408,20 @@
     <div id="gameCards"></div>
   </section>
 
+  <!-- ================= MY GAME ================= -->
+  <section class="view" id="view-mygame">
+    <div class="filters">
+      <div class="frow">
+        <input type="search" id="myq" placeholder="Search your shortlist…">
+        <label class="chip" style="cursor:pointer"><input type="checkbox" id="myMaybe" style="accent-color:#f2cb4e"> Include Maybe</label>
+      </div>
+      <div class="frow" id="myChips"></div>
+    </div>
+    <div class="mine-strip" id="myTally"></div>
+    <p class="count-note" id="myCount"></p>
+    <div id="myBoard"></div>
+  </section>
+
   <!-- ================= PILLARS ================= -->
   <section class="view" id="view-pillars"><div id="pillarCards"></div></section>
 
@@ -398,8 +442,13 @@
       <li>When done, set the game to <i>Researched</i>. Periodically filter to <b>Yes</b> — that cluster is the seed of your game design document.</li>
     </ol>
 
+    <h2>Turning research into a design</h2>
+    <p>The <b>My Game</b> tab is where the codex stops being a library. Everything marked <b>Yes</b> collects there as a shortlist, and each one gets placed into a system of the game you're building — discovery, combat, progression, venues, world. Each system has its own notes box for the rules those mechanics have to serve.</p>
+    <p>The value is in the placing. A mechanic you can't assign to a system is a mechanic you liked without knowing what it's <i>for</i>, and a system holding twelve entries is one you're overbuilding. Use <b>Parked</b> honestly — "worth loving, not worth building here" is a real answer, and a shortlist with nothing parked usually means nothing has been decided.</p>
+
     <h2>Your edits are saved</h2>
     <p>Ratings, decisions, notes, and new entries save automatically in this browser (when opened as a local file). They live in this browser only — use <b>Export backup</b> now and then to download a JSON snapshot, and <b>Import backup</b> to restore it or move to another computer. If your browser blocks local storage, the page still works for reading and filtering; just export before closing to keep changes.</p>
+    <p><b>Storage is per address.</b> Opening the file from your disk and opening the hosted copy at <a href="https://ali0600.github.io/jrpg-design-codex/" style="color:var(--green)">ali0600.github.io/jrpg-design-codex</a> are two separate stores — work done in one will not appear in the other. Export from the one you've been using and import into the other to bring your decisions across.</p>
   </section>
 
 </main>
@@ -2175,13 +2224,30 @@ const MINIGAMES = [
 
 /* ============================= STATE ============================= */
 const LS_KEY = "jrpg_codex_v1";
-let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}};
+let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}}};
 let canSave = true;
+
+/* Backups predate later fields, so fill every slot rather than trusting the shape.
+   A restored v1 backup must never leave store.myGame.assign undefined. */
+function normalizeStore(s){
+  s = s || {};
+  s.overrides    = s.overrides    || {};
+  s.customMechs  = Array.isArray(s.customMechs) ? s.customMechs : [];
+  s.customGames  = Array.isArray(s.customGames) ? s.customGames : [];
+  s.gameStatus   = s.gameStatus   || {};
+  s.minigameFavs = s.minigameFavs || {};
+  s.myGame       = s.myGame       || {};
+  s.myGame.assign = s.myGame.assign || {};
+  s.myGame.notes  = s.myGame.notes  || {};
+  return s;
+}
+
 try{
   const raw = localStorage.getItem(LS_KEY);
   if(raw) store = Object.assign(store, JSON.parse(raw));
   localStorage.setItem("__t","1"); localStorage.removeItem("__t");
 }catch(e){ canSave = false; }
+store = normalizeStore(store);
 
 function persist(){
   if(!canSave) return;
@@ -2305,6 +2371,8 @@ function updateMech(id, patch){
   if(custom) Object.assign(custom, patch);
   else store.overrides[id] = Object.assign(store.overrides[id]||{}, patch);
   persist(); renderCards();
+  // A want/notes change moves a mechanic in or out of the shortlist.
+  renderMyGame();
 }
 
 /* expand / collapse all */
@@ -2493,8 +2561,8 @@ $("#importFile").addEventListener("change", e=>{
     try{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
-      store = Object.assign({overrides:{},customMechs:[],customGames:[],gameStatus:{},minigameFavs:{}}, data.store);
-      persist(); buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames();
+      store = normalizeStore(data.store);
+      persist(); buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame();
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };
@@ -2553,8 +2621,113 @@ function renderMinigames(){
 }
 ["mgq","mgGame","mgFav"].forEach(id=> $("#"+id).addEventListener("input", renderMinigames));
 
+/* ============================= MY GAME ============================= */
+/* The shortlist, organised into the systems of the game being designed. Buckets
+   mirror GAME_PROMPT_V2's structure so this board and the brief stay legible
+   against each other. "" means unsorted — the inbox, rendered last. */
+const BUCKETS = [
+  {k:"discovery", n:"Discovery & Traversal",  d:"How the world hides things, and how you reach them."},
+  {k:"combat",    n:"Combat (Timing)",        d:"The fight itself — defence as the skill expression."},
+  {k:"progress",  n:"Progression & Upgrades", d:"Everything that grows: party, gear, tools, shops."},
+  {k:"venues",    n:"Minigames & Venues",     d:"Side activities that pay back into the main game."},
+  {k:"world",     n:"World & Base-building",  d:"The place that becomes yours."},
+  {k:"parked",    n:"Parked",                 d:"Worth loving, not worth building here."},
+];
+const BUCKET_NAME = Object.fromEntries(BUCKETS.map(b=>[b.k,b.n]));
+let myFocus = "";
+
+function myPool(){
+  const wantMaybe = $("#myMaybe").checked;
+  return allMechs().filter(m => m.want==="Yes" || (wantMaybe && m.want==="Maybe"));
+}
+
+function renderMyGame(){
+  const q = $("#myq").value.trim().toLowerCase();
+  const pool = myPool();
+  const match = m => !q || (m.name+" "+m.game+" "+m.cat+" "+m.how+" "+m.loop+" "+(m.notes||"")).toLowerCase().includes(q);
+
+  // Tallies count the whole pool; the list below is what the filters let through.
+  const counts = {};
+  pool.forEach(m => { const b = store.myGame.assign[m.id] || ""; counts[b] = (counts[b]||0) + 1; });
+  const sorted = pool.length - (counts[""]||0);
+  $("#myTally").innerHTML =
+    `<span class="mine-tally"><b>${sorted}</b>of ${pool.length} placed</span>` +
+    BUCKETS.map(b=>`<span class="mine-tally${counts[b.k]?"":" empty-b"}"><b>${counts[b.k]||0}</b>${esc(b.n)}</span>`).join("");
+
+  const chips = $("#myChips");
+  const chipDefs = [{k:"",label:"Everything"}].concat(BUCKETS.map(b=>({k:b.k,label:b.n})), [{k:"__unsorted",label:"Unsorted"}]);
+  chips.innerHTML = "";
+  chipDefs.forEach(c=>{
+    const btn = document.createElement("button");
+    btn.className = "chip" + (myFocus===c.k?" on":"");
+    btn.textContent = c.label;
+    btn.onclick = ()=>{ myFocus = (myFocus===c.k && c.k!=="") ? "" : c.k; renderMyGame(); };
+    chips.appendChild(btn);
+  });
+
+  const board = $("#myBoard");
+  if(!pool.length){
+    $("#myCount").textContent = "";
+    board.innerHTML = '<div class="empty">Nothing shortlisted yet. Mark mechanics <b>Yes</b> on the Mechanics tab and they collect here.<br>Already have decisions saved elsewhere? Use <b>Import backup</b>.</div>';
+    return;
+  }
+
+  const groups = BUCKETS.map(b=>({...b, rows: pool.filter(m => store.myGame.assign[m.id]===b.k && match(m))}))
+                        .concat([{k:"", n:"Unsorted", d:"Not yet placed in a system.", unsorted:true,
+                                  rows: pool.filter(m => !store.myGame.assign[m.id] && match(m))}]);
+  const shown = groups.reduce((n,g)=>n+g.rows.length, 0);
+  $("#myCount").textContent = shown + " of " + pool.length + " shortlisted mechanic" + (pool.length===1?"":"s") + " shown";
+
+  const visible = groups.filter(g=>{
+    if(myFocus==="__unsorted") return g.unsorted;
+    if(myFocus) return g.k===myFocus;
+    return g.rows.length || !g.unsorted; // keep empty buckets visible as targets; hide an empty inbox
+  });
+
+  board.innerHTML = visible.map(g=>`
+    <section class="bucket${g.unsorted?" is-unsorted":""}">
+      <h3>${esc(g.n)}<span class="bcount">${g.rows.length} mechanic${g.rows.length===1?"":"s"}</span></h3>
+      <p class="bdesc">${esc(g.d)}</p>
+      ${g.rows.map(m=>{
+        const color = CATS[m.cat] || "#9aa8c8";
+        return `<div class="mine-row">
+          <span class="orb" style="--c:${color}"></span>
+          <div class="mine-main">
+            <h4>${esc(m.name)}</h4>
+            <div class="meta"><span>${esc(m.game)}</span><span class="cat" style="--c:${color}">${esc(m.cat)}</span>${m.want==="Maybe"?'<span style="color:var(--gold)">Maybe</span>':""}</div>
+            ${m.notes?`<p class="notes-p">${esc(m.notes)}</p>`:""}
+          </div>
+          <select data-assign="${esc(m.id)}" aria-label="Place ${esc(m.name)} in a system">
+            <option value=""${!store.myGame.assign[m.id]?" selected":""}>— unsorted —</option>
+            ${BUCKETS.map(b=>`<option value="${b.k}"${store.myGame.assign[m.id]===b.k?" selected":""}>${esc(b.n)}</option>`).join("")}
+          </select>
+        </div>`;
+      }).join("") || `<div class="mine-row" style="color:var(--ink-faint); font-size:13px">Nothing here yet.</div>`}
+      ${g.unsorted ? "" : `<textarea class="bucket-note" data-note="${g.k}" placeholder="How this system works in your game — the rules these mechanics have to serve…">${esc(store.myGame.notes[g.k]||"")}</textarea>`}
+    </section>`).join("");
+
+  board.querySelectorAll("[data-assign]").forEach(sel=>{
+    sel.addEventListener("change", ()=>{
+      const id = sel.dataset.assign;
+      if(sel.value) store.myGame.assign[id] = sel.value;
+      else delete store.myGame.assign[id];
+      persist(); renderMyGame();
+    });
+  });
+  // Save on blur, not per keystroke: a re-render mid-sentence would steal the caret.
+  board.querySelectorAll("[data-note]").forEach(ta=>{
+    ta.addEventListener("blur", ()=>{
+      const k = ta.dataset.note;
+      if(ta.value.trim()) store.myGame.notes[k] = ta.value;
+      else delete store.myGame.notes[k];
+      persist();
+    });
+  });
+}
+["myq","myMaybe"].forEach(id=> $("#"+id).addEventListener("input", renderMyGame));
+
 /* ============================= INIT ============================= */
-buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames();
+buildFilters(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame();
 if(!canSave) flashSave("Local saving unavailable — use Export backup");
 </script>
 </body>
