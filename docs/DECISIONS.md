@@ -67,3 +67,47 @@ Edict, keeping §4 untouched.
 
 **Status:** highest-rated rejected — misleading for design research. Both:
 `deferred — worth trying` (see Backlog).
+
+## 2026-08-12 — Repo visibility and where the codex is hosted
+
+**Fork:** the codex needed off-machine backup, a validation gate, and ideally a URL that
+works from a phone. Free GitHub Pages requires a public repo, and this repo carries the
+owner's original design work (WAYMARK's full rules, both Waystone briefs).
+
+- **A — public repo + GitHub Pages** *(chosen — owner's call)*: simplest path, free
+  hosting, and a data-rich project with a real CI gate reads well as a portfolio piece.
+  Cost: the design documents become publicly readable. Mitigations applied — the personal
+  overlay (`jrpg-codex-backup.json`) is gitignored so ratings and private notes never
+  land in the repo, and publishing first is itself a timestamped authorship record.
+- **B — private repo + Cloudflare Pages**: keeps the designs unpublished while still
+  giving a hosted URL, since Cloudflare deploys from private repos on its free tier.
+  Costs a second account and a second CI surface to keep honest.
+- **C — private repo, CI only, no hosting**: backup and validation without publishing
+  anything; the app stays a local file.
+
+**Status:** B — `deferred — worth trying` if the owner later wants the designs private
+without losing the hosted URL. C — `rejected`: gives up the phone-accessible copy, which
+was one of the two reasons to do this at all.
+
+**Revisit hook:** the deploy is one job in `.github/workflows/validate.yml`. Switching to
+B means flipping the repo private and replacing that job with a Cloudflare Pages build —
+the `validate` job and its `needs:` gate stay exactly as they are.
+
+## 2026-08-12 — How much of the codex the "My Game" board should organise
+
+**Fork:** the board needed a fixed structure to sort the shortlist into.
+
+- **A — six fixed system buckets** *(chosen)*: mirrors `GAME_PROMPT_V2.md`'s own
+  structure, so the board and the brief stay legible against each other, and an
+  unplaceable mechanic is itself a useful signal.
+- **B — user-defined buckets**: maximum flexibility; but an empty board with no
+  suggested structure is a blank page, and the brief already settled the systems.
+- **C — group by the five design pillars**: reuses `PILLARS`; rejected because pillars
+  are *tests* a mechanic must pass, not places a mechanic lives — most good mechanics
+  satisfy several, so the grouping would be arbitrary.
+
+**Status:** B — `deferred — worth trying` once the fixed six prove too coarse.
+C — `rejected — pillars are tests, not containers`.
+
+**Revisit hook:** `BUCKETS` is a single const near the My Game render code; making it
+user-editable means persisting it into `store.myGame` and adding an editor.

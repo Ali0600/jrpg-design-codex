@@ -58,3 +58,46 @@ would have steered future research away from sources that actually work.
 status code. Distinguish a hard block (403 to everything) from a UA-specific or transient
 one (200 to a different client) — and probe the *specific* surface you'll use, since the
 API and the HTML frontend of the same site can behave oppositely.
+
+## A sabotage that lands outside the region under test changes bytes and proves nothing
+The validator's `--selftest` mutates the codex in memory and requires each check to fire.
+One fixture used the regex `/us:\d+/` to corrupt a user score — and it matched
+`border-radius:4px` in the CSS long before reaching any game row. The mutation applied
+cleanly, the file's bytes changed, nothing threw, and the check reported "no errors at
+all" for a data file that was still perfectly valid.
+
+**Why it came up:** three of the first fourteen fixtures were wrong on the first run, and
+this was the one that looked most like a *code* bug rather than a *fixture* bug. The usual
+guards — pattern found, source changed, checksum differs — all passed, because the edit
+was real. It just wasn't where I thought it was.
+
+**Takeaway:** a mutation test needs to assert *where* it edited, not only *that* it
+edited. `replaceFirst` now refuses any match outside the data region. When a sabotage
+"applies" but the check stays green, suspect the fixture's aim before the check's logic.
+
+## A test fixture must target a row that actually satisfies the rule's precondition
+The "queued games need a research brief" check has a precondition: `status === "To
+Research"`. The fixture emptied the first `why:"BRIEF: …"` in the file — but five
+*researched* games kept their brief-style text after being researched, so the sabotage
+landed on a row the rule doesn't apply to and the check correctly stayed silent.
+
+**Why it came up:** it read as "the check is broken" for a check that was working exactly
+as designed.
+
+**Takeaway:** when a conditional rule's test fails to fire, verify the fixture satisfies
+the condition — query the data for a row that *does*, and anchor on that. Text that looks
+like a status marker (a `BRIEF:` prefix) is not the status field.
+
+## Presentation can assert the opposite of the content it presents
+The lineage view styles the last node of each chain green, meaning "the one worth stealing
+from". The collection chain deliberately ends on Tetra Master — the codex's standing
+example of collection that *never* converts into power. So the UI was about to highlight
+the failure case as the payoff, directly contradicting the paragraph printed underneath it.
+
+**Why it came up:** the data was right and the note was right; only the rendering was
+wrong, and no data validation could ever have caught it. It surfaced from reading the
+rendered output rather than the arrays.
+
+**Takeaway:** when a view applies emphasis by *position* (last, first, largest, newest),
+check whether every row's semantics match that position's meaning. Give the exception an
+explicit flag (`counter:`) rather than assuming ordering encodes value.
