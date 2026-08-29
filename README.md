@@ -37,6 +37,9 @@ worse than none, because it reads as verified.
   tool-gated, a second layer…), so you can ask "who else solved this shape?"
 - **Lineages** — chains where each game answers the one before it, ending on the node
   worth stealing from, or on a counter-example worth designing against
+- **UI Gallery** — captioned screenshots of the researched games' actual interfaces
+  (battle HUDs, menus, minigames), filterable by game and screen type, with thumbnails
+  on each game's card
 - **Your own layer** — ratings, want/skip decisions, notes, pinned videos and custom
   entries save to `localStorage`, with JSON export/import for backup
 
@@ -57,6 +60,7 @@ The codex isn't only an input. Its research was distilled into an original game 
 
 ```
 JRPG_Design_Codex.html     the app and the database, in one file
+shots/                     UI screenshots for the gallery (sources in SOURCES.md)
 scripts/validate_codex.mjs structural validator (runs in CI)
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
@@ -85,11 +89,22 @@ Research a game via the MediaWiki API (Fandom serves 403 to bots over HTML, but 
 python3 scripts/wiki_fetch.py finalfantasy.fandom.com "Chocobo Hot and Cold" --plain
 ```
 
+Add a UI screenshot to the gallery (list a page's images, then fetch one — it is
+resized, format-detected by magic bytes, and logged to `shots/SOURCES.md`):
+
+```bash
+python3 scripts/fetch_ui_shots.py --list finalfantasy.fandom.com "Sphere Grid"
+```
+
+Game screenshots in `shots/` are the property of their respective publishers,
+reproduced at reduced resolution for design study and commentary; every image's
+source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
+
 ## Experience gained
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 17
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 22
   structural invariants, with a mutation-testing self-check proving each one can fail
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection in Python** — API-first clients with host allowlisting,

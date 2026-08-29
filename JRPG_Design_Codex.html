@@ -305,6 +305,39 @@
   .bucket-note::placeholder{color:var(--ink-faint); font-style:italic;}
   @media (max-width:640px){ .mine-row{flex-wrap:wrap;} .mine-row select{max-width:none; width:100%;} }
 
+  /* ---------- UI gallery ---------- */
+  .shot-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px;}
+  .shot-cell{
+    background:linear-gradient(180deg, var(--panel2), var(--panel));
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    cursor:zoom-in; padding:0; text-align:left; font:inherit; color:var(--ink);
+  }
+  .shot-cell:hover{border-color:var(--steel);}
+  .shot-cell img{width:100%; height:160px; object-fit:cover; display:block; background:#0a0f1d;}
+  .shot-meta{padding:9px 12px 11px;}
+  .shot-meta .sm-top{display:flex; gap:8px; align-items:baseline; margin-bottom:3px;}
+  .shot-meta .sm-game{font-size:12px; font-weight:600; color:#eef3ff; flex:1; min-width:0;}
+  .shot-type{
+    flex:none; font-size:9.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--cyan); border:1px solid #1e5b62; border-radius:4px; padding:1px 6px;
+  }
+  .shot-meta .sm-cap{font-size:12px; color:var(--ink-dim); line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+  .game-shots{display:flex; gap:6px; margin:8px 0 2px; flex-wrap:wrap;}
+  .game-shots img{
+    height:52px; border:1px solid var(--line); border-radius:5px; cursor:zoom-in; display:block;
+  }
+  .game-shots img:hover{border-color:var(--steel);}
+  .lightbox{
+    position:fixed; inset:0; z-index:60; background:rgba(5,8,18,.92);
+    display:none; flex-direction:column; align-items:center; justify-content:center; padding:26px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:min(96vw,1100px); max-height:72vh; border:1px solid var(--line); border-radius:8px; background:#0a0f1d;}
+  .lb-cap{max-width:80ch; text-align:center; color:var(--ink); font-size:14px; margin-top:14px; line-height:1.55;}
+  .lb-sub{color:var(--ink-faint); font-size:11.5px; letter-spacing:.06em; margin-top:5px;}
+  .lb-nav{display:flex; gap:10px; margin-top:14px;}
+
   .guide h2{font-family:"Palatino Linotype", Palatino, Georgia, serif; font-size:22px; margin:26px 0 10px; color:#eef3ff;}
   .guide p, .guide li{color:var(--ink-dim); max-width:76ch;}
   .guide ol{padding-left:22px;} .guide li{margin-bottom:8px;}
@@ -357,6 +390,7 @@
   <button class="tab" role="tab" aria-selected="false" data-view="minigames">Minigames</button>
   <button class="tab" role="tab" aria-selected="false" data-view="games">Games</button>
   <button class="tab" role="tab" aria-selected="false" data-view="mygame">My Game</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="gallery">UI Gallery</button>
   <button class="tab" role="tab" aria-selected="false" data-view="pillars">Design Pillars</button>
   <button class="tab" role="tab" aria-selected="false" data-view="guide">How to Use</button>
 </div></div></nav>
@@ -469,6 +503,16 @@
     <div id="myBoard"></div>
   </section>
 
+  <!-- ================= UI GALLERY ================= -->
+  <section class="view" id="view-gallery">
+    <div class="filters">
+      <div class="frow" id="shotGameChips"></div>
+      <div class="frow" id="shotTypeChips"></div>
+    </div>
+    <p class="count-note" id="shotCount"></p>
+    <div class="shot-grid" id="shotGrid"></div>
+  </section>
+
   <!-- ================= PILLARS ================= -->
   <section class="view" id="view-pillars">
     <div id="pillarCards"></div>
@@ -498,12 +542,28 @@
     <p>The <b>My Game</b> tab is where the codex stops being a library. Everything marked <b>Yes</b> collects there as a shortlist, and each one gets placed into a system of the game you're building — discovery, combat, progression, venues, world. Each system has its own notes box for the rules those mechanics have to serve.</p>
     <p>The value is in the placing. A mechanic you can't assign to a system is a mechanic you liked without knowing what it's <i>for</i>, and a system holding twelve entries is one you're overbuilding. Use <b>Parked</b> honestly — "worth loving, not worth building here" is a real answer, and a shortlist with nothing parked usually means nothing has been decided.</p>
 
+    <h2>The UI Gallery</h2>
+    <p>The <b>UI Gallery</b> tab holds real screenshots of the researched games' interfaces — battle HUDs, menu screens, minigames — filterable by game and by screen type, each captioned with what the UI is showing. Use it three ways: as reference when designing your own screens, to study how another game solved the same layout problem, and to check a codex claim against what's actually on screen. Thumbnails also appear on each game's card in the Games tab.</p>
+    <p>The images live in the <b>shots/</b> folder beside this file (sources in <code>shots/SOURCES.md</code>). If you open the bare HTML without that folder, the gallery simply explains itself — nothing else breaks.</p>
+
     <h2>Your edits are saved</h2>
     <p>Ratings, decisions, notes, and new entries save automatically in this browser (when opened as a local file). They live in this browser only — use <b>Export backup</b> now and then to download a JSON snapshot, and <b>Import backup</b> to restore it or move to another computer. If your browser blocks local storage, the page still works for reading and filtering; just export before closing to keep changes.</p>
     <p><b>Storage is per address.</b> Opening the file from your disk and opening the hosted copy at <a href="https://ali0600.github.io/jrpg-design-codex/" style="color:var(--green)">ali0600.github.io/jrpg-design-codex</a> are two separate stores — work done in one will not appear in the other. Export from the one you've been using and import into the other to bring your decisions across.</p>
   </section>
 
 </main>
+
+<!-- lightbox for UI screenshots -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+  <div class="lb-sub" id="lbSub"></div>
+  <div class="lb-nav">
+    <button class="btn" id="lbPrev">← Prev</button>
+    <button class="btn" id="lbClose">Close (Esc)</button>
+    <button class="btn" id="lbNext">Next →</button>
+  </div>
+</div>
 
 <footer><div class="wrap">JRPG Design Codex · fully offline · your data stays on your machine</div></footer>
 
@@ -551,6 +611,27 @@ const LINEAGES = [
    note:"Your strongest cluster. All nine turn exploration into construction, but they differ in what the world reads back: Suikoden II and Xenoblade grow a place, Dark Cloud 2 and Legend of Mana let you author its layout, and Ys VIII goes furthest — the village population is a NUMBER the map itself checks, so rescuing people is literally the traversal upgrade."},
   {name:"Collection that converts into power", ids:["M212","M214","M146","M158","M235","M160","M131"], counter:"M131",
    note:"The test you apply to every collectible: does owning it change what you can DO? Golden Sun gets four systems out of one creature; Clair Obscur's Pictos hand the ability to the whole party and give the slot back. Tetra Master sits at the end as the counter-example — hundreds of cards that never convert into anything, which is the failure to design against."},
+];
+
+/* UI screenshots. Files live in shots/<game-slug>/ next to this file — committed to
+   the repo and deployed with the site, at reduced resolution, provenance in
+   shots/SOURCES.md. A bare copy of this HTML without the folder degrades cleanly:
+   every img hides itself on error. Captions say what the UI SHOWS, cross-checked
+   against the game's codex entries — an uncaptioned screenshot teaches nothing. */
+const SHOT_TYPES = ["Battle","Menus","Field","Minigame","Map"];
+const SHOTS = [
+{game:"Kingdom Hearts II",src:"shots/kingdom-hearts-ii/battle-reaction-command.jpg",type:"Battle",from:"kingdomhearts.fandom.com",
+ cap:"The full battle HUD (JP version): command menu bottom-left, party portraits with health rings, the Drive gauge at MAX bottom-right — and a triangle Reaction Command prompt floating mid-screen."},
+{game:"Kingdom Hearts II",src:"shots/kingdom-hearts-ii/minigame-struggle.jpg",type:"Minigame",from:"kingdomhearts.fandom.com",
+ cap:"Struggle: both fighters' orb counts in the top corners, the match timer centre — and the ordinary battle command menu reused inside a town sport, so the minigame needs no new controls."},
+{game:"Final Fantasy X",src:"shots/final-fantasy-x/battle-ctb.jpg",type:"Battle",from:"finalfantasy.fandom.com",
+ cap:"CTB in action: commands bottom-left, party HP/MP bottom-right, and the full turn-order queue down the right edge — the whole fight is readable before you commit to an action."},
+{game:"Final Fantasy X",src:"shots/final-fantasy-x/menus-sphere-grid.jpg",type:"Menus",from:"finalfantasy.fandom.com",
+ cap:"The Sphere Grid mid-journey: Wakka at Sphere Level 1, claimed nodes lit, the next node's payoff spelled out top of screen. Progression as a board you physically walk."},
+{game:"The Legend of Dragoon",src:"shots/the-legend-of-dragoon/menus-additions.jpg",type:"Menus",from:"legendofdragoon.fandom.com",
+ cap:"The Addition list: every combo's level, SP payout, damage% and hits-to-next-level in one table — per-Addition mastery tracking, the exact loop M133 describes."},
+{game:"Sea of Stars",src:"shots/sea-of-stars/battle-timed-hits.jpg",type:"Battle",from:"seaofstars.fandom.com",
+ cap:"Battle UI: command ring on the active character, party HP/MP bars bottom-left, combo meter above them — and the enemy's 'lock' icons top-right, M079's telegraphed attack-break puzzle on screen."},
 ];
 
 const BASE_MECHS = [
@@ -2719,6 +2800,7 @@ function renderGames(){
       </div>
       <div class="game-sub">${esc(g.dev)} · ${esc(g.year)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}</div>
       ${scoreRowHTML(g)}
+      ${gameShotsHTML(g.title)}
       <p class="game-why">${esc(g.why)}</p>`;
     card.querySelector(".statusSel").addEventListener("change", e=>{
       const custom = store.customGames.find(x=>x.title===g.title);
@@ -2726,6 +2808,7 @@ function renderGames(){
       else store.gameStatus[g.title] = e.target.value;
       persist(); renderStats(); renderGames();
     });
+    wireShotThumbs(card);
     box.appendChild(card);
   });
 }
@@ -2789,6 +2872,107 @@ function renderLineages(){
   });
 }
 
+/* ============================= UI GALLERY ============================= */
+/* Screenshot files are optional by design — a bare copy of the HTML has no shots/
+   folder, so every <img> removes its own cell on error and the grid explains
+   itself when nothing loads. The lightbox walks the CURRENT filtered list. */
+let shotGame = "", shotType = "";
+let lbList = [], lbAt = 0;
+
+function shotsFor(title){ return SHOTS.filter(s=>s.game===title); }
+
+function gameShotsHTML(title){
+  const list = shotsFor(title);
+  if(!list.length) return "";
+  return `<div class="game-shots">${list.map(s=>
+    `<img src="${esc(s.src)}" alt="${esc(s.cap)}" title="${esc(s.cap)}" loading="lazy"
+          data-shot="${esc(s.src)}" onerror="this.remove()">`).join("")}</div>`;
+}
+function wireShotThumbs(rootEl){
+  rootEl.querySelectorAll("[data-shot]").forEach(img=>{
+    img.addEventListener("click", ()=>{
+      const shot = SHOTS.find(s=>s.src===img.dataset.shot);
+      if(!shot) return;
+      const list = shotsFor(shot.game);
+      openLightbox(list, Math.max(0, list.indexOf(shot)));
+    });
+  });
+}
+
+function buildShotChips(){
+  const gBox = $("#shotGameChips"), tBox = $("#shotTypeChips");
+  const games = [...new Set(SHOTS.map(s=>s.game))];
+  gBox.innerHTML = ""; tBox.innerHTML = "";
+  const mk = (box, label, on, fn) => {
+    const b = document.createElement("button");
+    b.className = "chip" + (on?" on":""); b.textContent = label; b.onclick = fn;
+    box.appendChild(b);
+  };
+  mk(gBox, "All games", shotGame==="", ()=>{ shotGame=""; renderGallery(); });
+  games.forEach(g=> mk(gBox, `${g} ${shotsFor(g).length}`, shotGame===g, ()=>{ shotGame = shotGame===g?"":g; renderGallery(); }));
+  mk(tBox, "All screens", shotType==="", ()=>{ shotType=""; renderGallery(); });
+  SHOT_TYPES.forEach(t=>{
+    const n = SHOTS.filter(s=>s.type===t).length;
+    if(!n) return; // don't offer a filter that can only show emptiness
+    mk(tBox, `${t} ${n}`, shotType===t, ()=>{ shotType = shotType===t?"":t; renderGallery(); });
+  });
+}
+
+function renderGallery(){
+  buildShotChips();
+  const list = SHOTS.filter(s => (!shotGame || s.game===shotGame) && (!shotType || s.type===shotType));
+  $("#shotCount").textContent = list.length + " screenshot" + (list.length===1?"":"s") + " shown · click to enlarge";
+  const grid = $("#shotGrid");
+  if(!list.length){
+    grid.innerHTML = '<div class="empty">No screenshots match. If NOTHING loads anywhere in this tab, you are viewing the bare HTML file without its <b>shots/</b> folder — grab it from the repo, or use the hosted copy.</div>';
+    return;
+  }
+  grid.innerHTML = list.map((s,i)=>`
+    <button class="shot-cell" data-i="${i}" aria-label="Enlarge: ${esc(s.cap)}">
+      <img src="${esc(s.src)}" alt="${esc(s.cap)}" loading="lazy" onerror="shotCellError(this)">
+      <div class="shot-meta">
+        <div class="sm-top"><span class="sm-game">${esc(s.game)}</span><span class="shot-type">${esc(s.type)}</span></div>
+        <div class="sm-cap">${esc(s.cap)}</div>
+      </div>
+    </button>`).join("");
+  grid.querySelectorAll(".shot-cell").forEach(cell=>
+    cell.addEventListener("click", ()=> openLightbox(list, +cell.dataset.i)));
+}
+/* When EVERY image fails (bare HTML copied without its shots/ folder), an empty grid
+   under a "6 screenshots shown" count reads as a bug — explain instead. */
+function shotCellError(img){
+  const grid = $("#shotGrid");
+  img.closest(".shot-cell")?.remove();
+  if(!grid.querySelector(".shot-cell")){
+    $("#shotCount").textContent = "";
+    grid.innerHTML = '<div class="empty">The screenshots could not load — you are viewing the bare HTML file without its <b>shots/</b> folder. Keep the folder next to the file (grab it from the repo), or use the hosted copy.</div>';
+  }
+}
+
+function openLightbox(list, at){
+  lbList = list; lbAt = at;
+  lbShow();
+  $("#lightbox").classList.add("open");
+}
+function lbShow(){
+  const s = lbList[lbAt];
+  if(!s) return;
+  $("#lbImg").src = s.src; $("#lbImg").alt = s.cap;
+  $("#lbCap").textContent = s.cap;
+  $("#lbSub").textContent = `${s.game} · ${s.type} · source: ${s.from} (see shots/SOURCES.md)`;
+}
+function lbClose(){ $("#lightbox").classList.remove("open"); }
+$("#lbClose").addEventListener("click", lbClose);
+$("#lbPrev").addEventListener("click", ()=>{ lbAt = (lbAt-1+lbList.length)%lbList.length; lbShow(); });
+$("#lbNext").addEventListener("click", ()=>{ lbAt = (lbAt+1)%lbList.length; lbShow(); });
+$("#lightbox").addEventListener("click", e=>{ if(e.target===e.currentTarget) lbClose(); });
+document.addEventListener("keydown", e=>{
+  if(!$("#lightbox").classList.contains("open")) return;
+  if(e.key==="Escape") lbClose();
+  else if(e.key==="ArrowLeft") { lbAt = (lbAt-1+lbList.length)%lbList.length; lbShow(); }
+  else if(e.key==="ArrowRight"){ lbAt = (lbAt+1)%lbList.length; lbShow(); }
+});
+
 /* ============================= STATS ============================= */
 function renderStats(){
   const ms = allMechs(), gs = allGames();
@@ -2820,7 +3004,7 @@ $("#importFile").addEventListener("change", e=>{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
       store = normalizeStore(data.store);
-      persist(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages();
+      persist(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };
@@ -3014,7 +3198,7 @@ function renderMyGame(){
 ["myq","myMaybe"].forEach(id=> $("#"+id).addEventListener("input", renderMyGame));
 
 /* ============================= INIT ============================= */
-buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages();
+buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
 if(!canSave) flashSave("Local saving unavailable — use Export backup");
 </script>
 </body>

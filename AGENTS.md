@@ -162,6 +162,19 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   optional `counter:"<id>"` marks a chain's counter-example (Tetra Master ends the
   collection chain) — it renders RED and moves the green "worth stealing" marker to
   the previous node. Without that flag the styling asserts the opposite of the note.
+- **`SHOTS` / `SHOT_TYPES`** — the UI Gallery (its own tab + thumbnail strips on game
+  cards + a shared lightbox). Each row: `{game, src, type, cap, from}`; files live in
+  `shots/<game-slug>/` NEXT to the HTML (the one exception to single-file — a bare copy
+  degrades cleanly, every img removes itself on error). Captions are REQUIRED and must
+  describe what the UI shows. The validator enforces SET EQUALITY between SHOTS rows
+  and the folder (both directions), and the deploy workflow copies `shots/` into the
+  site — if you add an image, the row, file, and (auto) deploy all travel together.
+  Add images via `scripts/fetch_ui_shots.py` (`--list` a wiki page, then `--get` a
+  File: title) — it detects format by MAGIC BYTES (Fandom's CDN serves WebP under .png
+  names), keeps ≤512px sources as PNG (pixel art smears under JPEG), resizes the rest
+  to ≤960px JPEG, and appends provenance to `shots/SOURCES.md`. CURATE VISUALLY: view
+  every candidate before keeping it — wiki pages are mostly character art, and one
+  "battle screenshot" turned out to be a scanned strategy-guide page.
 - Minigame videos: base rows never hardcode a video id (they rot). The owner can pin
   a specific URL per minigame, stored in `store.overrides[gID].yt` and validated by
   `cleanYt()` — https + a real YouTube host + an actual video id, so a stray paste
