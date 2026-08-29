@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **243 mechanics** (`BASE_MECHS` array, M001-M243) across **66 researched games**: FF7 Rebirth,
+- **261 mechanics** (`BASE_MECHS` array, M001-M261) across **66 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -59,7 +59,25 @@ backup; the HTML file is the source of truth and is more up to date.
   CrossCode (elemental modes gate puzzles but an Overload gauge locks you out if you lean
   on one), Fire Emblem: Three Houses (the monastery week as point-allocation; cross-house
   recruits earned by training into someone they'd respect).
-- **87 minigames** (`MINIGAMES` array, g001-g087): the Final Fantasy series (g001-g054)
+  Plus the **queue-clearing batch** (M244-M261, g088-g089, added 2026-08-12), which
+  emptied the research queue: EarthBound (the rolling HP odometer — damage arrives as a
+  RATE so you can out-heal a killing blow; the Sound Stone's eight melodies; the phone
+  economy where Dad banks your money and homesickness is cured by calling Mum), Mother 3
+  (Sound Battles — combos timed to the ENEMY'S battle theme, 16 hits max, tempo learnable
+  by putting the foe to sleep; Battle Memory, a found item that unlocks a risk-free
+  practice mode), Kingdom Hearts II (**the standout**: five Drive Forms each levelling on
+  a DIFFERENT verb — hits landed, Heartless killed, Drive Orbs collected, Nobodies slain —
+  and each paying out a permanent TRAVERSAL ability for base Sora; plus a Moogle shop that
+  gains EXP from the items it makes for you, which is the owner's "shops have upgrades too"
+  pillar built), Lost Odyssey (Skill Link — immortals learn only by standing next to
+  mortals, so party composition IS the skill tree; 33 dreams triggered by places, not plot;
+  the Aim Ring, whose miss costs the BONUS not the turn), Baten Kaitos (Magnus that change
+  while carried — lava hardens to a hot rock then cools to a pebble; a healing item can rot
+  into a damaging one), Live A Live (eight chapters with eight different VERBS over one
+  rigid spine — a boss-rush chapter where you learn techniques by BEING HIT by them, a
+  stealth chapter completable at 0 or 100 kills, a combat-free chapter that is trap prep
+  against a clock).
+- **89 minigames** (`MINIGAMES` array, g001-g089): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
   sims), each with a highlighted Rewards field and a
@@ -72,10 +90,9 @@ backup; the HTML file is the source of truth and is more up to date.
   missable); Ragtime Mouse's Protect Ring depends on answering the FINAL question, not a
   score threshold; Green Plains grants the "Sea" ability (not "Ocean").
 - **5 design pillars** (`PILLARS` array) with test questions.
-- **Games roster** (`BASE_GAMES` array) — **66 researched + 6 queued** (72 total). Queue
-  refilled 2026-07-28 with BRIEF-style `why` entries: EarthBound, Mother 3 (rhythm combos —
-  the timing lineage keyed to MUSIC), Kingdom Hearts II, Lost Odyssey, Baten Kaitos (cards
-  that AGE in real time — inventory as a living, changing thing), Live A Live.
+- **Games roster** (`BASE_GAMES` array) — **72 researched + 0 queued** (72 total). The
+  queue is EMPTY as of 2026-08-12; refill it with BRIEF-style `why` entries before the
+  next research session (see the Research playbook).
 - **Reception scores** on each game row (added 2026-07-28): `mc` (Metascore 0-100),
   `mcN` (critic review count), `us` (Metacritic user score 0-10), `usN` (user rating
   count), `mcPlat` (platform the score is FOR), `mcUrl`, `mcNote` (caveat). All fields
@@ -221,6 +238,13 @@ a game (or to work the queue):
    Caves of Narshe) fetch fine directly. Only a site with neither open API nor fetchable
    HTML (e.g. Neoseeker) drops to snippets — corroborate those with a readable source.
    A 402/403 is a bot-block, not a missing page.
+   Source notes as of 2026-08-12: **strategywiki.org now 403s its api.php too**, so it is
+   no longer a usable second source. **wikibound.info** (EarthBound/Mother) was added to
+   the allowlist — it blocks HTML but serves api.php openly, the same wrong-door pattern
+   as Fandom. Wiki page titles are frequently NOT what you would guess: Lost Odyssey's
+   pages are `Skills` / `Immortal` / `Rings`, and Mother 3's combo system lives at
+   `Sound Battle` on WikiBound and nowhere on Fandom. Probe a few titles before concluding
+   a wiki lacks coverage.
 3. Append mechanics rows (continue M-sequence) — every row needs the reward loop and
    owner-pillar adaptation notes.
 4. Append minigame rows (continue g-sequence) — **rewards must be concrete**: name the

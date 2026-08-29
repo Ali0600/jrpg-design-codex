@@ -309,10 +309,17 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /\bmc:\d+,mcN:/, "mc:999,mcN:", "Metascore out of range") },
   { name: "empty reward in an rt table", expect: /empty `get` reward/,
     apply: s => replaceFirst(s, /get:"[^"]+"/, 'get:""', "empty reward in an rt table") },
-  // Must target a QUEUED row: five researched games kept their brief text after
-  // being researched, so the first `why:"BRIEF:` in the file is not a queued one.
+  // Builds the failing shape itself -- queued AND brief-less -- instead of relying on
+  // a queued row being present. It broke once because the first `why:"BRIEF:` in the
+  // file belongs to an already-RESEARCHED game, and again when clearing the research
+  // queue left no queued row at all. A fixture for a CONDITIONAL rule has to establish
+  // the condition, not hope the data still happens to satisfy it.
   { name: "queued game with no research brief", expect: /need a `why` research brief/,
-    apply: s => replaceFirst(s, /(title:"Live A Live"[\s\S]{0,900}?why:")[^"]*"/, '$1"', "queued game with no research brief") },
+    apply: s => replaceFirst(
+      s,
+      /title:"Live A Live",([\s\S]{0,900}?)why:"[^"]*"/,
+      (_, inner) => 'title:"Live A Live",' + inner.replace(/status:"[^"]*"/, 'status:"To Research"') + 'why:""',
+      "queued game with no research brief") },
   { name: "unknown discovery verb", expect: /unknown discovery verb/,
     apply: s => replaceFirst(s, /verbs:\["([^"]+)"/, 'verbs:["Not A Real Verb"', "unknown discovery verb") },
   { name: "lineage pointing at a missing mechanic", expect: /references missing mechanic/,
