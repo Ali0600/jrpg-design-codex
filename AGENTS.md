@@ -75,7 +75,7 @@ backup; the HTML file is the source of truth and is more up to date.
 - **Games roster** (`BASE_GAMES` array) — **66 researched + 6 queued** (72 total). Queue
   refilled 2026-07-28 with BRIEF-style `why` entries: EarthBound, Mother 3 (rhythm combos —
   the timing lineage keyed to MUSIC), Kingdom Hearts II, Lost Odyssey, Baten Kaitos (cards
-  that AGE in real time — direct WAYMARK research), Live A Live.
+  that AGE in real time — inventory as a living, changing thing), Live A Live.
 - **Reception scores** on each game row (added 2026-07-28): `mc` (Metascore 0-100),
   `mcN` (critic review count), `us` (Metacritic user score 0-10), `usN` (user rating
   count), `mcPlat` (platform the score is FOR), `mcUrl`, `mcNote` (caveat). All fields
@@ -97,14 +97,6 @@ backup; the HTML file is the source of truth and is more up to date.
   is NOT the riddle — it's that Elden Ring rewards exploration in *many different ways* so
   the shape of the next reward is unpredictable. Design for VARIETY of discovery, not for
   one clever mechanic.
-- `CARD_GAME_PROMPT.md` (added 2026-07-28) — **WAYMARK**, the owner's unique card game:
-  rules-complete, fully self-contained (built to hand to a different conversation).
-  Standalone-first; its §10 maps every element onto Waystone and supersedes
-  GAME_PROMPT_V2.md §7 when integration happens. Core: Triple Triad's readable capture +
-  Queen's Blood's territory-gated placement + "Edicts" (collectible rule-cards — the
-  regional-rules idea made ownable) + "Journey Marks" (Tetra Master's per-copy growth,
-  made visible/chosen/deterministic). Zero RNG in match resolution (the Tetra autopsy
-  law). Research staged in scratchpad/cardgame/ (Triad ruleset, QB ruleset, Tetra autopsy).
 
 ## Owner's key preferences (learned over the project)
 - Loves: FF7 Rebirth's materia/weapon-upgrade layering; Elden Ring's paintings
@@ -275,8 +267,5 @@ CLAUDE.md, copy it over AGENTS.md** — two sources of truth always drift.
   Chrono Trigger, FF6, Super Mario RPG, Terranigma, Yakuza 0. Also: non-FF card games.
 - Distill all want:"Yes" mechanics into a design document ("pillars v2") for the
   owner's own JRPG.
-- ~~Design the owner's card game using the four-ingredient formula~~ — DONE 2026-07-28:
-  see `CARD_GAME_PROMPT.md` (WAYMARK). Remaining follow-up: build the prototype
-  (priority order in its §11) and, on integration, rebind §10's slots into Waystone.
 - Possible features: pin specific YouTube videos per minigame; a "my game" tab for
   designing their own systems against the pillars.

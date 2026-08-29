@@ -46,14 +46,11 @@ worse than none, because it reads as verified.
 
 ## Design output
 
-The codex isn't only an input. Three original design documents were written from it:
+The codex isn't only an input. Its research was distilled into an original game brief:
 
 - **[`GAME_PROMPT_V2.md`](GAME_PROMPT_V2.md)** — *Waystone*, an exploration RPG built on
   a 15-verb discovery taxonomy, defensive timing combat, and abilities that go party-wide
   once mastered
-- **[`CARD_GAME_PROMPT.md`](CARD_GAME_PROMPT.md)** — *WAYMARK*, a rules-complete card
-  game: territory-gated placement, collectible rule-cards, per-copy card growth, and
-  zero randomness in match resolution
 - **[`GAME_PROMPT.md`](GAME_PROMPT.md)** — the earlier Waystone brief, kept for reference
 
 ## Repository layout
@@ -92,7 +89,7 @@ python3 scripts/wiki_fetch.py finalfantasy.fandom.com "Chocobo Hot and Cold" --p
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 14
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 17
   structural invariants, with a mutation-testing self-check proving each one can fail
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection in Python** — API-first clients with host allowlisting,
