@@ -110,3 +110,22 @@ rendered output rather than the arrays.
 **Takeaway:** when a view applies emphasis by *position* (last, first, largest, newest),
 check whether every row's semantics match that position's meaning. Give the exception an
 explicit flag (`counter:`) rather than assuming ordering encodes value.
+
+## An image's filename and host page are claims about its content, not evidence
+Building the UI gallery meant harvesting screenshots by metadata: a file called
+`BattleXsample.JPG` sitting on the Sphere Grid page, `Sh2-judgment-ring.gif` on the
+Judgement Ring page. Viewed before committing, the first turned out to be a **scanned
+strategy-guide book spread** and the second decorative ring artwork — and roughly half
+of all candidates were rejects (character art, box covers, vistas with no HUD). None of
+that is visible in an API listing; the name, size and page context all read as exactly
+what was wanted.
+
+**Why it came up:** the curation bar was "the shot must show UI", and the only
+instrument that can check that bar is looking at the pixels. Every image was downloaded
+to a scratchpad and viewed before `--get` committed it to the repo; six of fourteen
+games yielded nothing usable and were recorded as such rather than padded with art.
+
+**Takeaway:** when harvesting media by filename/page/metadata, treat the metadata as a
+claim and verify the bytes by *viewing them* before shipping — and record the no-yield
+sources so the next pass doesn't re-search them. Same family as "verify the rendered
+outcome, not the proxy": the plausible filename is the proxy.
