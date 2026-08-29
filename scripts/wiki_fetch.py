@@ -43,8 +43,9 @@ USER_AGENT = "jrpg-design-codex-research/1.0 (personal game-design research)"
 
 
 def api_base(host: str) -> str:
-    # Fandom serves the API at /api.php; most other MediaWiki installs use /w/api.php.
-    if host.endswith("fandom.com"):
+    # Fandom and the Super Mario Wiki serve the API at /api.php; most other
+    # MediaWiki installs (strategywiki, wikibound) use /w/api.php.
+    if host.endswith("fandom.com") or host == "www.mariowiki.com":
         return f"https://{host}/api.php"
     return f"https://{host}/w/api.php"
 
