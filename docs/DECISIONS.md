@@ -6,54 +6,11 @@ rejected options still offer.
 
 ## Backlog — alternatives worth trying later
 
-- **In-match knowledge quizzes on card lore** (from the WAYMARK fork) — cards carrying
-  world-facts that matter in play; revisit hook: WAYMARK §5.4 keywords could host a
-  "Loremark" keyword once the base game is proven.
 - **Both-scores-per-game (original + best remaster)** (from the Metacritic fork) —
   revisit hook: `scripts/fetch_scores.py` already resolves both slugs; add a second
   field set (`mcR`, `usR`) and a second chip row.
 
 ---
-
-## 2026-07-28 — WAYMARK: standalone vs in-RPG card game
-
-**Fork:** design the owner's card game as (A) the in-world card game of Waystone,
-(B) a standalone game, or (C) standalone-first with explicit integration hooks.
-
-- **A — in-RPG only**: richest thematic fit immediately; but unusable until Waystone
-  exists, and the design brief couldn't be handed to another conversation cleanly.
-- **B — standalone only**: shippable on its own; but risks designing economy hooks
-  (shops, opponents) that later fight Waystone's systems.
-- **C — standalone-first, renameable slots** *(chosen — owner's call)*: every economy
-  element is a named slot with a 1:1 Waystone binding (CARD_GAME_PROMPT.md §10).
-  Constraint adopted: if a mechanic can't survive the renaming untouched, it was
-  designed wrong.
-
-**Status:** A rejected — subsumed by C's §10. B rejected — C is B plus a mapping table.
-
-**Revisit hook:** integration time = replace GAME_PROMPT_V2.md §7 with §10's bindings.
-
-## 2026-07-28 — WAYMARK: which ancestor lineage drives the core rules
-
-**Fork:** grid-capture (Triple Triad / Tetra Master), lane-&-rank (Queen's Blood /
-Gwent), or a research-driven hybrid.
-
-- **Grid-capture pure**: most readable, fastest matches; but well-trodden — hard to be
-  "unique, not a clone."
-- **Lane-&-rank pure**: deepest deck construction; but heavier rules and longer matches,
-  failing the owner's 2–4-minute bar for roadside NPC play.
-- **Hybrid** *(chosen — research decided, owner pre-approved that mode)*: Triad's
-  side-rank capture for readability + QB's territory logic as an adjacency gate
-  (no pawn bookkeeping) + the genuinely novel layer moved to the META: collectible
-  rule-cards (Edicts) and per-copy growth (Journey Marks).
-
-**Status:** pure lineages rejected — each fails one of the owner's acceptance tests
-(uniqueness / match length). `deferred — worth trying`: a lane-scored VARIANT could
-ship later as a venue type ("tournament boards score by row totals") without touching
-the core rules.
-
-**Revisit hook:** WAYMARK §9 knobs; a lane-scoring venue would slot in as a House
-Edict, keeping §4 untouched.
 
 ## 2026-07-28 — Metacritic scores: which release's score to record
 
@@ -72,7 +29,7 @@ Edict, keeping §4 untouched.
 
 **Fork:** the codex needed off-machine backup, a validation gate, and ideally a URL that
 works from a phone. Free GitHub Pages requires a public repo, and this repo carries the
-owner's original design work (WAYMARK's full rules, both Waystone briefs).
+owner's original design work (both Waystone briefs).
 
 - **A — public repo + GitHub Pages** *(chosen — owner's call)*: simplest path, free
   hosting, and a data-rich project with a real CI gate reads well as a portfolio piece.
@@ -111,3 +68,27 @@ C — `rejected — pillars are tests, not containers`.
 
 **Revisit hook:** `BUCKETS` is a single const near the My Game render code; making it
 user-editable means persisting it into `store.myGame` and adding an editor.
+
+## 2026-08-12 — Dropping the card-game side project
+
+**Fork:** a standalone card game was designed from the codex's card-game research
+(Triple Triad, Queen's Blood, Tetra Master) and written up as a full rules document.
+The owner tried it and reported it "wasn't helpful or fun". What happens to it?
+
+- **A — delete it and every reference** *(chosen — owner's call)*: the design document
+  removed, references cleared from CLAUDE.md, AGENTS.md, README.md, the codex data and
+  this file. Gone from the repo, the live site, and any fresh clone.
+- **B — scrub it from git history too**: rejected. It rewrites every commit hash on an
+  already-published repo, GitHub retains orphaned objects by SHA regardless, and the
+  content was the owner's own design doc rather than a secret.
+- **C — keep it, marked abandoned**: rejected — the point was to stop seeing it.
+
+**Do not re-propose building it.** This is recorded so a future session reads "tried,
+didn't land" rather than spotting the gap and suggesting it again.
+
+**What survives it:** Baten Kaitos stays in the research queue on its own merits, with
+its brief rewritten away from serving the card game and toward the mechanic itself —
+every item being a card that ages in real time. Possessions that change on their own is
+a legitimate "everything has upgrades" question independent of any card game. The
+underlying card-game research also remains in the codex as ordinary entries (mechanics
+M024, M092, M131 and their minigame rows), which is where it belongs.
