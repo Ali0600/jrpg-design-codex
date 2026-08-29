@@ -37,7 +37,8 @@ TIMEOUT = 30
 MAX_DOWNLOAD = 15 * 1024 * 1024  # bound the untrusted response
 # Image bytes must come from the wiki's own CDN or the wiki itself.
 ALLOWED_IMAGE_HOST_RE = re.compile(
-    r"(^|\.)wikia\.nocookie\.net$|(^|\.)wikimedia\.org$", re.IGNORECASE
+    r"(^|\.)wikia\.nocookie\.net$|(^|\.)wikimedia\.org$"
+    r"|^mario\.wiki\.gallery$|(^|\.)wikibound\.info$", re.IGNORECASE
 )
 
 PNG = b"\x89PNG\r\n\x1a\n"
