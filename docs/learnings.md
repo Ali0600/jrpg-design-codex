@@ -88,6 +88,15 @@ as designed.
 the condition — query the data for a row that *does*, and anchor on that. Text that looks
 like a status marker (a `BRIEF:` prefix) is not the status field.
 
+**It broke a second time, from the opposite direction (2026-08-12).** Clearing the
+research queue meant *no* game had `status:"To Research"` any more, so the fixture had
+nothing to sabotage and the check silently stopped firing — a routine data change
+disarmed a validator rule. The real fix is stronger than picking a better row: the
+fixture now **constructs** the failing shape itself, setting both `status:"To Research"`
+and an empty `why` in one mutation. A fixture for a conditional rule should establish the
+condition rather than hope the data still happens to satisfy it — otherwise the test's
+survival depends on content that is free to change.
+
 ## Presentation can assert the opposite of the content it presents
 The lineage view styles the last node of each chain green, meaning "the one worth stealing
 from". The collection chain deliberately ends on Tetra Master — the codex's standing

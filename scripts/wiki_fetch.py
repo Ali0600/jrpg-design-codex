@@ -34,7 +34,7 @@ TIMEOUT = 20  # seconds — bound the outbound request
 # open fetcher (SSRF-safe): an unexpected host is refused, not requested.
 ALLOWED_HOST_RE = re.compile(
     r"^[a-z0-9-]+\.(fandom\.com|gamepedia\.com|wiki\.gg)$"
-    r"|^(strategywiki\.org|www\.mariowiki\.com|nintendo\.fandom\.com)$",
+    r"|^(strategywiki\.org|www\.mariowiki\.com|nintendo\.fandom\.com|wikibound\.info)$",
     re.IGNORECASE,
 )
 
