@@ -92,3 +92,25 @@ every item being a card that ages in real time. Possessions that change on their
 a legitimate "everything has upgrades" question independent of any card game. The
 underlying card-game research also remains in the codex as ordinary entries (mechanics
 M024, M092, M131 and their minigame rows), which is where it belongs.
+
+## 2026-08-29 — UI screenshots: committed copies vs hotlinks vs local-only
+
+**Fork:** the gallery needs images of copyrighted game UIs, and the repo + site are
+public. Where do the bytes live?
+
+- **A — commit compressed copies** *(chosen — owner's call)*: downloaded once via the
+  wiki APIs, resized (≤960px JPEG, small pixel art stays PNG), committed under
+  `shots/` with per-file provenance in `shots/SOURCES.md`. No rot, works offline and
+  on Pages. Standard wiki fair-use posture: reduced resolution, accompanying design
+  commentary, attribution.
+- **B — hotlink the wiki CDN URLs**: no copyrighted bytes in the repo — but images
+  break when wikis rename files, which is the exact rot class the codex already
+  refuses for YouTube video ids; and the local file needs internet.
+- **C — local-only, gitignored**: safest legally, but the hosted copy (the whole point
+  of Pages for the owner) would show an empty gallery.
+
+**Status:** B — `rejected — trades a copyright optic for guaranteed link rot`.
+C — `rejected — defeats the phone use-case`.
+
+**Revisit hook:** if a takedown ever arrives, the fix is `git rm` the file + row (CI's
+set-equality check makes a half-removal impossible) and the site redeploys clean.

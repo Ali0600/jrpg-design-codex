@@ -12,8 +12,8 @@
  * passed cannot distinguish "the data is sound" from "the check does nothing".
  */
 
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { dirname, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -109,14 +109,16 @@ export function validate(html, docs = {}) {
       src +
         "; return {CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES," +
         " LINEAGES: typeof LINEAGES === 'undefined' ? null : LINEAGES," +
-        " VERBS: typeof VERBS === 'undefined' ? null : VERBS};"
+        " VERBS: typeof VERBS === 'undefined' ? null : VERBS," +
+        " SHOTS: typeof SHOTS === 'undefined' ? null : SHOTS," +
+        " SHOT_TYPES: typeof SHOT_TYPES === 'undefined' ? null : SHOT_TYPES};"
     )();
   } catch (e) {
     errors.push(`data region does not evaluate: ${e.message}`);
     return { errors, stats: null };
   }
 
-  const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS } = data;
+  const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -217,6 +219,35 @@ export function validate(html, docs = {}) {
     for (const m of BASE_MECHS) {
       for (const v of m.verbs ?? []) {
         if (!verbSet.has(v)) errors.push(`mechanic ${m.id}: unknown discovery verb ${JSON.stringify(v)}`);
+      }
+    }
+  }
+  if (SHOTS) {
+    const typeSet = new Set(SHOT_TYPES ?? []);
+    const referenced = new Set();
+    for (const s of SHOTS) {
+      const label = `shot ${JSON.stringify(s.src ?? "(no src)")}`;
+      if (!titles.has(s.game)) errors.push(`${label}: unknown game ${JSON.stringify(s.game)}`);
+      if (!typeSet.has(s.type)) errors.push(`${label}: type ${JSON.stringify(s.type)} not in SHOT_TYPES`);
+      if (!isText(s.cap)) errors.push(`${label}: caption is required — an uncaptioned screenshot teaches nothing`);
+      if (!isText(s.from)) errors.push(`${label}: missing \`from\` source host`);
+      if (!/^shots\/[a-z0-9-]+\/[a-z0-9.-]+\.(jpg|png|webp)$/.test(s.src ?? "")) {
+        errors.push(`${label}: src must match shots/<game-slug>/<name>.(jpg|png|webp)`);
+      }
+      if (referenced.has(s.src)) errors.push(`${label}: duplicate src`);
+      referenced.add(s.src);
+    }
+    // Set equality BOTH ways against the real folder: a ref without a file is a broken
+    // image; a file without a ref is an invisible orphan nobody will ever audit.
+    if (docs.shotFiles == null && SHOTS.length) {
+      errors.push("SHOTS rows exist but the shots/ folder could not be listed — every image would 404");
+    }
+    if (docs.shotFiles != null) {
+      for (const src of referenced) {
+        if (!docs.shotFiles.has(src)) errors.push(`shot ${JSON.stringify(src)}: file missing from the shots/ folder`);
+      }
+      for (const f of docs.shotFiles) {
+        if (!referenced.has(f)) errors.push(`shots folder: ${JSON.stringify(f)} is not referenced by any SHOTS row — delete it or add the row`);
       }
     }
   }
@@ -326,6 +357,13 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /ids:\["M\d+"/, 'ids:["M999"', "lineage pointing at a missing mechanic") },
   { name: "counter-example outside its own chain", expect: /is not in its own ids list/,
     apply: s => replaceFirst(s, /counter:"M\d+"/, 'counter:"M001"', "counter-example outside its own chain") },
+  { name: "shot referencing an unknown game", expect: /shot .*unknown game/,
+    apply: s => replaceFirst(s, '{game:"Kingdom Hearts II",src:"shots/kingdom-hearts-ii/battle-reaction-command.jpg"',
+                             '{game:"Kingdom Hearts III",src:"shots/kingdom-hearts-ii/battle-reaction-command.jpg"', "shot referencing an unknown game") },
+  { name: "shot with a type outside SHOT_TYPES", expect: /not in SHOT_TYPES/,
+    apply: s => replaceFirst(s, /type:"Battle"/, 'type:"BoxArt"', "shot with a type outside SHOT_TYPES") },
+  { name: "shot with an empty caption", expect: /caption is required/,
+    apply: s => replaceFirst(s, /cap:"[^"]+"/, 'cap:""', "shot with an empty caption") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
 ];
@@ -340,6 +378,16 @@ function replaceInDoc(text, needle, repl, label) {
 const DOC_SABOTAGES = [
   { name: "CLAUDE.md count drift", expect: /CLAUDE\.md says \d+ mechanics/,
     apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ mechanics\*\*/, "**999 mechanics**", "CLAUDE.md count drift") }) },
+  { name: "shot file missing from disk", expect: /file missing from the shots\/ folder/,
+    apply: d => {
+      if (!d.shotFiles?.size) throw new Error('sabotage "shot file missing": no shotFiles to remove');
+      return { ...d, shotFiles: new Set([...d.shotFiles].slice(1)) };
+    } },
+  { name: "orphan file in the shots folder", expect: /not referenced by any SHOTS row/,
+    apply: d => {
+      if (d.shotFiles == null) throw new Error('sabotage "orphan file": shotFiles listing absent');
+      return { ...d, shotFiles: new Set([...d.shotFiles, "shots/some-game/orphan.jpg"]) };
+    } },
   { name: "AGENTS.md mirror drift", expect: /AGENTS\.md has drifted/,
     apply: d => ({ ...d, agents: d.agents + "\ndrifted\n" }) },
 ];
@@ -395,7 +443,20 @@ function selftest(html, docs) {
 function main() {
   const html = readFileSync(CODEX, "utf8");
   const read = p => { try { return readFileSync(join(ROOT, p), "utf8"); } catch { return null; } };
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md") };
+
+  // Real listing of the shots folder, normalized to the repo-relative form the
+  // SHOTS rows use. Injectable so the selftest can stage missing/orphan files.
+  let shotFiles = null;
+  try {
+    shotFiles = new Set(
+      readdirSync(join(ROOT, "shots"), { recursive: true })
+        .map(String)
+        .filter(f => /\.(jpg|png|webp)$/.test(f))
+        .map(f => "shots/" + f.split(sep).join("/"))
+    );
+  } catch { /* no folder yet — SHOTS rows will then fail closed if any exist */ }
+
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), shotFiles };
 
   const { errors, stats } = validate(html, docs);
 

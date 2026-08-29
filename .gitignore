@@ -14,3 +14,4 @@ scores.json
 # This repo is public — the backup must never be committed.
 jrpg-codex-backup.json
 jrpg-codex-backup*.json
+.claude/
