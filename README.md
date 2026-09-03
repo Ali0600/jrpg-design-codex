@@ -100,7 +100,7 @@ Game screenshots in `shots/` are the property of their respective publishers,
 reproduced at reduced resolution for design study and commentary; every image's
 source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
 
-## Experience gained
+## Experience Gained
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
