@@ -181,6 +181,12 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   can't put a `javascript:` URL behind a link they'll click later.
 - Minigame cards link to YouTube via `ytLink()` (search-query URLs, never hardcoded
   video IDs — they don't rot).
+- **`refs`** — optional provenance on mechanic AND minigame rows:
+  `refs:[{u:"https://…",t:"Power-Up/Item FAQ by SIMSteven"}]`, rendered as a Sources
+  line. `u` must be https on a host matching `REF_HOSTS` (defined beside `refOk()` in
+  the page); the validator READS that regex out of the file, so there is one allowlist
+  and the gate cannot drift from the renderer. A URL outside it renders as plain text,
+  never an href — imported backups flow through the same renderer.
 
 ## Conventions for extending
 - To add researched games/mechanics: append to the arrays following the existing row
@@ -192,6 +198,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `rt` holds the actual items and thresholds.
 - `scripts/` contains the Python patch scripts that built the file historically —
   reference only; with direct file access, edit the arrays in place instead.
+- `scripts/gf_probe.js` is the GameFAQs in-page probe (see the Research playbook, step
+  2b, and `docs/research/README.md`); `scripts/digest_lint.mjs` enforces the pointer
+  grammar on `docs/research/*.md`. Both are tested offline by
+  `node --test scripts/gf_probe.test.mjs` (synthetic fixtures under `scripts/fixtures/gf/`,
+  a 100-line DOM stand-in, no jsdom) — that suite runs in CI too.
 - `scripts/fetch_scores.py` refreshes the Metacritic critic + user scores. It reads a
   roster JSON (`[{title,year,dev},...]` exported from BASE_GAMES) and writes scores.json.
   Design notes worth keeping: it resolves the DIRECT slug first (Metacritic's canonical
@@ -223,11 +234,13 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   `why` brief; SHOTS rows carry a known game, a type in SHOT_TYPES, a caption and a
   well-formed `src`, with **two-way set equality against the shots/ folder** (a row
   without a file is a broken image; a file without a row is an orphan nobody audits),
-  failing closed if the folder cannot be listed; and **the counts quoted in CLAUDE.md
-  match the data**, with AGENTS.md byte-identical to CLAUDE.md. The last two make the
-  doc drift that bit us before into a build failure — so when counts change, update
-  CLAUDE.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **22** sabotages to fire.
+  failing closed if the folder cannot be listed; optional `refs` on rows (https, host in
+  the page's own `REF_HOSTS`, non-empty label); and **the counts quoted in CLAUDE.md AND
+  README.md match the data**, with AGENTS.md byte-identical to CLAUDE.md. The last two
+  make the doc drift that bit us before into a build failure — README sat at 243/87 for
+  two batches before its check existed — so when counts change, update CLAUDE.md and
+  README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
+- `--selftest` mutates the data in memory and requires all **25** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -266,6 +279,17 @@ a game (or to work the queue):
    pages are `Skills` / `Immortal` / `Rings`, and Mother 3's combo system lives at
    `Sound Battle` on WikiBound and nowhere on Fandom. Probe a few titles before concluding
    a wiki lacks coverage.
+   **2b. GameFAQs** (added 2026-09-05) is the richest source for item lists, secrets and
+   minigame payouts — and Cloudflare-challenged to every script (403 "Just a moment…"
+   even with a browser UA; no API). Read it in the **Browser pane** with
+   `scripts/gf_probe.js` evaluated in the page, following the runbook in
+   `docs/research/README.md`: search → confirm platform+year against BASE_GAMES →
+   `triage()` → per guide `meta()` → `toc({min:800})` → PILLAR `grep`s → ≤4 `section()`
+   reads, ~12 pages per game. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
+   every one with a `[gf:<id> §<section>, <author> v<ver>]` pointer; that digest is the
+   committed staging file. Never `get_page_text` on gamefaqs (14KB of consent text),
+   never curl it or reuse its cookie, never store guide text. Stop on
+   `page().kind === "challenge"`.
 3. Append mechanics rows (continue M-sequence) — every row needs the reward loop and
    owner-pillar adaptation notes.
 4. Append minigame rows (continue g-sequence) — **rewards must be concrete**: name the
@@ -276,9 +300,10 @@ a game (or to work the queue):
 
 ### The batch pipeline (use this for anything over ~3 games)
 Proven across five batches (PS1, Clair Obscur, PS2, popular-classics, modern-hits):
-1. **Stage** each game's verified result as its own JSON in a scratchpad dir FIRST —
-   one file per game, written the moment that game's research lands. This survives
-   context compaction and agent crashes; a lost staging dir cost a re-do once.
+1. **Stage** each game's verified result in `docs/research/<slug>.md` FIRST — the
+   committed digest (copy `docs/research/_template.md`), written the moment that game's
+   facts land, a pointer on every one. This replaced the scratchpad JSON that a lost
+   staging dir once cost a re-do; `node scripts/digest_lint.mjs` keeps it honest.
 2. **Compile** with a throwaway Node script: assigns sequential IDs from the current
    max, validates every `cat` against CATS, converts `->` to `→`, and emits three
    text blocks (mechanics / games / minigames).

@@ -9,6 +9,10 @@ rejected options still offer.
 - **Both-scores-per-game (original + best remaster)** (from the Metacritic fork) —
   revisit hook: `scripts/fetch_scores.py` already resolves both slugs; add a second
   field set (`mcR`, `usR`) and a second chip row.
+- **A committed splice script for digest rows** (from the GameFAQs-flow fork) — revisit
+  hook: the first session that splices more than ~10 rows out of `docs/research/*.md`
+  writes `scripts/splice_rows.mjs` — reads a digest's `## Codex rows` block, assigns ids
+  from the current max, anchors on the array's closing `];`, dry-run by default.
 
 ---
 
@@ -114,3 +118,42 @@ C — `rejected — defeats the phone use-case`.
 
 **Revisit hook:** if a takedown ever arrives, the fix is `git rm` the file + row (CI's
 set-equality check makes a half-removal impossible) and the site redeploys clean.
+
+## 2026-09-05 — How to read GameFAQs, a source that challenges every script
+
+**Fork:** GameFAQs guides hold the item lists, secrets and minigame payouts the codex
+wants, but the site answers every scripted client with a Cloudflare challenge (HTTP 403
+"Just a moment…", browser User-Agent or not) and has no API.
+
+- **A — read it in the Browser pane, one page at a time, with an in-page probe**
+  *(chosen)*: a real browser passes the challenge because it IS the thing being checked
+  for; `scripts/gf_probe.js` is evaluated inside the page and returns bounded digests
+  (contents list, keyword windows, one section at a time — 6KB default, 12KB ceiling),
+  because the only channel back is the tool result. Facts, never guide text, land in a
+  committed per-game digest with a pointer on every one. Cost: human browsing pace,
+  ~12 pages per game, and the probe is re-pasted on every navigation.
+- **B — reuse the browser's `cf_clearance` cookie from `curl`**: fast and scriptable,
+  and exactly the fingerprint-spoofing bypass the repo's own learning rejects — it turns
+  a "wrong door" into an arms race with the site's bot defence, against a robots.txt
+  that names AI crawlers as disallowed.
+- **C — skip the source**: the wikis already work through their API. But the pilot game
+  has two mechanics rows, zero minigame rows, and a 29KB *Power-Up/Item FAQ* nobody else
+  transcribed.
+
+**Status:** B `rejected — a bypass, not a front door`. C `rejected — leaves the richest
+source on the table`.
+
+## 2026-09-05 — Where harvested facts live before they are rows
+
+**Fork:** a guide yields far more than the two or three rows the codex keeps per game.
+
+- **A — `docs/research/<slug>.md`, committed** *(chosen — owner's call)*: every useful
+  fact in our own words with its pointer; survives a lost session; is the staging file
+  the rows are written from; greppable later. Public repo, so the linter refuses a fact
+  without a source and the runbook forbids guide prose.
+- **B — scratchpad only**: what the batch pipeline did before. A lost staging dir once
+  cost a full re-do, and the surplus was thrown away every time.
+
+**Status:** B `rejected — lossy, and it already bit once`. Related, deferred: a committed
+splice script (see Backlog) — the digest's paste-ready `## Codex rows` block makes
+row-writing mechanical without one at today's two-to-four rows per game.

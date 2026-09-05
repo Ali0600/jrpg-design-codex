@@ -1,0 +1,75 @@
+*****************************************************************************
+*                    Lantern Vale - Relic & Power-Up FAQ                    *
+*****************************************************************************
+Version 1.2
+Author: aster
+
+Table of Contents
+-----------------
+1. Introduction .................................................... [INT01]
+2. Power-Ups ....................................................... [PWR01]
+3. Relics .......................................................... [REL01]
+4. Secrets ......................................................... [SEC01]
+5. Shops ........................................................... [SHP01]
+6. Version History ................................................. [VER01]
+=============================================================================
+1. Introduction                                                       [INT01]
+=============================================================================
+
+This guide covers every relic and power-up in Lantern Vale. Nothing in it is
+from a real game; it exists to exercise the heading detector.
+
+To use it: 1. Go to the town. Then read the section you need.
+
+===== Power-Ups =====
+
+Each power-up raises one stat permanently. There are eight in the base game
+and four more behind the post-game door.
+
+POWER-UP LIST
+
+FLAME CORE
+Effect: +5 attack
+
+FROST CORE
+Effect: +5 defense
+
+GALE CORE
+Effect: +5 speed
+
+STONE CORE
+Effect: +5 guard
+
+TIDE CORE
+Effect: +5 magic
+
+STAR CORE
+Effect: +5 luck
+
+[REL01] Relics
+==============
+
+Relics are found in the field and never sold. The author asks that this text
+is not:
+  1) used for nothing here
+  2) given away as a product
+
+4.2 Hidden Relics
+
+Cross the bridge at night to find the Moon Relic behind the mill. The Relic
+of Echoes sits under the third lantern.
+
+SECRETS
+
+The blue door opens once the lantern count reaches 12. You receive the Sun
+Sigil after 30 wins in the harbor arena, and a second Relic after 50 wins.
+
+Shops
+-----
+The vendor in Harbor sells Tide Cores for 250 coins each after chapter 3.
+The exchange booth trades 10 shells for one Glow Bead.
+
+Version History
+---------------
+v1.2 - fixed typos.
+v1.0 - first release.
