@@ -224,6 +224,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   out-of-range values before trusting a refresh.
 - After any edit, run `node scripts/validate_codex.mjs --selftest` (it supersedes the
   old hand-rolled parse check — see the CI section below).
+- To eyeball a render, use the live site: `file://` in the Browser pane loads as a static
+  `data:` snapshot where `scrollIntoView` does nothing, so screenshots show the hero
+  whatever you scroll. Reach a card with `find` + `scroll_to`, and take the DOM (anchors,
+  hrefs, computed visibility) as the proof, not the picture.
 
 ## Deployment & CI — main is a PRODUCTION TRIGGER
 Live at **https://ali0600.github.io/jrpg-design-codex/** (public repo `Ali0600/jrpg-design-codex`).
@@ -318,7 +322,9 @@ Proven across five batches (PS1, Clair Obscur, PS2, popular-classics, modern-hit
    FOUND, is UNIQUE, and that the gap between it and the closing `];` is whitespace
    only. Anchor on the LAST ROW'S ending text — verify it at execution time, it
    changes every batch. These asserts caught two would-be corruptions; do not skip them.
-   Watch for curly apostrophes (’ vs ') when copying anchor text.
+   Watch for curly apostrophes (’ vs ') when copying anchor text. Both arrays end with
+   `}` and NO trailing comma before `];` — the pilot's splice assumed `},` and its own
+   assert refused it; handle either ending.
 4. **Validate**: parse via `new Function(<script>)`, then assert exact counts, ID
    sequentiality + zero dupes, every `cat` in CATS, and zero orphan `game`/`g` refs.
 5. **Score + docs**: `fetch_scores.py` for new rows, then update this file's counts.
