@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **261 mechanics** (`BASE_MECHS` array, M001-M261) across **66 researched games**: FF7 Rebirth,
+- **265 mechanics** (`BASE_MECHS` array, M001-M265) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -77,7 +77,14 @@ backup; the HTML file is the source of truth and is more up to date.
   rigid spine — a boss-rush chapter where you learn techniques by BEING HIT by them, a
   stealth chapter completable at 0 or 100 kills, a combat-free chapter that is trap prep
   against a clock).
-- **89 minigames** (`MINIGAMES` array, g001-g089): the Final Fantasy series (g001-g054)
+  Plus the **GameFAQs pilot** (M262-M265, g090-g092, added 2026-09-05): Threads of Fate
+  re-researched through the new flow (`docs/research/README.md`) from two GameFAQs guides
+  by different authors plus the wiki — a three-use monster-coin economy, a legendary set
+  that is really an NPC's cookware converting monster coins into stats, a hidden wine that
+  cuts the upgrade shop's prices sixfold, Mint's spell effects hidden five different ways
+  (against Rue's forms all in the open), and three minigames with reward tables. The
+  first rows to carry `refs`; the digest is `docs/research/threads-of-fate.md`.
+- **92 minigames** (`MINIGAMES` array, g001-g092): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
   sims), each with a highlighted Rewards field and a
@@ -134,7 +141,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M243, minigames g001-g087. Continue the
+  - IDs are sequential: mechanics M001-M265, minigames g001-g092. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the

@@ -18,10 +18,11 @@
      against synthetic fixtures without a browser. */
   var core = { V: V, MAX: MAX, DEF: DEF };
 
-  var RULE = /^\s*[=\-_*#~+]{4,}\s*$/;
-  var BANNER = /^[\-=*#~+]{2,}\s*[^\s\-=*#~+].*?\s*[\-=*#~+]{2,}$/;
+  // A rule line may be boxed: `//-=-=-=-=\\` opens a heading box, `\\-=-=-=-=//` closes it.
+  var RULE = /^\s*[\/\\|]{0,2}\s*[=\-_*#~+]{4,}\s*[\/\\|]{0,2}\s*$/;
+  var BANNER = /^[\-=*#~+<>]{2,}\s*[^\s\-=*#~+<>].*?\s*[\-=*#~+<>]+$/;
   var BRACKET = /^\[[A-Za-z0-9.]{2,8}\]\s*\S/;
-  var NUMBERED = /^(\d{1,2}(?:\.\d{1,2}){0,2}|[IVX]{1,5}|[A-Z])[.)]?\s+[A-Z0-9]/;
+  var NUMBERED = /^(\d{1,2}(?:\.\d{1,2}){0,2}|[IVX]{1,5}|[A-Z])[.)>:]?\s+[A-Z0-9]/;
   var CAPS = /^[A-Z0-9][A-Z0-9 \-'&\/:,()!?]{3,60}$/;
   var BOILER = /^(copyright|legal|disclaimer|version history|revision history|update history|updates?$|credits|contact|thanks|acknowledg|about (the|this) (author|guide|faq)|introduction|table of contents|contents|faq info|legal stuff|e-?mail)/i;
 
@@ -43,7 +44,7 @@
 
   function isRule(s) { return RULE.test(s); }
   function isBlank(s) { return !s || !s.trim(); }
-  function clean(s) { return s.replace(/^[\s\-=*#~+|:!]+|[\s\-=*#~+|:!]+$/g, "").replace(/\s+/g, " "); }
+  function clean(s) { return s.replace(/^[\s\-=*#~+|:!<>]+|[\s\-=*#~+|:!<>]+$/g, "").replace(/\s+/g, " "); }
   function letters(s) { return (s.match(/[A-Z]/g) || []).length; }
   function nwords(s) { return s.split(/\s+/).filter(Boolean).length; }
 
