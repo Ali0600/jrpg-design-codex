@@ -220,17 +220,25 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   allowlisted in the script (the FF minigame survey is broader than the mechanics
   roster — a new orphan outside that list is treated as a typo); score ranges (the
   fetch_scores guard re-asserted at rest); `rt` rows non-empty; queued games have a
-  `why` brief; and **the counts quoted in CLAUDE.md match the data**, with AGENTS.md
-  byte-identical to CLAUDE.md. The last two make the doc drift that bit us before into
-  a build failure — so when counts change, update CLAUDE.md and re-copy AGENTS.md in
-  the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all 14 checks to fire. Two
-  fixture rules learned the hard way: a sabotage must land INSIDE the data region (an
-  early `/us:\d+/` fixture matched `border-radius:4px` in the CSS and tested nothing),
-  and the "queued game needs a brief" fixture must target an actually-queued row —
-  five RESEARCHED games kept their `BRIEF:`-style `why` text.
-- Optional `LINEAGES` / `VERBS` structures are validated only if present, so the
-  validator does not need editing when they land.
+  `why` brief; SHOTS rows carry a known game, a type in SHOT_TYPES, a caption and a
+  well-formed `src`, with **two-way set equality against the shots/ folder** (a row
+  without a file is a broken image; a file without a row is an orphan nobody audits),
+  failing closed if the folder cannot be listed; and **the counts quoted in CLAUDE.md
+  match the data**, with AGENTS.md byte-identical to CLAUDE.md. The last two make the
+  doc drift that bit us before into a build failure — so when counts change, update
+  CLAUDE.md and re-copy AGENTS.md in the SAME commit or CI goes red.
+- `--selftest` mutates the data in memory and requires all **22** sabotages to fire.
+  Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
+  region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
+  the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
+  outside the region. (2) A fixture for a CONDITIONAL rule must ESTABLISH the
+  condition, not hope the data still satisfies it: the "queued game needs a brief"
+  sabotage first broke because the first `why:"BRIEF:` in the file belongs to an
+  already-RESEARCHED game, then broke again when clearing the queue left no queued row
+  at all — a routine data change silently disarming the check. It now rewrites a row to
+  BOTH `status:"To Research"` and an empty `why` in one mutation.
+- Optional `LINEAGES` / `VERBS` / `SHOTS` / `SHOT_TYPES` structures are validated only
+  if present, so the validator does not need editing when they land.
 
 ## Research playbook (the system for "research <game>")
 The Games tab is a pipeline: cards sort Researching -> To Research -> Researched, each
