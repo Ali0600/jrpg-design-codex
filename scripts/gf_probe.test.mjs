@@ -29,6 +29,8 @@ test("detects every plain-text heading style", () => {
   const expect = {
     "Introduction": "rule", "Power-Ups": "banner", "[REL01] Relics": "rule", "Hidden Relics": "numbered",
     "SECRETS": "caps", "Shops": "rule", "Version History": "rule",
+    // The boxed style the Threads of Fate Secrets Guide uses (found live, 2026-09-05).
+    "04> LEGENDARY STUFF": "rule", "Legendary Ladle": "banner", "Legendary Pot": "banner",
   };
   for (const [frag, kind] of Object.entries(expect)) {
     const s = byHead(secs, frag);

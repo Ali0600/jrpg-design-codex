@@ -69,6 +69,18 @@ Shops
 The vendor in Harbor sells Tide Cores for 250 coins each after chapter 3.
 The exchange booth trades 10 shells for one Glow Bead.
 
+//-=-=-=-=-=-=-=-=-=-=-=-\\
+    04> LEGENDARY STUFF
+\\-=-=-=-=-=-=-=-=-=-=-=-//
+
+Three cookware pieces are scattered across the dungeons.
+
+>>Legendary Ladle >
+Found under the mill, behind the third lantern.
+
+>>Legendary Pot >
+Found on the harbor roof after chapter 3.
+
 Version History
 ---------------
 v1.2 - fixed typos.
