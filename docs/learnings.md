@@ -151,3 +151,21 @@ logic to the far side of the channel and give every accessor a hard output budge
 a "dropped N" marker. The document never crosses; digests do. And when a site blocks
 scripts outright, "read it like a person" is a legitimate front door — reusing the
 browser's clearance cookie from a script is not.
+
+## Synthetic fixtures only cover the shapes you imagined — run one real input before trusting them
+The GameFAQs probe's heading detector passed 17 cases on a fixture I wrote, then met its
+first real guide: the Secrets Guide boxes every heading as `//-=-=-=\\ … 04> TITLE …
+\\-=-=-=//` and sub-heads as `>>Name >`, none of which any fixture contained, so a 30KB
+guide came back as one section. Earlier the same fixture had *hidden* a bug the other way:
+my hand-written contents lines were 77 characters wide, over a 72-character heading cap I
+had chosen by feel — classic guides are 79 columns — so the TOC tests failed for a reason
+that looked like a parser bug and was really a wrong constant.
+
+**Why it came up:** the fail-first suite was genuinely red-then-green, which is exactly the
+kind of evidence that invites overconfidence. The `grep`/`lines()` escape hatch kept the
+pilot moving, and the fix went into the fixture as a block in the real guide's style.
+
+**Takeaway:** a fixture you authored encodes your assumptions twice — in the input and in
+the expectation — so before calling a parser covered, feed it one input you did not write
+and read the whole output, not the assertion. Keep a raw-access escape hatch in any
+instrument that classifies, so the day its classes are wrong the work still proceeds.
