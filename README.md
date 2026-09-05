@@ -1,7 +1,7 @@
 # JRPG Design Codex
 
 A searchable research database of **what makes JRPG progression and exploration feel
-good** — 243 mechanics across 66 games, 87 minigames with their actual reward tables,
+good** — 261 mechanics across 72 games, 89 minigames with their actual reward tables,
 and reception scores — built as a design reference for an original JRPG.
 
 **[Open the codex →](https://ali0600.github.io/jrpg-design-codex/)**
@@ -13,8 +13,8 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 
 | | |
 |---|---|
-| **243 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
-| **87 minigames** | 42 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
+| **261 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
+| **89 minigames** | 44 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
 
@@ -40,6 +40,9 @@ worse than none, because it reads as verified.
 - **UI Gallery** — captioned screenshots of the researched games' actual interfaces
   (battle HUDs, menus, minigames), filterable by game and screen type, with thumbnails
   on each game's card
+- **Sources** — rows can carry provenance links back to the guide or wiki page each
+  claim came from; everything a research pass found that didn't fit a row lives in a
+  per-game digest under [`docs/research/`](docs/research/)
 - **Your own layer** — ratings, want/skip decisions, notes, pinned videos and custom
   entries save to `localStorage`, with JSON export/import for backup
 
@@ -62,8 +65,11 @@ The codex isn't only an input. Its research was distilled into an original game 
 JRPG_Design_Codex.html     the app and the database, in one file
 shots/                     UI screenshots for the gallery (sources in SOURCES.md)
 scripts/validate_codex.mjs structural validator (runs in CI)
+scripts/gf_probe.js        in-page probe for reading GameFAQs guides (tests alongside)
+scripts/digest_lint.mjs    pointer-grammar lint for the research digests
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
+docs/research/             one digest per researched game, every fact with its source
 docs/                      learnings and design decision records
 ```
 
@@ -76,7 +82,8 @@ node scripts/validate_codex.mjs --selftest
 Validation runs on every push and pull request, and **gates the deploy** — nothing
 reaches the live site that hasn't passed. It checks ID sequences, category and enum
 values, cross-references between the arrays, score ranges, reward-table completeness,
-and that the counts quoted in the docs still match the data.
+source-link hosts, and that the counts quoted in this README and in CLAUDE.md still
+match the data.
 
 `--selftest` then sabotages the data in memory — a duplicated ID, an out-of-range score,
 a broken reference — and requires every check to fire. A validator that has only ever
@@ -96,6 +103,16 @@ resized, format-detected by magic bytes, and logged to `shots/SOURCES.md`):
 python3 scripts/fetch_ui_shots.py --list finalfantasy.fandom.com "Sphere Grid"
 ```
 
+GameFAQs guides are the richest source for item lists and minigame payouts, but the
+site challenges every script, so they are read in a real browser with a probe evaluated
+inside the page that returns only bounded digests (contents, keyword windows, one
+section at a time). The runbook is [`docs/research/README.md`](docs/research/README.md);
+the probe's offline tests run against synthetic fixtures:
+
+```bash
+node --test scripts/gf_probe.test.mjs
+```
+
 Game screenshots in `shots/` are the property of their respective publishers,
 reproduced at reduced resolution for design study and commentary; every image's
 source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
@@ -104,10 +121,14 @@ source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 22
-  structural invariants, with a mutation-testing self-check proving each one can fail
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 25
+  structural invariants, with a mutation-testing self-check proving each one can fail,
+  and a 17-case offline suite for the browser probe built on a 100-line DOM stand-in
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
-- **Resilient data collection in Python** — API-first clients with host allowlisting,
-  range validation that rejects malformed upstream values, and fail-closed error handling
-- **Documentation-as-code** — CI verifies that figures quoted in the docs still match the
-  data they describe, so the two can't silently drift
+- **Resilient data collection** — API-first Python clients with host allowlisting,
+  range validation that rejects malformed upstream values, fail-closed error handling,
+  and an in-page extraction probe for a Cloudflare-gated site that caps every result
+  at 12KB so a 1.4MB guide can be read without ever being fetched whole
+- **Documentation-as-code** — CI verifies that figures quoted in the README and the
+  agent docs still match the data they describe; the README check caught a real
+  two-batch drift on the day it was added

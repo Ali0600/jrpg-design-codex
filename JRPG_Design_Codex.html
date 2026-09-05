@@ -251,6 +251,14 @@
     font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
     color:var(--purple); border:1px solid #4a3a72; border-radius:4px; padding:2px 7px;
   }
+  .refs{display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:9px;}
+  .refs .flabel{margin:0 4px 0 0;}
+  .refs a, .refs .ref-held{
+    font-size:11.5px; color:var(--ink-dim); text-decoration:none;
+    border:1px solid var(--line-soft); border-radius:999px; padding:2px 9px;
+  }
+  .refs a:hover{color:var(--gold); border-color:var(--gold);}
+  .refs .ref-held{opacity:.6; text-decoration:line-through;}
 
   /* ---------- lineages ---------- */
   .section-h{
@@ -2657,6 +2665,7 @@ function renderCards(){
         <div class="field loop"><div class="flabel">Reward loop</div><p>${esc(m.loop)}</p></div>
         ${m.notes?`<div class="field"><div class="flabel">Adaptation notes</div><p class="notes-p">${esc(m.notes)}</p></div>`:""}
         ${(m.verbs||[]).length?`<div class="field"><div class="flabel">Discovery verb</div><div class="verb-tags">${m.verbs.map(v=>`<span class="verb-tag" title="${esc(VERBS[v]||"")}">${esc(v)}</span>`).join("")}</div></div>`:""}
+        ${refsHTML(m.refs)}
         <div class="controls">
           <span><span class="ctl-label">Rating</span><span class="stars">${[1,2,3,4,5].map(i=>`<button class="star ${m.rating>=i?"lit":""}" data-r="${i}" aria-label="Rate ${i} of 5">★</button>`).join("")}</span></span>
           <span><span class="ctl-label">In my game?</span><span class="want-group">${["Yes","Maybe","No"].map(v=>`<button class="wbtn ${m.want===v?"on-"+v:""}" data-w="${v}">${v}</button>`).join("")}</span></span>
@@ -3031,6 +3040,27 @@ function buildMgFilters(){
 }
 /* Base rows never hardcode a video id — those rot. A search URL always resolves.
    The owner can pin a specific video they liked; the pin lives in their own store. */
+/* Provenance links on a row (`refs:[{u,t}]`). Rows from an imported backup flow
+   through the same renderer, so a URL outside the allowlist renders as plain text,
+   never an href. The validator reads REF_HOSTS from this file: one allowlist, two
+   consumers, no drift. */
+const REF_HOSTS = /^(gamefaqs\.gamespot\.com|[a-z0-9-]+\.fandom\.com|wikibound\.info|www\.mariowiki\.com|[a-z0-9-]+\.wiki\.gg|jegged\.com|game8\.co|(www\.)?cavesofnarshe\.com)$/i;
+function refOk(url){
+  let u;
+  try{ u = new URL(String(url||"")); }catch(e){ return null; }
+  if(u.protocol !== "https:" || !REF_HOSTS.test(u.hostname)) return null;
+  return u.href;
+}
+function refsHTML(refs){
+  if(!Array.isArray(refs) || !refs.length) return "";
+  const items = refs.map(r=>{
+    const href = refOk(r && r.u), label = esc((r && r.t) || "source");
+    return href
+      ? `<a href="${esc(href)}" target="_blank" rel="noopener">${label}</a>`
+      : `<span class="ref-held" title="Link withheld: not an allowed source host">${label}</span>`;
+  }).join("");
+  return `<div class="refs"><span class="flabel">Sources</span>${items}</div>`;
+}
 function ytLink(m){
   const pinned = (store.overrides[m.id]||{}).yt;
   if(pinned) return pinned;
@@ -3083,7 +3113,7 @@ function renderMinigames(){
         ? `<table class="rt">${m.rt.map(r=>`<tr><td>${esc(r.at)}</td><td>${esc(r.get)}</td></tr>`).join("")}</table>`
         : ""
       }</div>
-      <p class="notes-p">${esc(m.l)}</p>`;
+      <p class="notes-p">${esc(m.l)}</p>${refsHTML(m.refs)}`;
     card.querySelector(".favbtn").addEventListener("click", ()=>{
       if(store.minigameFavs[m.id]) delete store.minigameFavs[m.id];
       else store.minigameFavs[m.id] = true;

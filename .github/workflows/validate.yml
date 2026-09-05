@@ -31,6 +31,10 @@ jobs:
       - name: Structural validation (+ prove the checks can fail)
         run: node scripts/validate_codex.mjs --selftest
 
+      # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
+      - name: Probe tests + digest lint
+        run: node --test scripts/gf_probe.test.mjs
+
       # Offline: exercises the score range guards only, no network calls.
       - name: Score guards
         run: python3 scripts/fetch_scores.py --selftest

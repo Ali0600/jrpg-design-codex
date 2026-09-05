@@ -64,6 +64,13 @@ function extractData(script) {
 
 const isText = v => typeof v === "string" && v.trim() !== "";
 
+/** The page's own source-host allowlist — `const REF_HOSTS = /.../i;` — read, not restated. */
+function readRefHosts(script) {
+  const m = script.match(/const REF_HOSTS\s*=\s*(\/(?:\\\/|[^\/\n])+\/[a-z]*);/);
+  if (!m) return null;
+  try { return new Function("return " + m[1])(); } catch { return null; }
+}
+
 function checkSequence(rows, prefix, width, errors) {
   const seen = new Map();
   rows.forEach((row, i) => {
@@ -222,6 +229,26 @@ export function validate(html, docs = {}) {
       }
     }
   }
+  // --- provenance: optional refs:[{u,t}] on mechanic and minigame rows. The host
+  // allowlist is read from the page itself (REF_HOSTS beside refOk()), so the gate and
+  // the renderer cannot drift: what the page refuses to link, this refuses to ship.
+  const refHosts = readRefHosts(script);
+  const checkRefs = (row, label) => {
+    if (row.refs == null) return;
+    if (!refHosts) { errors.push(`${label}: has refs but the page defines no REF_HOSTS allowlist`); return; }
+    if (!Array.isArray(row.refs) || row.refs.length === 0) { errors.push(`${label}: refs must be a non-empty array of {u,t}`); return; }
+    for (const r of row.refs) {
+      if (!isText(r?.t)) errors.push(`${label}: refs entry has an empty label`);
+      let u = null;
+      try { u = new URL(String(r?.u ?? "")); } catch { /* not a URL at all */ }
+      if (!u || u.protocol !== "https:" || !refHosts.test(u.hostname)) {
+        errors.push(`${label}: refs entry ${JSON.stringify(r?.u ?? "")} is not an allowed https host`);
+      }
+    }
+  };
+  BASE_MECHS.forEach(m => checkRefs(m, `mechanic ${m.id}`));
+  MINIGAMES.forEach(g => checkRefs(g, `minigame ${g.id}`));
+
   if (SHOTS) {
     const typeSet = new Set(SHOT_TYPES ?? []);
     const referenced = new Set();
@@ -279,6 +306,26 @@ export function validate(html, docs = {}) {
       if (Number(dr[1]) !== stats.researched) errors.push(`CLAUDE.md says ${dr[1]} researched games, file has ${stats.researched}`);
       if (Number(dr[2]) !== stats.queued) errors.push(`CLAUDE.md says ${dr[2]} queued games, file has ${stats.queued}`);
       if (Number(dr[3]) !== stats.games) errors.push(`CLAUDE.md says ${dr[3]} games total, file has ${stats.games}`);
+    }
+  }
+  if (docs.readme != null) {
+    const cell = (re, what) => {
+      const m = docs.readme.match(re);
+      if (!m) errors.push(`README.md: could not find the ${what} cell — update the validator or the doc`);
+      return m ? Number(m[1]) : null;
+    };
+    const rm = cell(/\*\*(\d+) mechanics\*\*/, "**N mechanics**");
+    const rg = cell(/\*\*(\d+) minigames\*\*/, "**N minigames**");
+    const rt = cell(/\*\*(\d+) games\*\*/, "**N games**");
+    const rr = cell(/(\d+) carry concrete reward tables/, "`N carry concrete reward tables`");
+    if (rm != null && rm !== stats.mechanics) errors.push(`README.md says ${rm} mechanics, file has ${stats.mechanics}`);
+    if (rg != null && rg !== stats.minigames) errors.push(`README.md says ${rg} minigames, file has ${stats.minigames}`);
+    if (rt != null && rt !== stats.games) errors.push(`README.md says ${rt} games, file has ${stats.games}`);
+    if (rr != null && rr !== stats.rewardTables) errors.push(`README.md says ${rr} reward tables, file has ${stats.rewardTables}`);
+    const intro = docs.readme.match(/(\d+) mechanics across (\d+) games, (\d+) minigames/);
+    if (!intro) errors.push("README.md: could not find the intro sentence `N mechanics across N games, N minigames`");
+    else if (Number(intro[1]) !== stats.mechanics || Number(intro[2]) !== stats.games || Number(intro[3]) !== stats.minigames) {
+      errors.push(`README.md intro says ${intro[1]} mechanics / ${intro[2]} games / ${intro[3]} minigames, file has ${stats.mechanics} / ${stats.games} / ${stats.minigames}`);
     }
   }
   if (docs.agents != null && docs.claude != null && docs.agents !== docs.claude) {
@@ -364,6 +411,13 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /type:"Battle"/, 'type:"BoxArt"', "shot with a type outside SHOT_TYPES") },
   { name: "shot with an empty caption", expect: /caption is required/,
     apply: s => replaceFirst(s, /cap:"[^"]+"/, 'cap:""', "shot with an empty caption") },
+  // Both CONSTRUCT a refs field on M001 rather than editing one that may not exist. It
+  // lands as the row's last key; if M001 ever gains a real refs (nested braces), this
+  // pattern stops at the inner `}` and the sabotage fails LOUDLY as a parse error.
+  { name: "ref with a non-https or unlisted host", expect: /refs .*not an allowed https host/,
+    apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"javascript:alert(1)",t:"x"}]}', "ref with an unlisted host") },
+  { name: "ref with an empty label", expect: /refs .*empty label/,
+    apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"https://gamefaqs.gamespot.com/ps/1-x/faqs/1",t:""}]}', "ref with an empty label") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
 ];
@@ -378,6 +432,8 @@ function replaceInDoc(text, needle, repl, label) {
 const DOC_SABOTAGES = [
   { name: "CLAUDE.md count drift", expect: /CLAUDE\.md says \d+ mechanics/,
     apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ mechanics\*\*/, "**999 mechanics**", "CLAUDE.md count drift") }) },
+  { name: "README.md count drift", expect: /README\.md says \d+ mechanics/,
+    apply: d => ({ ...d, readme: replaceInDoc(d.readme, /\*\*\d+ mechanics\*\*/, "**999 mechanics**", "README.md count drift") }) },
   { name: "shot file missing from disk", expect: /file missing from the shots\/ folder/,
     apply: d => {
       if (!d.shotFiles?.size) throw new Error('sabotage "shot file missing": no shotFiles to remove');
@@ -456,7 +512,7 @@ function main() {
     );
   } catch { /* no folder yet — SHOTS rows will then fail closed if any exist */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), shotFiles };
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), shotFiles };
 
   const { errors, stats } = validate(html, docs);
 

@@ -129,3 +129,25 @@ games yielded nothing usable and were recorded as such rather than padded with a
 claim and verify the bytes by *viewing them* before shipping — and record the no-yield
 sources so the next pass doesn't re-search them. Same family as "verify the rendered
 outcome, not the proxy": the plausible filename is the proxy.
+
+## When the only channel back is your own context, make the instrument return digests, not documents
+GameFAQs blocks every script, so the guides can only be read in a real browser — and the
+only way anything gets from that browser to the agent is the tool result, which lands in
+the agent's context window. A 380KB guide is 8 `<pre>` chunks; a 1.4MB one is 30. There
+is no "download it and grep locally": whatever the page returns is paid for in tokens,
+and one careless `get_page_text` on a GameFAQs page returns 14KB of cookie-consent
+boilerplate before a single line of guide.
+
+**Why it came up:** designing the GameFAQs harvest flow. The first instinct was a
+fetcher (like `wiki_fetch.py`); the second was the browser's page-text tool. Neither
+survives the arithmetic. `scripts/gf_probe.js` instead runs *inside* the page and
+exposes `toc()` → `grep()` → `section(i, maxChars, from)`, every result capped at 12KB
+and reporting what it cut, so a guide is read the way a person skims one — contents
+first, then the paragraphs that matter.
+
+**Takeaway:** when a surface can only be read through a channel that costs context
+(a browser tool result, a screenshot, an LLM-summarised page), push the *selection*
+logic to the far side of the channel and give every accessor a hard output budget with
+a "dropped N" marker. The document never crosses; digests do. And when a site blocks
+scripts outright, "read it like a person" is a legitimate front door — reusing the
+browser's clearance cookie from a script is not.
