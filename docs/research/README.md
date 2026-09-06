@@ -42,8 +42,8 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    runs it, answering `{armed:"gf probe v2 loaded", page:{…}}`. **Re-arm on every page**;
    a navigation wipes it. Add `--ref <branch>` while iterating on the probe itself, and
    remember a branch name with a slash only resolves through the `refs/heads/` form the
-   script already writes — and that raw.githubusercontent.com keeps serving the previous
-   push for a few minutes, so check the fetched length before trusting a fresh fix. If the page blocks the fetch, `--paste` prints the probe inline
+   script already writes. The fetch carries a `?t=<now>` cache-buster: without it,
+   raw.githubusercontent.com keeps serving the previous push for five minutes. If the page blocks the fetch, `--paste` prints the probe inline
    as a fallback. Pick the row whose **platform and year match
    the BASE_GAMES row** — the search is fuzzy ("persona 5 royal" returns *Persona 5*). Never
    let the tool pick.

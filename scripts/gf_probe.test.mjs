@@ -373,7 +373,14 @@ test("the arm line fetches the probe, caches it, and runs what it fetched", asyn
   const out = await run(page.win, fetch, armText());
   assert.match(String(out.armed), /gf probe v\d+ loaded/);
   assert.equal(out.page.kind, "faq");
-  assert.deepEqual(calls, [probeUrl("main")]);
+  assert.equal(out.from, "network", "the arm line says the probe came over the network");
+  assert.equal(out.len, src.length, "and how long it was — a stale copy shows up as the wrong length");
+  assert.equal(calls.length, 1);
+  // A cache-buster on every fetch: raw.githubusercontent.com's CDN serves the previous push
+  // for five minutes and no-store cannot reach it, so without this a probe fix looks like
+  // a no-op on the branch it was pushed to.
+  assert.match(calls[0], new RegExp("^" + probeUrl("main").replace(/[.?+]/g, "\\$&") + "\\?t=\\d{12,}$"),
+    `fetch URL ${calls[0]} is not the probe URL plus a ?t=<now> cache-buster`);
   assert.equal(store.get(KEY), src, "the fetched probe is cached for the offline case");
 
   // The network is preferred over the cache: a stale cache must never win, or a probe fix
@@ -393,6 +400,8 @@ test("the arm line fetches the probe, caches it, and runs what it fetched", asyn
   const offline = async () => { throw new Error("offline"); };
   const back = await run(faqPage({ chunks: [FAQ_TEXT] }).win, offline, armText());
   assert.match(String(back.armed), /gf probe v\d+ loaded/, "falls back to the cached probe");
+  assert.equal(back.from, "cache", "and ANNOUNCES the fallback rather than passing it off as a fetch");
+  assert.match(String(back.why), /offline/, "with the fetch error, so the cause is on screen");
 
   // A 404 body is short, not empty: it must be refused as a fetch failure, not evaluated.
   store.set(KEY, src);
