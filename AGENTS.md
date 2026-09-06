@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **278 mechanics** (`BASE_MECHS` array, M001-M278) across **72 researched games**: FF7 Rebirth,
+- **280 mechanics** (`BASE_MECHS` array, M001-M280) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -106,7 +106,12 @@ backup; the HTML file is the source of truth and is more up to date.
   bought PARTS multiplying the pilot's own numbers, with fuel spent by Booster and bought
   back by a guarding Charge; Hyper Mode, whose odds are literally the fraction of health
   missing; and the Kislev Battling arena, a real-time fight paying a fixed purse plus a
-  bonus for speed and damage avoided.
+  bonus for speed and damage avoided. **Parasite Eve** (M279-M280, M115/M116 sharpened):
+  Bonus Points discounted by how much each fight hurt, with battle COUNT deliberately
+  irrelevant so grinding pays nothing; and Wayne's two uncounted collections — 300 junk for
+  an Ultimate Weapon, and rare cards counted by USE for a toolkit that turns the tuning
+  system's scarcest consumable infinite. The two guides disagree on the toolkit threshold
+  and one explains the other's error; the digest keeps both.
 - **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
@@ -286,7 +291,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `main()` is guarded so importing it does not run a validation). It also LOGS the splice
   in `CHANGES` — a new entry dated today, or merged into today's entry if one exists
   (two entries sharing a date would break the strictly-decreasing order) — and refuses
-  outright if `const CHANGES = [` is missing.
+  outright if `const CHANGES = [` is missing. **After a same-day merge, re-read that entry's
+  `title` and `note`**: the merge keeps the FIRST title, so a second game spliced the same
+  day lands under a heading that no longer describes it (wave 2's rows merged into an entry
+  titled "GameFAQs rollout, wave 1"). Retitle it by hand.
 - All of them are tested offline by
   `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs` (synthetic fixtures
   under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI
