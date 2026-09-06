@@ -2084,7 +2084,25 @@ how:"Every ranked Glitz Pit match arrives with a condition set by the promoter -
 loop:"Read today's condition → rebuild your approach around it → win the way the crowd asked → rank up.",
 rating:0,want:"Yes",
 notes:"The best value-for-effort idea in this game: one line of text per fight turns a fixed roster of enemies into a different puzzle each time, with no new content. The conditions attack the player's HABITS - the badge build, the reliable opener, the favourite partner - so the reward for a deep system is being asked to use the parts of it you avoid. Note the safety rail: the condition against the Iron Clefts can never forbid the one move that can hurt them.",
-refs:[{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"},{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"}]}
+refs:[{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"},{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"}]},
+{id:"M276",verbs:["Mastery reveal"],game:"Xenogears",name:"Deathblows (a combo alphabet that trains itself)",cat:"Combat",
+how:"Each character has exactly seven moves - four Triangle, two Square, one X - and which one comes out depends on the PREVIOUS press, so the same button is a different move in a different position. Deathblows are named button strings, learned by accumulating hidden experience on each component move during ordinary fighting. Nothing is bought or taught: the combos you favour become the combos you own.",
+loop:"Fight normally → the presses you make train the moves beneath them → a named Deathblow fills toward 100% → it becomes a move worth spending AP on.",
+rating:0,want:"Yes",
+notes:"The training is invisible and continuous, so a player who never thinks about it still unlocks things while one who reads the table can steer it. Two details worth copying whole: pressing a learned Deathblow's finisher earns that move nothing, so mastery pushes you off what you just mastered; and the percentage bar splits equally across component moves whose real costs differ tenfold, making it an honest ordering and a dishonest estimate. Copy the second only on purpose.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/46377",t:"Deathblow Learning Guide by fidormula (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/4414",t:"Deathblow/Ability FAQ by Ranma (GameFAQs)"}]},
+{id:"M277",verbs:["Shop stock","Traded"],game:"Xenogears",name:"Gears (stats made of parts, fuel made of turns)",cat:"Progression & Upgrades",
+how:"A Gear has no experience of its own. Its Attack is the Gear's multiplier times the Engine's Output, its Defence comes only from Armour and accessories, and its Response is added straight onto the PILOT's hit and evade - so the character's growth passes through the machine rather than being replaced by it. Upgrades are named parts in three slots (Engine, Frame, Armour) plus accessories. Fuel is the running cost: Booster spends 2% of maximum per round, and Charge buys it back with a turn while halving physical damage.",
+loop:"Earn money → buy a better Engine, Frame or Armour → your pilot's own numbers flow through the new part → spend fuel to go fast, spend a turn to get it back.",
+rating:0,want:"Yes",
+notes:"Two things to steal. The vehicle MULTIPLIES the pilot instead of replacing them - Gear hit% is the character's plus Response, and the Ether amp scales the character's own Ether - so time spent on foot is never wasted and the mech is a lens, not a second character sheet. And fuel makes speed a decision with a price whose refill is itself a defensive stance, so the economy and the combat are one system. The status effects mirror across scales too: Poison on foot is a Fuel Leak in a Gear.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/58934",t:"Battle Mechanics FAQ by ForteGSOmega (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268",t:"Guide and Walkthrough by Shotgunnova (GameFAQs)"}]},
+{id:"M278",verbs:["Mastery reveal","Consequence"],game:"Xenogears",name:"Hyper Mode (the odds of your best state rise as your health falls)",cat:"Combat",
+how:"Beyond the three Attack Levels sits a fourth, Hyper Mode, whose attacks are stronger AND cheaper in fuel, and in which Charge refills ten times as much. You cannot buy it or trigger it: reach Attack Level 3, take an action that does not spend it, and the game rolls against a percentage built from how much damage you have taken and which Deathblows you have been using.",
+loop:"Land Deathblows to bank Hyper Mode Points → get hurt, which multiplies them → hold at Attack Level 3 → roll into a mode that is both stronger and cheaper.",
+rating:0,want:"Yes",
+notes:"A comeback mechanic with its arithmetic in the open: the multiplier is literally the fraction of health missing, so the mode is likeliest exactly when you are losing, and because heavier Deathblows bank more points (XX is worth six, TT one) the player who has been swinging big is the one rescued. The shape worth stealing is making emergency power a FUNCTION of the trouble rather than a button, with the player's earlier choices weighting the dice.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/58934",t:"Battle Mechanics FAQ by ForteGSOmega (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268",t:"Guide and Walkthrough by Shotgunnova (GameFAQs)"}]}
 ];
 
 const BASE_GAMES = [
@@ -2719,7 +2737,22 @@ rt:[
 {at:"Defeat Rawk Hawk",get:"Champion, a 100 coin bonus, the champion's room and the Champ's Belt"},
 {at:"Lose a match (GameCube version)",get:"Drop one rank; the Switch version leaves the rank unchanged until you are champion"}],
 l:"The purse pays for OBEYING, not for winning: a win that ignores the condition drops you to a flat fee, so the money is really the fee for playing the designer's way. And the ladder rises, so the last fight pays most - the opposite of a grind.",
-refs:[{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"},{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"}]}
+refs:[{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"},{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"}]},
+{id:"g096",g:"Xenogears",n:"The Kislev Battling arena",
+p:"Kislev's arena is a real-time one-on-one Gear fight with its own control scheme rather than a menu battle - Square attacks in a three-hit chain, Triangle jumps, O dashes, L1 guards, R1 fires ether bullets, and pausing offers GIVE UP. Register with the receptionist for two daily matches and climb a fixed ladder of opponents. Retries are unlimited.",
+r:"A fixed purse per opponent rising from 300G to 2,500G, plus a separate bonus of 100-1,000G earned by winning fast and taking little damage - including the damage Fei does to himself by overheating.",
+rt:[
+{at:"Beat Tin Robo",get:"300 G, plus a 100-200 G bonus"},
+{at:"Beat Titan",get:"500 G, plus a 200-300 G bonus"},
+{at:"Beat W Shaver",get:"750 G, plus a 200-300 G bonus"},
+{at:"Beat Musha",get:"1,000 G, plus a 300-400 G bonus"},
+{at:"Beat Hamamoto",get:"1,500 G, plus a 400-500 G bonus"},
+{at:"Beat Firewheel",get:"2,000 G, plus a 500-600 G bonus"},
+{at:"Beat Silverstar",get:"2,500 G, plus an 800-1,000 G bonus"},
+{at:"How the bonus is earned",get:"Speed of the win and how little damage you took, counting Fei's own overheating damage"},
+{at:"Losing",get:"Unlimited retries; the story fights against Ganador and Stier carry no purse"}],
+l:"Splitting the reward into a flat purse and a performance bonus lets the same fight pay a beginner and still leave something to chase - and because the bonus counts damage TAKEN, the skill it rewards is defence, not speed alone.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268",t:"Guide and Walkthrough by Shotgunnova (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/4408",t:"Battling FAQ by Dan_GC (GameFAQs)"}]}
 ];
 
 /* ============================= CHANGELOG =============================
@@ -2738,7 +2771,7 @@ refs:[{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"}
 const CHANGES = [
   {date:"2026-09-06", title:"GameFAQs rollout, wave 1",
    note:"The Witcher 3, Golden Sun and Paper Mario: TTYD, researched through the GameFAQs flow.",
-   added:["M266-M275","g093-g095"], updated:[]},
+   added:["M266-M278","g093-g096"], updated:[]},
   {date:"2026-09-05", title:"GameFAQs pilot: Threads of Fate",
    note:"The harvest flow's first game, and the first rows to carry sources.",
    added:["M262-M265","g090-g092"], updated:["M117","M118"]},
