@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **272 mechanics** (`BASE_MECHS` array, M001-M272) across **72 researched games**: FF7 Rebirth,
+- **275 mechanics** (`BASE_MECHS` array, M001-M275) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -96,7 +96,11 @@ backup; the HTML file is the source of truth and is more up to date.
   expensive purchases) and Lucky Medals (found in jars, dropped by Mimics) as two tokens
   with two venues holding gear sold nowhere else; Unleashes and breakable artifact powers.
   Both venues came with real reward tables (g093 Lucky Wheels, g094 the Tolbi Spring).
-- **94 minigames** (`MINIGAMES` array, g001-g094): the Final Fantasy series (g001-g054)
+  **Paper Mario: TTYD** (M273-M275, g095) — 100 hidden Star Pieces whose only sink is
+  trading for badges; Charlieton, a shop that rerolls its stock every time you leave and
+  the only route to a complete badge set; and the Glitz Pit's per-fight battle CONDITIONS,
+  where winning without obeying pays a flat consolation fee and no rank (g095's table).
+- **95 minigames** (`MINIGAMES` array, g001-g095): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
   sims), each with a highlighted Rewards field and a
