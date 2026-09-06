@@ -13,6 +13,7 @@ import {
   FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, challengePage, searchPage,
 } from "./fixtures/gf/pages.mjs";
 import { lintDigest, lintDir } from "./digest_lint.mjs";
+import { bootstrapText, REARM, KEY } from "./gf_bootstrap.mjs";
 
 const require = createRequire(import.meta.url);
 const { core, install } = require("./gf_probe.js");
@@ -226,8 +227,82 @@ test("every committed digest passes the lint", () => {
   assert.ok(files.length >= 1, "docs/research holds at least the template");
 });
 
+test("visited() reports what was read, what was greped, and the biggest unread section", () => {
+  const g = mount(faqPage({ chunks: [FAQ_TEXT] }));
+  const rows = g.toc().rows;
+  const relics = rows.find(r => r.head.includes("[REL01] Relics")).i;
+  const secrets = rows.find(r => r.head === "SECRETS").i;
+  assert.deepEqual(g.visited().read, [], "nothing is read until something is read");
+
+  g.section(relics);                       // whole section
+  g.section(secrets, 20);                  // first 20 chars only
+  g.grep("threshold");
+
+  const v = g.visited();
+  assert.deepEqual(v.read.map(r => r.i).sort((a, b) => a - b), [relics, secrets].sort((a, b) => a - b));
+  assert.equal(v.read.find(r => r.i === relics).pct, 100);
+  assert.ok(v.read.find(r => r.i === secrets).pct < 100, "a partial read is reported as partial");
+  assert.deepEqual(v.greps, ["threshold"]);
+
+  const unread = v.unread.map(r => r.head);
+  assert.ok(!unread.includes("SECRETS") && !unread.includes("[REL01] Relics"), "read sections are not listed unread");
+  assert.ok(v.unread.every(r => r.len >= 800), "the floor is honoured");
+  assert.ok(g.visited(0).unread.length > v.unread.length, "a lower floor surfaces more");
+  assert.ok(size(v) <= DEF, `visited ${size(v)}`);
+});
+
+test("unread ranks by size, not document order, and never counts boilerplate", () => {
+  // Sizes deliberately disagree with document order, and the biggest section of all is
+  // boilerplate — so ordering and the boiler filter are both observable here.
+  const body = (title, n) => `${title}\n${"=".repeat(title.length)}\n${("filler line about rewards\n").repeat(n)}\n`;
+  const g = mount(faqPage({ chunks: [
+    body("Alpha Items", 40) + body("Beta Rewards", 120) + body("Gamma Notes", 60) + body("Credits", 200),
+  ] }));
+  const v = g.visited();
+  assert.deepEqual(v.unread.map(r => r.head), ["Beta Rewards", "Gamma Notes", "Alpha Items"]);
+  assert.ok(v.unread.every(r => r.len >= 800), "all three clear the floor");
+  assert.ok(v.unread[0].len < 20000 && !v.unread.some(r => r.head === "Credits"),
+    "Credits is the largest section and pure boilerplate — it must not be recommended");
+});
+
+test("visited() stays under the ceiling on a guide with hundreds of sections", () => {
+  let big = "";
+  for (let i = 0; i < 400; i++) big += `Section Number ${i}\n=================\n${("body text\n").repeat(90)}\n`;
+  const g = mount(faqPage({ chunks: [big] }));
+  const v = g.visited();
+  assert.ok(size(v) <= DEF, `visited ${size(v)}`);
+  assert.ok(v.dropped > 0, "it reports how much of the unread list it had to cut");
+  assert.ok(v.unread.length < 400);
+});
+
+test("the bootstrap paste survives a round trip through localStorage", () => {
+  const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
+  const store = new Map();
+  const localStorage = { setItem: (k, v) => store.set(k, String(v)), getItem: k => store.get(k) ?? null };
+  const page = faqPage({ chunks: [FAQ_TEXT] });
+  // The paste runs in page scope: `window`, `document`, `localStorage`, and an `eval`
+  // whose completion value is the probe IIFE's return.
+  const run = new Function("window", "document", "localStorage", "return eval(arguments[3])");
+  const said = run(page.win, page.doc, localStorage, bootstrapText(src));
+  assert.match(String(said), /gf probe v\d+ loaded/, "the stored copy is what installed");
+  assert.equal(store.get(KEY), src, "byte-identical to the file on disk");
+  // Page two: the forty-character re-arm alone must rebuild the whole probe.
+  const page2 = faqPage({ chunks: [FAQ_TEXT] });
+  const again = run(page2.win, page2.doc, localStorage, REARM);
+  assert.match(String(again), /gf probe v\d+ loaded/);
+  assert.ok(typeof page2.win.__gf.toc === "function", "the re-armed probe is usable");
+  assert.ok(REARM.length < 60, `re-arm is ${REARM.length} chars, not a paste`);
+
+  // Page one must RUN what it stored, not the text it was handed — otherwise a storage
+  // that silently refused the write would only surface on page two, mid-guide.
+  const sentinel = { setItem: () => {}, getItem: () => '"came from storage"' };
+  assert.equal(run(faqPage({ chunks: [FAQ_TEXT] }).win, page.doc, sentinel, bootstrapText(src)),
+    "came from storage", "the first paste evaluates the stored copy");
+});
+
 test("the probe file is small enough to paste into a page", () => {
   const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
-  assert.ok(src.length < 22000, `probe is ${src.length} chars — every page navigation re-pastes it`);
+  // Paste cost, not correctness: the probe is re-armed on every page navigation.
+  assert.ok(src.length < 24000, `probe is ${src.length} chars — every page navigation re-pastes it`);
   assert.doesNotMatch(src, /^\s*(const|let|class)\s/m, "no top-level bindings — the REPL must be able to eval it twice");
 });

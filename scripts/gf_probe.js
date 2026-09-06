@@ -306,7 +306,8 @@
         text = parts.join("\n");
       }
       var lines = core.splitLines(text);
-      var entry = { format: format, chunks: pres.length, chars: text.length, lines: lines, sections: core.sections(lines) };
+      var entry = { format: format, chunks: pres.length, chars: text.length, lines: lines,
+                    sections: core.sections(lines), read: {}, greps: [] };
       api._c[key] = entry;
       return entry;
     }
@@ -340,12 +341,16 @@
       maxChars = Math.min(maxChars == null ? DEF : (maxChars | 0), MAX - 400);
       from = Math.max(0, from | 0);
       var text = a.lines.slice(s.start, s.end).join("\n");
-      return { i: s.i, head: s.head, from: from, to: Math.min(from + maxChars, text.length),
+      var to = Math.min(from + maxChars, text.length);
+      var seen = a.read[s.i];                                 // for visited(): how far in, of what
+      a.read[s.i] = { to: Math.max(seen ? seen.to : 0, to), total: text.length };
+      return { i: s.i, head: s.head, from: from, to: to,
                total: text.length, text: text.slice(from, from + maxChars) };
     };
 
     api.grep = function (pattern, ctx, max) {
       var a = assemble(), r = core.grep(a.lines, a.sections, pattern, ctx, max);
+      if (r.rows && a.greps.indexOf(String(pattern)) < 0) a.greps.push(String(pattern));
       return r.rows ? core.fitRows(r, "rows", DEF) : r;
     };
 
@@ -355,6 +360,22 @@
       count = Math.min(Math.max(1, count == null ? 60 : (count | 0)), 200);
       var text = a.lines.slice(from - 1, from - 1 + count).join("\n").slice(0, MAX - 200);
       return { from: from, to: Math.min(from - 1 + count, a.lines.length), of: a.lines.length, text: text };
+    };
+
+    // What this session actually READ of the guide, and what it did not. The probe
+    // indexes every line, but only what comes back through a tool result reaches the
+    // agent — so the digest records coverage instead of implying it.
+    api.visited = function (minUnread) {
+      var a = assemble(), min = minUnread == null ? 800 : (minUnread | 0);
+      var read = [], unread = [];
+      a.sections.forEach(function (s) {
+        var r = a.read[s.i];
+        if (r) read.push({ i: s.i, head: s.head, pct: Math.round(r.to * 100 / Math.max(1, r.total)) });
+        else if (s.len >= min && !s.boiler && !s.list) unread.push({ i: s.i, head: s.head, len: s.len });
+      });
+      unread.sort(function (x, y) { return y.len - x.len; });
+      return core.fitRows({ sections: a.sections.length, chars: a.chars, read: read,
+                            greps: a.greps.slice(), unread: unread }, "unread", DEF);
     };
 
     api.skeleton = function () {
@@ -382,6 +403,7 @@
         "section(i, maxChars, from)  one section's text, pageable with `from`",
         "grep(pattern, ctx, max)     keyword windows; pattern = regex source or a PILLAR key: " + Object.keys(core.PILLAR).join(" "),
         "lines(from, count)          raw lines by 1-based number, when heading detection fails",
+        "visited(minUnread)          what you read, which greps ran, and the biggest sections you did NOT read",
         "skeleton()                  DOM outline of a list row / the guide box, for selector repair",
         "Every result is capped (" + DEF + " chars default, " + MAX + " max). Read only what you need."
       ];

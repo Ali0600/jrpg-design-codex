@@ -207,9 +207,28 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   reference only; with direct file access, edit the arrays in place instead.
 - `scripts/gf_probe.js` is the GameFAQs in-page probe (see the Research playbook, step
   2b, and `docs/research/README.md`); `scripts/digest_lint.mjs` enforces the pointer
-  grammar on `docs/research/*.md`. Both are tested offline by
-  `node --test scripts/gf_probe.test.mjs` (synthetic fixtures under `scripts/fixtures/gf/`,
-  a 100-line DOM stand-in, no jsdom) — that suite runs in CI too.
+  grammar on `docs/research/*.md`. `__gf.visited()` reports what a session actually READ
+  of a guide — the probe indexes every line, but only what returns through a tool result
+  reaches the agent, so each digest carries a Coverage line naming the biggest sections
+  nobody opened.
+- `scripts/gf_bootstrap.mjs` prints the one-time paste that parks the probe in the
+  gamefaqs origin's localStorage (`node scripts/gf_bootstrap.mjs`), plus the 38-character
+  re-arm for every later page (`--rearm`). A page navigation wipes the probe, and
+  re-pasting 21KB a dozen times per game was the flow's largest cost.
+- `scripts/splice_rows.mjs` writes a digest's `## Codex rows` block into the arrays:
+  placeholder ids (`M+1` = the first `###` under `## Mechanics candidates`) bind each row
+  to its candidate, ids are assigned from the current max, every `cat`/`game`/`want`/`rt`/
+  `refs` host is checked against the page's own vocabularies, and the assigned ids are
+  written back into the digest's `row:` lines. Dry run by default; `--write` applies.
+  It appends only — sharpening an EXISTING row stays a hand edit, because ids are the join
+  key for the owner's saved ratings. It imports `extractScript` / `extractData` /
+  `readRefHosts` from `validate_codex.mjs` rather than re-deriving them (that file's
+  `main()` is guarded so importing it does not run a validation).
+- All three are tested offline by
+  `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs` (synthetic fixtures
+  under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI
+  too. Both suites have been mutation-swept: every check was deleted in turn and had to
+  take a test down with it.
 - `scripts/fetch_scores.py` refreshes the Metacritic critic + user scores. It reads a
   roster JSON (`[{title,year,dev},...]` exported from BASE_GAMES) and writes scores.json.
   Design notes worth keeping: it resolves the DIRECT slug first (Metacritic's canonical
@@ -315,16 +334,11 @@ Proven across five batches (PS1, Clair Obscur, PS2, popular-classics, modern-hit
    committed digest (copy `docs/research/_template.md`), written the moment that game's
    facts land, a pointer on every one. This replaced the scratchpad JSON that a lost
    staging dir once cost a re-do; `node scripts/digest_lint.mjs` keeps it honest.
-2. **Compile** with a throwaway Node script: assigns sequential IDs from the current
-   max, validates every `cat` against CATS, converts `->` to `→`, and emits three
-   text blocks (mechanics / games / minigames).
-3. **Splice** with a Python script that, per array, asserts the anchor string is
-   FOUND, is UNIQUE, and that the gap between it and the closing `];` is whitespace
-   only. Anchor on the LAST ROW'S ending text — verify it at execution time, it
-   changes every batch. These asserts caught two would-be corruptions; do not skip them.
-   Watch for curly apostrophes (’ vs ') when copying anchor text. Both arrays end with
-   `}` and NO trailing comma before `];` — the pilot's splice assumed `},` and its own
-   assert refused it; handle either ending.
+2–3. **Compile + splice** with `node scripts/splice_rows.mjs docs/research/<slug>.md`
+   (dry run) then `--write`. It does what the old throwaway scripts did — sequential ids
+   from the current max, `cat` checked against CATS, `->` converted to `→`, anchors
+   asserted found-and-unique, both array endings (`}` and `},`) handled — and refuses
+   rather than guessing. The hand-rolled version is gone; do not write another.
 4. **Validate**: parse via `new Function(<script>)`, then assert exact counts, ID
    sequentiality + zero dupes, every `cat` in CATS, and zero orphan `game`/`g` refs.
 5. **Score + docs**: `fetch_scores.py` for new rows, then update this file's counts.

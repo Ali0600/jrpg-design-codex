@@ -34,8 +34,8 @@ jobs:
         run: node scripts/validate_codex.mjs --selftest
 
       # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
-      - name: Probe tests + digest lint
-        run: node --test scripts/gf_probe.test.mjs
+      - name: Probe tests + splicer tests + digest lint
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs
 
       # Offline: exercises the score range guards only, no network calls.
       - name: Score guards
