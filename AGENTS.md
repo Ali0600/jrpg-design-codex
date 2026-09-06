@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **280 mechanics** (`BASE_MECHS` array, M001-M280) across **72 researched games**: FF7 Rebirth,
+- **281 mechanics** (`BASE_MECHS` array, M001-M281) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -111,7 +111,12 @@ backup; the HTML file is the source of truth and is more up to date.
   irrelevant so grinding pays nothing; and Wayne's two uncounted collections — 300 junk for
   an Ultimate Weapon, and rare cards counted by USE for a toolkit that turns the tuning
   system's scarcest consumable infinite. The two guides disagree on the toolkit threshold
-  and one explains the other's error; the digest keeps both.
+  and one explains the other's error; the digest keeps both. **Suikoden V** (M281, M187
+  sharpened): a trade economy whose CATALOGUE widens with use — sell enough staples and the
+  shops start stocking their refined forms (soybeans→miso, wheat→beer, fruit→wine,
+  rice→sake), which is the shop-upgrades pillar as an economy. Its two guides disagree on
+  whether prices move meaningfully at all, and both readings are kept. The brief's
+  castle-facility question came back THIN and is recorded as such.
 - **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business

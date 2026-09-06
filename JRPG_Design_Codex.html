@@ -1631,7 +1631,8 @@ notes:"The Suikoden-V-specific take on 'collection converts to power', distinct 
 how:"Formations are party-wide stances (unlike 2-3 character unite attacks): each applies a passive bonus to the entire party — +attack, +defense, +accuracy/speed, or +all attributes — and carries one unique 'Form Skill', a strong special usable once per battle. You begin with a single formation and collect the rest through play: many sit in treasure chests in specific places, while others unlock only when you recruit particular characters (one needs both large characters, Genoh and Byakuren, in the party).",
 loop:"Explore or recruit to find a new formation → equip it for a permanent party-wide buff plus a signature once-per-battle skill → discovery and recruitment directly upgrade how the whole party fights.",
 rating:0,want:"Yes",
-notes:"The cleanest embodiment of your pillar in Suikoden V, distinct to V: the WORLD hands you upgrades (formations in chests) AND your COLLECTION does (recruit the right pair to unlock one), and each is layered — a passive buff plus a timed one-shot Form Skill. Make party-wide 'stances' a discoverable collectible — some found by exploring, some gated behind recruiting a specific NPC or pair — so both exploration and recruitment visibly change how the party fights, not just its numbers. The once-per-battle Form Skill turns 'which stance, and when' into a knowledge/timing choice."},
+notes:"The cleanest embodiment of your pillar in Suikoden V, distinct to V: the WORLD hands you upgrades (formations in chests) AND your COLLECTION does (recruit the right pair to unlock one), and each is layered — a passive buff plus a timed one-shot Form Skill. Make party-wide 'stances' a discoverable collectible — some found by exploring, some gated behind recruiting a specific NPC or pair — so both exploration and recruitment visibly change how the party fights, not just its numbers. The once-per-battle Form Skill turns 'which stance, and when' into a knowledge/timing choice. Two details worth copying exactly: the Form Skill costs a TURN as well as its once-per-battle limit, so using it is a real trade rather than a free bonus; and the Rearrange grid ties weapon range to row position, with short-range weapons rarely connecting from the back, so choosing a stance means choosing a shape as well as a buff.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/60774",t:"Guide and Walkthrough by 29_Rooks (GameFAQs)"}]},
 {id:"M188",game:"Persona 4",name:"Midnight Channel Weather Deadline",cat:"Exploration & Rewards",
 how:"A serial killer casts victims into a dungeon world inside the TV, and each new victim starts a countdown you read off the in-game weather forecast: you have until the next foggy day to reach and clear their dungeon, because once the fog rolls in the Shadows go berserk and kill anyone trapped. The forecast (rain tomorrow, fog the day after) is the literal clock, checked alongside the day-planner calendar that governs every action. Miss the deadline and the victim dies — a hard Game Over that reverts you a week.",
 loop:"Read the forecast → race the fog to clear a dungeon before the deadline → save the victim and bank the story + Persona haul → the weather itself is a clock you learn to read.",
@@ -2116,7 +2117,13 @@ how:"The gunsmith Wayne watches two running totals no quest ever mentions. Bring
 loop:"Hoard what looks like litter → hand it over unprompted → a permanent upgrade the shop never advertised → store it with Wayne before the last fight so it survives into the next round.",
 rating:0,want:"Yes",
 notes:"Two rewards for behaviour rather than for objectives: the game never sets 'collect 300 junk' as a task, so finding it is a discovery rather than a checklist item. The toolkit is the better idea because it converts a SCARCITY into an infinity - the tuning system's whole difficulty is rationing super tools, and the reward for exploring the tower is that the rationing stops. One trap to copy deliberately or avoid: the counter is on card USES, not cards owned, so a player who hoards rather than spends never triggers it.",
-refs:[{u:"https://gamefaqs.gamespot.com/ps/198265-parasite-eve/faqs/50263",t:"Game Mechanic Guide by PrinceThrakhath (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/198265-parasite-eve/faqs/4082",t:"EX Mode Guide by KWee (GameFAQs)"}]}
+refs:[{u:"https://gamefaqs.gamespot.com/ps/198265-parasite-eve/faqs/50263",t:"Game Mechanic Guide by PrinceThrakhath (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps/198265-parasite-eve/faqs/4082",t:"EX Mode Guide by KWee (GameFAQs)"}]},
+{id:"M281",verbs:["Shop stock","Traded"],game:"Suikoden V",name:"Trade that widens its own catalogue",cat:"Economy & Currency",
+how:"Every town buys and sells the same commodities at different prices, so profit comes from carrying goods along a route rather than from any single shop. The part worth stealing is that the LIST of tradable goods is itself a progression track: sell enough of the cheap staples and the trade shops begin stocking their refined counterparts, which carry far better margins. Soybeans open miso and soy sauce, wheat opens beer, fruit opens wine, rice opens sake, gold opens gold craftworks.",
+loop:"Haul cheap staples between towns for thin margins → the shops start offering the refined version of what you have been trading → the same route now pays several times more.",
+rating:0,want:"Yes",
+notes:"'Shops have upgrades too' as an economy rather than an inventory: the SHOP's catalogue levels up in response to the player's behaviour, and the upgrade is a better version of the exact good they chose to specialise in. It also solves the usual trading-minigame problem - early margins are deliberately thin, so without the unlock the system would be a chore, and the unlock is what converts patience into real income. Pair it with a published price list, as this game does, so the player can plan a route instead of guessing.",
+refs:[{u:"https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/42465",t:"Trading Guide by popemobile (GameFAQs)"},{u:"https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/60774",t:"Guide and Walkthrough by 29_Rooks (GameFAQs)"}]}
 ];
 
 const BASE_GAMES = [
@@ -2784,8 +2791,8 @@ refs:[{u:"https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268",t:"Guide
    scripts/check_changes.mjs makes forgetting one a red CI check. */
 const CHANGES = [
   {date:"2026-09-06", title:"GameFAQs rollout, waves 1 and 2",
-   note:"The Witcher 3, Golden Sun, Paper Mario: TTYD, Xenogears and Parasite Eve, researched through the GameFAQs flow.",
-   added:["M266-M280","g093-g096"], updated:["M115","M116"]},
+   note:"The Witcher 3, Golden Sun, Paper Mario: TTYD, Xenogears, Parasite Eve and Suikoden V, researched through the GameFAQs flow.",
+   added:["M266-M281","g093-g096"], updated:["M115","M116","M187"]},
   {date:"2026-09-05", title:"GameFAQs pilot: Threads of Fate",
    note:"The harvest flow's first game, and the first rows to carry sources.",
    added:["M262-M265","g090-g092"], updated:["M117","M118"]},
