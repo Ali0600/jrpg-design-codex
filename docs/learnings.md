@@ -169,3 +169,35 @@ pilot moving, and the fix went into the fixture as a block in the real guide's s
 the expectation — so before calling a parser covered, feed it one input you did not write
 and read the whole output, not the assertion. Keep a raw-access escape hatch in any
 instrument that classifies, so the day its classes are wrong the work still proceeds.
+
+## A path-shaped ref only survives if nothing after it can be mistaken for the ref
+
+`raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>` answered 404 for a branch named
+`research/witcher-3` while the identical URL worked for `main`. The slash in the branch
+name makes the boundary between ref and path ambiguous, and the server does not guess; the
+explicit `refs/heads/research/witcher-3` form resolves, and it also works for `main`, so
+there is no reason to ever write the short one.
+
+**Why it came up:** the research flow fetches the probe from the repo instead of pasting
+22KB into the page on every navigation. Arming from a work-in-progress branch returned a
+14-byte "404: Not Found" body, which `eval` accepted happily — the failure surfaced two
+calls later as a probe that "ignored" the fix.
+
+**Takeaway:** when a ref, key or id can itself contain the separator, always use the
+unambiguous long form — and have the fetcher reject a suspiciously short body instead of
+handing it to the interpreter.
+
+## A cache consulted before the network turns every fix into a no-op
+
+The first version of the arm line read its localStorage copy first and fetched only if that
+was empty. Every later page then ran the probe as it was the first time it was cached, so a
+just-shipped fix appeared to do nothing and the obvious suspect — the fix — was innocent.
+
+**Why it came up:** the same session updated the probe three times while researching, and
+each update was invisible until the cache was cleared by hand.
+
+**Takeaway:** for anything you are actively changing, fetch first and treat the cache as the
+FALLBACK for a failed fetch, not the preferred source. A cache is a durability mechanism;
+using it as the default read path silently pins the consumer to an old version. The related
+tell is a component with a deliberate "already initialised, do nothing" guard: re-running
+the loader is then a no-op, so the loader must clear the old instance before installing.

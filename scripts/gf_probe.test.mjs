@@ -13,7 +13,7 @@ import {
   FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, ffaqPage, challengePage, searchPage,
 } from "./fixtures/gf/pages.mjs";
 import { lintDigest, lintDir } from "./digest_lint.mjs";
-import { bootstrapText, REARM, KEY } from "./gf_bootstrap.mjs";
+import { armText, pasteText, probeUrl, KEY } from "./gf_bootstrap.mjs";
 
 const require = createRequire(import.meta.url);
 const { core, install } = require("./gf_probe.js");
@@ -298,29 +298,75 @@ test("visited() stays under the ceiling on a guide with hundreds of sections", (
   assert.ok(v.unread.length < 400);
 });
 
-test("the bootstrap paste survives a round trip through localStorage", () => {
+test("the arm line fetches the probe, caches it, and runs what it fetched", async () => {
   const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
   const store = new Map();
   const localStorage = { setItem: (k, v) => store.set(k, String(v)), getItem: k => store.get(k) ?? null };
   const page = faqPage({ chunks: [FAQ_TEXT] });
-  // The paste runs in page scope: `window`, `document`, `localStorage`, and an `eval`
-  // whose completion value is the probe IIFE's return.
-  const run = new Function("window", "document", "localStorage", "return eval(arguments[3])");
-  const said = run(page.win, page.doc, localStorage, bootstrapText(src));
-  assert.match(String(said), /gf probe v\d+ loaded/, "the stored copy is what installed");
-  assert.equal(store.get(KEY), src, "byte-identical to the file on disk");
-  // Page two: the forty-character re-arm alone must rebuild the whole probe.
-  const page2 = faqPage({ chunks: [FAQ_TEXT] });
-  const again = run(page2.win, page2.doc, localStorage, REARM);
-  assert.match(String(again), /gf probe v\d+ loaded/);
-  assert.ok(typeof page2.win.__gf.toc === "function", "the re-armed probe is usable");
-  assert.ok(REARM.length < 60, `re-arm is ${REARM.length} chars, not a paste`);
+  const calls = [];
+  const fetch = async (u) => { calls.push(u); return { text: async () => src }; };
+  const run = (win, fetchImpl, text) =>
+    new Function("window", "document", "localStorage", "fetch", "return eval(arguments[4])")(
+      win, page.doc, localStorage, fetchImpl, text);
 
-  // Page one must RUN what it stored, not the text it was handed — otherwise a storage
-  // that silently refused the write would only surface on page two, mid-guide.
-  const sentinel = { setItem: () => {}, getItem: () => '"came from storage"' };
-  assert.equal(run(faqPage({ chunks: [FAQ_TEXT] }).win, page.doc, sentinel, bootstrapText(src)),
-    "came from storage", "the first paste evaluates the stored copy");
+  const out = await run(page.win, fetch, armText());
+  assert.match(String(out.armed), /gf probe v\d+ loaded/);
+  assert.equal(out.page.kind, "faq");
+  assert.deepEqual(calls, [probeUrl("main")]);
+  assert.equal(store.get(KEY), src, "the fetched probe is cached for the offline case");
+
+  // The network is preferred over the cache: a stale cache must never win, or a probe fix
+  // looks like it did nothing. Serve DIFFERENT bytes and the new ones must be what runs.
+  // Padded past the arm line's short-read guard, which treats a tiny body (a 404 page,
+  // say) as a failed fetch — that guard is why a 14-byte "404: Not Found" never ran.
+  const freshSrc = 'localStorage.setItem("seen","fresh");"fresh probe";' + "//x".repeat(400);
+  const sentinel = async () => ({ text: async () => freshSrc });
+  const fresh = await run(faqPage({ chunks: [FAQ_TEXT] }).win, sentinel, armText());
+  assert.equal(fresh.page, null, "a body that is not the probe reports null, it does not throw");
+  assert.equal(store.get("seen"), "fresh", "the freshly fetched source is the one evaluated");
+  assert.equal(store.get(KEY), freshSrc, "and it replaces the cache rather than reading it");
+  assert.notEqual(fresh.armed, "gf probe v1 loaded", "the stale cached probe did not win");
+
+  // …and when the network fails, the cache carries it.
+  store.set(KEY, src);
+  const offline = async () => { throw new Error("offline"); };
+  const back = await run(faqPage({ chunks: [FAQ_TEXT] }).win, offline, armText());
+  assert.match(String(back.armed), /gf probe v\d+ loaded/, "falls back to the cached probe");
+
+  // A 404 body is short, not empty: it must be refused as a fetch failure, not evaluated.
+  store.set(KEY, src);
+  const notFound = async () => ({ text: async () => "404: Not Found" });
+  const guarded = await run(faqPage({ chunks: [FAQ_TEXT] }).win, notFound, armText());
+  assert.match(String(guarded.armed), /gf probe v\d+ loaded/, "a 404 body never becomes the probe");
+  assert.equal(store.get(KEY), src, "and it does not poison the cache");
+
+  assert.ok(armText().length < 700, `arm line is ${armText().length} chars, not a paste`);
+  assert.match(probeUrl("research/witcher-3"), /\/refs\/heads\/research\/witcher-3\//,
+    "a slashed branch name needs the refs/heads form or raw 404s");
+});
+
+test("re-arming the SAME page replaces the installed probe, by both routes", async () => {
+  // The probe's second-eval guard is deliberate, so an arm that does not clear window.__gf
+  // silently keeps the old object — which is how a probe fix appears to do nothing.
+  const page = faqPage({ chunks: [FAQ_TEXT] });
+  const store = new Map();
+  const localStorage = { setItem: (k, v) => store.set(k, String(v)), getItem: k => store.get(k) ?? null };
+  const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
+  const fetch = async () => ({ text: async () => src });
+
+  const runPaste = text => new Function("window", "document", "localStorage", "return eval(arguments[3])")(
+    page.win, page.doc, localStorage, text);
+  runPaste(pasteText(src));
+  const afterPaste = page.win.__gf;
+  runPaste(pasteText(src));
+  assert.notEqual(page.win.__gf, afterPaste, "the paste clears window.__gf");
+
+  const runArm = text => new Function("window", "document", "localStorage", "fetch", "return eval(arguments[4])")(
+    page.win, page.doc, localStorage, fetch, text);
+  const before = page.win.__gf;
+  const out = await runArm(armText());
+  assert.notEqual(page.win.__gf, before, "the arm line clears window.__gf too");
+  assert.match(String(out.armed), /gf probe v\d+ loaded/, "and installs, rather than reporting already loaded");
 });
 
 test("the probe file is small enough to paste into a page", () => {

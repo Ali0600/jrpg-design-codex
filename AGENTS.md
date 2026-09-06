@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **265 mechanics** (`BASE_MECHS` array, M001-M265) across **72 researched games**: FF7 Rebirth,
+- **269 mechanics** (`BASE_MECHS` array, M001-M269) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -84,6 +84,13 @@ backup; the HTML file is the source of truth and is more up to date.
   cuts the upgrade shop's prices sixfold, Mint's spell effects hidden five different ways
   (against Rue's forms all in the open), and three minigames with reward tables. The
   first rows to carry `refs`; the digest is `docs/research/threads-of-fate.md`.
+  Plus the **GameFAQs rollout** (owner-approved 2026-09-06: the 15 roster games with ≤2
+  mechanics rows and no minigame rows, in five waves of three). **The Witcher 3**
+  (M266-M269) — the game has no in-depth GameFAQs guide at all, so its systems came from
+  one 19-page formatted walkthrough plus the Witcher wiki: Scavenger Hunts where finding a
+  diagram is what CREATES the quest, witcher gear as six pieces × five tiers with 3- and
+  6-piece set bonuses, Hidden Treasure whose real payload is the note that starts the next
+  quest, and Places of Power paying one permanent Skill Point on first activation.
 - **92 minigames** (`MINIGAMES` array, g001-g092): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
@@ -211,10 +218,21 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   of a guide — the probe indexes every line, but only what returns through a tool result
   reaches the agent, so each digest carries a Coverage line naming the biggest sections
   nobody opened.
-- `scripts/gf_bootstrap.mjs` prints the one-time paste that parks the probe in the
-  gamefaqs origin's localStorage (`node scripts/gf_bootstrap.mjs`), plus the 38-character
-  re-arm for every later page (`--rearm`). A page navigation wipes the probe, and
-  re-pasting 21KB a dozen times per game was the flow's largest cost.
+- `scripts/gf_bootstrap.mjs` prints the ~500-character line that arms the probe in a page:
+  it FETCHES `gf_probe.js` from the public repo (a GameFAQs page is allowed to fetch
+  raw.githubusercontent.com — measured 2026-09-06), caches it in the origin's localStorage
+  as the offline fallback, clears `window.__gf` and evaluates it. Re-arm on every page; a
+  navigation wipes the probe, and re-pasting 22KB a dozen times per game was the flow's
+  largest cost. `--ref <branch>` arms from a branch while iterating on the probe (always
+  spelled `refs/heads/<name>` — a slashed branch 404s the short raw URL); `--paste` prints
+  the probe inline for a page that blocks the fetch. Two traps it now handles: the cache is
+  never preferred over the network (a stale cached probe makes a fix look like a no-op),
+  and a short body such as a 404 page is refused rather than evaluated.
+- **A formatted guide is paginated.** `div.ffaq` guides (the norm for post-2010 games) split
+  across `?page=N`, zero-based; `meta().pages` and `visited().pages` say how many, and every
+  other number describes the page you are on. Before the Witcher 3 pass the probe could not
+  read these guides at all — it reported `kind:"unknown"` — so a 19-page guide would have
+  been silently read as nothing.
 - `scripts/splice_rows.mjs` writes a digest's `## Codex rows` block into the arrays:
   placeholder ids (`M+1` = the first `###` under `## Mechanics candidates`) bind each row
   to its candidate, ids are assigned from the current max, every `cat`/`game`/`want`/`rt`/

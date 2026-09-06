@@ -35,19 +35,24 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
 ### Runbook
 
 1. **Confirm the game.** `preview_start` with
-   `https://gamefaqs.gamespot.com/search?game=<title>`, arm the probe
-   (`node scripts/gf_bootstrap.mjs` → paste its output as the `javascript_tool` text; it
-   answers `"gf probe v1 loaded"` and parks the probe in the origin's localStorage, so
-   every later page re-arms with `node scripts/gf_bootstrap.mjs --rearm`, 38 characters
-   instead of 21KB. If the page refuses `eval`, paste `scripts/gf_probe.js` itself each
-   time), then `__gf.search()`. Pick the row whose **platform and year match
+   `https://gamefaqs.gamespot.com/search?game=<title>`, arm the probe, then `__gf.search()`.
+   **Arming**: `node scripts/gf_bootstrap.mjs` prints a ~500-character line — paste that as
+   the `javascript_tool` text. It fetches the probe from the public repo over the network
+   (measured allowed from a GameFAQs page, 2026-09-06), caches it, clears any old copy and
+   runs it, answering `{armed:"gf probe v1 loaded", page:{…}}`. **Re-arm on every page**;
+   a navigation wipes it. Add `--ref <branch>` while iterating on the probe itself, and
+   remember a branch name with a slash only resolves through the `refs/heads/` form the
+   script already writes. If the page blocks the fetch, `--paste` prints the probe inline
+   as a fallback. Pick the row whose **platform and year match
    the BASE_GAMES row** — the search is fuzzy ("persona 5 royal" returns *Persona 5*). Never
    let the tool pick.
 2. **Triage the guides.** Navigate to `<game url>/faqs`, re-eval the probe (the page reset
    it), `__gf.triage()`. Take the top three; keep the full walkthroughs for `grep` only.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
    translations out, `toc first` on anything over 200KB.
-3. **Read one guide.** Navigate, re-arm, then in this order: `__gf.meta()` →
+3. **Read one guide.** Check `__gf.meta().pages` FIRST: a formatted guide is split across
+   pages (The Witcher 3's walkthrough is 19 of them) and every other number describes only
+   the page you are on. Move with `?page=N`, zero-based. Then, in this order: `__gf.meta()` →
    `__gf.toc({min:800})` → `__gf.grep("threshold")` / `"rewards"` / `"hidden"` /
    `"upgrades"` / `"economy"` → at most four `__gf.section(i)` reads (page a long one with
    `from`) → `__gf.visited()`, whose answer becomes the guide's **Coverage** line in the
