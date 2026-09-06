@@ -388,6 +388,15 @@ a game (or to work the queue):
    pages are `Skills` / `Immortal` / `Rings`, and Mother 3's combo system lives at
    `Sound Battle` on WikiBound and nowhere on Fandom. Probe a few titles before concluding
    a wiki lacks coverage.
+   Source notes as of 2026-09-06 (wave 2): **a game's own Fandom wiki is often LORE-only** —
+   `xenogears.fandom.com` has no Gear, Deathblow, Fuel or Hyper Mode page at all, the
+   Xeno-series wiki's Gear page is origin-and-history with no stats, and
+   `suikoden.fandom.com`'s Trading page covers I, II and Tierkreis but has no Suikoden V
+   section. When the wiki cannot carry a MECHANICAL cross-check, take the second source from
+   a second GameFAQs AUTHOR instead; a strong In-Depth list usually supplies one, and
+   Xenogears had two independent Deathblow guides. Also: the GameFAQs search page
+   occasionally renders its EMPTY form and ignores `?game=`, returning zero rows — re-navigate
+   the same URL once before concluding the game is not there.
    **2b. GameFAQs** (added 2026-09-05) is the richest source for item lists, secrets and
    minigame payouts — and Cloudflare-challenged to every script (403 "Just a moment…"
    even with a browser UA; no API). Read it in the **Browser pane** with

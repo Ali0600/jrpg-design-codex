@@ -236,3 +236,23 @@ something rather than to convey motion; inheriting a global smooth-scroll turns 
 a journey. The related trap when verifying: an animated scroll cannot complete in a hidden
 or zero-height viewport, so size the viewport first and prefer synchronous measurement —
 `requestAnimationFrame` never fires there either, and a test that awaits one simply hangs.
+
+## A document that shares your subject's name is not necessarily about your subject
+
+Xenogears' story arena is called "Battling", and the guide list carries a 53KB "Battling
+FAQ". I read it for the arena's payouts, found zero money references in the entire file,
+and was one step from recording "this arena has no defined payouts". The guide documents an
+unlockable *versus* mode that happens to share the name — the story arena is a different
+thing in a different guide, and it pays 300G to 2,500G plus a bonus scaled on speed and
+damage taken.
+
+**Why it came up:** this codex treats "no minigame with defined payouts" as a valid,
+publishable result. That makes a wrong NEGATIVE as expensive as a wrong fact, because it
+closes the question and nobody re-opens it.
+
+**Takeaway:** before recording an absence, confirm the document you searched is about the
+thing you meant — a name match is a hypothesis, not an identification. Check the document's
+own framing (its contents list, its opening, the vocabulary it uses) against your subject.
+The tell here was available and I nearly walked past it: the file was full of positive
+evidence of a DIFFERENT subject — match counts, difficulty settings, a two-player mode —
+which is much stronger information than the absence of the thing I wanted.
