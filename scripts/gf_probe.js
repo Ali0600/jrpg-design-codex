@@ -10,7 +10,7 @@
 (function (root) {
   "use strict";
 
-  var V = 1;
+  var V = 2;
   var MAX = 12000;   // hard ceiling on any result, in JSON characters
   var DEF = 6000;    // default budget for one accessor call
 
@@ -239,6 +239,9 @@
      */
     function guideBox() { return q("div.faqtext") || q("div.ffaq.ffaqbody") || q("div.ffaq"); }
 
+    /** A game's HOME page (no /faqs) carries the "Game Detail" box; a guide page never does. */
+    function gameInfoBox() { return q("div.pod_gameinfo"); }
+
     /**
      * Long guides are SPLIT ACROSS PAGES ("Page 1 of 19", ?page=N, zero-based). Everything
      * else here describes the page you are on, so this number is what stops a 19-page
@@ -257,6 +260,7 @@
       if (/^just a moment/i.test(title) || q("#challenge-error-text, #challenge-running, #cf-chl-widget")) kind = "challenge";
       else if (q("ol.gf_guides")) kind = "listing";
       else if (guideBox()) kind = "faq";
+      else if (gameInfoBox()) kind = "game";
       else if (/^\/search/.test((loc && loc.pathname) || "")) kind = "search";
       var pg = pages();
       return { kind: kind, url: href(), title: title, page: pg.page, pages: pg.pages };
@@ -295,6 +299,50 @@
         rows.push({ title: txt(a), platform: m[1], url: h });
       });
       return core.fitRows({ n: rows.length, rows: rows }, "rows", DEF);
+    };
+
+    /**
+     * A game's home page: the Game Detail box as label -> text (plus the hrefs under each
+     * label), the user rating / difficulty / length averages with their vote counts, and the
+     * "Games You May Like" titles with their site-relative paths. Labels come back as the
+     * page prints them; the splicer is the strict side and refuses one it has not seen.
+     * Never returned: the Description pod, the blurb under each related game, or anything
+     * from document.body — those are marketing prose, and prose is not stored.
+     */
+    api.game = function () {
+      var detail = {}, links = {}, ratings = {}, like = [];
+      var all = function (el, sel) { return el ? Array.prototype.slice.call(el.querySelectorAll(sel)) : []; };
+      qa("div.pod_gameinfo div.pod_gameinfo_left ol.list li").forEach(function (li) {
+        var label = txt(li.querySelector("b")).replace(/:\s*$/, "");
+        if (!label) return;
+        var whole = txt(li);
+        var value = whole.indexOf(label) === 0 ? whole.slice(label.length).replace(/^:\s*/, "").trim() : whole;
+        detail[label] = value;
+        var hrefs = all(li, "a").map(function (a) { return a.getAttribute("href") || ""; }).filter(Boolean);
+        if (hrefs.length) links[label] = hrefs;
+      });
+      ["rate", "difficulty", "length"].forEach(function (m) {
+        var box = q("#gs_" + m + "_avg");
+        if (!box) return;
+        var input = box.querySelector("input");
+        var v = Number(input ? input.getAttribute("value") : NaN);
+        var hm = txt(q("#gs_" + m + "_avg_hint")).match(/^(.*?)\s*\(([\d,]+)\s*ratings?\)/i);
+        var r = {};
+        if (isFinite(v)) r.v = v;
+        if (hm) { r.w = hm[1]; r.n = Number(hm[2].replace(/,/g, "")); }
+        if (r.v != null || r.n != null) ratings[m] = r;
+      });
+      qa("div.pod").forEach(function (pod) {
+        var h = pod.querySelector("div.head h2.title");
+        if (!h || !/^games you may like$/i.test(txt(h))) return;
+        all(pod, "ol.list li").forEach(function (li) {
+          var a = li.querySelector("div.content a.bold");
+          if (a) like.push({ t: txt(a), u: a.getAttribute("href") || "" });
+        });
+      });
+      return core.fitRows({ url: href(), title: txt(q("h1.page-title")),
+                            platform: txt(q("h3.platform-title span.header_more")),
+                            detail: detail, links: links, ratings: ratings, like: like }, "like", DEF);
     };
 
     // The guide text, assembled once per page: <pre> chunks are joined BEFORE the
@@ -419,9 +467,10 @@
 
     api.help = function () {
       return [
-        "page()                      what this page is: listing | faq | search | challenge (STOP on challenge)",
+        "page()                      what this page is: listing | faq | game | search | challenge (STOP on challenge)",
         "guides() / triage()         the guide list, raw or scored for codex value",
         "search()                    game candidates on a /search?game= page — confirm platform + year, never auto-pick",
+        "game()                      a game's home page: Game Detail labels, user rating/difficulty/length, Games You May Like (t,u only) — never the Description pod",
         "meta()                      id, author, version, updated, size, section count",
         "toc({max,min})              section list; min skips sections shorter than N chars; list = a contents/item list folded into one section (grep reaches inside)",
         "section(i, maxChars, from)  one section's text, pageable with `from`",

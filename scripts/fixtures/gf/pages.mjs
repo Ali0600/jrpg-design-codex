@@ -148,3 +148,100 @@ export function searchPage() {
   ])]);
   return document({ title: "Game Search - GameFAQs", root, path: "/search" });
 }
+
+/**
+ * A game's HOME page (no /faqs): the Game Detail box, the user-ratings block and the
+ * "Games You May Like" list. Copied from Parasite Eve's page, 2026-09-06. The two sentinel
+ * strings stand in for the publisher prose the probe must NEVER return; `likes` pads the
+ * related-game list for the ceiling test.
+ */
+export const GAME_MARKETING = "MARKETING TEXT MUST NOT LEAK";
+export const GAME_BLURB = "PUBLISHER BLURB MUST NOT LEAK";
+
+export function gamePage({ withAlso = true, likes = 3 } = {}) {
+  const row = (label, children) => el("li", {}, [el("div", { cls: "content" }, [el("b", {}, [label + ":"]), ...children])]);
+  const detailRows = [
+    row("Platform", [el("a", { href: "/ps" }, ["PlayStation"])]),
+    row("Genre", [el("a", { href: "/ps/category/48-role-playing" }, ["Role-Playing"]), " » ",
+                  el("a", { href: "/ps/category/73-role-playing-action-rpg" }, ["Action RPG"])]),
+    row("Developer/Publisher", [el("a", { href: "/games/company/1-lantern-works" }, ["Lantern Works"])]),
+    row("Release", [el("a", { href: "/ps/1-lantern-vale/data" }, ["March 3, 1999"])]),
+    row("Franchises", [el("a", { href: "/games/franchise/1-lantern" }, ["Lantern"]), ", ",
+                       el("a", { href: "/games/franchise/2-vale" }, ["Vale Chronicles"])]),
+    // A row with no <b> label (not seen live; the guard against one is what keeps an
+    // unlabelled paragraph out of the map). Its text is a third sentinel.
+    el("li", {}, [el("div", { cls: "content" }, ["UNLABELLED ROW MUST NOT LEAK"])]),
+    ...(withAlso ? [
+      row("Also Known As", ["Rantan no Tani (JP)"]),
+      row("Also on", [el("a", { href: "/psp/2-lantern-vale" }, ["PSP"]), ", ", el("a", { href: "/vita/3-lantern-vale" }, ["Vita"])]),
+    ] : []),
+  ];
+  const rate = (m, v, hint, avg) => el("div", { cls: "gamespace_rate_half", title: avg }, [
+    el("div", { cls: "gamespace_rate_rating", id: "gs_" + m + "_avg" }, [
+      el("i", { cls: "fa fa-fw fa-star mg_rate_active" }, []),
+      el("input", { attrs: { type: "hidden", name: "score", value: String(v), readonly: "readonly" } }, []),
+    ]),
+    el("div", { cls: "gamespace_rate_hint", id: "gs_" + m + "_avg_hint" }, [hint]),
+  ]);
+  const likeLi = (t, href, box) => el("li", {}, [
+    el("div", { cls: "list_img img_med" }, [el("img", { cls: "crop imgboxart", attrs: { src: box, alt: "" } }, [])]),
+    el("div", { cls: "content" }, [el("a", { cls: "bold", href }, [t]), el("div", { cls: "meta" }, [GAME_BLURB])]),
+  ]);
+  const likeRows = [
+    likeLi("Harbor Story", "/ps/4-harbor-story", "/a/box/0/0/1/1_thumb.jpg"),
+    likeLi("Lantern Vale II", "/ps/5-lantern-vale-ii", "/a/box/0/0/2/2_thumb.jpg"),
+    likeLi("Reed Blade Saga", "/ps/6-reed-blade-saga", "/a/box/0/0/3/3_thumb.jpg"),
+  ];
+  for (let i = likeRows.length; i < likes; i++) {
+    likeRows.push(likeLi("Related Game Number " + i, "/ps/" + (100 + i) + "-related-game-" + i, "/a/box/0/0/9/9_thumb.jpg"));
+  }
+  const root = el("html", {}, [el("body", {}, [
+    el("div", { cls: "header_right" }, [
+      el("h1", { cls: "page-title" }, ["Lantern Vale"]),
+      el("h3", { cls: "platform-title" }, [el("span", { cls: "header_more" }, ["PlayStation"])]),
+    ]),
+    el("div", { cls: "pod pod_half pod_gamespace" }, [el("div", { cls: "pod" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Description"])]),
+      el("div", { cls: "body" }, [el("ol", { cls: "list flex col1 nobg" }, [
+        el("li", {}, [el("div", { cls: "content" }, [el("div", { cls: "game_desc" }, [GAME_MARKETING])])]),
+      ])]),
+    ])]),
+    el("div", { cls: "pod_half pod_gamespace pod_gamespace_home_mygames" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["User Ratings"])]),
+      el("div", { cls: "body gamespace_rate_box" }, [
+        el("div", { cls: "gamespace_rate_header" }, ["Product Rating"]),
+        rate("rate", 4.12, "Great (2,317 ratings)", "Average: 4.12 stars from 2317 users"),
+        el("div", { cls: "gamespace_rate_header" }, ["Difficulty"]),
+        rate("difficulty", 3.25, "Just Right (1,560 ratings)", "Average: 3.25 hearts from 1560 users"),
+        el("div", { cls: "gamespace_rate_header" }, ["Length"]),
+        rate("length", 19.5, "20 Hours (1,102 ratings)", "Average: 19.5 hours from 1102 users"),
+      ]),
+    ]),
+    el("div", { cls: "pod pod_gameinfo" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Game Detail"])]),
+      el("div", { cls: "body pod_gameinfo_left" }, [el("ol", { cls: "list flex col1 nobg" }, detailRows)]),
+      el("div", { cls: "body pod_gameinfo_right" }, [
+        el("div", { cls: "metacritic" }, [el("a", { href: "https://www.metacritic.com/game/playstation/lantern-vale" }, [
+          el("div", { cls: "score score_high" }, ["81"])])]),
+        el("div", { cls: "esrb" }, [el("p", {}, [el("span", { cls: "esrb_logo esrb_logo_m" }, [])])]),
+      ]),
+    ]),
+    // Another pod with the SAME row shape (bold link + blurb) under a different heading:
+    // the like-list is picked by its heading, not by what its rows look like.
+    el("div", { cls: "pod" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Game News"])]),
+      el("div", { cls: "body" }, [el("ol", { cls: "list flex col1" }, [
+        el("li", {}, [el("div", { cls: "content" }, [
+          el("a", { cls: "bold", href: "/news/1-lantern-vale-patch" }, ["NEWS HEADLINE MUST NOT LEAK"]),
+          el("div", { cls: "meta" }, ["2 days ago"]),
+        ])]),
+      ])]),
+    ]),
+    el("div", { cls: "pod" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Games You May Like"])]),
+      el("div", { cls: "body" }, [el("ol", { cls: "list flex col1" }, likeRows)]),
+    ]),
+  ])]);
+  return document({ title: "Lantern Vale for PlayStation - GameFAQs", root, path: "/ps/1-lantern-vale",
+                    bodyText: CHROME + GAME_MARKETING + "\n" + GAME_BLURB + CONSENT });
+}
