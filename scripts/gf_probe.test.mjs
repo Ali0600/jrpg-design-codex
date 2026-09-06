@@ -11,6 +11,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, ffaqPage, challengePage, searchPage,
+  gamePage,
 } from "./fixtures/gf/pages.mjs";
 import { lintDigest, lintDir } from "./digest_lint.mjs";
 import { armText, pasteText, probeUrl, KEY } from "./gf_bootstrap.mjs";
@@ -116,6 +117,10 @@ test("every accessor stays under the ceiling", () => {
   assert.ok(size(gl) <= DEF, `guides ${size(gl)}`);
   assert.equal(gl.n, 200);
   assert.ok(gl.dropped > 0);
+  const gg = mount(gamePage({ likes: 300 })).game();
+  assert.ok(size(gg) <= DEF, `game ${size(gg)}`);
+  assert.ok(gg.dropped > 0, "game() reports what it cut from the like-list");
+  assert.ok(gg.like.length > 3 && gg.like.length < 300);
 });
 
 test("meta() reads the page chrome and the title, not the body", () => {
@@ -159,11 +164,67 @@ test("triage ranks guides by codex value", () => {
   assert.match(t.rows[3].why, /thin/);
 });
 
-test("page() tells the four page kinds apart, including the challenge", () => {
+test("page() tells the five page kinds apart, including the challenge", () => {
   assert.equal(mount(listingPage()).page().kind, "listing");
   assert.equal(mount(faqPage({ chunks: [FAQ_TEXT] })).page().kind, "faq");
   assert.equal(mount(challengePage()).page().kind, "challenge");
   assert.equal(mount(searchPage()).page().kind, "search");
+  assert.equal(mount(gamePage()).page().kind, "game");
+});
+
+test("game() reads the Game Detail box, the user ratings and the like-list, and nothing else", () => {
+  const r = mount(gamePage()).game();
+  assert.equal(r.title, "Lantern Vale");
+  assert.equal(r.platform, "PlayStation");
+  assert.equal(r.url, "https://gamefaqs.gamespot.com/ps/1-lantern-vale");
+  // Labels exactly as the page prints them, values with the label stripped: the splicer,
+  // not the probe, decides what each label means.
+  assert.deepEqual(r.detail, {
+    Platform: "PlayStation",
+    Genre: "Role-Playing » Action RPG",
+    "Developer/Publisher": "Lantern Works",
+    Release: "March 3, 1999",
+    Franchises: "Lantern, Vale Chronicles",
+    "Also Known As": "Rantan no Tani (JP)",
+    "Also on": "PSP, Vita",
+  });
+  assert.deepEqual(r.links.Release, ["/ps/1-lantern-vale/data"]);
+  assert.deepEqual(r.links["Also on"], ["/psp/2-lantern-vale", "/vita/3-lantern-vale"]);
+  assert.equal(r.links["Also Known As"], undefined, "plain-text rows carry no hrefs");
+  // The precise averages and counts come from each block's title attribute, never from
+  // the hidden input, which rounds difficulty and length to the icon count.
+  assert.deepEqual(r.ratings, {
+    rate: { v: 4.12, w: "Great", n: 12317 },
+    difficulty: { v: 3.25, w: "Just Right/Tough", n: 1560 },
+    length: { v: 31, w: "31 Hours", n: 1105 },
+  });
+  assert.deepEqual(r.like, [
+    { t: "Harbor Story", u: "/ps/4-harbor-story" },
+    { t: "Lantern Vale II", u: "/ps/5-lantern-vale-ii" },
+    { t: "Reed Blade Saga", u: "/ps/6-reed-blade-saga" },
+  ]);
+  // The prose guard: neither the Description pod nor the blurb under each related game
+  // may come back, through any field.
+  assert.doesNotMatch(JSON.stringify(r), /MUST NOT LEAK/);
+  assert.ok(size(r) <= DEF, `game ${size(r)}`);
+  const walk = v => {
+    if (typeof v === "string") assert.ok(v.length < 120, `a value long enough to be prose: ${v.slice(0, 40)}…`);
+    else if (v && typeof v === "object") Object.values(v).forEach(walk);
+  };
+  walk(r);
+  // Without the optional rows the map simply lacks them — no empty keys.
+  const short = mount(gamePage({ withAlso: false })).game();
+  assert.equal(Object.keys(short.detail).length, 5);
+  assert.equal(short.detail["Also on"], undefined);
+});
+
+test("game() on a page with no Game Detail box is empty, not a throw", () => {
+  const r = mount(searchPage()).game();
+  assert.deepEqual(r.detail, {});
+  assert.deepEqual(r.links, {});
+  assert.deepEqual(r.ratings, {});
+  assert.deepEqual(r.like, []);
+  assert.equal(r.title, "");
 });
 
 test("search() lists game candidates once each and never picks", () => {
@@ -312,7 +373,14 @@ test("the arm line fetches the probe, caches it, and runs what it fetched", asyn
   const out = await run(page.win, fetch, armText());
   assert.match(String(out.armed), /gf probe v\d+ loaded/);
   assert.equal(out.page.kind, "faq");
-  assert.deepEqual(calls, [probeUrl("main")]);
+  assert.equal(out.from, "network", "the arm line says the probe came over the network");
+  assert.equal(out.len, src.length, "and how long it was — a stale copy shows up as the wrong length");
+  assert.equal(calls.length, 1);
+  // A cache-buster on every fetch: raw.githubusercontent.com's CDN serves the previous push
+  // for five minutes and no-store cannot reach it, so without this a probe fix looks like
+  // a no-op on the branch it was pushed to.
+  assert.match(calls[0], new RegExp("^" + probeUrl("main").replace(/[.?+]/g, "\\$&") + "\\?t=\\d{12,}$"),
+    `fetch URL ${calls[0]} is not the probe URL plus a ?t=<now> cache-buster`);
   assert.equal(store.get(KEY), src, "the fetched probe is cached for the offline case");
 
   // The network is preferred over the cache: a stale cache must never win, or a probe fix
@@ -325,13 +393,15 @@ test("the arm line fetches the probe, caches it, and runs what it fetched", asyn
   assert.equal(fresh.page, null, "a body that is not the probe reports null, it does not throw");
   assert.equal(store.get("seen"), "fresh", "the freshly fetched source is the one evaluated");
   assert.equal(store.get(KEY), freshSrc, "and it replaces the cache rather than reading it");
-  assert.notEqual(fresh.armed, "gf probe v1 loaded", "the stale cached probe did not win");
+  assert.doesNotMatch(String(fresh.armed), /gf probe v\d+ loaded/, "the stale cached probe did not win");
 
   // …and when the network fails, the cache carries it.
   store.set(KEY, src);
   const offline = async () => { throw new Error("offline"); };
   const back = await run(faqPage({ chunks: [FAQ_TEXT] }).win, offline, armText());
   assert.match(String(back.armed), /gf probe v\d+ loaded/, "falls back to the cached probe");
+  assert.equal(back.from, "cache", "and ANNOUNCES the fallback rather than passing it off as a fetch");
+  assert.match(String(back.why), /offline/, "with the fetch error, so the cause is on screen");
 
   // A 404 body is short, not empty: it must be refused as a fetch failure, not evaluated.
   store.set(KEY, src);
@@ -371,7 +441,9 @@ test("re-arming the SAME page replaces the installed probe, by both routes", asy
 
 test("the probe file is small enough to paste into a page", () => {
   const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
-  // Paste cost, not correctness: the probe is re-armed on every page navigation.
-  assert.ok(src.length < 24000, `probe is ${src.length} chars — every page navigation re-pastes it`);
+  // Paste cost, not correctness: the arm line fetches the probe, but the --paste fallback
+  // still inlines the whole file on a page that blocks the fetch. Raised from 24,000 when
+  // game() landed (2026-09-06); correctness is the tests above.
+  assert.ok(src.length < 27000, `probe is ${src.length} chars — the --paste fallback inlines all of it`);
   assert.doesNotMatch(src, /^\s*(const|let|class)\s/m, "no top-level bindings — the REPL must be able to eval it twice");
 });

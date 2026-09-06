@@ -263,7 +263,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   grammar on `docs/research/*.md`. `__gf.visited()` reports what a session actually READ
   of a guide — the probe indexes every line, but only what returns through a tool result
   reaches the agent, so each digest carries a Coverage line naming the biggest sections
-  nobody opened.
+  nobody opened. `__gf.game()` reads a game's HOME page (`page().kind === "game"`): the
+  Game Detail labels as printed, the user rating / difficulty / length averages with vote
+  counts, and the "Games You May Like" titles with site-relative paths — never the
+  Description pod or the related-game blurbs, which are marketing prose.
 - `scripts/gf_bootstrap.mjs` prints the ~500-character line that arms the probe in a page:
   it FETCHES `gf_probe.js` from the public repo (a GameFAQs page is allowed to fetch
   raw.githubusercontent.com — measured 2026-09-06), caches it in the origin's localStorage
@@ -273,7 +276,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   spelled `refs/heads/<name>` — a slashed branch 404s the short raw URL); `--paste` prints
   the probe inline for a page that blocks the fetch. Two traps it now handles: the cache is
   never preferred over the network (a stale cached probe makes a fix look like a no-op),
-  and a short body such as a 404 page is refused rather than evaluated.
+  and a short body such as a 404 page is refused rather than evaluated. The fetch carries a
+  `?t=<now>` cache-buster because raw.githubusercontent.com's CDN serves a branch's file for
+  five minutes after a push and `cache:"no-store"` cannot reach that cache — the live proof
+  for `game()` ran the pre-fix probe twice before the fetched length gave it away.
 - **A formatted guide is paginated.** `div.ffaq` guides (the norm for post-2010 games) split
   across `?page=N`, zero-based; `meta().pages` and `visited().pages` say how many, and every
   other number describes the page you are on. Before the Witcher 3 pass the probe could not

@@ -39,13 +39,23 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    **Arming**: `node scripts/gf_bootstrap.mjs` prints a ~500-character line — paste that as
    the `javascript_tool` text. It fetches the probe from the public repo over the network
    (measured allowed from a GameFAQs page, 2026-09-06), caches it, clears any old copy and
-   runs it, answering `{armed:"gf probe v1 loaded", page:{…}}`. **Re-arm on every page**;
+   runs it, answering `{armed:"gf probe v2 loaded", page:{…}}`. **Re-arm on every page**;
    a navigation wipes it. Add `--ref <branch>` while iterating on the probe itself, and
    remember a branch name with a slash only resolves through the `refs/heads/` form the
-   script already writes. If the page blocks the fetch, `--paste` prints the probe inline
+   script already writes. The fetch carries a `?t=<now>` cache-buster: without it,
+   raw.githubusercontent.com keeps serving the previous push for five minutes. If the page blocks the fetch, `--paste` prints the probe inline
    as a fallback. Pick the row whose **platform and year match
    the BASE_GAMES row** — the search is fuzzy ("persona 5 royal" returns *Persona 5*). Never
    let the tool pick.
+1b. **Harvest the game page** (added 2026-09-06). On the confirmed game URL itself — no
+   `/faqs` — re-arm, check `__gf.page().kind === "game"`, then `__gf.game()`: the Game Detail
+   labels as the page prints them, the user rating / difficulty / length averages with their
+   vote counts, and the "Games You May Like" titles with their site-relative paths. Nothing
+   else comes back — not the Description pod, not the blurb under each related game. Save the
+   tool result verbatim to `<scratchpad>/gf/<slug>.json`; `node scripts/splice_game.mjs
+   --game "<codex title>" <file>` (dry run, then `--write`) turns it into the row's `gf`
+   field and refuses any label it has not seen. The platform-and-year rule applies to this
+   page too: a port or remake page carries the wrong release line, and the splicer says so.
 2. **Triage the guides.** Navigate to `<game url>/faqs`, re-eval the probe (the page reset
    it), `__gf.triage()`. Take the top three; keep the full walkthroughs for `grep` only.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
