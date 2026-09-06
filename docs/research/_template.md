@@ -12,6 +12,10 @@ digest started <date>
 |---|---|---|---|---|---|---|---|
 | 00000 | Example FAQ | author | 1.0 | 01/01/2000 | In-Depth Guides | 29 | https://gamefaqs.gamespot.com/ps/0-example/faqs/00000 |
 
+Coverage 00000: read 4/22 sections (Power-Ups 100%, Relics 60%, …); greps: threshold,
+rewards, hidden, upgrades, economy; unread ≥800: Walkthrough Part 2 (12,400), Enemy List
+(3,100). — from `__gf.visited()`; says what this pass did NOT look at.
+
 ## Mechanics candidates
 
 ### <Mechanic name>
@@ -54,7 +58,11 @@ row: <filled in after the splice, e.g. g090>
 ## Codex rows
 
 ```js
-// paste-ready rows; ids are assigned at splice time
+// Placeholder ids bind a row to its candidate: M+1 is the first ### under
+// "Mechanics candidates", g+2 the second under "Minigame candidates".
+// `node scripts/splice_rows.mjs docs/research/<slug>.md [--write]` assigns the real ids.
+{id:"M+1",game:"<title>",name:"<name>",cat:"<CATS key>",how:"…",loop:"…",want:"",
+ notes:"…",refs:[{u:"https://gamefaqs.gamespot.com/…",t:"<Guide> by <author> (GameFAQs)"}]}
 ```
 
 ## Codex delta

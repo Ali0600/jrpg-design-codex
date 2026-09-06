@@ -9,10 +9,10 @@ rejected options still offer.
 - **Both-scores-per-game (original + best remaster)** (from the Metacritic fork) —
   revisit hook: `scripts/fetch_scores.py` already resolves both slugs; add a second
   field set (`mcR`, `usR`) and a second chip row.
-- **A committed splice script for digest rows** (from the GameFAQs-flow fork) — revisit
-  hook: the first session that splices more than ~10 rows out of `docs/research/*.md`
-  writes `scripts/splice_rows.mjs` — reads a digest's `## Codex rows` block, assigns ids
-  from the current max, anchors on the array's closing `];`, dry-run by default.
+- ~~**A committed splice script for digest rows**~~ — **promoted 2026-09-06**, its revisit
+  hook reached: the 15-game GameFAQs rollout will splice 45–75 rows. Shipped as
+  `scripts/splice_rows.mjs` (placeholder ids bind rows to digest candidates; dry run by
+  default; 18 checks, each mutation-proven).
 
 ---
 

@@ -13,7 +13,7 @@
  */
 
 import { readFileSync, readdirSync } from "node:fs";
-import { dirname, join, sep } from "node:path";
+import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -40,7 +40,7 @@ const STATUS = new Set(["Researched", "Researching", "To Research"]);
 
 // ---------------------------------------------------------------- extraction
 
-function extractScript(html) {
+export function extractScript(html) {
   const m = html.match(/<script>([\s\S]*)<\/script>/);
   if (!m) throw new Error("no <script> block found");
   return m[1];
@@ -51,7 +51,7 @@ function extractScript(html) {
  * be evaluated together, not one array at a time: some game rows reference shared
  * consts (title:FF) declared alongside them.
  */
-function extractData(script) {
+export function extractData(script) {
   const start = script.indexOf("const CATS");
   const end = script.indexOf("/* ============================= STATE");
   if (start < 0) throw new Error("could not locate `const CATS` — data region moved");
@@ -65,7 +65,7 @@ function extractData(script) {
 const isText = v => typeof v === "string" && v.trim() !== "";
 
 /** The page's own source-host allowlist — `const REF_HOSTS = /.../i;` — read, not restated. */
-function readRefHosts(script) {
+export function readRefHosts(script) {
   const m = script.match(/const REF_HOSTS\s*=\s*(\/(?:\\\/|[^\/\n])+\/[a-z]*);/);
   if (!m) return null;
   try { return new Function("return " + m[1])(); } catch { return null; }
@@ -542,4 +542,4 @@ function main() {
   }
 }
 
-main();
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) main();
