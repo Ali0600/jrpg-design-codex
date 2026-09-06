@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, challengePage, searchPage,
+  FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, ffaqPage, challengePage, searchPage,
 } from "./fixtures/gf/pages.mjs";
 import { lintDigest, lintDir } from "./digest_lint.mjs";
 import { bootstrapText, REARM, KEY } from "./gf_bootstrap.mjs";
@@ -172,6 +172,29 @@ test("search() lists game candidates once each and never picks", () => {
     { title: "Persona 5", platform: "ps4", url: "/ps4/835628-persona-5" },
     { title: "Persona 5 Strikers", platform: "switch", url: "/switch/262892-persona-5-strikers" },
   ]);
+});
+
+test("a formatted guide in div.ffaq is read, and its pagination is reported", () => {
+  const g = mount(ffaqPage({ page: 3, pages: 19 }));
+  assert.equal(g.page().kind, "faq", "an ffaq guide is a guide, not an unknown page");
+  const m = g.meta();
+  assert.equal(m.format, "html");
+  assert.equal(m.page, 3);
+  assert.equal(m.pages, 19, "18 other pages exist and the digest must be able to say so");
+  const heads = g.toc().rows.map(r => r.head);
+  assert.ok(heads.includes("Places of Power"), heads.join(" | "));
+  assert.ok(heads.includes("Finisher Attacks"), "H4 headings are sections too");
+  assert.match(g.grep("Ability Point").rows[0].text, /one Ability Point/);
+  const v = g.visited();
+  assert.equal(v.page, 3);
+  assert.equal(v.pages, 19, "coverage that hides 18 unread pages is not coverage");
+});
+
+test("a single-page guide reports one page, not zero", () => {
+  const g = mount(faqPage({ chunks: [FAQ_TEXT] }));
+  assert.equal(g.meta().pages, 1);
+  assert.equal(g.meta().page, 1);
+  assert.equal(g.page().pages, 1);
 });
 
 test("a second eval is a no-op", () => {

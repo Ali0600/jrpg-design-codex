@@ -88,6 +88,33 @@ export function faqPage({ chunks, title = "Lantern Vale - Relic & Power-Up FAQ -
 }
 
 /** The HTML-formatted guide shape (headings + tables instead of <pre>). Unverified live. */
+/**
+ * A FORMATTED guide, the post-2010 shape: no <pre>, real H2-H5 headings inside
+ * div.ffaq.ffaqbody, and the text SPLIT over pages ("Page 3 of 19", ?page=N zero-based).
+ * Copied from The Witcher 3's Guide and Walkthrough, 2026-09-06.
+ */
+export function ffaqPage({ page = 3, pages = 19 } = {}) {
+  const box = el("div", { cls: "ffaq ffaqbody" }, [
+    el("h3", {}, ["Table of Contents"]),
+    el("h2", {}, ["Gameplay Basics"]),
+    el("p", {}, ["Two sentences of body text about how the basics work in this game."]),
+    el("h3", {}, ["Combat Techniques"]),
+    el("p", {}, ["Melee, ranged and the rest, described at some length for the reader."]),
+    el("h4", {}, ["Finisher Attacks"]),
+    el("p", {}, ["A finisher triggers on a staggered enemy and costs no stamina."]),
+    el("h2", {}, ["Places of Power"]),
+    el("p", {}, ["Each one grants one Ability Point, once, the first time you use it."]),
+  ]);
+  const pager = el("div", { cls: "ffaq_pager" }, [
+    el("span", {}, [`Page ${page} of ${pages}`]),
+    el("a", { href: `/ps/1-lantern-vale/faqs/106?page=${page}` }, ["Next"]),
+  ]);
+  const root = el("html", {}, [el("body", {}, [el("div", {}, [pager, box])])]);
+  return document({ title: "Lantern Vale - Guide and Walkthrough - PlayStation - By dune - GameFAQs",
+                    root, path: `/ps/1-lantern-vale/faqs/106?page=${page - 1}`,
+                    bodyText: CHROME + `Page ${page} of ${pages}` + "Version: 0.90 | Updated: 03/03/2021" + CONSENT });
+}
+
 export function htmlFaqPage() {
   const box = el("div", { cls: "faqtext" }, [
     el("h2", {}, ["Items"]),

@@ -3,7 +3,8 @@
  * Evaluated INSIDE the page (paste whole as the javascript_tool text); installs
  * window.__gf, whose accessors return small, capped JSON — the only channel back to the
  * agent is the tool result, so a guide is read toc → grep → one section at a time.
- * Reads div.faqtext and ol.gf_guides only, never document.body (consent text, ~14KB).
+ * Reads the guide box (div.faqtext, or div.ffaq for formatted guides) and ol.gf_guides
+ * only, never document.body (consent text, ~14KB).
  *   In the page:  __gf.help()      In node (tests):  require("./gf_probe.js")
  */
 (function (root) {
@@ -231,14 +232,34 @@
     function txt(el) { return el ? String(el.textContent || "").replace(/\s+/g, " ").trim() : ""; }
     function href() { return loc ? String(loc.href || "") : ""; }
 
+    /**
+     * A guide is either plain text in div.faqtext or a formatted guide in div.ffaq —
+     * the second shape is the norm for post-2010 games and was invisible to this probe
+     * until The Witcher 3 (2026-09-06).
+     */
+    function guideBox() { return q("div.faqtext") || q("div.ffaq.ffaqbody") || q("div.ffaq"); }
+
+    /**
+     * Long guides are SPLIT ACROSS PAGES ("Page 1 of 19", ?page=N, zero-based). Everything
+     * else here describes the page you are on, so this number is what stops a 19-page
+     * guide from being read as a whole one.
+     */
+    function pages() {
+      var el = q("div.ffaq_pager, div.paginate, ul.paginate") || doc.body;
+      var m = String((el && el.innerText) || "").match(/Page (\d+) of (\d+)/);
+      var cur = Number(((href().match(/[?&]page=(\d+)/) || [])[1] || 0)) + 1;
+      return m ? { page: Number(m[1]), pages: Number(m[2]) } : { page: cur, pages: 1 };
+    }
+
     api.page = function () {
       var title = String(doc.title || "");
       var kind = "unknown";
       if (/^just a moment/i.test(title) || q("#challenge-error-text, #challenge-running, #cf-chl-widget")) kind = "challenge";
       else if (q("ol.gf_guides")) kind = "listing";
-      else if (q("div.faqtext")) kind = "faq";
+      else if (guideBox()) kind = "faq";
       else if (/^\/search/.test((loc && loc.pathname) || "")) kind = "search";
-      return { kind: kind, url: href(), title: title };
+      var pg = pages();
+      return { kind: kind, url: href(), title: title, page: pg.page, pages: pg.pages };
     };
 
     api.guides = function () {
@@ -281,7 +302,7 @@
     function assemble() {
       var key = href();
       if (api._c[key]) return api._c[key];
-      var pres = qa("div.faqtext pre"), format = "pre", text;
+      var box0 = guideBox(), pres = box0 ? qa("div.faqtext pre") : [], format = "pre", text;
       if (pres.length) {
         text = pres.reduce(function (acc, p) {           // no blank line at a chunk seam
           var s = String(p.textContent || "");
@@ -301,8 +322,7 @@
             Array.prototype.slice.call(el.children).forEach(walk);
           } else parts.push(String(el.innerText != null ? el.innerText : (el.textContent || "")));
         };
-        var box = q("div.faqtext");
-        Array.prototype.slice.call(box ? box.children : []).forEach(walk);
+        Array.prototype.slice.call(box0 ? box0.children : []).forEach(walk);
         text = parts.join("\n");
       }
       var lines = core.splitLines(text);
@@ -319,9 +339,11 @@
       // only the match leaves. Older guides also carry it in their own header.
       var vu = core.parseVersion(doc.body ? String(doc.body.innerText || "") : "");
       if (!vu.version) vu = core.parseVersion(a.lines.slice(0, 60).join("\n"));
+      var pg = pages();
       return { id: id, game: t.game, title: t.title, platform: t.platform, author: t.author,
                version: vu.version, updated: vu.updated, format: a.format, chunks: a.chunks,
-               chars: a.chars, lines: a.lines.length, sections: a.sections.length, url: href() };
+               chars: a.chars, lines: a.lines.length, sections: a.sections.length,
+               page: pg.page, pages: pg.pages, url: href() };
     };
 
     api.toc = function (opts) {
@@ -374,12 +396,14 @@
         else if (s.len >= min && !s.boiler && !s.list) unread.push({ i: s.i, head: s.head, len: s.len });
       });
       unread.sort(function (x, y) { return y.len - x.len; });
-      return core.fitRows({ sections: a.sections.length, chars: a.chars, read: read,
-                            greps: a.greps.slice(), unread: unread }, "unread", DEF);
+      var pg = pages();
+      return core.fitRows({ sections: a.sections.length, chars: a.chars, page: pg.page,
+                            pages: pg.pages, read: read, greps: a.greps.slice(),
+                            unread: unread }, "unread", DEF);
     };
 
     api.skeleton = function () {
-      var target = q("ol.gf_guides > li") || q("div.faqtext") || doc.body || null;
+      var target = q("ol.gf_guides > li") || guideBox() || doc.body || null;
       var acc = [];
       var outline = function (el, depth) {
         if (!el || depth > 4 || acc.length > 60) return;
@@ -405,6 +429,7 @@
         "lines(from, count)          raw lines by 1-based number, when heading detection fails",
         "visited(minUnread)          what you read, which greps ran, and the biggest sections you did NOT read",
         "skeleton()                  DOM outline of a list row / the guide box, for selector repair",
+        "NOTE a formatted guide is SPLIT over pages — meta().pages says how many; ?page=N (0-based) is the next one",
         "Every result is capped (" + DEF + " chars default, " + MAX + " max). Read only what you need."
       ];
     };
