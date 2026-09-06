@@ -1,7 +1,7 @@
 # JRPG Design Codex
 
 A searchable research database of **what makes JRPG progression and exploration feel
-good** — 265 mechanics across 72 games, 92 minigames with their actual reward tables,
+good** — 269 mechanics across 72 games, 92 minigames with their actual reward tables,
 and reception scores — built as a design reference for an original JRPG.
 
 **[Open the codex →](https://ali0600.github.io/jrpg-design-codex/)**
@@ -13,7 +13,7 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 
 | | |
 |---|---|
-| **265 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
+| **269 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
 | **92 minigames** | 47 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
