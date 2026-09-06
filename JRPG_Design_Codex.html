@@ -2024,7 +2024,25 @@ how:"Most weapon artifacts carry Unleashes - weapon-specific special attacks tha
 loop:"Equip a new weapon → discover what it unleashes by fighting with it → use its power → risk breaking it → pay a shop to make it whole.",
 rating:0,want:"Maybe",
 notes:"Two ideas worth taking. The upgrade you buy is partly unknown until used, so equipment has something to REVEAL rather than just a number to compare, and the reward for using a weapon is learning what it does. And breakage gives the shop a third role beside selling and remembering: repair. Keep a broken item working as armour, as here, or breakage becomes a punishment for engaging with the system.",
-refs:[{u:"https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/18461",t:"Artifacts Guide by RocketTrekkieEvoli (GameFAQs)"},{u:"https://goldensun.fandom.com/wiki/Unleash",t:"Unleash (Golden Sun Universe)"}]}
+refs:[{u:"https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/18461",t:"Artifacts Guide by RocketTrekkieEvoli (GameFAQs)"},{u:"https://goldensun.fandom.com/wiki/Unleash",t:"Unleash (Golden Sun Universe)"}]},
+{id:"M273",verbs:["Latent geometry","Tool-gated","Traded"],game:"Paper Mario: The Thousand-Year Door",name:"Star Pieces (100 hidden collectibles that buy your build)",cat:"Exploration & Rewards",
+how:"Star Pieces are hidden throughout the world - some buried, needing a Spin Jump or the Ultra Hammer to dig up - and some are sidequest rewards. There are 100, and they are not money: their one use is trading with Dazzle in Rogueport Underground, who exchanges them for badges at fixed prices from 1 to 15 pieces. The fortune teller Merluvlee will sell you the location of ones you missed.",
+loop:"Search scenery and floors for a hidden star → carry the pieces to one NPC in the sewers → convert them into the badges your build is made of → pay a fortune teller for the rest.",
+rating:0,want:"Yes",
+notes:"The cleanest exploration-to-power pipeline in the codex: a collectible with exactly one sink, and that sink is the build system. Because the price list is fixed and public, a player can plan a hunt for a specific badge, which turns idle searching into a shopping trip with a goal. The fortune teller is the anti-frustration valve - pay money to convert 'somewhere in the world' into 'here' - and it belongs alongside the hunt, not instead of it.",
+refs:[{u:"https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",t:"Star Piece (Super Mario Wiki)"},{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/33039",t:"Badge FAQ by Fullgore_EXE (GameFAQs)"}]},
+{id:"M274",verbs:["Shop stock","The fleeing rare"],game:"Paper Mario: The Thousand-Year Door",name:"Charlieton (a shop that rerolls, and the only route to a full collection)",cat:"Economy & Currency",
+how:"Charlieton is a travelling salesman in Rogueport Plaza whose inventory changes every time you leave and come back - two screens away is enough. His prices are high and his stock is rare, and he is the only source that can finish a badge collection, so completing the set means repeatedly walking away and returning to see what he has today.",
+loop:"Check the stall → nothing you want → walk two screens and back → new stock → eventually the badge that exists nowhere else.",
+rating:0,want:"Yes",
+notes:"The owner's favourite pattern - hunting a collection through shops and NPCs - with the important half attached: the hunt CONVERTS into power, because badges are the build. The reroll turns a static shop into a place worth revisiting, and gating completion behind it makes the shop content rather than a menu. Copy it, but keep a public price list as Dazzle has, so a player can save toward a known target instead of only reacting to what appears.",
+refs:[{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/33039",t:"Badge FAQ by Fullgore_EXE (GameFAQs)"},{u:"https://www.mariowiki.com/Charlieton",t:"Charlieton (Super Mario Wiki)"}]},
+{id:"M275",verbs:["Challenge gauntlet","Mastery reveal"],game:"Paper Mario: The Thousand-Year Door",name:"Glitz Pit battle conditions (the constraint is the content)",cat:"Combat",
+how:"Every ranked Glitz Pit match arrives with a condition set by the promoter - appeal to the crowd at least once, appeal three times, do not attack for the first three turns, do not let Mario attack. Winning is not enough: fail the condition and you do not rank up, and you face the same opponent again until you win while obeying it. Most conditions are random, though a few story fights have fixed ones.",
+loop:"Read today's condition → rebuild your approach around it → win the way the crowd asked → rank up.",
+rating:0,want:"Yes",
+notes:"The best value-for-effort idea in this game: one line of text per fight turns a fixed roster of enemies into a different puzzle each time, with no new content. The conditions attack the player's HABITS - the badge build, the reliable opener, the favourite partner - so the reward for a deep system is being asked to use the parts of it you avoid. Note the safety rail: the condition against the Iron Clefts can never forbid the one move that can hurt them.",
+refs:[{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"},{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"}]}
 ];
 
 const BASE_GAMES = [
@@ -2645,7 +2663,21 @@ rt:[
 {at:"Medal outside all rings",get:"Unlikely to be worth much"},
 {at:"Spring-exclusive pool (any ring)",get:"Assassin Blade, Burning Axe, Grievous Mace, Spirit Armor, Kimono, Cocktail Dress, Earth Shield, Battle Gloves, Guardian Armlet, Adept's Helm, Ninja Hood, Glittering Tiara"}],
 l:"The same throw pays on a gradient rather than hit-or-miss, so a bad throw still pays something and a perfect one is worth aiming for - and the moving obstacles mean skill and patience both matter without any stat being involved.",
-refs:[{u:"https://goldensun.fandom.com/wiki/Lucky_Medal_Fountains",t:"Lucky Medal Fountains (Golden Sun Universe)"},{u:"https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/18461",t:"Artifacts Guide by RocketTrekkieEvoli (GameFAQs)"}]}
+refs:[{u:"https://goldensun.fandom.com/wiki/Lucky_Medal_Fountains",t:"Lucky Medal Fountains (Golden Sun Universe)"},{u:"https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/18461",t:"Artifacts Guide by RocketTrekkieEvoli (GameFAQs)"}]},
+{id:"g095",g:"Paper Mario: The Thousand-Year Door",n:"The Glitz Pit",
+p:"Mario fights as 'The Great Gonzales' from Rank 20 of the minor league upward, choosing matches from a computer terminal in the locker room and facing opponents in a fixed order by rank. Each match carries a condition that must be met to rank up. Reaching Rank 10 promotes him to the major league; beating the champion Rawk Hawk takes the Champ's Belt.",
+r:"Prize money rising with each opponent beaten, a flat consolation fee when the condition is failed, and coin bonuses at promotion and at the championship.",
+rt:[
+{at:"Win the first ranked match",get:"5 coins"},
+{at:"Each subsequent opponent defeated",get:"1 coin more than the last (6, 7, 8 and so on)"},
+{at:"Win but fail the condition - minor league",get:"A flat 4 coins, and no rank up"},
+{at:"Win but fail the condition - major league",get:"A flat 10 coins, and no rank up"},
+{at:"Lose or flee the match",get:"1 coin"},
+{at:"Reach Rank 10",get:"Promotion to the major league, a 30 coin bonus, the major-league locker room"},
+{at:"Defeat Rawk Hawk",get:"Champion, a 100 coin bonus, the champion's room and the Champ's Belt"},
+{at:"Lose a match (GameCube version)",get:"Drop one rank; the Switch version leaves the rank unchanged until you are champion"}],
+l:"The purse pays for OBEYING, not for winning: a win that ignores the condition drops you to a flat fee, so the money is really the fee for playing the designer's way. And the ladder rises, so the last fight pays most - the opposite of a grind.",
+refs:[{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"},{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"}]}
 ];
 
 /* ============================= STATE ============================= */
