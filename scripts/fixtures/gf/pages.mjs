@@ -43,6 +43,14 @@ function pod(heading, lis) {
 export function listingPage() {
   const root = el("html", {}, [el("body", {}, [
     el("h2", {}, ["PlayStation"]),
+    // The /faqs listing carries the game's own Game Detail box in its sidebar (measured
+    // 2026-09-06) — a listing must never be mistaken for the game's home page.
+    el("div", { cls: "pod pod_gameinfo" }, [
+      el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Game Detail"])]),
+      el("div", { cls: "body pod_gameinfo_left" }, [el("ol", { cls: "list flex col1 nobg" }, [
+        el("li", {}, [el("div", { cls: "content" }, [el("b", {}, ["Platform:"]), el("a", { href: "/ps" }, ["PlayStation"])])]),
+      ])]),
+    ]),
     pod("Full Game Guides", [
       guideLi({ title: "Guide and Walkthrough", href: "/ps/1-lantern-vale/faqs/101", author: "aster",
                 meta: "v.1.3, 380KB, 2002", rec: true, flags: "*Highest Rated*", date: "06/25/2002" }),
@@ -210,11 +218,14 @@ export function gamePage({ withAlso = true, likes = 3 } = {}) {
       el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["User Ratings"])]),
       el("div", { cls: "body gamespace_rate_box" }, [
         el("div", { cls: "gamespace_rate_header" }, ["Product Rating"]),
-        rate("rate", 4.12, "Great (2,317 ratings)", "Average: 4.12 stars from 2317 users"),
+        // Measured shapes: the input is the rounded icon count, the title carries the real
+        // average and the count. The thousands comma in the first title is ASSUMED for
+        // five-digit counts — every count measured so far had four digits and no comma.
+        rate("rate", 4, "Great (12317 ratings)", "Average: 4.12 stars from 12,317 users"),
         el("div", { cls: "gamespace_rate_header" }, ["Difficulty"]),
-        rate("difficulty", 3.25, "Just Right (1,560 ratings)", "Average: 3.25 hearts from 1560 users"),
+        rate("difficulty", 3, "Just Right/Tough (1560)", "Average: 3.25 hearts from 1560 users"),
         el("div", { cls: "gamespace_rate_header" }, ["Length"]),
-        rate("length", 19.5, "20 Hours (1,102 ratings)", "Average: 19.5 hours from 1102 users"),
+        rate("length", 4, "31 Hours (1105)", "Average: 31 hours from 1105 users"),
       ]),
     ]),
     el("div", { cls: "pod pod_gameinfo" }, [

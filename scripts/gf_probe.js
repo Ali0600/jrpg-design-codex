@@ -239,7 +239,11 @@
      */
     function guideBox() { return q("div.faqtext") || q("div.ffaq.ffaqbody") || q("div.ffaq"); }
 
-    /** A game's HOME page (no /faqs) carries the "Game Detail" box; a guide page never does. */
+    /**
+     * The "Game Detail" box marks a game's HOME page — but the /faqs listing carries the
+     * same box in its sidebar (measured 2026-09-06), so the guide list is tested first.
+     * A guide page carries neither.
+     */
     function gameInfoBox() { return q("div.pod_gameinfo"); }
 
     /**
@@ -302,12 +306,10 @@
     };
 
     /**
-     * A game's home page: the Game Detail box as label -> text (plus the hrefs under each
-     * label), the user rating / difficulty / length averages with their vote counts, and the
-     * "Games You May Like" titles with their site-relative paths. Labels come back as the
-     * page prints them; the splicer is the strict side and refuses one it has not seen.
-     * Never returned: the Description pod, the blurb under each related game, or anything
-     * from document.body — those are marketing prose, and prose is not stored.
+     * A game's home page: Game Detail as label -> text (+ the hrefs under each label), the
+     * rating / difficulty / length averages with vote counts, and the "Games You May Like"
+     * titles with site-relative paths. Labels come back as printed; the splicer is the strict
+     * side. Never returned: the Description pod or a related game's blurb — that is prose.
      */
     api.game = function () {
       var detail = {}, links = {}, ratings = {}, like = [];
@@ -321,15 +323,22 @@
         var hrefs = all(li, "a").map(function (a) { return a.getAttribute("href") || ""; }).filter(Boolean);
         if (hrefs.length) links[label] = hrefs;
       });
+      // The block's title ("Average: 3.25 hearts from 1560 users") is the only place the
+      // precise figure and the count both live: the hidden input is the ROUNDED icon count
+      // for difficulty and length (measured 2026-09-06); the hint only names the word.
       ["rate", "difficulty", "length"].forEach(function (m) {
         var box = q("#gs_" + m + "_avg");
         if (!box) return;
+        var half = qa("div.gamespace_rate_half[title]").filter(function (h) { return !!h.querySelector("#gs_" + m + "_avg"); })[0];
+        var am = String(half ? half.getAttribute("title") : "").match(/Average:\s*([\d.]+)\s+\S+\s+from\s+([\d,]+)\s+users/i);
         var input = box.querySelector("input");
-        var v = Number(input ? input.getAttribute("value") : NaN);
-        var hm = txt(q("#gs_" + m + "_avg_hint")).match(/^(.*?)\s*\(([\d,]+)\s*ratings?\)/i);
+        var v = Number(am ? am[1] : (input ? input.getAttribute("value") : NaN));
+        var hm = txt(q("#gs_" + m + "_avg_hint")).match(/^(.*?)\s*\(([\d,]+)(?:\s*ratings?)?\)\s*$/i);
         var r = {};
         if (isFinite(v)) r.v = v;
-        if (hm) { r.w = hm[1]; r.n = Number(hm[2].replace(/,/g, "")); }
+        if (hm && hm[1]) r.w = hm[1];
+        var n = Number(String(am ? am[2] : (hm ? hm[2] : "")).replace(/,/g, ""));
+        if (n > 0) r.n = n;
         if (r.v != null || r.n != null) ratings[m] = r;
       });
       qa("div.pod").forEach(function (pod) {

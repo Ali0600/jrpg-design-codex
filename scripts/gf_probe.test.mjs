@@ -191,10 +191,12 @@ test("game() reads the Game Detail box, the user ratings and the like-list, and 
   assert.deepEqual(r.links.Release, ["/ps/1-lantern-vale/data"]);
   assert.deepEqual(r.links["Also on"], ["/psp/2-lantern-vale", "/vita/3-lantern-vale"]);
   assert.equal(r.links["Also Known As"], undefined, "plain-text rows carry no hrefs");
+  // The precise averages and counts come from each block's title attribute, never from
+  // the hidden input, which rounds difficulty and length to the icon count.
   assert.deepEqual(r.ratings, {
-    rate: { v: 4.12, w: "Great", n: 2317 },
-    difficulty: { v: 3.25, w: "Just Right", n: 1560 },
-    length: { v: 19.5, w: "20 Hours", n: 1102 },
+    rate: { v: 4.12, w: "Great", n: 12317 },
+    difficulty: { v: 3.25, w: "Just Right/Tough", n: 1560 },
+    length: { v: 31, w: "31 Hours", n: 1105 },
   });
   assert.deepEqual(r.like, [
     { t: "Harbor Story", u: "/ps/4-harbor-story" },
