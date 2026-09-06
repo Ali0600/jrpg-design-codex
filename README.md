@@ -40,6 +40,10 @@ worse than none, because it reads as verified.
 - **UI Gallery** — captioned screenshots of the researched games' actual interfaces
   (battle HUDs, menus, minigames), filterable by game and screen type, with thumbnails
   on each game's card
+- **What's new** — a changelog strip on the Mechanics tab, `NEW` / `UPDATED` pills on
+  the cards themselves, a *newest changes first* sort, a "new or updated only" filter,
+  and a **Mark all as seen** button, so a fresh batch of research is a glance rather
+  than a hunt. Clicking any ID chip jumps straight to that card
 - **Sources** — rows can carry provenance links back to the guide or wiki page each
   claim came from; everything a research pass found that didn't fit a row lives in a
   per-game digest under [`docs/research/`](docs/research/)
@@ -67,6 +71,8 @@ shots/                     UI screenshots for the gallery (sources in SOURCES.md
 scripts/validate_codex.mjs structural validator (runs in CI)
 scripts/gf_probe.js        in-page probe for reading GameFAQs guides (tests alongside)
 scripts/digest_lint.mjs    pointer-grammar lint for the research digests
+scripts/splice_rows.mjs    writes a research digest's rows into the app, and logs them
+scripts/check_changes.mjs  CI gate: every rewritten row must be logged in the changelog
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
 docs/research/             one digest per researched game, every fact with its source
@@ -121,9 +127,10 @@ source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 25
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 29
   structural invariants, with a mutation-testing self-check proving each one can fail,
-  and a 17-case offline suite for the browser probe built on a 100-line DOM stand-in
+  plus a 47-case offline suite and a differential CI gate that compares a pull request
+  against its base revision and fails when an edited record goes unlogged
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection** — API-first Python clients with host allowlisting,
   range validation that rejects malformed upstream values, fail-closed error handling,

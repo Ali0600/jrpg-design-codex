@@ -204,6 +204,26 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   can't put a `javascript:` URL behind a link they'll click later.
 - Minigame cards link to YouTube via `ytLink()` (search-query URLs, never hardcoded
   video IDs — they don't rot).
+- **`CHANGES`** — the changelog, and the ONLY record of what is new: the app is a single
+  offline file with no build step, so it cannot ask git, and a per-row `added` date could
+  not express "this row was rewritten" without hand-stamping every edit. Newest first,
+  dates strictly decreasing, `added` naming every id in the file (the validator fails the
+  build otherwise, so a row cannot reach the arrays unmarked). `expandIds()` lives beside
+  it in the data region and turns `"M266-M275"` into ids — the validator calls the PAGE's
+  copy, so the ranges the UI renders are the ranges it checks.
+  **Edited an existing row in place? Add its id to the newest entry's `updated` list** —
+  `scripts/check_changes.mjs` fails CI otherwise. The splicer logs `added` for you.
+  Everything else derives from this one list: `changeInfo(id)` maps each id to the NEWEST
+  entry naming it, `store.seen` (an ISO date, backfilled by `normalizeStore`) is the
+  owner's read marker, and from those come the NEW/UPDATED pills, the "What's new" strip,
+  the newest-first sort, the "new or updated only" filters and the Games-tab tally.
+  Before anything is marked seen the baseline is `CHANGES[1].date`, so a first visit
+  highlights the latest batch instead of pilling all 370 rows.
+- **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
+  the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
+  the lineage chain both call it; two jump paths drifted apart the moment a filter was
+  added. It scrolls with `behavior:"instant"` deliberately: the sheet sets
+  `scroll-behavior:smooth`, and a 35,000px animated scroll reads as a broken page.
 - **`refs`** — optional provenance on mechanic AND minigame rows:
   `refs:[{u:"https://…",t:"Power-Up/Item FAQ by SIMSteven"}]`, rendered as a Sources
   line. `u` must be https on a host matching `REF_HOSTS` (defined beside `refOk()` in
@@ -242,6 +262,12 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   other number describes the page you are on. Before the Witcher 3 pass the probe could not
   read these guides at all — it reported `kind:"unknown"` — so a 19-page guide would have
   been silently read as nothing.
+- `scripts/check_changes.mjs` is the differential gate: it evaluates the codex at the PR's
+  base revision and in the working copy, compares each M/g row as a PARSED object with
+  sorted keys, and requires every row whose content changed to appear in an `updated` list
+  the base did not already have. Parse, never text-diff — appending a row rewrites the
+  previous last row by one comma, so a textual diff would demand an `updated` entry for
+  M243, M261, M265 … on every splice and the gate would be trained away in two PRs.
 - `scripts/splice_rows.mjs` writes a digest's `## Codex rows` block into the arrays:
   placeholder ids (`M+1` = the first `###` under `## Mechanics candidates`) bind each row
   to its candidate, ids are assigned from the current max, every `cat`/`game`/`want`/`rt`/
@@ -250,9 +276,12 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   It appends only — sharpening an EXISTING row stays a hand edit, because ids are the join
   key for the owner's saved ratings. It imports `extractScript` / `extractData` /
   `readRefHosts` from `validate_codex.mjs` rather than re-deriving them (that file's
-  `main()` is guarded so importing it does not run a validation).
-- All three are tested offline by
-  `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs` (synthetic fixtures
+  `main()` is guarded so importing it does not run a validation). It also LOGS the splice
+  in `CHANGES` — a new entry dated today, or merged into today's entry if one exists
+  (two entries sharing a date would break the strictly-decreasing order) — and refuses
+  outright if `const CHANGES = [` is missing.
+- All of them are tested offline by
+  `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs` (synthetic fixtures
   under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI
   too. Both suites have been mutation-swept: every check was deleted in turn and had to
   take a test down with it.
@@ -292,12 +321,15 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   well-formed `src`, with **two-way set equality against the shots/ folder** (a row
   without a file is a broken image; a file without a row is an orphan nobody audits),
   failing closed if the folder cannot be listed; optional `refs` on rows (https, host in
-  the page's own `REF_HOSTS`, non-empty label); and **the counts quoted in CLAUDE.md AND
+  the page's own `REF_HOSTS`, non-empty label); **the changelog** (ISO dates strictly
+  decreasing, every range parseable by the page's own `expandIds`, no id added twice, and
+  the union of every `added` list EQUAL to the full M/g id set — membership, so both a
+  missing row and a phantom one are caught); and **the counts quoted in CLAUDE.md AND
   README.md match the data**, with AGENTS.md byte-identical to CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **25** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **29** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match

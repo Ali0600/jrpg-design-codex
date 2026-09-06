@@ -6,7 +6,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { planSplice, serializeRow, appendToArray, updateDigest, parseCodex } from "./splice_rows.mjs";
+import { planSplice, serializeRow, appendToArray, updateDigest, parseCodex, logChange, ranges } from "./splice_rows.mjs";
 
 const hash = s => createHash("sha256").update(s).digest("hex");
 
@@ -24,6 +24,9 @@ const BASE_GAMES = [
 {title:"Harbor Town",year:2001,dev:"d",status:"Researched"}
 ];
 const PILLARS = [{n:1,t:"t",m:"m",q:"q"}];
+const CHANGES = [
+  {date:"2026-09-05", title:"Earlier", added:["M001-M002","g001"], updated:[]},
+];
 const MINIGAMES = [
 {id:"g001",g:"Lantern Vale",n:"Arena",p:"p",r:"r",l:"l"${tail === "}" ? "}" : "},"}
 ];
@@ -195,3 +198,53 @@ test("serialized rows carry every field through unchanged", () => {
   assert.deepEqual(back[1], g.row);
   assert.match(serializeRow(assignments[1]), /verbs:\["Guarded"\]/);
 });
+
+test("ranges collapses runs and leaves singletons alone", () => {
+  assert.deepEqual(ranges(["M266","M267","M268","M270"]), ["M266-M268","M270"]);
+  assert.deepEqual(ranges(["g093","M266","g094"]), ["M266","g093-g094"]);
+  assert.deepEqual(ranges(["M009","M010"]), ["M009-M010"], "padding is preserved across the ten boundary");
+  assert.deepEqual(ranges(["M266","M266"]), ["M266"]);
+});
+
+test("a splice logs itself in CHANGES, newest first", () => {
+  const html = codexHtml();
+  const out = logChange(html, { date: "2026-09-06", title: "Golden Sun", ids: ["M003","M004","g002"] });
+  assert.match(out, /const CHANGES = \[\n  \{date:"2026-09-06", title:"Golden Sun",\n   added:\["M003-M004","g002"\], updated:\[\]\},\n  \{date:"2026-09-05"/);
+  // The page's own reader must accept what the splicer wrote.
+  const { CHANGES, expandIds } = evalChanges(out);
+  assert.equal(CHANGES[0].date, "2026-09-06");
+  assert.deepEqual(expandIds(CHANGES[0].added), ["M003","M004","g002"]);
+});
+
+test("a second splice on the same day widens that day's entry instead of adding another", () => {
+  // Two entries sharing a date would break the strictly-decreasing order the validator
+  // enforces, so the same-day path must merge — including across an existing range.
+  let out = logChange(codexHtml(), { date: "2026-09-06", title: "Golden Sun", ids: ["M003","M004"] });
+  out = logChange(out, { date: "2026-09-06", title: "Paper Mario", ids: ["M005","g002"] });
+  const { CHANGES, expandIds } = evalChanges(out);
+  assert.equal(CHANGES.length, 2, "still one entry for today");
+  assert.equal(CHANGES[0].title, "Golden Sun", "the first title of the day stands");
+  assert.deepEqual(expandIds(CHANGES[0].added), ["M003","M004","M005","g002"]);
+  assert.deepEqual(CHANGES.map(c => c.date), ["2026-09-06","2026-09-05"]);
+});
+
+test("a codex with no changelog is refused, not silently spliced", () => {
+  const noLog = codexHtml().replace(/const CHANGES = \[[\s\S]*?\n\];/, "");
+  assert.throws(() => logChange(noLog, { date: "2026-09-06", title: "x", ids: ["M003"] }),
+    /could not find `const CHANGES = \[`/);
+  const doubled = codexHtml().replace("const CHANGES = [", "const CHANGES = [\n// const CHANGES = [");
+  assert.throws(() => logChange(doubled, { date: "2026-09-06", title: "x", ids: ["M003"] }),
+    /appears more than once/);
+});
+
+/** Read CHANGES + expandIds back out of a page, the way the app and validator do. */
+function evalChanges(html) {
+  const script = html.slice(html.indexOf("<script>") + 8, html.lastIndexOf("</script>"));
+  const src = script.slice(script.indexOf("const CATS"), script.indexOf("/* ============================= STATE"));
+  return new Function(src + `
+    function expandIds(list){ const out=[]; (list||[]).forEach(e=>{ const s=String(e),
+      r=s.match(/^([Mg])(\\d+)-([Mg])(\\d+)$/);
+      if(r){ const a=+r[2],b=+r[4],w=r[2].length; for(let i=a;i<=b;i++) out.push(r[1]+String(i).padStart(w,"0")); return; }
+      out.push(s); }); return out; }
+    return {CHANGES, expandIds};`)();
+}

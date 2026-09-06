@@ -123,6 +123,8 @@
   .badge.Yes{color:#0d2416; background:var(--green); border-color:var(--green); font-weight:700;}
   .badge.Maybe{color:var(--gold); border-color:#6b5a1e;}
   .badge.No{color:var(--red); border-color:#5f2b2b;}
+  .badge.isnew{color:#07231c; background:var(--cyan); border-color:var(--cyan); font-weight:700;}
+  .badge.isupd{color:var(--gold); border-color:#6b5a1e; background:#241f0e;}
   .chev{color:var(--ink-faint); flex:none; transition:transform .18s;}
   .card.open .chev{transform:rotate(90deg);}
   .card-body{display:none; border-top:1px solid var(--line-soft); padding:18px 20px 20px;}
@@ -259,6 +261,29 @@
   }
   .refs a:hover{color:var(--gold); border-color:var(--gold);}
   .refs .ref-held{opacity:.6; text-decoration:line-through;}
+
+  /* ---------- what's new ---------- */
+  /* The card a jump landed on. An outline, not a flash: the reduced-motion reset
+     at the top of this sheet kills every animation, so a flash would be invisible
+     for exactly the people who most need the position cue. */
+  .card.target{outline:2px solid var(--gold); outline-offset:2px;}
+  .wn-entry{padding:10px 0; border-top:1px solid var(--line-soft);}
+  .wn-entry:first-child{border-top:0;}
+  .wn-head{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;}
+  .wn-date{font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); flex:none;}
+  .wn-title{font-weight:600; color:#eef3ff;}
+  .wn-note{font-size:12.5px; color:var(--ink-dim); margin:4px 0 7px;}
+  .wn-ids{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+  .idchip{
+    font-size:11.5px; font-family:ui-monospace, "SF Mono", Menlo, monospace;
+    color:var(--ink-dim); background:#0e1526; cursor:pointer;
+    border:1px solid var(--line-soft); border-radius:999px; padding:2px 9px;
+  }
+  .idchip:hover{color:var(--gold); border-color:var(--gold);}
+  .idchip.upd{color:var(--gold); border-color:#6b5a1e;}
+  .wn-more{font-size:11.5px; color:var(--ink-faint); align-self:center;}
+  .wn-foot{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:12px;}
+  .g-new{color:var(--cyan);}
 
   /* ---------- lineages ---------- */
   .section-h{
@@ -407,6 +432,11 @@
 
   <!-- ================= MECHANICS ================= -->
   <section class="view active" id="view-mechanics">
+    <details class="verb-box" id="whatsNew">
+      <summary>What's new <span class="vhint" id="wnSummary"></span></summary>
+      <div id="wnBody"></div>
+    </details>
+
     <div class="filters">
       <div class="frow">
         <input type="search" id="q" placeholder="Search mechanics… (e.g. materia, stagger, painting)">
@@ -416,6 +446,12 @@
           <option>Yes</option><option>Maybe</option><option>No</option>
           <option value="__undecided">Undecided</option>
         </select>
+        <select id="mSort" aria-label="Sort mechanics">
+          <option value="default">Sort: by ID</option>
+          <option value="new">Sort: newest changes first</option>
+          <option value="name">Sort: A–Z</option>
+        </select>
+        <label class="chip" style="cursor:pointer"><input type="checkbox" id="fNew" style="accent-color:#4ec9b0"> New or updated only</label>
       </div>
       <div class="frow" id="catChips"></div>
       <details class="verb-box">
@@ -460,7 +496,13 @@
       <div class="frow">
         <input type="search" id="mgq" placeholder="Search minigames… (e.g. cards, racing, piano)">
         <select id="mgGame"><option value="">All games</option></select>
+        <select id="mgSort" aria-label="Sort minigames">
+          <option value="default">Sort: by ID</option>
+          <option value="new">Sort: newest changes first</option>
+          <option value="name">Sort: A–Z</option>
+        </select>
         <label class="chip" style="cursor:pointer"><input type="checkbox" id="mgFav" style="accent-color:#f2cb4e"> Saved ideas only</label>
+        <label class="chip" style="cursor:pointer"><input type="checkbox" id="mgNew" style="accent-color:#4ec9b0"> New or updated only</label>
       </div>
     </div>
     <p class="count-note" id="mgCount"></p>
@@ -2680,9 +2722,63 @@ l:"The purse pays for OBEYING, not for winning: a win that ignores the condition
 refs:[{u:"https://www.mariowiki.com/Glitz_Pit",t:"Glitz Pit (Super Mario Wiki)"},{u:"https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937",t:"Glitz Pit Guide by MarsJenkar (GameFAQs)"}]}
 ];
 
+/* ============================= CHANGELOG =============================
+   What changed, and when. This is the ONLY record of it: the app is a single
+   offline file with no build step, so it cannot ask git what is new, and a
+   per-row `added` date could not express "this row was rewritten" without being
+   stamped by hand on every edit. One list, and every surface — the NEW/UPDATED
+   pills, the newest-first sort, the "since I last looked" filter, the strip —
+   derives from it.
+
+   Newest first. Dates are the day the rows landed on main (back-filled from git,
+   not from prose). `added` must name EVERY id in the file, so a row that reaches
+   the arrays without a changelog entry fails validation instead of quietly
+   showing up unmarked. `updated` names rows whose content was rewritten in place;
+   scripts/check_changes.mjs makes forgetting one a red CI check. */
+const CHANGES = [
+  {date:"2026-09-06", title:"GameFAQs rollout, wave 1",
+   note:"The Witcher 3, Golden Sun and Paper Mario: TTYD, researched through the GameFAQs flow.",
+   added:["M266-M275","g093-g095"], updated:[]},
+  {date:"2026-09-05", title:"GameFAQs pilot: Threads of Fate",
+   note:"The harvest flow's first game, and the first rows to carry sources.",
+   added:["M262-M265","g090-g092"], updated:["M117","M118"]},
+  {date:"2026-08-29", title:"Queue-clearing batch",
+   note:"EarthBound, Mother 3, Kingdom Hearts II, Lost Odyssey, Baten Kaitos, Live A Live — the research queue emptied.",
+   added:["M244-M261","g088-g089"], updated:[]},
+  {date:"2026-08-12", title:"Discovery verbs, lineages and pinnable videos",
+   note:"32 mechanics tagged with the discovery verb that describes HOW their reward is found.",
+   added:[], updated:["M016","M021","M028-M029","M039","M054","M069","M082","M084","M087","M098",
+     "M132","M135","M139","M148","M151","M162","M170","M184","M191","M197","M199","M206",
+     "M208-M209","M212-M213","M231","M233-M234","M237","M239"]},
+  {date:"2026-08-07", title:"The codex, first published",
+   note:"Seven research batches: the PS1 catalogue through to the modern hits, plus the Final Fantasy minigame survey.",
+   added:["M001-M243","g001-g087"], updated:[]},
+];
+
+/* "M266-M275" -> every id in between. Throws on anything malformed rather than
+   skipping it: a typo that silently un-lists rows would leave them unmarked
+   forever, which is the exact failure this changelog exists to prevent. */
+function expandIds(list){
+  const out = [];
+  (list || []).forEach(entry=>{
+    const s = String(entry);
+    const r = s.match(/^([Mg])(\d+)-([Mg])(\d+)$/);
+    if(r){
+      if(r[1] !== r[3]) throw new Error("changelog range crosses id types: " + s);
+      const a = +r[2], b = +r[4], w = r[2].length;
+      if(b < a) throw new Error("changelog range runs backwards: " + s);
+      for(let i = a; i <= b; i++) out.push(r[1] + String(i).padStart(w, "0"));
+      return;
+    }
+    if(!/^[Mg]\d+$/.test(s)) throw new Error("changelog entry is not an id or range: " + s);
+    out.push(s);
+  });
+  return out;
+}
+
 /* ============================= STATE ============================= */
 const LS_KEY = "jrpg_codex_v1";
-let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}}};
+let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}}, seen:""};
 let canSave = true;
 
 /* Backups predate later fields, so fill every slot rather than trusting the shape.
@@ -2697,6 +2793,7 @@ function normalizeStore(s){
   s.myGame       = s.myGame       || {};
   s.myGame.assign = s.myGame.assign || {};
   s.myGame.notes  = s.myGame.notes  || {};
+  s.seen         = typeof s.seen === "string" ? s.seen : "";
   return s;
 }
 
@@ -2733,6 +2830,103 @@ function allGames(){
 /* ============================= HELPERS ============================= */
 const $ = s => document.querySelector(s);
 function esc(s){ return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ============================= WHAT'S NEW ============================= */
+/* One read model over CHANGES, built once. Every id maps to the NEWEST entry
+   that names it, so a row added in July and rewritten in September reads as
+   "updated September" — the thing the owner actually wants to see. */
+let changeMap = new Map();
+function buildChangeMap(){
+  changeMap = new Map();
+  // Oldest first, so a newer entry overwrites an older claim on the same id.
+  [...CHANGES].reverse().forEach(c=>{
+    expandIds(c.added).forEach(id=> changeMap.set(id, {date:c.date, kind:"new", title:c.title}));
+    expandIds(c.updated).forEach(id=> changeMap.set(id, {date:c.date, kind:"updated", title:c.title}));
+  });
+}
+function changeInfo(id){ return changeMap.get(id) || null; }
+
+/* What counts as "already seen". Before the owner has ever marked anything, fall
+   back to the SECOND-newest entry's date, so a first visit highlights the latest
+   batch instead of pilling all 370 rows — which would mark nothing at all. */
+function seenDate(){
+  if(store.seen) return store.seen;
+  return CHANGES.length > 1 ? CHANGES[1].date : "";
+}
+function isFresh(id){
+  const info = changeInfo(id);
+  return !!info && info.date > seenDate();
+}
+function freshBadge(id){
+  const info = changeInfo(id);
+  if(!info || info.date <= seenDate()) return "";
+  const cls = info.kind === "new" ? "isnew" : "isupd";
+  return `<span class="badge ${cls}" title="${esc(info.date + " · " + info.title)}">${info.kind}</span>`;
+}
+
+/* Jump to one card: clear whatever filters would hide it, open it, scroll it into
+   view, and mark it. One implementation, used by the changelog chips AND by the
+   lineage chain — two jump paths would drift the moment a filter is added. */
+function gotoCard(id){
+  const mech = allMechs().some(m=>m.id===id);
+  if(mech){
+    fCat = ""; fVerb = "";
+    $("#q").value = ""; $("#fGame").value = ""; $("#fWant").value = "";
+    $("#fNew").checked = false; $("#mSort").value = "default";
+    buildFilters(); buildVerbChips(); openSet.add(id); renderCards();
+  }else{
+    $("#mgq").value = ""; $("#mgGame").value = "";
+    $("#mgFav").checked = false; $("#mgNew").checked = false; $("#mgSort").value = "default";
+    buildMgFilters(); renderMinigames();
+  }
+  document.querySelector(`.tab[data-view="${mech ? "mechanics" : "minigames"}"]`).click();
+  const card = document.querySelector(`.card[data-id="${CSS.escape(id)}"]`);
+  if(!card){ window.scrollTo({top:0, behavior:"instant"}); return; }
+  document.querySelectorAll(".card.target").forEach(c=>c.classList.remove("target"));
+  card.classList.add("target");
+  // `instant`, not the sheet's default smooth: a jump can cross tens of thousands of
+  // pixels, which as an animation reads as the page having broken rather than moved.
+  card.scrollIntoView({block:"center", behavior:"instant"});
+}
+
+function renderWhatsNew(){
+  const seen = seenDate();
+  const fresh = [...changeMap.entries()].filter(([,i])=> i.date > seen);
+  const nNew = fresh.filter(([,i])=> i.kind === "new").length;
+  const nUpd = fresh.length - nNew;
+  const behind = CHANGES.filter(c=> c.date > seen).length;
+
+  $("#wnSummary").textContent = fresh.length
+    ? `— ${nNew} new · ${nUpd} updated in ${behind} update${behind===1?"":"s"} since ${seen || "the start"}`
+    : "— nothing new since you last looked";
+
+  const chips = (ids, kind) => expandIds(ids).slice(0, 24).map(id=>
+      `<button class="idchip${kind==="updated"?" upd":""}" data-goto="${esc(id)}" title="Jump to ${esc(id)}">${esc(id)}</button>`
+    ).join("") + (expandIds(ids).length > 24 ? `<span class="wn-more">+${expandIds(ids).length - 24} more</span>` : "");
+
+  $("#wnBody").innerHTML = CHANGES.slice(0, 3).map(c=>`
+    <div class="wn-entry${c.date > seen ? "" : " seen"}">
+      <div class="wn-head">
+        <span class="wn-date">${esc(c.date)}${c.date > seen ? " · new to you" : ""}</span>
+        <span class="wn-title">${esc(c.title)}</span>
+      </div>
+      ${c.note?`<p class="wn-note">${esc(c.note)}</p>`:""}
+      ${expandIds(c.added).length?`<div class="wn-ids"><span class="wn-date">Added</span>${chips(c.added,"new")}</div>`:""}
+      ${expandIds(c.updated).length?`<div class="wn-ids" style="margin-top:6px"><span class="wn-date">Updated</span>${chips(c.updated,"updated")}</div>`:""}
+    </div>`).join("") + `
+    <div class="wn-foot">
+      <button class="btn" id="btnSeen"${fresh.length?"":" disabled"}>Mark all as seen</button>
+      <span class="wn-more">${store.seen ? "Last marked seen: " + esc(store.seen) : "Nothing marked seen yet — showing the latest update"}</span>
+    </div>`;
+
+  $("#wnBody").querySelectorAll("[data-goto]").forEach(b=>
+    b.addEventListener("click", ()=> gotoCard(b.dataset.goto)));
+  $("#btnSeen").addEventListener("click", ()=>{
+    store.seen = CHANGES.length ? CHANGES[0].date : "";
+    persist();
+    renderWhatsNew(); renderCards(); renderMinigames(); renderGames();
+  });
+}
 
 /* ============================= TABS ============================= */
 document.querySelectorAll(".tab").forEach(t=>{
@@ -2782,15 +2976,30 @@ function buildFilters(){
   gs.innerHTML = '<option value="">All games</option>' +
     [...new Set(allMechs().map(m=>m.game))].map(g=>`<option${g===cur?" selected":""}>${esc(g)}</option>`).join("");
 }
-["q","fGame","fWant"].forEach(id=> $("#"+id).addEventListener("input", renderCards));
+["q","fGame","fWant","fNew","mSort"].forEach(id=> $("#"+id).addEventListener("input", renderCards));
+
+/* Shared by both tabs so the two sorts cannot disagree about what "newest" means.
+   Ties inside one changelog entry fall back to id, descending — the last row
+   spliced is the one most recently written, so it leads. */
+function sortRows(list, mode, nameOf){
+  if(mode === "name") return list.sort((a,b)=> nameOf(a).localeCompare(nameOf(b)));
+  if(mode === "new") return list.sort((a,b)=>{
+    const ad = (changeInfo(a.id)||{}).date || "", bd = (changeInfo(b.id)||{}).date || "";
+    if(ad !== bd) return bd.localeCompare(ad);
+    return b.id.localeCompare(a.id);
+  });
+  return list;
+}
 
 /* ============================= MECHANIC CARDS ============================= */
 const openSet = new Set();
 function renderCards(){
   const q = $("#q").value.trim().toLowerCase();
   const g = $("#fGame").value, w = $("#fWant").value;
+  const newOnly = $("#fNew").checked, sortBy = $("#mSort").value;
   const list = allMechs().filter(m=>{
     if(g && m.game!==g) return false;
+    if(newOnly && !isFresh(m.id)) return false;
     if(fCat && m.cat!==fCat) return false;
     if(fVerb && !(m.verbs||[]).includes(fVerb)) return false;
     if(w==="__undecided"){ if(m.want) return false; }
@@ -2801,13 +3010,16 @@ function renderCards(){
     }
     return true;
   });
-  $("#countNote").textContent = list.length + " mechanic" + (list.length===1?"":"s") + " shown";
+  sortRows(list, sortBy, m=>m.name);
+  $("#countNote").textContent = list.length + " mechanic" + (list.length===1?"":"s") + " shown" +
+    (newOnly ? " · new or updated since " + (seenDate() || "the start") : "");
   const box = $("#cards"); box.innerHTML = "";
   if(!list.length){ box.innerHTML = '<div class="empty">Nothing matches these filters. Clear them, or log a new mechanic.</div>'; return; }
   list.forEach(m=>{
     const color = CATS[m.cat] || "#9aa8c8";
     const card = document.createElement("article");
     card.className = "card" + (openSet.has(m.id) ? " open" : "");
+    card.dataset.id = m.id;
     card.innerHTML = `
       <div class="card-head" role="button" tabindex="0" aria-expanded="${openSet.has(m.id)}">
         <span class="orb" style="--c:${color}"></span>
@@ -2815,6 +3027,7 @@ function renderCards(){
           <h3>${esc(m.name)}</h3>
           <div class="meta"><span>${esc(m.game)}</span><span class="cat" style="--c:${color}">${esc(m.cat)}</span>${m.rating?`<span>★ ${m.rating}/5</span>`:""}</div>
         </div>
+        ${freshBadge(m.id)}
         ${m.want?`<span class="badge ${m.want}">${m.want}</span>`:""}
         <span class="chev">▶</span>
       </div>
@@ -2945,9 +3158,9 @@ function sortGames(games, mode){
 
 function renderGames(){
   const box = $("#gameCards"); box.innerHTML = "";
-  const mechCount = {}, mgCount = {};
-  allMechs().forEach(m=> mechCount[m.game]=(mechCount[m.game]||0)+1);
-  MINIGAMES.forEach(m=> mgCount[m.g]=(mgCount[m.g]||0)+1);
+  const mechCount = {}, mgCount = {}, freshN = {};
+  allMechs().forEach(m=>{ mechCount[m.game]=(mechCount[m.game]||0)+1; if(isFresh(m.id)) freshN[m.game]=(freshN[m.game]||0)+1; });
+  MINIGAMES.forEach(m=>{ mgCount[m.g]=(mgCount[m.g]||0)+1; if(isFresh(m.id)) freshN[m.g]=(freshN[m.g]||0)+1; });
   const mode = ($("#gameSort")||{}).value || "pipeline";
   const games = sortGames([...allGames()], mode);
   const active = games.filter(g=>g.status==="Researching").length;
@@ -2977,7 +3190,7 @@ function renderGames(){
           </select>
         </span>
       </div>
-      <div class="game-sub">${esc(g.dev)} · ${esc(g.year)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}</div>
+      <div class="game-sub">${esc(g.dev)} · ${esc(g.year)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}</div>
       ${scoreRowHTML(g)}
       ${gameShotsHTML(g.title)}
       <p class="game-why">${esc(g.why)}</p>`;
@@ -3039,15 +3252,7 @@ function renderLineages(){
   }).join("");
 
   $("#lineageCards").querySelectorAll("[data-goto]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const id = btn.dataset.goto, m = byId[id];
-      if(!m) return;
-      fCat = ""; fVerb = "";
-      $("#q").value = m.name; $("#fGame").value = ""; $("#fWant").value = "";
-      buildFilters(); buildVerbChips(); openSet.add(id); renderCards();
-      document.querySelector('.tab[data-view="mechanics"]').click();
-      window.scrollTo({top:0});
-    });
+    btn.addEventListener("click", ()=>{ if(byId[btn.dataset.goto]) gotoCard(btn.dataset.goto); });
   });
 }
 
@@ -3183,7 +3388,7 @@ $("#importFile").addEventListener("change", e=>{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
       store = normalizeStore(data.store);
-      persist(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
+      persist(); buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };
@@ -3241,16 +3446,20 @@ function cleanYt(url){
 function renderMinigames(){
   const q = $("#mgq").value.trim().toLowerCase();
   const g = $("#mgGame").value, favOnly = $("#mgFav").checked;
+  const newOnly = $("#mgNew").checked, sortBy = $("#mgSort").value;
   const list = MINIGAMES.filter(m=>{
     if(g && m.g!==g) return false;
     if(favOnly && !store.minigameFavs[m.id]) return false;
+    if(newOnly && !isFresh(m.id)) return false;
     if(q){
       const hay = (m.n+" "+m.g+" "+m.p+" "+m.r+" "+m.l+" "+(m.rt||[]).map(r=>r.at+" "+r.get).join(" ")).toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
   });
-  $("#mgCount").textContent = list.length + " minigame" + (list.length===1?"":"s") + " shown";
+  sortRows(list, sortBy, m=>m.n);
+  $("#mgCount").textContent = list.length + " minigame" + (list.length===1?"":"s") + " shown" +
+    (newOnly ? " · new or updated since " + (seenDate() || "the start") : "");
   const box = $("#mgCards"); box.innerHTML = "";
   if(!list.length){ box.innerHTML = '<div class="empty">Nothing matches. Clear the filters to see the full arcade.</div>'; return; }
   list.forEach(m=>{
@@ -3258,9 +3467,10 @@ function renderMinigames(){
     const pinned = !!(store.overrides[m.id]||{}).yt;
     const card = document.createElement("article");
     card.className = "card mg-card";
+    card.dataset.id = m.id;
     card.innerHTML = `
       <div class="mg-top">
-        <h3>${esc(m.n)}</h3><span class="mg-game">${esc(m.g)}</span>
+        <h3>${esc(m.n)}</h3><span class="mg-game">${esc(m.g)}</span>${freshBadge(m.id)}
         <a class="wbtn ytbtn" href="${esc(ytLink(m))}" target="_blank" rel="noopener">${pinned?"▶ Watch (pinned)":"▶ Search"}</a>
         <button class="wbtn pinbtn" title="${pinned?"Change or remove the pinned video":"Pin a specific video to this minigame"}">${pinned?"✎ Pin":"📌 Pin"}</button>
         <button class="wbtn favbtn ${fav?"on-Maybe":""}">${fav?"★ Idea saved":"☆ Save idea"}</button>
@@ -3290,7 +3500,7 @@ function renderMinigames(){
     box.appendChild(card);
   });
 }
-["mgq","mgGame","mgFav"].forEach(id=> $("#"+id).addEventListener("input", renderMinigames));
+["mgq","mgGame","mgFav","mgNew","mgSort"].forEach(id=> $("#"+id).addEventListener("input", renderMinigames));
 
 /* ============================= MY GAME ============================= */
 /* The shortlist, organised into the systems of the game being designed. Buckets
@@ -3398,7 +3608,7 @@ function renderMyGame(){
 ["myq","myMaybe"].forEach(id=> $("#"+id).addEventListener("input", renderMyGame));
 
 /* ============================= INIT ============================= */
-buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
+buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
 if(!canSave) flashSave("Local saving unavailable — use Export backup");
 </script>
 </body>

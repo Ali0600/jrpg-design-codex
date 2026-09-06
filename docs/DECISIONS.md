@@ -16,6 +16,37 @@ rejected options still offer.
 
 ---
 
+## 2026-09-06 — How the app should show "what changed since I last looked"
+
+**Fork:** derive the change list from git at deploy time / stamp each row with an `added`
+date / keep one hand-maintained `CHANGES` list in the data.
+
+- **Git at deploy time** — a build step writes the changelog from the commit history.
+  Accurate and free of bookkeeping, but the codex is deliberately a single file that
+  works from `file://` with no build; a derived changelog would be absent exactly when
+  the owner opens the local copy, and it would describe COMMITS rather than the
+  research batches the owner actually reviews.
+  `rejected — needs a build step the project does not have, and dies on file://`
+- **A date on every row** (`added:"2026-09-06"`) — no separate list to keep in sync, but
+  it cannot express "this row was REWRITTEN" without a second field stamped by hand on
+  every edit, and 370 rows would each carry a date nobody reads.
+  `rejected — cannot express an update, which is half of what the owner wants to see`
+- **One `CHANGES` list in the data region** ✔ — newest first, each entry `{date, title,
+  note, added, updated}`. Every surface derives from it: the pills, the strip, the sort,
+  the filters, the Games-tab tally.
+
+**Chosen:** the `CHANGES` list, with two gates that stop it rotting into decoration.
+The validator requires the union of every `added` to EQUAL the full id set, so a row
+cannot reach the arrays unlisted; `scripts/check_changes.mjs` diffs a PR against its base
+and fails when a rewritten row is not newly logged as `updated`. The splicer writes the
+`added` half itself, so the only manual step is logging an edit you made by hand.
+
+**Revisit hook:** if the manual `updated` step is ever missed twice in a row, the next
+step is deriving it — have `check_changes.mjs` WRITE the entry instead of failing, behind
+a `--fix` flag, so the gate becomes a codemod rather than a chore.
+
+---
+
 ## 2026-07-28 — Metacritic scores: which release's score to record
 
 **Fork:** original release / highest-rated version / both.

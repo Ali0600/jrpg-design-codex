@@ -201,3 +201,38 @@ FALLBACK for a failed fetch, not the preferred source. A cache is a durability m
 using it as the default read path silently pins the consumer to an old version. The related
 tell is a component with a deliberate "already initialised, do nothing" guard: re-running
 the loader is then a no-op, so the loader must clear the old instance before installing.
+
+## Diff the parsed objects, not the text, or a serializer's punctuation becomes your signal
+
+A CI gate was meant to catch "you edited a record but did not log the edit". Comparing the
+two versions of the file as TEXT would have failed on rows nobody touched: appending an
+entry to a JS array rewrites the previous last row by one character — the comma that now
+follows its closing brace — so every splice would have demanded a changelog entry for
+M243, then M261, then M265, each of which was untouched.
+
+**Why it came up:** the history made it visible. Reconstructing which rows changed in each
+past commit flagged exactly one row per research batch, always the last one, always the row
+immediately before the newly appended block.
+
+**Takeaway:** when comparing two versions of structured data, parse both and compare
+canonical forms (sorted keys) rather than diffing the serialization. Incidental
+punctuation — separators, trailing commas, key order, whitespace — belongs to the format,
+not the content, and a gate that reports it will be trained away within a couple of PRs.
+The tell to look for before trusting such a gate: does its output name a record that sits
+adjacent to the real change?
+
+## A positioning action should not be an animation
+
+A "jump to this card" button set the target and called `scrollIntoView`, and the page never
+moved. The stylesheet had `html{scroll-behavior:smooth}`, so the scroll was an animation
+driven by the frame loop — and the destination was 35,000px away, which as an animation is
+indistinguishable from a page that has frozen.
+
+**Why it came up:** the jump measured as landed=false while the element, the outline and
+the tab switch were all correct, which sent the search toward the selector before the CSS.
+
+**Takeaway:** pass `behavior:"instant"` explicitly for any scroll whose purpose is to SHOW
+something rather than to convey motion; inheriting a global smooth-scroll turns a jump into
+a journey. The related trap when verifying: an animated scroll cannot complete in a hidden
+or zero-height viewport, so size the viewport first and prefer synchronous measurement —
+`requestAnimationFrame` never fires there either, and a test that awaits one simply hangs.

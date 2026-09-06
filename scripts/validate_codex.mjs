@@ -118,14 +118,17 @@ export function validate(html, docs = {}) {
         " LINEAGES: typeof LINEAGES === 'undefined' ? null : LINEAGES," +
         " VERBS: typeof VERBS === 'undefined' ? null : VERBS," +
         " SHOTS: typeof SHOTS === 'undefined' ? null : SHOTS," +
-        " SHOT_TYPES: typeof SHOT_TYPES === 'undefined' ? null : SHOT_TYPES};"
+        " SHOT_TYPES: typeof SHOT_TYPES === 'undefined' ? null : SHOT_TYPES," +
+        " CHANGES: typeof CHANGES === 'undefined' ? null : CHANGES," +
+        " expandIds: typeof expandIds === 'undefined' ? null : expandIds};"
     )();
   } catch (e) {
     errors.push(`data region does not evaluate: ${e.message}`);
     return { errors, stats: null };
   }
 
-  const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES } = data;
+  const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES,
+          CHANGES, expandIds } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -279,6 +282,53 @@ export function validate(html, docs = {}) {
     }
   }
 
+  const allIds = new Set([...BASE_MECHS.map(m => m.id), ...MINIGAMES.map(m => m.id)]);
+
+  // --- the changelog: what the app calls new. The page's OWN expandIds does the
+  // parsing, so a range the UI would render is the range this validates — no second
+  // implementation to drift. The load-bearing check is MEMBERSHIP: every id in the
+  // arrays must appear in exactly one `added`, and nothing else may. A per-entry
+  // property check would pass happily while a freshly spliced row sat unlisted and
+  // therefore permanently unmarked, which is the one failure this feature exists to
+  // prevent.
+  if (CHANGES) {
+    if (!expandIds) {
+      errors.push("CHANGES exists but the page defines no expandIds() — the ranges cannot be read");
+    } else if (!Array.isArray(CHANGES) || CHANGES.length === 0) {
+      errors.push("CHANGES must be a non-empty array");
+    } else {
+      const ISO = /^\d{4}-\d{2}-\d{2}$/;
+      const claimed = new Map();          // id -> the entry that first added it
+      let prevDate = null;
+      CHANGES.forEach((c, i) => {
+        const label = `CHANGES[${i}] ${JSON.stringify(c?.title ?? "(untitled)")}`;
+        if (!ISO.test(c?.date ?? "")) errors.push(`${label}: date ${JSON.stringify(c?.date ?? "")} is not YYYY-MM-DD`);
+        else if (prevDate !== null && !(c.date < prevDate)) {
+          errors.push(`${label}: dates must run newest-first and strictly decrease — ${c.date} follows ${prevDate}`);
+        } else prevDate = c.date;
+        if (!isText(c?.title)) errors.push(`${label}: needs a title`);
+        for (const field of ["added", "updated"]) {
+          if (!Array.isArray(c?.[field])) { errors.push(`${label}: \`${field}\` must be an array`); continue; }
+          let ids;
+          try { ids = expandIds(c[field]); }
+          catch (e) { errors.push(`${label}: ${field} — ${e.message}`); continue; }
+          for (const id of ids) {
+            if (!allIds.has(id)) errors.push(`${label}: ${field} names ${id}, which is not a row in this file`);
+            if (field === "added") {
+              if (claimed.has(id)) errors.push(`${label}: ${id} was already added by ${JSON.stringify(claimed.get(id))}`);
+              else claimed.set(id, c.title);
+            }
+          }
+        }
+      });
+      for (const id of allIds) {
+        if (!claimed.has(id)) {
+          errors.push(`${id} appears in no CHANGES entry's \`added\` — it would show in the app with no date, and never as new`);
+        }
+      }
+    }
+  }
+
   // --- docs that restate the counts (two sources of truth always drift)
   const stats = {
     mechanics: BASE_MECHS.length,
@@ -367,6 +417,14 @@ function replaceFirst(src, needle, repl, label) {
  * an unrelated rule and reading as coverage it doesn't have.
  */
 const SABOTAGES = [
+  { name: "changelog leaves a row unlisted", expect: /appears in no CHANGES entry/,
+    apply: s => replaceFirst(s, '"M001-M243"', '"M001-M242"', "changelog leaves a row unlisted") },
+  { name: "changelog names a row that does not exist", expect: /names M999, which is not a row/,
+    apply: s => replaceFirst(s, '"M117","M118"', '"M117","M999"', "changelog names a missing row") },
+  { name: "changelog dates out of order", expect: /must run newest-first/,
+    apply: s => replaceFirst(s, 'date:"2026-08-29"', 'date:"2026-09-29"', "changelog dates out of order") },
+  { name: "changelog adds a row twice", expect: /was already added by/,
+    apply: s => replaceFirst(s, '"M244-M261"', '"M243-M261"', "changelog adds a row twice") },
   { name: "duplicate mechanic id", expect: /duplicate id M001/,
     apply: s => replaceFirst(s, 'id:"M002"', 'id:"M001"', "duplicate mechanic id") },
   { name: "mechanic id sequence gap", expect: /sequence break/,
