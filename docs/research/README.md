@@ -74,8 +74,12 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    `node scripts/splice_rows.mjs docs/research/<slug>.md` to see the id map, and
    `--write` to apply it. It assigns ids from the current max, checks every `cat`, `game`,
    `want`, `rt` row and `refs` host against the page's own vocabularies, appends to both
-   arrays, and writes the assigned ids back into the digest's `row:` lines. Sharpening an
-   EXISTING row stays a hand edit. Then update the counts in CLAUDE.md, copy it to
+   arrays, writes the assigned ids back into the digest's `row:` lines, and logs the batch
+   in the page's `CHANGES` list so the new rows show as **NEW** in the app.
+   Sharpening an EXISTING row stays a hand edit — **and its id must go in that entry's
+   `updated` list by hand too**, or `scripts/check_changes.mjs` fails the build. That gate
+   exists because an edited row changes nothing the structural validator can see, so
+   without it the sharpened row keeps its original date and the owner's review misses it. Then update the counts in CLAUDE.md, copy it to
    AGENTS.md, and run `node scripts/validate_codex.mjs --selftest` and
    `node scripts/digest_lint.mjs`.
 7. **Record the delta** under `## Codex delta` and set the game's status.

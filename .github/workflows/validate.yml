@@ -24,6 +24,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # check_changes.mjs reads the codex at the base revision, which a shallow
+          # clone does not contain.
+          fetch-depth: 0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
@@ -35,7 +38,16 @@ jobs:
 
       # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
       - name: Probe tests + splicer tests + digest lint
-        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs
+
+      # A row EDITED in place changes nothing the structural validator can measure, so
+      # the app would keep showing it with its original date and the owner's review would
+      # miss the edit. This compares against the base revision and requires the edit to be
+      # logged. The base sha goes through env, never interpolated into the shell.
+      - name: Every rewritten row is logged in CHANGES
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || 'HEAD~1' }}
+        run: node scripts/check_changes.mjs --base "$BASE_SHA"
 
       # Offline: exercises the score range guards only, no network calls.
       - name: Score guards

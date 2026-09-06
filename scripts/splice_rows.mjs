@@ -233,6 +233,65 @@ export function appendToArray(html, arrayName, rowTexts) {
   return html.slice(0, at + decl.length) + tail + sep + rowTexts.join(",\n") + html.slice(end);
 }
 
+/**
+ * Log the splice in the page's CHANGES list, so the new rows show as NEW in the app.
+ * Without this the validator would reject the file outright (every id must appear in an
+ * `added` list), which is deliberate: a row that reaches the arrays unlogged is a row the
+ * owner's review will never surface.
+ *
+ * Re-running for a second game on the same day MERGES into that day's entry rather than
+ * writing a second one — two entries with the same date would break the strictly
+ * decreasing order the changelog is validated for.
+ */
+export function logChange(html, { date, title, ids }) {
+  const anchor = "const CHANGES = [";
+  const at = html.indexOf(anchor);
+  if (at < 0) refuse("could not find `const CHANGES = [` in the codex — the changelog the app reads is missing");
+  if (html.indexOf(anchor, at + 1) >= 0) refuse("`const CHANGES = [` appears more than once — anchor is ambiguous");
+
+  const added = ranges(ids).map(s => JSON.stringify(s)).join(",");
+  const head = html.slice(0, at + anchor.length);
+  const rest = html.slice(at + anchor.length);
+
+  // Same-day re-run: widen today's entry instead of adding a second one.
+  const today = rest.match(/^\s*\{date:"(\d{4}-\d{2}-\d{2})",[\s\S]*?added:\[([^\]]*)\]/);
+  if (today && today[1] === date) {
+    const merged = ranges(mergeIds(today[2], ids)).map(s => JSON.stringify(s)).join(",");
+    return head + rest.replace(`added:[${today[2]}]`, `added:[${merged}]`);
+  }
+  return head + `\n  {date:${JSON.stringify(date)}, title:${JSON.stringify(title)},\n` +
+         `   added:[${added}], updated:[]},` + rest;
+}
+
+/** ["M266","M267","M269"] -> ["M266-M267","M269"] — the compact form the file uses. */
+export function ranges(ids) {
+  // Mechanics before minigames, deliberately: localeCompare puts "g" before "M" (it
+  // folds case), which would silently invert the order the file has always used.
+  const rank = p => (p === "M" ? 0 : 1);
+  const sorted = [...new Set(ids)].sort((a, b) =>
+    a[0] === b[0] ? Number(a.slice(1)) - Number(b.slice(1)) : rank(a[0]) - rank(b[0]));
+  const out = [];
+  for (const id of sorted) {
+    const p = id[0], n = Number(id.slice(1)), w = id.length - 1;
+    const last = out[out.length - 1];
+    if (last && last.p === p && last.b + 1 === n) last.b = n;
+    else out.push({ p, a: n, b: n, w });
+  }
+  return out.map(r => r.a === r.b ? r.p + String(r.a).padStart(r.w, "0")
+    : `${r.p}${String(r.a).padStart(r.w, "0")}-${r.p}${String(r.b).padStart(r.w, "0")}`);
+}
+
+function mergeIds(existing, ids) {
+  const have = (existing.match(/"([^"]+)"/g) || []).map(s => s.slice(1, -1));
+  const flat = [];
+  for (const e of have) {
+    const r = e.match(/^([Mg])(\d+)-[Mg](\d+)$/);
+    if (r) { const w = r[2].length; for (let i = +r[2]; i <= +r[3]; i++) flat.push(r[1] + String(i).padStart(w, "0")); }
+    else flat.push(e);
+  }
+  return flat.concat(ids);
+}
+
 /** Point each candidate's `row:` line at its new id, and retire the ```js block. */
 export function updateDigest(md, assignments, digest) {
   const lines = digest.lines.slice();
@@ -298,10 +357,17 @@ function main(argv) {
 
   let next = appendToArray(html, "BASE_MECHS", mechs.map(serializeRow));
   next = appendToArray(next, "MINIGAMES", minis.map(serializeRow));
+  const title = (md.match(/^#\s+(.+?)\s*$/m) || [, "Research"])[1].replace(/\s+—\s+research digest$/i, "");
+  next = logChange(next, {
+    date: new Date().toISOString().slice(0, 10),
+    title,
+    ids: assignments.map(a => a.id),
+  });
 
   if (!write) {
     console.log(`\n--- dry run: ${next.length - html.length} chars would be added to the codex ---`);
     for (const a of assignments) console.log(serializeRow(a).split("\n")[0].slice(0, 120) + " …");
+    console.log(`changelog: would log ${ranges(assignments.map(a => a.id)).join(", ")} under today's date`);
     console.log("\nnothing written. Re-run with --write to apply.");
     return;
   }
@@ -309,6 +375,9 @@ function main(argv) {
   writeFileSync(CODEX, next);
   writeFileSync(digestPath, updateDigest(md, assignments, digest));
   console.log(`\nwrote ${assignments.length} rows into JRPG_Design_Codex.html and updated ${path}.`);
+  console.log(`Logged in CHANGES as ${ranges(assignments.map(a => a.id)).join(", ")}.`);
+  console.log("If you also SHARPENED an existing row, add its id to that entry's `updated` list —");
+  console.log("scripts/check_changes.mjs fails the build otherwise.");
   console.log("Now update the counts in CLAUDE.md and README.md, copy CLAUDE.md to AGENTS.md,");
   console.log("then run: node scripts/validate_codex.mjs --selftest");
 }
