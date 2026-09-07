@@ -322,7 +322,9 @@
     api.game = function () {
       var detail = {}, links = {}, ratings = {}, like = [];
       var all = function (el, sel) { return el ? Array.prototype.slice.call(el.querySelectorAll(sel)) : []; };
-      qa("div.pod_gameinfo div.pod_gameinfo_left ol.list li").forEach(function (li) {
+      // The box's list body is usually div.pod_gameinfo_left, but a sparse page (Terranigma,
+      // 2026-09-07) has a bare div.body — so select the list under the pod, not the body.
+      qa("div.pod_gameinfo ol.list li").forEach(function (li) {
         var label = txt(li.querySelector("b")).replace(/:\s*$/, "");
         if (!label) return;
         var whole = txt(li);

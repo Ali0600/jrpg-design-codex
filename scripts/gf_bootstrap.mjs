@@ -21,10 +21,12 @@
  *   - It SAYS where the probe came from (`from:"network"|"cache"`, plus `len` and the
  *     fetch error): a fallback that serves yesterday's probe without announcing itself is
  *     how a fix "did nothing" for three re-arms in a row (2026-06-27 lesson, met again).
- *   - It appends `?t=<now>` to the fetch. raw.githubusercontent.com's CDN serves a branch
- *     file for five minutes after a push (cache-control: max-age=300), and `no-store` only
- *     bypasses the browser's own cache — the live proof for game() ran the pre-fix probe
- *     twice before the fetched length gave it away (2026-09-06). The host ignores the query.
+ *
+ * One thing it cannot fix: raw.githubusercontent.com's CDN serves a file for up to five
+ * minutes after a push (cache-control: max-age=300) WHATEVER the query string — a
+ * `?t=<now>` cache-buster was tried and measured useless (2026-09-07), and `no-store` only
+ * bypasses the browser's own cache. The readout is `len` in the arm result: compare it with
+ * the file you pushed, and wait, or use --paste, when it is the old one.
  *
  * A ref is always spelled `refs/heads/<name>`: a branch name containing a slash makes the
  * short raw URL ambiguous, and raw.githubusercontent answers 404 rather than guessing.
@@ -46,7 +48,7 @@ export function probeUrl(ref = "main") {
 export function armText(ref = "main") {
   return `(async()=>{try{delete window.__gf}catch(e){window.__gf=undefined}`
     + `var K=${JSON.stringify(KEY)},s=null,from="network",why="";`
-    + `try{s=await(await fetch(${JSON.stringify(probeUrl(ref))}+"?t="+Date.now(),{cache:"no-store"})).text();`
+    + `try{s=await(await fetch(${JSON.stringify(probeUrl(ref))},{cache:"no-store"})).text();`
     + `if(s.length<1000)throw new Error("short read "+s.length);localStorage.setItem(K,s)}`
     + `catch(e){s=localStorage.getItem(K);from="cache";why=String(e&&e.message||e)}`
     + `if(!s)return{armed:false,why:"no network and nothing cached: "+why};`

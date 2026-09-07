@@ -168,7 +168,7 @@ export function searchPage() {
 export const GAME_MARKETING = "MARKETING TEXT MUST NOT LEAK";
 export const GAME_BLURB = "PUBLISHER BLURB MUST NOT LEAK";
 
-export function gamePage({ withAlso = true, likes = 3 } = {}) {
+export function gamePage({ withAlso = true, likes = 3, bareBody = false } = {}) {
   const row = (label, children) => el("li", {}, [el("div", { cls: "content" }, [el("b", {}, [label + ":"]), ...children])]);
   const detailRows = [
     row("Platform", [el("a", { href: "/ps" }, ["PlayStation"])]),
@@ -236,7 +236,8 @@ export function gamePage({ withAlso = true, likes = 3 } = {}) {
     ]),
     el("div", { cls: "pod pod_gameinfo" }, [
       el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Game Detail"])]),
-      el("div", { cls: "body pod_gameinfo_left" }, [el("ol", { cls: "list flex col1 nobg" }, detailRows)]),
+      // A sparse page (Terranigma) carries the list in a bare div.body, no _left class.
+      el("div", { cls: bareBody ? "body" : "body pod_gameinfo_left" }, [el("ol", { cls: "list flex col1 nobg" }, detailRows)]),
       el("div", { cls: "body pod_gameinfo_right" }, [
         el("div", { cls: "metacritic" }, [el("a", { href: "https://www.metacritic.com/game/playstation/lantern-vale" }, [
           el("div", { cls: "score score_high" }, ["81"])])]),

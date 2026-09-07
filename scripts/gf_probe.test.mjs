@@ -219,6 +219,8 @@ test("game() reads the Game Detail box, the user ratings and the like-list, and 
     else if (v && typeof v === "object") Object.values(v).forEach(walk);
   };
   walk(r);
+  // A page whose list body lacks the _left class (Terranigma) still yields every row.
+  assert.deepEqual(mount(gamePage({ bareBody: true })).game().detail, r.detail);
   // Without the optional rows the map simply lacks them — no empty keys.
   const short = mount(gamePage({ withAlso: false })).game();
   assert.equal(Object.keys(short.detail).length, 5);
@@ -387,12 +389,7 @@ test("the arm line fetches the probe, caches it, and runs what it fetched", asyn
   assert.equal(out.page.kind, "faq");
   assert.equal(out.from, "network", "the arm line says the probe came over the network");
   assert.equal(out.len, src.length, "and how long it was — a stale copy shows up as the wrong length");
-  assert.equal(calls.length, 1);
-  // A cache-buster on every fetch: raw.githubusercontent.com's CDN serves the previous push
-  // for five minutes and no-store cannot reach it, so without this a probe fix looks like
-  // a no-op on the branch it was pushed to.
-  assert.match(calls[0], new RegExp("^" + probeUrl("main").replace(/[.?+]/g, "\\$&") + "\\?t=\\d{12,}$"),
-    `fetch URL ${calls[0]} is not the probe URL plus a ?t=<now> cache-buster`);
+  assert.deepEqual(calls, [probeUrl("main")]);
   assert.equal(store.get(KEY), src, "the fetched probe is cached for the offline case");
 
   // The network is preferred over the cache: a stale cache must never win, or a probe fix
