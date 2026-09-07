@@ -37,6 +37,15 @@ worse than none, because it reads as verified.
   tool-gated, a second layer…), so you can ask "who else solved this shape?"
 - **Lineages** — chains where each game answers the one before it, ending on the node
   worth stealing from, or on a counter-example worth designing against
+- **A page for every game** — click a game's name anywhere to open it: box art, what its
+  GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how
+  GameFAQs readers rate it, its difficulty and length), every mechanic and minigame it
+  contributed, its screenshots and sources, the lineages it sits in, and the games GameFAQs
+  readers pair it with. The address carries the page, so Back and shared links work
+- **Covers** — a box-art thumbnail beside every game, from Wikipedia at thumbnail size with
+  each file's source recorded, and a Wikipedia link on the page
+- **GameFAQs suggestions** — the games GameFAQs lists beside the codex's own, ranked by how
+  many codex games point at each, with a one-click *Queue it* into your research queue
 - **UI Gallery** — captioned screenshots of the researched games' actual interfaces
   (battle HUDs, menus, minigames), filterable by game and screen type, with thumbnails
   on each game's card
