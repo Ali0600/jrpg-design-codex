@@ -38,6 +38,70 @@ const KNOWN_UNROSTERED = new Set([
 const WANT = new Set(["Yes", "Maybe", "No", ""]);
 const STATUS = new Set(["Researched", "Researching", "To Research"]);
 
+/**
+ * The script-owned game-row fields (written by game_rows.mjs, never by hand). `gf` is the
+ * GameFAQs game-page harvest; its key list is the one game_rows.mjs writes in this order.
+ * Every string in it is capped: a Game Detail label or a related game's title fits in 120
+ * chars, and a publisher's blurb does not — that cap is the machine-checkable form of
+ * "GameFAQs prose is never stored".
+ */
+const GF_KEYS = new Set(["u", "plat", "genre", "dev", "pub", "rel", "fr", "aka", "also", "rating", "diff", "len", "like", "note", "at"]);
+const GF_PATH = /^\/[a-z0-9]+\/\d+-[a-z0-9-]+$/;
+const GF_MAX_TEXT = 120;
+const GF_YEAR_WINDOW = 2;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const twoDp = v => typeof v === "number" && Number.isFinite(v) && Math.abs(v * 100 - Math.round(v * 100)) < 1e-9;
+
+function checkGf(g, label, errors, seenU) {
+  const gf = g.gf;
+  if (!gf || typeof gf !== "object" || Array.isArray(gf)) { errors.push(`${label}: gf must be an object`); return; }
+  for (const k of Object.keys(gf)) if (!GF_KEYS.has(k)) errors.push(`${label}: gf: unknown key ${JSON.stringify(k)}`);
+  if (!GF_PATH.test(gf.u ?? "")) errors.push(`${label}: gf.u must be a site-relative path /<platform>/<id>-<slug>, got ${JSON.stringify(gf.u)}`);
+  else if (seenU.has(gf.u)) errors.push(`${label}: gf.u ${gf.u} already used by ${JSON.stringify(seenU.get(gf.u))}`);
+  else seenU.set(gf.u, g.title);
+  for (const k of ["plat", "rel"]) if (!isText(gf[k])) errors.push(`${label}: gf.${k} is required`);
+  for (const k of ["dev", "pub", "note"]) if (gf[k] != null && !isText(gf[k])) errors.push(`${label}: gf.${k} must be non-empty text`);
+  if (!ISO_DATE.test(gf.at ?? "")) errors.push(`${label}: gf.at must be the ISO harvest date, got ${JSON.stringify(gf.at)}`);
+  for (const k of ["genre", "fr", "aka", "also"]) {
+    if (gf[k] != null && !(Array.isArray(gf[k]) && gf[k].length && gf[k].every(isText))) errors.push(`${label}: gf.${k} must be a non-empty array of text`);
+  }
+  for (const k of ["rating", "diff", "len"]) {
+    const r = gf[k];
+    if (r == null) continue;
+    if (!r || typeof r !== "object" || Array.isArray(r)) { errors.push(`${label}: gf.${k} must be an object`); continue; }
+    for (const kk of Object.keys(r)) if (!["v", "n", "w"].includes(kk)) errors.push(`${label}: gf.${k}: unknown key ${JSON.stringify(kk)}`);
+    const max = k === "len" ? 10000 : 5;
+    if (r.v != null && !(twoDp(r.v) && r.v >= 0 && r.v <= max)) errors.push(`${label}: gf.${k}.v out of range (0-${max}, two decimals): ${r.v}`);
+    if (r.n != null && !(Number.isInteger(r.n) && r.n > 0)) errors.push(`${label}: gf.${k}.n must be a positive integer, got ${r.n}`);
+    if (r.w != null && !isText(r.w)) errors.push(`${label}: gf.${k}.w must be text`);
+  }
+  if (gf.like != null) {
+    if (!Array.isArray(gf.like)) errors.push(`${label}: gf.like must be an array`);
+    else {
+      const seen = new Set();
+      gf.like.forEach((l, i) => {
+        const where = `${label}: gf.like[${i}]`;
+        if (!l || typeof l !== "object") { errors.push(`${where} must be {t,u}`); return; }
+        for (const kk of Object.keys(l)) if (!["t", "u"].includes(kk)) errors.push(`${where}: unknown key ${JSON.stringify(kk)} — only t and u are stored`);
+        if (!isText(l.t)) errors.push(`${where}: t must be text`);
+        if (!GF_PATH.test(l.u ?? "")) errors.push(`${where}: u must be a site-relative game path, got ${JSON.stringify(l.u)}`);
+        if (seen.has(l.u)) errors.push(`${where}: ${l.u} listed twice`);
+        seen.add(l.u);
+      });
+    }
+  }
+  const walk = (v, path) => {
+    if (typeof v === "string") { if (v.length > GF_MAX_TEXT) errors.push(`${label}: gf${path} is ${v.length} chars — longer than ${GF_MAX_TEXT}, and prose is not stored`); }
+    else if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${path}[${i}]`));
+    else if (v && typeof v === "object") for (const k of Object.keys(v)) walk(v[k], `${path}.${k}`);
+  };
+  walk(gf, "");
+  const ym = String(gf.rel ?? "").match(/\b(19|20)\d{2}\b/);
+  if (ym && Number.isInteger(g.year) && Math.abs(Number(ym[0]) - g.year) > GF_YEAR_WINDOW && !isText(gf.note)) {
+    errors.push(`${label}: gf.rel release year ${ym[0]} is more than ${GF_YEAR_WINDOW} years from year ${g.year} and gf.note does not explain it — a port or remake page?`);
+  }
+}
+
 // ---------------------------------------------------------------- extraction
 
 export function extractScript(html) {
@@ -142,6 +206,7 @@ export function validate(html, docs = {}) {
 
   // --- games
   const seenTitle = new Set();
+  const seenU = new Map(), coverRefs = new Set(), digestRefs = new Map();
   for (const g of BASE_GAMES) {
     const label = `game ${JSON.stringify(g.title ?? "(untitled)")}`;
     checkFields(g, label, ["title", "dev", "status"], errors);
@@ -168,6 +233,33 @@ export function validate(html, docs = {}) {
     if (g.status === "To Research" && !isText(g.why)) {
       errors.push(`${label}: queued games need a \`why\` research brief`);
     }
+    // --- the script-owned fields
+    if (g.gf != null) checkGf(g, label, errors, seenU);
+    if (g.cover != null) {
+      if (!/^covers\/[a-z0-9-]+\.(jpg|png|webp)$/.test(g.cover)) errors.push(`${label}: cover must match covers/<slug>.(jpg|png|webp), got ${JSON.stringify(g.cover)}`);
+      else if (coverRefs.has(g.cover)) errors.push(`${label}: cover ${g.cover} is also used by another row`);
+      else coverRefs.add(g.cover);
+      if (!isText(g.wp)) errors.push(`${label}: has a cover but no wp — the cover's provenance is its Wikipedia article`);
+    }
+    if (g.wp != null && !isText(g.wp)) errors.push(`${label}: wp must be a non-empty Wikipedia article title`);
+    if (g.digest != null) {
+      if (!/^[a-z0-9-]+$/.test(g.digest)) errors.push(`${label}: digest must be a docs/research slug, got ${JSON.stringify(g.digest)}`);
+      else if (digestRefs.has(g.digest)) errors.push(`${label}: digest ${JSON.stringify(g.digest)} is also claimed by ${JSON.stringify(digestRefs.get(g.digest))}`);
+      else digestRefs.set(g.digest, g.title);
+    }
+  }
+  // Two-way set equality against the real folders, the same posture as SHOTS below: a row
+  // naming a file that is not there is a broken link, and a file no row names is an orphan
+  // nobody will ever audit. Fail closed when the folder cannot be listed.
+  if (docs.digestFiles == null && digestRefs.size) errors.push("game rows claim digests but docs/research could not be listed");
+  if (docs.digestFiles != null) {
+    for (const [slug, t] of digestRefs) if (!docs.digestFiles.has(slug)) errors.push(`game ${JSON.stringify(t)}: digest ${JSON.stringify(slug)} has no docs/research/${slug}.md`);
+    for (const f of docs.digestFiles) if (!digestRefs.has(f)) errors.push(`docs/research/${f}.md is not claimed by any game row's \`digest\` — stamp it (game_rows.mjs --set digest=${f})`);
+  }
+  if (docs.coverFiles == null && coverRefs.size) errors.push("game rows carry covers but the covers/ folder could not be listed — every cover would 404");
+  if (docs.coverFiles != null) {
+    for (const c of coverRefs) if (!docs.coverFiles.has(c)) errors.push(`cover ${JSON.stringify(c)}: file missing from the covers/ folder`);
+    for (const f of docs.coverFiles) if (!coverRefs.has(f)) errors.push(`covers folder: ${JSON.stringify(f)} is not referenced by any game row — delete it or set the row's cover`);
   }
 
   // --- mechanics
@@ -307,6 +399,23 @@ export function validate(html, docs = {}) {
           errors.push(`${label}: dates must run newest-first and strictly decrease — ${c.date} follows ${prevDate}`);
         } else prevDate = c.date;
         if (!isText(c?.title)) errors.push(`${label}: needs a title`);
+        // Game-level changes (details, covers) name roster titles, not ids.
+        if (c?.games != null) {
+          if (!Array.isArray(c.games)) errors.push(`${label}: \`games\` must be an array of roster titles`);
+          else {
+            const seenG = new Set();
+            for (const t of c.games) {
+              if (!titles.has(t)) errors.push(`${label}: games[] names no roster game ${JSON.stringify(t)}`);
+              if (seenG.has(t)) errors.push(`${label}: games[] lists ${JSON.stringify(t)} twice`);
+              seenG.add(t);
+            }
+          }
+        }
+        // An entry that names nothing would still move the first-visit baseline (the app
+        // treats the second-newest entry's date as "already seen"), hiding the real batch.
+        if (Array.isArray(c?.added) && Array.isArray(c?.updated) && !c.added.length && !c.updated.length && !(Array.isArray(c?.games) && c.games.length)) {
+          errors.push(`${label}: names no row and no game — an empty entry silently moves the first-visit baseline`);
+        }
         for (const field of ["added", "updated"]) {
           if (!Array.isArray(c?.[field])) { errors.push(`${label}: \`${field}\` must be an array`); continue; }
           let ids;
@@ -333,6 +442,8 @@ export function validate(html, docs = {}) {
   const stats = {
     mechanics: BASE_MECHS.length,
     games: BASE_GAMES.length,
+    gf: BASE_GAMES.filter(g => g.gf != null).length,
+    covers: BASE_GAMES.filter(g => g.cover != null).length,
     minigames: MINIGAMES.length,
     researched: BASE_GAMES.filter(g => g.status === "Researched").length,
     queued: BASE_GAMES.filter(g => g.status !== "Researched").length,
@@ -476,6 +587,30 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"javascript:alert(1)",t:"x"}]}', "ref with an unlisted host") },
   { name: "ref with an empty label", expect: /refs .*empty label/,
     apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"https://gamefaqs.gamespot.com/ps/1-x/faqs/1",t:""}]}', "ref with an empty label") },
+  // The script-owned game fields. Anchors are the literal forms game_rows.mjs writes
+  // (bare keys, no spaces), so each lands on the first harvested row in the file.
+  { name: "gf with a key outside the whitelist", expect: /gf: unknown key "blurb"/,
+    apply: s => replaceFirst(s, 'gf:{u:"', 'gf:{blurb:"x",u:"', "gf with a key outside the whitelist") },
+  { name: "gf.u as an absolute URL", expect: /gf\.u must be a site-relative path/,
+    apply: s => replaceFirst(s, 'gf:{u:"/', 'gf:{u:"https://gamefaqs.gamespot.com/', "gf.u as an absolute URL") },
+  { name: "gf rating out of range", expect: /gf\.rating\.v out of range/,
+    apply: s => replaceFirst(s, /rating:\{v:[\d.]+,/, "rating:{v:9.5,", "gf rating out of range") },
+  { name: "prose stored in gf (a related game's blurb)", expect: /longer than 120, and prose is not stored/,
+    apply: s => replaceFirst(s, 'like:[{t:"', 'like:[{t:"' + "x".repeat(130), "prose stored in gf") },
+  { name: "gf release year from a port or remake page", expect: /release year 2090 is more than 2 years/,
+    apply: s => replaceFirst(s, /rel:"[^"]*?(19|20)\d\d[^"]*"/, m => m.replace(/(19|20)\d\d/, "2090"), "gf release year from a port or remake page") },
+  { name: "two rows sharing one gf.u", expect: /gf\.u \S+ already used by/,
+    apply: s => {
+      const first = s.match(/gf:\{u:"([^"]+)"/);
+      if (!first) throw new Error('sabotage "two rows sharing one gf.u": no gf row to copy');
+      return replaceFirst(s, /(gf:\{u:"[^"]+"[\s\S]*?gf:\{u:")[^"]+"/, `$1${first[1]}"`, "two rows sharing one gf.u");
+    } },
+  { name: "digest naming no docs/research file", expect: /digest "parasite-eve-x" has no docs\/research/,
+    apply: s => replaceFirst(s, 'digest:"parasite-eve"', 'digest:"parasite-eve-x"', "digest naming no docs/research file") },
+  { name: "changelog games[] naming a non-roster game", expect: /games\[\] names no roster game "Xenogearss"/,
+    apply: s => replaceFirst(s, 'games:["Xenogears"', 'games:["Xenogearss"', "changelog games[] naming a non-roster game") },
+  { name: "changelog entry that names nothing", expect: /names no row and no game/,
+    apply: s => replaceFirst(s, /added:\[\], updated:\["[^\]]+\]/, "added:[], updated:[]", "changelog entry that names nothing") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
 ];
@@ -504,6 +639,11 @@ const DOC_SABOTAGES = [
     } },
   { name: "AGENTS.md mirror drift", expect: /AGENTS\.md has drifted/,
     apply: d => ({ ...d, agents: d.agents + "\ndrifted\n" }) },
+  { name: "orphan digest file no game row claims", expect: /docs\/research\/ghost\.md is not claimed/,
+    apply: d => {
+      if (d.digestFiles == null) throw new Error('sabotage "orphan digest": digestFiles listing absent');
+      return { ...d, digestFiles: new Set([...d.digestFiles, "ghost"]) };
+    } },
 ];
 
 function selftest(html, docs) {
@@ -570,7 +710,22 @@ function main() {
     );
   } catch { /* no folder yet — SHOTS rows will then fail closed if any exist */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), shotFiles };
+  // The digests a game row may claim, and the cover files a row may name — both listed
+  // for the two-way checks, both injectable so the selftest can stage an orphan.
+  let digestFiles = null;
+  try {
+    digestFiles = new Set(
+      readdirSync(join(ROOT, "docs", "research"))
+        .filter(f => /\.md$/.test(f) && !/^(README|_template)\.md$/.test(f))
+        .map(f => f.replace(/\.md$/, ""))
+    );
+  } catch { /* no folder — rows claiming a digest then fail closed */ }
+  let coverFiles = null;
+  try {
+    coverFiles = new Set(readdirSync(join(ROOT, "covers")).filter(f => /\.(jpg|png|webp)$/.test(f)).map(f => "covers/" + f));
+  } catch { /* no covers/ yet — rows naming a cover then fail closed */ }
+
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), shotFiles, digestFiles, coverFiles };
 
   const { errors, stats } = validate(html, docs);
 
@@ -578,7 +733,7 @@ function main() {
     console.log(
       `codex: ${stats.mechanics} mechanics · ${stats.minigames} minigames ` +
       `(${stats.rewardTables} with reward tables) · ${stats.games} games ` +
-      `(${stats.researched} researched, ${stats.queued} queued) · ${stats.want} marked want:Yes`
+      `(${stats.researched} researched, ${stats.queued} queued; ${stats.gf} with GameFAQs details, ${stats.covers} with covers) · ${stats.want} marked want:Yes`
     );
   }
 
