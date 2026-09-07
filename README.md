@@ -68,6 +68,7 @@ The codex isn't only an input. Its research was distilled into an original game 
 ```
 JRPG_Design_Codex.html     the app and the database, in one file
 shots/                     UI screenshots for the gallery (sources in SOURCES.md)
+covers/                    box-art thumbnails, one per game (sources in SOURCES.md)
 scripts/validate_codex.mjs structural validator (runs in CI)
 scripts/gf_probe.js        in-page probe for reading GameFAQs guides (tests alongside)
 scripts/digest_lint.mjs    pointer-grammar lint for the research digests
@@ -89,11 +90,18 @@ node scripts/validate_codex.mjs --selftest
 node scripts/splice_game.mjs --game "Parasite Eve" gf/parasite-eve.json --write
 ```
 
+```bash
+node scripts/fetch_covers.mjs --write
+```
+
 The second writes a saved `__gf.game()` result — a game's GameFAQs page: platform,
 genre, developer, publisher, release, franchise, the user rating, difficulty and length,
 and the games GameFAQs pairs it with — into that game's row. Dry run without `--write`;
 an unseen label, a mismatched title, a release year off by more than two, or any string
-long enough to be prose is a refusal.
+long enough to be prose is a refusal. The third fetches every game's box art from
+Wikipedia at thumbnail size, records each file's article and `File:` page in
+`covers/SOURCES.md`, and builds a contact sheet to look at before committing — a lead
+image is sometimes a logo or the remake's box.
 
 Validation runs on every push and pull request, and **gates the deploy** — nothing
 reaches the live site that hasn't passed. It checks ID sequences, category and enum
@@ -131,15 +139,17 @@ node --test scripts/gf_probe.test.mjs
 
 Game screenshots in `shots/` are the property of their respective publishers,
 reproduced at reduced resolution for design study and commentary; every image's
-source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
+source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md). Box-art thumbnails in `covers/` are likewise their publishers' property, reproduced
+at 240px solely to identify each game beside its design commentary; each one's Wikipedia
+article and `File:` page are recorded in [`covers/SOURCES.md`](covers/SOURCES.md).
 
 ## Experience Gained
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 39
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 43
   structural invariants, with a mutation-testing self-check proving each one can fail,
-  plus a 69-case offline suite and a differential CI gate that compares a pull request
+  plus an 81-case offline suite and a differential CI gate that compares a pull request
   against its base revision and fails when an edited record goes unlogged
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection** — API-first Python clients with host allowlisting,

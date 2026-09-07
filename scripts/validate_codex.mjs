@@ -605,10 +605,16 @@ const SABOTAGES = [
       if (!first) throw new Error('sabotage "two rows sharing one gf.u": no gf row to copy');
       return replaceFirst(s, /(gf:\{u:"[^"]+"[\s\S]*?gf:\{u:")[^"]+"/, `$1${first[1]}"`, "two rows sharing one gf.u");
     } },
+  { name: "cover outside the covers folder", expect: /cover must match covers\//,
+    apply: s => replaceFirst(s, 'cover:"covers/', 'cover:"shots/', "cover outside the covers folder") },
+  // Drops the wp line that follows the first cover line: a cover with no article to
+  // point at has no provenance.
+  { name: "cover without its Wikipedia article", expect: /has a cover but no wp/,
+    apply: s => replaceFirst(s, /(cover:"covers\/[^"]+")(,\nwp:"[^"]*")/, "$1", "cover without its Wikipedia article") },
   { name: "digest naming no docs/research file", expect: /digest "parasite-eve-x" has no docs\/research/,
     apply: s => replaceFirst(s, 'digest:"parasite-eve"', 'digest:"parasite-eve-x"', "digest naming no docs/research file") },
-  { name: "changelog games[] naming a non-roster game", expect: /games\[\] names no roster game "Xenogearss"/,
-    apply: s => replaceFirst(s, 'games:["Xenogears"', 'games:["Xenogearss"', "changelog games[] naming a non-roster game") },
+  { name: "changelog games[] naming a non-roster game", expect: /games\[\] names no roster game ".* \(not on the roster\)"/,
+    apply: s => replaceFirst(s, /games:\["([^"]+)"/, 'games:["$1 (not on the roster)"', "changelog games[] naming a non-roster game") },
   { name: "changelog entry that names nothing", expect: /names no row and no game/,
     apply: s => replaceFirst(s, /added:\[\], updated:\["[^\]]+\]/, "added:[], updated:[]", "changelog entry that names nothing") },
   { name: "broken javascript", expect: /does not parse/,
@@ -639,6 +645,16 @@ const DOC_SABOTAGES = [
     } },
   { name: "AGENTS.md mirror drift", expect: /AGENTS\.md has drifted/,
     apply: d => ({ ...d, agents: d.agents + "\ndrifted\n" }) },
+  { name: "cover file missing from disk", expect: /file missing from the covers\/ folder/,
+    apply: d => {
+      if (!d.coverFiles?.size) throw new Error('sabotage "cover file missing": no coverFiles to remove');
+      return { ...d, coverFiles: new Set([...d.coverFiles].slice(1)) };
+    } },
+  { name: "orphan file in the covers folder", expect: /covers folder: .*not referenced by any game row/,
+    apply: d => {
+      if (d.coverFiles == null) throw new Error('sabotage "orphan cover": coverFiles listing absent');
+      return { ...d, coverFiles: new Set([...d.coverFiles, "covers/ghost.jpg"]) };
+    } },
   { name: "orphan digest file no game row claims", expect: /docs\/research\/ghost\.md is not claimed/,
     apply: d => {
       if (d.digestFiles == null) throw new Error('sabotage "orphan digest": digestFiles listing absent');

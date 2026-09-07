@@ -262,8 +262,12 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   machine-checkable form of "GameFAQs prose is never stored". `digest` is the
   `docs/research/<slug>.md` basename; the validator holds both directions equal (every
   claimed slug has a file, every digest file is claimed), so a research splice stamps it
-  and a zero-row digest is stamped by hand. `cover` and `wp` arrive with the covers work.
-  Custom games never carry any of these, so every renderer must degrade without them.
+  and a zero-row digest is stamped by hand. `cover` is `covers/<slug>.<ext>` — the second
+  exception to single-file, next to `shots/` — and REQUIRES `wp`, the resolved Wikipedia
+  article the image came from (also the page's Wikipedia link). The validator holds
+  `covers/` and the rows' `cover` fields equal in both directions and the deploy copies
+  the folder. Custom games never carry any of these, so every renderer must degrade
+  without them.
 
 ## Conventions for extending
 - To add researched games/mechanics: append to the arrays following the existing row
@@ -330,6 +334,20 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   title search misses them), a chunk count that differs from the roster is a refusal, an
   owned key found on a line with any other key is a refusal, and the rewritten row must
   still evaluate or nothing is written. `gf` keys are re-ordered to the canonical list.
+- `scripts/fetch_covers.mjs [--write] [--only "<title>"…] [--file "<File>"] [--force]`
+  fetches each roster game's box art from Wikipedia's `pageimages` (the article's lead
+  image; `pilicense=any` because box art is non-free, `pithumbsize=240` so no local
+  resize), refuses a missing or disambiguation page and any byte that is not a JPEG, PNG or
+  WebP from `upload.wikimedia.org` under 2 MiB, writes `covers/<slug>.<ext>`, sets `cover`
+  and the RESOLVED `wp`, appends the provenance line to `covers/SOURCES.md`, and builds a
+  contact sheet (one second between files, and a 429 or 5xx from the image host is retried
+  with backoff — the first full run died at file 31 on a 429). **Look at every cover on
+  that sheet before committing** — file names lie in BOTH directions: the first run's
+  `WildArms.png` was the series logo, while `BDFF_Logo.jpg` turned out to be the 3DS box
+  and `Deluxe_package.jpg` the GBA box; and a bare title can land on the series article
+  (Xenoblade). A wrong one is fixed by setting `wp` (the game article, usually
+  `<title> (video game)`) or passing `--file`, and a game Wikipedia cannot serve goes in
+  the ledger's no-yield list. `--selftest` runs the pure guards in CI.
 - `scripts/splice_game.mjs --game "<title>" <game.json> [--write]` turns a saved
   `__gf.game()` result into the row's `gf`. It is the strict side of the harvest: an unseen
   Game Detail label is a refusal that PRINTS the label (extend `LABELS` deliberately — an
@@ -394,7 +412,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **39** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **43** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match

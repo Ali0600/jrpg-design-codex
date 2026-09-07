@@ -16,6 +16,38 @@ rejected options still offer.
 
 ---
 
+## 2026-09-07 — Covers: Wikipedia thumbnails committed vs GameFAQs box art vs none
+
+**Fork:** the owner asked for a picture beside every game's name. Where do 72 box-art
+images come from, and where do the bytes live?
+
+- **Wikipedia's lead image, committed at thumbnail size** ✔ — one `pageimages` API call
+  per fifty titles (`pilicense=any`, because box art is a non-free file; `pithumbsize=240`,
+  so Wikipedia serves the thumbnail and nothing is resized locally), the bytes checked by
+  host, size and magic, written to `covers/<slug>.<ext>` with the article and the `File:`
+  page recorded in `covers/SOURCES.md`, and the row's `wp` field doubling as the override
+  and the article link. Same posture as `shots/` (2026-08-29): reduced size, identification
+  beside design commentary, provenance one click away.
+- **GameFAQs' own box thumbnails** — the page the owner was looking at, but the host is
+  Cloudflare-challenged to every script, hotlinking was already rejected for the gallery
+  (link rot plus a copyright optic), and pulling bytes back through the browser tool's
+  result channel costs thousands of tokens per image.
+  `rejected — unfetchable by script, and hotlinking was rejected 2026-08-29`
+- **No pictures** — nothing to curate, nothing to defend.
+  `rejected — the owner asked for them, and a roster of 72 names is hard to scan`
+
+**Chosen:** Wikipedia, committed. Two rules travel with it: an image is a CLAIM about its
+content until someone has looked at it (`--write` builds a contact sheet; the first run's
+file names lied both ways — `WildArms.png` was the series logo, while `BDFF_Logo.jpg` and
+`Deluxe_package.jpg` were the real boxes), and a game Wikipedia cannot serve is recorded in
+the ledger's no-yield list, never padded from elsewhere.
+
+**Revisit hook:** if a takedown ever arrives, `git rm` the file and unset the row's
+`cover` (`game_rows.mjs --unset cover`); the validator's two-way check makes a half-removal
+impossible and the site redeploys clean.
+
+---
+
 ## 2026-09-07 — Where the GameFAQs game-page data lives
 
 **Fork:** a game's GameFAQs page carries a Game Detail box, user ratings and a "Games You

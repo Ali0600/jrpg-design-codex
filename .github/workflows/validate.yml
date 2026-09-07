@@ -37,8 +37,12 @@ jobs:
         run: node scripts/validate_codex.mjs --selftest
 
       # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
-      - name: Probe tests + splicer tests + row-writer tests + digest lint
-        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs
+      - name: Probe tests + splicer tests + row-writer tests + cover-fetch tests + digest lint
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs scripts/fetch_covers.test.mjs
+
+      # Offline: the cover fetcher's byte and host guards, no network calls.
+      - name: Cover guards
+        run: node scripts/fetch_covers.mjs --selftest
 
       # A row EDITED in place changes nothing the structural validator can measure, so
       # the app would keep showing it with its original date and the owner's review would
@@ -77,6 +81,8 @@ jobs:
           # The gallery's images. Validation already proved SHOTS rows and files
           # match 1:1, so a missing folder here should fail the job, not ship empty.
           cp -r shots _site/shots
+          # The covers, under the same two-way check.
+          cp -r covers _site/covers
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
