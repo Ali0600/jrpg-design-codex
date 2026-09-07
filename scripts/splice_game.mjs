@@ -4,7 +4,7 @@
  *
  *   node scripts/splice_game.mjs --game "<codex title>" <file.json>             dry run
  *   node scripts/splice_game.mjs --game "<codex title>" <file.json> --write
- *       [--allow-year-mismatch "<reason>"] [--allow-title-mismatch] [--today YYYY-MM-DD]
+ *       [--allow-year-mismatch "<reason>"] [--allow-title-mismatch] [--note "<text>"] [--today YYYY-MM-DD]
  *
  * The probe returns the Game Detail box as the page prints it; this is the strict side.
  * A label it has not seen is a REFUSAL that names the label — LABELS is extended by hand,
@@ -55,7 +55,7 @@ const twoDp = v => typeof v === "number" && Number.isFinite(v) && Math.abs(v * 1
  * The gf field for one row, or the list of reasons there is none. Pure: nothing here reads
  * or writes disk, so the tests drive it with the probe's own fixture output.
  */
-export function normalizeGame(probe, row, { today, allowYearMismatch = "", allowTitleMismatch = false } = {}) {
+export function normalizeGame(probe, row, { today, allowYearMismatch = "", allowTitleMismatch = false, note = "" } = {}) {
   const problems = [];
   const bad = msg => problems.push(msg);
   if (!probe || typeof probe !== "object" || !probe.detail || typeof probe.detail !== "object" || !probe.url) {
@@ -81,8 +81,9 @@ export function normalizeGame(probe, row, { today, allowYearMismatch = "", allow
     const map = LABELS[label];
     if (map === null) continue;
     for (const k of Array.isArray(map) ? map : [map]) {
+      // Lists are deduped: Legend of Mana's page lists one alias twice (2026-09-07).
       const value = SPLIT[k]
-        ? String(text).split(SPLIT[k]).map(s => s.trim()).filter(Boolean)
+        ? [...new Set(String(text).split(SPLIT[k]).map(s => s.trim()).filter(Boolean))]
         : String(text).trim();
       if (!value.length) { bad(`Game Detail ${label} is empty`); continue; }
       gf[k] = value;
@@ -136,6 +137,10 @@ export function normalizeGame(probe, row, { today, allowYearMismatch = "", allow
     else bad(`Release ${JSON.stringify(gf.rel)} is ${ym[0]}, the row's year is ${row.year} — a port or remake page? re-run with --allow-year-mismatch "<reason>" if this is the right page`);
   }
 
+  // A note the operator writes for the page (GameFAQs has no Persona 5 Royal page, so the
+  // row carries Persona 5's) — the same field the year override fills.
+  if (isText(note)) gf.note = note.trim();
+
   const walk = (v, path) => {
     if (typeof v === "string") { if (v.length > MAX_TEXT) bad(`${path} is ${v.length} chars — longer than ${MAX_TEXT}, and prose is not stored`); }
     else if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${path}[${i}]`));
@@ -150,7 +155,7 @@ export function normalizeGame(probe, row, { today, allowYearMismatch = "", allow
 
 // ---------------------------------------------------------------------- main
 
-const VALUED = new Set(["--game", "--allow-year-mismatch", "--today", "--codex"]);
+const VALUED = new Set(["--game", "--allow-year-mismatch", "--today", "--codex", "--note"]);
 
 function main(argv) {
   const write = argv.includes("--write");
@@ -173,6 +178,7 @@ function main(argv) {
     today: arg("--today", new Date().toISOString().slice(0, 10)),
     allowYearMismatch: arg("--allow-year-mismatch", ""),
     allowTitleMismatch: argv.includes("--allow-title-mismatch"),
+    note: arg("--note", ""),
   });
   if (problems.length) {
     console.error(`\n${problems.length} problem${problems.length === 1 ? "" : "s"} — nothing written:`);

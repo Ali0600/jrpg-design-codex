@@ -227,12 +227,16 @@ test("game() on a page with no Game Detail box is empty, not a throw", () => {
   assert.equal(r.title, "");
 });
 
-test("search() lists game candidates once each and never picks", () => {
+test("search() lists game candidates once each, skips board links, and never picks", () => {
   const s = mount(searchPage()).search();
   assert.deepEqual(s.rows, [
     { title: "Persona 5", platform: "ps4", url: "/ps4/835628-persona-5" },
     { title: "Persona 5 Strikers", platform: "switch", url: "/switch/262892-persona-5-strikers" },
   ]);
+  // A pattern narrows BEFORE the cap, so the row that matters cannot be the one dropped.
+  assert.deepEqual(mount(searchPage()).search("strikers$").rows.map(r => r.url), ["/switch/262892-persona-5-strikers"]);
+  assert.equal(mount(searchPage()).search("^persona 5$").rows.length, 1);
+  assert.ok(mount(searchPage()).search("(").error, "a broken pattern reports, not throws");
 });
 
 test("a formatted guide in div.ffaq is read, and its pagination is reported", () => {

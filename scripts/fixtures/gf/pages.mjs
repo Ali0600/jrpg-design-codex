@@ -152,6 +152,7 @@ export function searchPage() {
     el("a", { href: "/ps4/835628-persona-5/faqs" }, ["Guides"]),
     el("a", { href: "/ps4/835628-persona-5" }, ["Persona 5"]),
     el("a", { href: "/switch/262892-persona-5-strikers" }, ["Persona 5 Strikers"]),
+    el("a", { href: "/boards/835628-persona-5" }, ["Board"]),
     el("a", { href: "/community/someone" }, ["someone"]),
   ])]);
   return document({ title: "Game Search - GameFAQs", root, path: "/search" });

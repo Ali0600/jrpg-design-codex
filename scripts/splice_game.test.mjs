@@ -75,6 +75,7 @@ test("the release year must sit within two years of the row's, or be explained",
   assert.deepEqual(ok.problems, []);
   assert.equal(ok.gf.note, "the 1999 page is the original; the row's year is the JP prototype");
   assert.equal(norm().gf.note, undefined, "no note when nothing needs explaining");
+  assert.equal(norm(undefined, ROW, { note: "  GameFAQs has no Royal page; this is Persona 5's  " }).gf.note, "GameFAQs has no Royal page; this is Persona 5's", "--note writes the same field");
   assert.ok(problemMatching(norm(p => { p.detail.Release = "Spring"; }), /carries no year/));
 });
 
@@ -108,6 +109,8 @@ test("list labels split the way the page joins them, and prose cannot get in", (
     delete p.detail.Developer; delete p.detail.Publisher;
   });
   assert.deepEqual(r.gf.aka, ["Paper Mario RPG (JP)", "Paper Mario: La Puerta Milenaria (EU)"]);
+  const dup = norm(p => { p.detail["Also Known As"] = "• Seiken Densetsu (JP)• Seiken Densetsu (JP)• Legend of Mana (AU)"; });
+  assert.deepEqual(dup.gf.aka, ["Seiken Densetsu (JP)", "Legend of Mana (AU)"], "a page that lists an alias twice yields it once");
   assert.equal(r.gf.dev, "Konami");
   assert.equal(r.gf.pub, "Konami");
   assert.ok(problemMatching(norm(p => { p.detail["Also Known As"] = "x".repeat(130); }), /gf\.aka\[0\] is 130 chars — longer than 120/));

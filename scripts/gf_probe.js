@@ -293,14 +293,20 @@
       return core.fitRows({ n: g.n, rows: core.triage(g.rows) }, "rows", DEF);
     };
 
-    api.search = function () {
-      var seen = {}, rows = [];
+    // `pattern` (a regex source) filters titles BEFORE the cap: a fuzzy search lists ~40
+    // rows and the cap once dropped the one that mattered (Sea of Stars, 2026-09-07).
+    // Message-board links share the game-path shape under /boards/ and are skipped.
+    api.search = function (pattern) {
+      var seen = {}, rows = [], re = pattern ? core.regex(pattern) : null;
+      if (re && re.error) return re;
       qa("a[href]").forEach(function (a) {
         var h = a.getAttribute("href") || "";
         var m = h.match(/^\/([a-z0-9]+)\/(\d+-[a-z0-9-]+)$/);
-        if (!m || seen[h]) return;
+        if (!m || m[1] === "boards" || seen[h]) return;
+        var title = txt(a);
+        if (re && !re.test(title)) return;
         seen[h] = 1;
-        rows.push({ title: txt(a), platform: m[1], url: h });
+        rows.push({ title: title, platform: m[1], url: h });
       });
       return core.fitRows({ n: rows.length, rows: rows }, "rows", DEF);
     };
@@ -478,7 +484,7 @@
       return [
         "page()                      what this page is: listing | faq | game | search | challenge (STOP on challenge)",
         "guides() / triage()         the guide list, raw or scored for codex value",
-        "search()                    game candidates on a /search?game= page — confirm platform + year, never auto-pick",
+        "search(pattern)             game candidates on a /search?game= page, title-filtered before the cap — confirm platform + year, never auto-pick",
         "game()                      a game's home page: Game Detail labels, user rating/difficulty/length, Games You May Like (t,u only) — never the Description pod",
         "meta()                      id, author, version, updated, size, section count",
         "toc({max,min})              section list; min skips sections shorter than N chars; list = a contents/item list folded into one section (grep reaches inside)",
