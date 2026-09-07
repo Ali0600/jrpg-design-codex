@@ -235,7 +235,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   owner's read marker, and from those come the NEW/UPDATED pills, the "What's new" strip,
   the newest-first sort, the "new or updated only" filters and the Games-tab tally.
   Before anything is marked seen the baseline is `CHANGES[1].date`, so a first visit
-  highlights the latest batch instead of pilling all 370 rows.
+  highlights the latest batch instead of pilling all 370 rows. An entry may also carry
+  `games:["<title>",…]` for game-LEVEL changes (details harvested, a cover added) — ids
+  cannot name a game row — and every entry must name at least one row or game: an empty
+  entry at the top would silently move that first-visit baseline past the real batch.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
   the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
@@ -247,6 +250,20 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
+- **Script-owned game-row fields** (added 2026-09-07) — `gf`, `cover`, `wp` and `digest`
+  on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
+  written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
+  writer replace a line and copy every other line of the row byte for byte. `gf` is the
+  GameFAQs game-page harvest: `{u, plat, genre[], dev, pub, rel, fr[], aka[], also[],
+  rating{v,n,w}, diff{v,n,w}, len{v,n,w}, like[{t,u}], note?, at}` — `u` and every
+  `like[].u` are site-relative paths (`/ps/198265-parasite-eve`), `len.v` is hours, `at`
+  is the harvest date, `note` exists only when the page's release year sits more than two
+  years from the row's, and NO string may exceed 120 chars: that cap is the
+  machine-checkable form of "GameFAQs prose is never stored". `digest` is the
+  `docs/research/<slug>.md` basename; the validator holds both directions equal (every
+  claimed slug has a file, every digest file is claimed), so a research splice stamps it
+  and a zero-row digest is stamped by hand. `cover` and `wp` arrive with the covers work.
+  Custom games never carry any of these, so every renderer must degrade without them.
 
 ## Conventions for extending
 - To add researched games/mechanics: append to the arrays following the existing row
@@ -305,7 +322,24 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   outright if `const CHANGES = [` is missing. **After a same-day merge, re-read that entry's
   `title` and `note`**: the merge keeps the FIRST title, so a second game spliced the same
   day lands under a heading that no longer describes it (wave 2's rows merged into an entry
-  titled "GameFAQs rollout, wave 1"). Retitle it by hand.
+  titled "GameFAQs rollout, wave 1"). Retitle it by hand. It also stamps
+  `digest:"<slug>"` on every game row the splice touched.
+- `scripts/game_rows.mjs` is the ONLY writer of the script-owned game-row fields:
+  `--game "<title>" --set wp="…" --set digest=… --unset cover [--write]`. Rows are paired
+  POSITIONALLY with the evaluated roster (two rows use `title:FF`/`title:ER`, so a textual
+  title search misses them), a chunk count that differs from the roster is a refusal, an
+  owned key found on a line with any other key is a refusal, and the rewritten row must
+  still evaluate or nothing is written. `gf` keys are re-ordered to the canonical list.
+- `scripts/splice_game.mjs --game "<title>" <game.json> [--write]` turns a saved
+  `__gf.game()` result into the row's `gf`. It is the strict side of the harvest: an unseen
+  Game Detail label is a refusal that PRINTS the label (extend `LABELS` deliberately — an
+  `Expansions` row is known and ignored), the page title must match the row
+  (`--allow-title-mismatch` for "The Witcher 3" vs the page's full title), the release year
+  must sit within two years of the row's (`--allow-year-mismatch "<reason>"` writes
+  `gf.note`; GameFAQs shows the platform page's NA date, so a JP-first year is absorbed
+  and a port or remake page is caught), `len` stores the hours from the word ("Over 80
+  Hours" → 80, not the site's 1–5 bucket), "Also Known As" splits on its bullets, and any
+  string over 120 chars is refused as prose. `--today` pins the harvest date.
 - All of them are tested offline by
   `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs` (synthetic fixtures
   under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI
@@ -347,15 +381,20 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   well-formed `src`, with **two-way set equality against the shots/ folder** (a row
   without a file is a broken image; a file without a row is an orphan nobody audits),
   failing closed if the folder cannot be listed; optional `refs` on rows (https, host in
-  the page's own `REF_HOSTS`, non-empty label); **the changelog** (ISO dates strictly
-  decreasing, every range parseable by the page's own `expandIds`, no id added twice, and
-  the union of every `added` list EQUAL to the full M/g id set — membership, so both a
-  missing row and a phantom one are caught); and **the counts quoted in CLAUDE.md AND
-  README.md match the data**, with AGENTS.md byte-identical to CLAUDE.md. The last two
+  the page's own `REF_HOSTS`, non-empty label); **the script-owned game fields** (`gf`
+  against its key whitelist, path shapes, rating ranges, the 120-char prose cap and the
+  two-year release window unless `note`; `gf.u` unique across rows; `digest` two-way
+  equal to `docs/research/`; `cover` two-way equal to `covers/` and never without `wp`);
+  **the changelog** (ISO dates strictly decreasing, every range parseable by the page's
+  own `expandIds`, no id added twice, the union of every `added` list EQUAL to the full
+  M/g id set — membership, so both a missing row and a phantom one are caught — every
+  `games[]` title on the roster, and no entry that names nothing); and **the counts
+  quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
+  CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **29** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **39** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -413,7 +452,9 @@ a game (or to work the queue):
    every one with a `[gf:<id> §<section>, <author> v<ver>]` pointer; that digest is the
    committed staging file. Never `get_page_text` on gamefaqs (14KB of consent text),
    never curl it or reuse its cookie, never store guide text. Stop on
-   `page().kind === "challenge"`.
+   `page().kind === "challenge"`. Harvest the game's HOME page too (runbook step 1b):
+   `__gf.game()` on the confirmed game URL, saved as JSON, then
+   `node scripts/splice_game.mjs --game "<title>" <file> --write`.
 3. Append mechanics rows (continue M-sequence) — every row needs the reward loop and
    owner-pillar adaptation notes.
 4. Append minigame rows (continue g-sequence) — **rewards must be concrete**: name the

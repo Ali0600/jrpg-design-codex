@@ -14,12 +14,15 @@
  * What it does NOT do: sharpen an EXISTING row (the pilot's M117/M118). Editing a row in
  * place stays a hand edit — ids are the join key for the owner's saved ratings, so a
  * script that rewrites existing rows is a script that can silently orphan their notes.
+ * (The one exception is the game row's `digest` field, stamped through game_rows.mjs so
+ * the game's page can link the digest and the validator's two-way digest check holds.)
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { extractScript, extractData, readRefHosts } from "./validate_codex.mjs";
+import { Refusal, refuse, setOwnedFields } from "./game_rows.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = join(ROOT, "JRPG_Design_Codex.html");
@@ -28,8 +31,6 @@ const WANT = new Set(["Yes", "Maybe", "No", ""]);
 const MECH_FIELDS = ["game", "name", "cat", "how", "loop"];
 const MINI_FIELDS = ["g", "n", "p", "r", "l"];
 
-class Refusal extends Error {}
-const refuse = msg => { throw new Refusal(msg); };
 const isText = v => typeof v === "string" && v.trim() !== "";
 const pad = n => String(n).padStart(3, "0");
 
@@ -263,6 +264,17 @@ export function logChange(html, { date, title, ids }) {
          `   added:[${added}], updated:[]},` + rest;
 }
 
+/**
+ * Point every game the splice touched at its digest (`digest:"<slug>"` on the BASE_GAMES
+ * row), so the digest file is claimed the moment its rows land. A digest that yields no
+ * rows at all is stamped by hand: `node scripts/game_rows.mjs --game "<title>" --set digest=<slug> --write`.
+ */
+export function stampDigest(html, titles, slug) {
+  let next = html;
+  for (const t of new Set(titles)) next = setOwnedFields(next, t, { digest: slug });
+  return next;
+}
+
 /** ["M266","M267","M269"] -> ["M266-M267","M269"] — the compact form the file uses. */
 export function ranges(ids) {
   // Mechanics before minigames, deliberately: localeCompare puts "g" before "M" (it
@@ -363,11 +375,15 @@ function main(argv) {
     title,
     ids: assignments.map(a => a.id),
   });
+  const slug = basename(digestPath, ".md");
+  const touched = assignments.map(a => (a.kind === "M" ? a.row.game : a.row.g));
+  next = stampDigest(next, touched, slug);
 
   if (!write) {
     console.log(`\n--- dry run: ${next.length - html.length} chars would be added to the codex ---`);
     for (const a of assignments) console.log(serializeRow(a).split("\n")[0].slice(0, 120) + " …");
     console.log(`changelog: would log ${ranges(assignments.map(a => a.id)).join(", ")} under today's date`);
+    console.log(`digest: would stamp digest:${JSON.stringify(slug)} on ${[...new Set(touched)].map(t => JSON.stringify(t)).join(", ")}`);
     console.log("\nnothing written. Re-run with --write to apply.");
     return;
   }
@@ -375,7 +391,7 @@ function main(argv) {
   writeFileSync(CODEX, next);
   writeFileSync(digestPath, updateDigest(md, assignments, digest));
   console.log(`\nwrote ${assignments.length} rows into JRPG_Design_Codex.html and updated ${path}.`);
-  console.log(`Logged in CHANGES as ${ranges(assignments.map(a => a.id)).join(", ")}.`);
+  console.log(`Logged in CHANGES as ${ranges(assignments.map(a => a.id)).join(", ")}; stamped digest:${JSON.stringify(slug)} on the game row(s).`);
   console.log("If you also SHARPENED an existing row, add its id to that entry's `updated` list —");
   console.log("scripts/check_changes.mjs fails the build otherwise.");
   console.log("Now update the counts in CLAUDE.md and README.md, copy CLAUDE.md to AGENTS.md,");

@@ -37,8 +37,8 @@ jobs:
         run: node scripts/validate_codex.mjs --selftest
 
       # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
-      - name: Probe tests + splicer tests + digest lint
-        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs
+      - name: Probe tests + splicer tests + row-writer tests + digest lint
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs
 
       # A row EDITED in place changes nothing the structural validator can measure, so
       # the app would keep showing it with its original date and the owner's review would

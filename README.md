@@ -85,6 +85,16 @@ docs/                      learnings and design decision records
 node scripts/validate_codex.mjs --selftest
 ```
 
+```bash
+node scripts/splice_game.mjs --game "Parasite Eve" gf/parasite-eve.json --write
+```
+
+The second writes a saved `__gf.game()` result — a game's GameFAQs page: platform,
+genre, developer, publisher, release, franchise, the user rating, difficulty and length,
+and the games GameFAQs pairs it with — into that game's row. Dry run without `--write`;
+an unseen label, a mismatched title, a release year off by more than two, or any string
+long enough to be prose is a refusal.
+
 Validation runs on every push and pull request, and **gates the deploy** — nothing
 reaches the live site that hasn't passed. It checks ID sequences, category and enum
 values, cross-references between the arrays, score ranges, reward-table completeness,
@@ -127,9 +137,9 @@ source is recorded in [`shots/SOURCES.md`](shots/SOURCES.md).
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 29
+- **Automated data-integrity testing** — a zero-dependency validator enforcing 39
   structural invariants, with a mutation-testing self-check proving each one can fail,
-  plus a 47-case offline suite and a differential CI gate that compares a pull request
+  plus a 69-case offline suite and a differential CI gate that compares a pull request
   against its base revision and fails when an edited record goes unlogged
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection** — API-first Python clients with host allowlisting,

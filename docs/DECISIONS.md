@@ -16,6 +16,41 @@ rejected options still offer.
 
 ---
 
+## 2026-09-07 — Where the GameFAQs game-page data lives
+
+**Fork:** a game's GameFAQs page carries a Game Detail box, user ratings and a "Games You
+May Like" list. Where do those facts go once the probe has read them?
+
+- **On the `BASE_GAMES` row** ✔ — four script-owned fields (`gf`, `cover`, `wp`, `digest`),
+  each on its own line, last in the row, in a fixed order, written only by
+  `scripts/game_rows.mjs`. One join key (the title), one renderer, and the validator is
+  already looping over the rows. The line-per-field invariant is what lets the writer
+  replace text instead of parsing braces — and copy every other line of the row byte for
+  byte, which is the whole safety argument.
+- **A separate `GF_DETAILS` table keyed by title** — keeps the roster rows short, but a
+  second title-keyed structure drifts the day a title is edited, and every consumer
+  would join twice.
+  `rejected — a second title-keyed table drifts on rename`
+- **The raw probe JSON committed under `docs/research/gf/`** — re-derivable and diffable,
+  but a second source of truth beside the arrays, and a JSON that carries the page's
+  `meta` blurbs is one careless copy away from storing publisher prose in a public repo.
+  `rejected — a second source of truth, one copy from storing prose`
+
+**Chosen:** on the row. The strictness lives in `scripts/splice_game.mjs`: an unseen Game
+Detail label is a refusal that names the label (the map is extended by hand, never
+guessed), the page's title must match the row's, the release year must sit within two
+years of the row's unless a reason is written into `gf.note`, and no stored string may
+exceed 120 characters — the machine-checkable form of "prose is not stored", re-asserted
+by the validator at rest. The changelog gained a `games:[…]` list so a batch of harvested
+rows shows up in What's New without an id-less entry, which would have moved the
+first-visit baseline (`seenDate()` falls back to the second-newest entry's date).
+
+**Revisit hook:** if a fifth script-owned field ever appears, it goes into `OWNED` in
+`game_rows.mjs` and nowhere else — the invariant, the validator and the writer all read
+that list.
+
+---
+
 ## 2026-09-06 — How the app should show "what changed since I last looked"
 
 **Fork:** derive the change list from git at deploy time / stamp each row with an `added`

@@ -6,7 +6,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { planSplice, serializeRow, appendToArray, updateDigest, parseCodex, logChange, ranges } from "./splice_rows.mjs";
+import { planSplice, serializeRow, appendToArray, updateDigest, parseCodex, logChange, ranges, stampDigest } from "./splice_rows.mjs";
 
 const hash = s => createHash("sha256").update(s).digest("hex");
 
@@ -226,6 +226,15 @@ test("a second splice on the same day widens that day's entry instead of adding 
   assert.equal(CHANGES[0].title, "Golden Sun", "the first title of the day stands");
   assert.deepEqual(expandIds(CHANGES[0].added), ["M003","M004","M005","g002"]);
   assert.deepEqual(CHANGES.map(c => c.date), ["2026-09-06","2026-09-05"]);
+});
+
+test("a splice stamps digest:<slug> on every game row it touched, and only those", () => {
+  const html = stampDigest(codexHtml(), ["Lantern Vale", "Lantern Vale"], "lantern-vale");
+  const games = new Function(html.slice(html.indexOf("const CATS"), html.indexOf("/* ============================= STATE")) + "; return BASE_GAMES;")();
+  assert.equal(games.find(g => g.title === "Lantern Vale").digest, "lantern-vale");
+  assert.equal(games.find(g => g.title === "Harbor Town").digest, undefined);
+  assert.match(html, /status:"Researched",\ndigest:"lantern-vale"\},/, "one owned line, last in the row");
+  assert.throws(() => stampDigest(codexHtml(), ["No Such Game"], "x"), /no BASE_GAMES row titled/);
 });
 
 test("a codex with no changelog is refused, not silently spliced", () => {
