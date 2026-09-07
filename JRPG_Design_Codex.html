@@ -195,6 +195,44 @@
   .game-card.q-active{border-color:color-mix(in srgb, var(--cyan) 45%, var(--line));}
   .game-card.q-queued{border-color:color-mix(in srgb, var(--gold) 35%, var(--line));}
 
+  /* ---- covers, the game page, the candidates panel ---- */
+  .g-row{display:flex; gap:14px; align-items:flex-start;}
+  .g-main{flex:1; min-width:0;}
+  .g-cover{width:56px; height:74px; object-fit:cover; border:1px solid var(--line); border-radius:5px; flex:none; background:#0a0f1d;}
+  .g-cover.ph{display:flex; align-items:center; justify-content:center; color:var(--ink-faint); font-size:11px; letter-spacing:.08em;}
+  .g-cover.mini{width:36px; height:48px; font-size:9px;}
+  .g-title{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .g-title a, .g-link{color:inherit; text-decoration:none; border-bottom:1px dotted var(--line);}
+  .g-title a:hover, .g-link:hover{color:var(--gold); border-color:var(--gold);}
+  .g-gf{color:var(--ink-dim);}
+  .gp-back{margin-bottom:14px;}
+  .gp-head{display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;}
+  .gp-cover{width:180px; max-width:38vw; height:auto; border:1px solid var(--line); border-radius:8px; background:#0a0f1d; flex:none;}
+  .gp-cover.ph{height:240px; display:flex; align-items:center; justify-content:center; color:var(--ink-faint);}
+  .gp-main{flex:1; min-width:260px;}
+  .gp-main h2{font-size:22px; color:#eef3ff; margin:0 0 4px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .gp-links{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 10px;}
+  .gp-section{margin-top:20px;}
+  .gp-section h3{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 8px;}
+  .gp-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px 18px;}
+  .gp-k{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:2px;}
+  .gp-row{display:flex; gap:10px; align-items:center; width:100%; text-align:left; padding:8px 6px; border:0; border-top:1px solid var(--line-soft); background:none; color:var(--ink); font:inherit; cursor:pointer;}
+  .gp-row:hover{background:rgba(255,255,255,.03);}
+  .gp-row .orb{width:12px; height:12px; flex:none; background:var(--c); border-radius:50%;}
+  .gp-name{flex:1; min-width:0;}
+  .gp-cat{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint);}
+  .gp-like{display:flex; gap:10px; flex-wrap:wrap;}
+  .gp-like-item{display:flex; gap:8px; align-items:center; padding:6px 10px 6px 6px; border:1px solid var(--line); border-radius:8px; color:inherit; text-decoration:none; background:var(--panel);}
+  .gp-like-item:hover{border-color:var(--gold);}
+  .gp-like-item.cand{border-style:dashed;}
+  .gp-like-item small{display:block; color:var(--ink-faint); font-size:11px;}
+  .cand{display:flex; gap:10px; align-items:center; padding:7px 0; border-top:1px solid var(--line-soft); flex-wrap:wrap;}
+  .cand-n{min-width:24px; text-align:center; font-weight:700; color:var(--gold);}
+  .cand-t{font-weight:600;}
+  .cand-by{flex:1; min-width:140px; font-size:12px; color:var(--ink-faint);}
+  .idchip.game{text-transform:none; letter-spacing:0;}
+  @media (max-width:640px){ .gp-cover{width:120px;} .g-cover{width:44px; height:58px;} }
+
   /* ---- reception scores (Metacritic critic + user) ---- */
   .scores{display:flex; gap:7px; align-items:center; flex-wrap:wrap; margin:0 0 9px;}
   .sc{
@@ -511,13 +549,16 @@
 
   <!-- ================= GAMES ================= -->
   <section class="view" id="view-games">
+   <div id="gamesList">
     <div class="toolbar">
       <button class="btn primary" id="btnAddGame">+ Add game to roster</button>
+      <input type="search" id="gq" placeholder="Search games — title, developer, genre, franchise, platform" aria-label="Search games">
       <select id="gameSort" aria-label="Sort games">
         <option value="pipeline">Sort: research pipeline</option>
         <option value="mc">Sort: Metascore (critics)</option>
         <option value="us">Sort: user score</option>
         <option value="gap">Sort: users vs critics gap</option>
+        <option value="gf">Sort: GameFAQs user rating</option>
         <option value="year">Sort: year released</option>
       </select>
     </div>
@@ -537,6 +578,13 @@
     </div>
     <p class="count-note" id="gamesNote"></p>
     <div id="gameCards"></div>
+    <details class="verb-box" id="gfCandidates">
+      <summary>Suggested by GameFAQs, not in the codex <span class="vhint" id="gfCandSummary"></span></summary>
+      <p class="wn-note">The games GameFAQs lists beside the codex's own, ranked by how many codex games point at each. <b>Queue it</b> adds one to your research queue (saved in this browser, like any custom entry).</p>
+      <div id="gfCandBody"></div>
+    </details>
+   </div>
+   <div id="gamePage" hidden></div>
   </section>
 
   <!-- ================= MY GAME ================= -->
@@ -579,6 +627,7 @@
 
     <h2>The research pipeline</h2>
     <p>The <b>Games</b> tab is a research queue, not just a list. Games sort by status — <i>Researching</i> first, then <i>To Research</i>, then the finished shelf — and each card shows how many mechanics and minigames it has contributed so far, so coverage gaps are visible at a glance.</p>
+    <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
     <ol>
       <li><b>Queue it.</b> Add the game with status <i>To Research</i>, and write the "why" as a <b>research brief</b>: the specific question this game should answer (the queued cards marked BRIEF show the shape).</li>
       <li><b>Research it.</b> Set it to <i>Researching</i>, then play it or work through deep dives and wikis with the codex open. Log mechanics with <b>+ Add mechanic</b> as you notice them.</li>
@@ -593,7 +642,7 @@
     <p>The value is in the placing. A mechanic you can't assign to a system is a mechanic you liked without knowing what it's <i>for</i>, and a system holding twelve entries is one you're overbuilding. Use <b>Parked</b> honestly — "worth loving, not worth building here" is a real answer, and a shortlist with nothing parked usually means nothing has been decided.</p>
 
     <h2>The UI Gallery</h2>
-    <p>The <b>UI Gallery</b> tab holds real screenshots of the researched games' interfaces — battle HUDs, menu screens, minigames — filterable by game and by screen type, each captioned with what the UI is showing. Use it three ways: as reference when designing your own screens, to study how another game solved the same layout problem, and to check a codex claim against what's actually on screen. Thumbnails also appear on each game's card in the Games tab.</p>
+    <p>The <b>UI Gallery</b> tab holds real screenshots of the researched games' interfaces — battle HUDs, menu screens, minigames — filterable by game and by screen type, each captioned with what the UI is showing. Use it three ways: as reference when designing your own screens, to study how another game solved the same layout problem, and to check a codex claim against what's actually on screen. Thumbnails also appear on each game's card in the Games tab and on its page; the box art beside each game's name comes from <b>covers/</b> (sources in <code>covers/SOURCES.md</code>), and a bare copy of the file without that folder shows the game's initials instead.</p>
     <p>The images live in the <b>shots/</b> folder beside this file (sources in <code>shots/SOURCES.md</code>). If you open the bare HTML without that folder, the gallery simply explains itself — nothing else breaks.</p>
 
     <h2>Your edits are saved</h2>
@@ -3047,20 +3096,48 @@ function allGames(){
 const $ = s => document.querySelector(s);
 function esc(s){ return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
+/* Game-page helpers. A GameFAQs path is re-checked before it becomes an href — the
+   same posture as refOk(): imported backups flow through this renderer too. */
+const GF_PATH = /^\/[a-z0-9]+\/\d+-[a-z0-9-]+$/;
+function gfUrl(p){ return GF_PATH.test(String(p||"")) ? "https://gamefaqs.gamespot.com" + p : null; }
+function wpUrl(t){ return "https://en.wikipedia.org/wiki/" + encodeURIComponent(String(t).replace(/ /g, "_")); }
+function normTitle(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
+function gameByTitle(t){ return allGames().find(g=>g.title===t) || null; }
+function coverHTML(g, cls){
+  const ini = String(g.title||"").split(/\s+/).filter(w=>/^[A-Za-z0-9]/.test(w)).slice(0,3).map(w=>w[0].toUpperCase()).join("");
+  if(!g.cover || !/^covers\/[a-z0-9-]+\.(jpg|png|webp)$/.test(g.cover)) return `<div class="${cls} ph" aria-hidden="true">${esc(ini)}</div>`;
+  return `<img class="${cls}" src="${esc(g.cover)}" alt="" loading="lazy" data-ini="${esc(ini)}" onerror="coverError(this)">`;
+}
+// A bare copy of the HTML has no covers/ folder: the image becomes its placeholder.
+function coverError(img){
+  const d = document.createElement("div");
+  d.className = img.className + " ph"; d.setAttribute("aria-hidden", "true");
+  d.textContent = img.dataset.ini || "";
+  img.replaceWith(d);
+}
+
 /* ============================= WHAT'S NEW ============================= */
 /* One read model over CHANGES, built once. Every id maps to the NEWEST entry
    that names it, so a row added in July and rewritten in September reads as
    "updated September" — the thing the owner actually wants to see. */
-let changeMap = new Map();
+let changeMap = new Map(), gameChangeMap = new Map();
 function buildChangeMap(){
-  changeMap = new Map();
+  changeMap = new Map(); gameChangeMap = new Map();
   // Oldest first, so a newer entry overwrites an older claim on the same id.
   [...CHANGES].reverse().forEach(c=>{
     expandIds(c.added).forEach(id=> changeMap.set(id, {date:c.date, kind:"new", title:c.title}));
     expandIds(c.updated).forEach(id=> changeMap.set(id, {date:c.date, kind:"updated", title:c.title}));
+    // Game-LEVEL changes (details harvested, a cover added) name roster titles, not ids.
+    (c.games||[]).forEach(t=> gameChangeMap.set(t, {date:c.date, kind:"updated", title:c.title}));
   });
 }
 function changeInfo(id){ return changeMap.get(id) || null; }
+function isFreshGame(title){ const i = gameChangeMap.get(title); return !!i && i.date > seenDate(); }
+function freshGameBadge(title){
+  const i = gameChangeMap.get(title);
+  if(!i || i.date <= seenDate()) return "";
+  return `<span class="badge isupd" title="${esc(i.date + " · " + i.title)}">updated</span>`;
+}
 
 /* What counts as "already seen". Before the owner has ever marked anything, fall
    back to the SECOND-newest entry's date, so a first visit highlights the latest
@@ -3110,10 +3187,11 @@ function renderWhatsNew(){
   const fresh = [...changeMap.entries()].filter(([,i])=> i.date > seen);
   const nNew = fresh.filter(([,i])=> i.kind === "new").length;
   const nUpd = fresh.length - nNew;
+  const nGames = [...gameChangeMap.values()].filter(i=> i.date > seen).length;
   const behind = CHANGES.filter(c=> c.date > seen).length;
 
-  $("#wnSummary").textContent = fresh.length
-    ? `— ${nNew} new · ${nUpd} updated in ${behind} update${behind===1?"":"s"} since ${seen || "the start"}`
+  $("#wnSummary").textContent = (fresh.length || nGames)
+    ? `— ${nNew} new · ${nUpd} updated${nGames?` · ${nGames} game${nGames===1?"":"s"} changed`:""} in ${behind} update${behind===1?"":"s"} since ${seen || "the start"}`
     : "— nothing new since you last looked";
 
   const chips = (ids, kind) => expandIds(ids).slice(0, 24).map(id=>
@@ -3129,6 +3207,7 @@ function renderWhatsNew(){
       ${c.note?`<p class="wn-note">${esc(c.note)}</p>`:""}
       ${expandIds(c.added).length?`<div class="wn-ids"><span class="wn-date">Added</span>${chips(c.added,"new")}</div>`:""}
       ${expandIds(c.updated).length?`<div class="wn-ids" style="margin-top:6px"><span class="wn-date">Updated</span>${chips(c.updated,"updated")}</div>`:""}
+      ${(c.games||[]).length?`<div class="wn-ids" style="margin-top:6px"><span class="wn-date">Games</span>${c.games.slice(0,24).map(t=>`<button class="idchip game upd" data-goto-game="${esc(t)}" title="Open the game's page">${esc(t)}</button>`).join("")}${c.games.length>24?`<span class="wn-more">+${c.games.length-24} more</span>`:""}</div>`:""}
     </div>`).join("") + `
     <div class="wn-foot">
       <button class="btn" id="btnSeen"${fresh.length?"":" disabled"}>Mark all as seen</button>
@@ -3137,12 +3216,55 @@ function renderWhatsNew(){
 
   $("#wnBody").querySelectorAll("[data-goto]").forEach(b=>
     b.addEventListener("click", ()=> gotoCard(b.dataset.goto)));
+  $("#wnBody").querySelectorAll("[data-goto-game]").forEach(b=>
+    b.addEventListener("click", ()=> gotoGame(b.dataset.gotoGame)));
   $("#btnSeen").addEventListener("click", ()=>{
     store.seen = CHANGES.length ? CHANGES[0].date : "";
     persist();
-    renderWhatsNew(); renderCards(); renderMinigames(); renderGames();
+    renderWhatsNew(); renderCards(); renderMinigames(); renderGames(); route();
   });
 }
+
+/* ============================= GAME PAGE ROUTE ============================= */
+/* The hash is the game page's ONLY state, and the tabs never touch it. Title links
+   everywhere are plain <a href="#game=…">, so the browser's own history does the
+   work: Back returns to the list, a link can be shared, middle-click opens a tab. One
+   reader, route(), runs on hashchange and at init. */
+let openGameTitle = null;
+function route(){
+  const m = location.hash.match(/^#game=(.*)$/);
+  let t = null;
+  // Firefox hands the hash back decoded, Chrome does not — decode defensively.
+  if(m){ try{ t = decodeURIComponent(m[1]); }catch(e){ t = m[1]; } }
+  if(t && !allGames().some(g=>g.title===t)){
+    $("#gamesNote").textContent = `No game called “${t}” in the roster — showing every game`;
+    t = null;
+  }
+  openGameTitle = t;
+  $("#gamesList").hidden = !!t;
+  $("#gamePage").hidden = !t;
+  if(!t) return;
+  const tab = document.querySelector('.tab[data-view="games"]');
+  if(tab.getAttribute("aria-selected") !== "true") tab.click();
+  renderGamePage(t);
+  window.scrollTo({top:0, behavior:"instant"});
+}
+window.addEventListener("hashchange", route);
+function gotoGame(title){
+  const want = "#game=" + encodeURIComponent(title);
+  if(location.hash === want) route(); else location.hash = want;
+}
+function closeGame(){ history.replaceState(null, "", location.pathname + location.search); route(); }
+// Every game link goes through gotoGame, so a link to the page that is ALREADY open
+// (from another tab, say) still brings the Games tab forward.
+document.addEventListener("click", e=>{
+  const a = e.target.closest && e.target.closest('a[href^="#game="]');
+  if(!a || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+  e.preventDefault();
+  let t = a.getAttribute("href").slice(6);
+  try{ t = decodeURIComponent(t); }catch(err){}
+  gotoGame(t);
+});
 
 /* ============================= TABS ============================= */
 document.querySelectorAll(".tab").forEach(t=>{
@@ -3241,7 +3363,7 @@ function renderCards(){
         <span class="orb" style="--c:${color}"></span>
         <div class="card-title">
           <h3>${esc(m.name)}</h3>
-          <div class="meta"><span>${esc(m.game)}</span><span class="cat" style="--c:${color}">${esc(m.cat)}</span>${m.rating?`<span>★ ${m.rating}/5</span>`:""}</div>
+          <div class="meta"><a class="g-link" href="#game=${encodeURIComponent(m.game)}" title="Open the game's page">${esc(m.game)}</a><span class="cat" style="--c:${color}">${esc(m.cat)}</span>${m.rating?`<span>★ ${m.rating}/5</span>`:""}</div>
         </div>
         ${freshBadge(m.id)}
         ${m.want?`<span class="badge ${m.want}">${m.want}</span>`:""}
@@ -3262,8 +3384,10 @@ function renderCards(){
       </div>`;
     const head = card.querySelector(".card-head");
     const toggle = ()=>{ card.classList.toggle("open"); const on = card.classList.contains("open"); head.setAttribute("aria-expanded", on); on?openSet.add(m.id):openSet.delete(m.id); };
-    head.addEventListener("click", toggle);
-    head.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); }});
+    // The game name inside the head is a link to the game's page: a click on it must
+    // not also toggle the card, and Enter on it must activate the link, not the head.
+    head.addEventListener("click", e=>{ if(e.target.closest("a")) return; toggle(); });
+    head.addEventListener("keydown", e=>{ if(e.target!==head) return; if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); }});
     card.querySelectorAll(".star").forEach(s=> s.addEventListener("click", ()=> updateMech(m.id, {rating: +s.dataset.r === m.rating ? 0 : +s.dataset.r})));
     card.querySelectorAll(".wbtn").forEach(b=> b.addEventListener("click", ()=> updateMech(m.id, {want: m.want===b.dataset.w ? "" : b.dataset.w})));
     const ta = card.querySelector(".edit-note");
@@ -3352,15 +3476,16 @@ function scoreRowHTML(g){
 function sortGames(games, mode){
   // Games with no score always sink to the bottom of a score sort — never
   // treated as a zero, which would read as "critics hated it".
-  const byScore = key => (a,b) => {
-    const av=a[key], bv=b[key];
+  const byScore = get => (a,b) => {
+    const av=get(a), bv=get(b);
     if(av==null && bv==null) return a.title.localeCompare(b.title);
     if(av==null) return 1;
     if(bv==null) return -1;
     return bv-av;
   };
-  if(mode==="mc")  return games.sort(byScore("mc"));
-  if(mode==="us")  return games.sort(byScore("us"));
+  if(mode==="mc")  return games.sort(byScore(g=>g.mc));
+  if(mode==="us")  return games.sort(byScore(g=>g.us));
+  if(mode==="gf")  return games.sort(byScore(g=> g.gf && g.gf.rating && g.gf.rating.v != null ? g.gf.rating.v : null));
   if(mode==="year")return games.sort((a,b)=>(b.year||0)-(a.year||0));
   if(mode==="gap") return games.sort((a,b)=>{
     const ag=userGap(a), bg=userGap(b);
@@ -3372,55 +3497,212 @@ function sortGames(games, mode){
   return games.sort((a,b)=>(STATUS_RANK[a.status]??3)-(STATUS_RANK[b.status]??3));
 }
 
+/* The "Games You May Like" graph: which codex games GameFAQs pairs with which, and the
+   titles it names that are NOT in the codex. A related game is matched by its GameFAQs
+   path first (exact), then by its normalised title (exact) — never fuzzily. */
+let likeIndex = null;
+function buildLikeIndex(){
+  const games = allGames();
+  const byU = new Map(), byNorm = new Map(), likedBy = new Map(), candidates = new Map();
+  games.forEach(g=>{ if(g.gf && g.gf.u) byU.set(g.gf.u, g.title); byNorm.set(normTitle(g.title), g.title); });
+  games.forEach(g=>{
+    ((g.gf && g.gf.like) || []).forEach(l=>{
+      if(!l || !l.t) return;
+      const hit = byU.get(l.u) || byNorm.get(normTitle(l.t));
+      if(hit){ if(!likedBy.has(hit)) likedBy.set(hit, new Set()); likedBy.get(hit).add(g.title); return; }
+      const k = normTitle(l.t);
+      if(!candidates.has(k)) candidates.set(k, {t:l.t, u:l.u, by:new Set()});
+      candidates.get(k).by.add(g.title);
+    });
+  });
+  return { byU, byNorm, likedBy, candidates };
+}
+function statusSelectHTML(g){
+  return `<select class="statusSel s-${(g.status||"").replace(/\s/g,"")}" aria-label="Status for ${esc(g.title)}">
+            ${["To Research","Researching","Researched"].map(s=>`<option${g.status===s?" selected":""}>${s}</option>`).join("")}
+          </select>`;
+}
+function setGameStatus(title, value){
+  const custom = store.customGames.find(x=>x.title===title);
+  if(custom) custom.status = value;
+  else store.gameStatus[title] = value;
+  persist(); renderStats(); renderGames();
+  if(openGameTitle === title) renderGamePage(title);
+}
+function gfRatingChip(g){
+  const r = g.gf && g.gf.rating;
+  if(!r || r.v == null) return "";
+  return ` · <span class="g-gf" title="GameFAQs user rating${r.n?` from ${r.n.toLocaleString()} users`:""}">GameFAQs ★ ${esc(r.v)}/5</span>`;
+}
+function gameMatches(g, q){
+  if(!q) return true;
+  const gf = g.gf || {};
+  const hay = [g.title, g.dev, g.status, gf.plat, ...(gf.genre||[]), ...(gf.fr||[]), ...(gf.aka||[]), g.wp].filter(Boolean).join(" ").toLowerCase();
+  return hay.includes(q);
+}
 function renderGames(){
   const box = $("#gameCards"); box.innerHTML = "";
+  likeIndex = buildLikeIndex();
   const mechCount = {}, mgCount = {}, freshN = {};
   allMechs().forEach(m=>{ mechCount[m.game]=(mechCount[m.game]||0)+1; if(isFresh(m.id)) freshN[m.game]=(freshN[m.game]||0)+1; });
   MINIGAMES.forEach(m=>{ mgCount[m.g]=(mgCount[m.g]||0)+1; if(isFresh(m.id)) freshN[m.g]=(freshN[m.g]||0)+1; });
   const mode = ($("#gameSort")||{}).value || "pipeline";
-  const games = sortGames([...allGames()], mode);
+  const q = (($("#gq")||{}).value || "").trim().toLowerCase();
+  const all = allGames();
+  const games = sortGames(all.filter(g=>gameMatches(g, q)), mode);
   const active = games.filter(g=>g.status==="Researching").length;
   const queued = games.filter(g=>g.status==="To Research").length;
   const scored = games.filter(g=>g.mc!=null).length;
+  const rated = games.filter(g=>g.gf && g.gf.rating && g.gf.rating.v!=null).length;
   const notes = {
     pipeline: (active+queued)
       ? `Research pipeline: ${active} in progress, ${queued} queued — pipeline sorts to the top`
-      : "Research queue empty — add a game you want researched next",
+      : "Research queue empty — add a game you want researched next, or queue one GameFAQs suggests below",
     mc:   `Sorted by Metascore · ${scored}/${games.length} have one (Metacritic launched in 2001, so older games are sparse)`,
     us:   `Sorted by Metacritic user score (0–10) · unscored games sink to the bottom`,
     gap:  `Sorted by how much higher USERS rate a game than critics — the cult-classic finder`,
+    gf:   `Sorted by GameFAQs user rating (0–5) · ${rated}/${games.length} have their GameFAQs page harvested so far`,
     year: `Sorted newest first`
   };
-  $("#gamesNote").textContent = notes[mode] || notes.pipeline;
+  $("#gamesNote").textContent = (q ? `${games.length} of ${all.length} games match “${q}” · ` : "") + (notes[mode] || notes.pipeline);
+  if(!games.length){ box.innerHTML = '<div class="empty">No game matches that search.</div>'; }
   games.forEach(g=>{
     const mN = mechCount[g.title]||0, gN = mgCount[g.title]||0;
     const card = document.createElement("article");
     card.className = "card game-card" +
       (g.status==="Researching" ? " q-active" : g.status==="To Research" ? " q-queued" : "");
     card.innerHTML = `
-      <div class="g-top">
-        <h3>${esc(g.title)}</h3>
-        <span>
-          <select class="statusSel s-${(g.status||"").replace(/\s/g,"")}" aria-label="Status for ${esc(g.title)}">
-            ${["To Research","Researching","Researched"].map(s=>`<option${g.status===s?" selected":""}>${s}</option>`).join("")}
-          </select>
-        </span>
-      </div>
-      <div class="game-sub">${esc(g.dev)} · ${esc(g.year)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}</div>
-      ${scoreRowHTML(g)}
-      ${gameShotsHTML(g.title)}
-      <p class="game-why">${esc(g.why)}</p>`;
-    card.querySelector(".statusSel").addEventListener("change", e=>{
-      const custom = store.customGames.find(x=>x.title===g.title);
-      if(custom) custom.status = e.target.value;
-      else store.gameStatus[g.title] = e.target.value;
-      persist(); renderStats(); renderGames();
-    });
+      <div class="g-row">
+        ${coverHTML(g, "g-cover")}
+        <div class="g-main">
+          <div class="g-top">
+            <h3 class="g-title"><a href="#game=${encodeURIComponent(g.title)}" title="Open the game's page">${esc(g.title)}</a>${freshGameBadge(g.title)}</h3>
+            <span>${statusSelectHTML(g)}</span>
+          </div>
+          <div class="game-sub">${esc(g.dev)} · ${esc(g.year)}${g.gf && g.gf.plat ? ` · ${esc(g.gf.plat)}` : ""} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}${gfRatingChip(g)}</div>
+          ${scoreRowHTML(g)}
+          ${gameShotsHTML(g.title)}
+          <p class="game-why">${esc(g.why)}</p>
+        </div>
+      </div>`;
+    card.querySelector(".statusSel").addEventListener("change", e=> setGameStatus(g.title, e.target.value));
     wireShotThumbs(card);
     box.appendChild(card);
   });
+  renderCandidates();
+}
+function renderCandidates(){
+  const box = $("#gfCandBody"), sum = $("#gfCandSummary");
+  if(!box || !likeIndex) return;
+  const list = [...likeIndex.candidates.values()].sort((a,b)=> b.by.size - a.by.size || a.t.localeCompare(b.t));
+  const harvested = allGames().filter(g=>g.gf && g.gf.like).length;
+  sum.textContent = list.length
+    ? `— ${list.length} game${list.length===1?"":"s"}, from ${harvested} harvested page${harvested===1?"":"s"}`
+    : "— nothing yet: harvest a game's GameFAQs page first";
+  box.innerHTML = list.map(c=>{
+    const href = gfUrl(c.u), by = [...c.by];
+    return `<div class="cand"><span class="cand-n" title="how many codex games GameFAQs pairs it with">${by.length}</span><span class="cand-t">${esc(c.t)}</span><span class="cand-by" title="${esc(by.join(", "))}">beside ${by.slice(0,3).map(esc).join(", ")}${by.length>3?` +${by.length-3}`:""}</span>${href?`<a class="wbtn" href="${esc(href)}" target="_blank" rel="noopener">GameFAQs ↗</a>`:""}<button class="wbtn" data-queue="${esc(c.t)}">Queue it</button></div>`;
+  }).join("");
+  box.querySelectorAll("[data-queue]").forEach(b=> b.addEventListener("click", ()=> queueCandidate(b.dataset.queue)));
+}
+function queueCandidate(t){
+  if(allGames().some(g=> normTitle(g.title) === normTitle(t))){ flashSave(`${t} is already on the roster`); return; }
+  const c = likeIndex && [...likeIndex.candidates.values()].find(x=>x.t===t);
+  const by = c ? [...c.by] : [];
+  store.customGames.push({title:t, year:"—", dev:"—", status:"To Research",
+    why:`BRIEF: GameFAQs pairs it with ${by.join(", ") || "a codex game"} — what does it do that they don't?`});
+  persist(); renderGames(); buildFilters(); renderStats();
+  if(openGameTitle) renderGamePage(openGameTitle);
+  flashSave(`${t} queued for research`);
+}
+
+/* ---- the game page: everything the codex holds on one game ---- */
+function renderGamePage(title){
+  const box = $("#gamePage");
+  const g = gameByTitle(title);
+  if(!g){ box.innerHTML = ""; return; }
+  const gf = g.gf || {};
+  const li = likeIndex || (likeIndex = buildLikeIndex());
+  const mechs = allMechs().filter(m=>m.game===title);
+  const minis = MINIGAMES.filter(m=>m.g===title);
+
+  const links = [];
+  const gfHref = gfUrl(gf.u);
+  if(gfHref) links.push(`<a class="wbtn" href="${esc(gfHref)}" target="_blank" rel="noopener">GameFAQs ↗</a>`);
+  if(g.wp) links.push(`<a class="wbtn" href="${esc(wpUrl(g.wp))}" target="_blank" rel="noopener">Wikipedia ↗</a>`);
+  if(g.mcUrl) links.push(`<a class="wbtn" href="${esc(g.mcUrl)}" target="_blank" rel="noopener">Metacritic ↗</a>`);
+  if(g.digest && /^[a-z0-9-]+$/.test(g.digest)) links.push(`<a class="wbtn" href="https://github.com/Ali0600/jrpg-design-codex/blob/main/docs/research/${esc(g.digest)}.md" target="_blank" rel="noopener">Research digest ↗</a>`);
+
+  const cells = [];
+  const cell = (k, v) => { if(v) cells.push(`<div><div class="gp-k">${k}</div><div>${v}</div></div>`); };
+  cell("Platform", esc(gf.plat));
+  cell("Genre", (gf.genre||[]).map(esc).join(" › "));
+  cell("Developer", esc(gf.dev));
+  cell("Publisher", esc(gf.pub));
+  cell("Release", esc(gf.rel));
+  cell("Franchise", (gf.fr||[]).map(esc).join(", "));
+  cell("Also on", (gf.also||[]).map(esc).join(", "));
+  cell("Also known as", (gf.aka||[]).map(esc).join(" · "));
+  const count = r => r && r.n ? ` <span class="g-gf">(${r.n.toLocaleString()} ratings)</span>` : "";
+  if(gf.rating && gf.rating.v!=null) cell("GameFAQs user rating", `★ ${esc(gf.rating.v)}/5${gf.rating.w?` · ${esc(gf.rating.w)}`:""}${count(gf.rating)}`);
+  if(gf.diff && gf.diff.v!=null) cell("Difficulty", `${esc(gf.diff.v)}/5${gf.diff.w?` · ${esc(gf.diff.w)}`:""}${count(gf.diff)}`);
+  if(gf.len && (gf.len.w || gf.len.v!=null)) cell("Length", `${esc(gf.len.w || (gf.len.v + " hours"))}${count(gf.len)}`);
+  if(gf.note) cell("Note on the page used", esc(gf.note));
+  if(gf.at) cell("Details fetched", esc(gf.at));
+
+  const mechRows = mechs.map(m=>`<button class="gp-row" data-goto="${esc(m.id)}" title="Open ${esc(m.id)} on the Mechanics tab"><span class="orb" style="--c:${CATS[m.cat]||"#9aa8c8"}"></span><span class="gp-name">${esc(m.name)}</span><span class="gp-cat">${esc(m.cat)}</span>${m.rating?`<span class="gp-cat">★ ${m.rating}/5</span>`:""}${m.want?`<span class="badge ${m.want}">${m.want}</span>`:""}${freshBadge(m.id)}</button>`).join("");
+  const miniRows = minis.map(m=>`<button class="gp-row" data-goto="${esc(m.id)}" title="Open ${esc(m.id)} on the Minigames tab"><span class="orb" style="--c:var(--gold)"></span><span class="gp-name">${esc(m.n)}</span><span class="gp-cat">${m.rt && m.rt.length ? `${m.rt.length} reward${m.rt.length===1?"":"s"} tabled` : "minigame"}</span>${freshBadge(m.id)}</button>`).join("");
+
+  const refs = [], seenU = new Set();
+  [...mechs, ...minis].forEach(r=> (r.refs||[]).forEach(x=>{ if(x && x.u && !seenU.has(x.u)){ seenU.add(x.u); refs.push(x); } }));
+
+  const lineages = (typeof LINEAGES === "undefined" ? [] : LINEAGES).filter(l=> (l.ids||[]).some(id=> mechs.some(m=>m.id===id)));
+
+  const likeItems = (gf.like||[]).map(l=>{
+    const hit = li.byU.get(l.u) || li.byNorm.get(normTitle(l.t));
+    if(hit){ const hg = gameByTitle(hit); return `<a class="gp-like-item" href="#game=${encodeURIComponent(hit)}">${coverHTML(hg, "g-cover mini")}<span>${esc(hit)}<small>in the codex</small></span></a>`; }
+    const href = gfUrl(l.u);
+    return `<span class="gp-like-item cand"><span class="g-cover mini ph" aria-hidden="true">?</span><span>${esc(l.t)}<small>not in the codex</small></span>${href?`<a class="wbtn" href="${esc(href)}" target="_blank" rel="noopener">GameFAQs ↗</a>`:""}<button class="wbtn" data-queue="${esc(l.t)}">Queue it</button></span>`;
+  }).join("");
+  const suggestedBy = [...(li.likedBy.get(title)||[])].sort();
+
+  const section = (h, inner) => inner ? `<div class="gp-section"><h3>${h}</h3>${inner}</div>` : "";
+  box.innerHTML = `
+    <button class="btn gp-back" id="btnCloseGame">← All games</button>
+    <article class="card game-card">
+      <div class="gp-head">
+        ${coverHTML(g, "gp-cover")}
+        <div class="gp-main">
+          <h2>${esc(g.title)}${freshGameBadge(g.title)}</h2>
+          <div class="game-sub">${esc(g.dev)} · ${esc(g.year)}${gf.plat?` · ${esc(gf.plat)}`:""} · ${mechs.length} mechanic${mechs.length===1?"":"s"}${minis.length?` · ${minis.length} minigame${minis.length===1?"":"s"}`:""}</div>
+          <div class="gp-links">${links.join("")}<span>${statusSelectHTML(g)}</span></div>
+          ${scoreRowHTML(g)}
+          ${cells.length ? `<div class="gp-grid">${cells.join("")}</div>` : `<p class="wn-note">No GameFAQs page harvested yet for this game.</p>`}
+        </div>
+      </div>
+      ${g.why ? `<div class="gp-section"><h3>${/^BRIEF:/.test(g.why) ? "Research brief" : "Why it is here"}</h3><p class="game-why">${esc(g.why)}</p></div>` : ""}
+      ${section(`Mechanics (${mechs.length})`, mechRows || `<p class="wn-note">None logged yet.</p>`)}
+      ${section(`Minigames (${minis.length})`, miniRows)}
+      ${section("Screenshots", gameShotsHTML(title))}
+      ${section("Sources", refs.length ? refsHTML(refs) : "")}
+      ${section("Lineages", lineages.length ? `<div class="wn-ids">${lineages.map(l=>`<button class="idchip game" data-lineage="${esc(l.name)}">${esc(l.name)}</button>`).join("")}</div>` : "")}
+      ${section("GameFAQs also suggests", likeItems ? `<div class="gp-like">${likeItems}</div>` : "")}
+      ${section("Suggested beside", suggestedBy.length ? `<div class="gp-like">${suggestedBy.map(t=>`<a class="gp-like-item" href="#game=${encodeURIComponent(t)}">${coverHTML(gameByTitle(t)||{title:t}, "g-cover mini")}<span>${esc(t)}<small>its GameFAQs page lists this game</small></span></a>`).join("")}</div>` : "")}
+    </article>`;
+
+  $("#btnCloseGame").addEventListener("click", closeGame);
+  box.querySelector(".statusSel").addEventListener("change", e=> setGameStatus(title, e.target.value));
+  box.querySelectorAll("[data-goto]").forEach(b=> b.addEventListener("click", ()=> gotoCard(b.dataset.goto)));
+  box.querySelectorAll("[data-queue]").forEach(b=> b.addEventListener("click", ()=> queueCandidate(b.dataset.queue)));
+  box.querySelectorAll("[data-lineage]").forEach(b=> b.addEventListener("click", ()=>{
+    document.querySelector('.tab[data-view="pillars"]').click();
+    const h = [...document.querySelectorAll("#lineageCards .lineage h3")].find(x=> x.textContent === b.dataset.lineage);
+    if(h) h.closest(".lineage").scrollIntoView({block:"center", behavior:"instant"});
+  }));
+  wireShotThumbs(box);
 }
 $("#gameSort").addEventListener("change", renderGames);
+$("#gq").addEventListener("input", renderGames);
 $("#btnAddGame").addEventListener("click", ()=> $("#gameForm").classList.toggle("show"));
 $("#btnCancelGame").addEventListener("click", ()=> $("#gameForm").classList.remove("show"));
 $("#btnSaveGame").addEventListener("click", ()=>{
@@ -3604,7 +3886,7 @@ $("#importFile").addEventListener("change", e=>{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
       store = normalizeStore(data.store);
-      persist(); buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
+      persist(); buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery(); route();
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };
@@ -3686,7 +3968,7 @@ function renderMinigames(){
     card.dataset.id = m.id;
     card.innerHTML = `
       <div class="mg-top">
-        <h3>${esc(m.n)}</h3><span class="mg-game">${esc(m.g)}</span>${freshBadge(m.id)}
+        <h3>${esc(m.n)}</h3><span class="mg-game">${gameByTitle(m.g) ? `<a class="g-link" href="#game=${encodeURIComponent(m.g)}" title="Open the game's page">${esc(m.g)}</a>` : esc(m.g)}</span>${freshBadge(m.id)}
         <a class="wbtn ytbtn" href="${esc(ytLink(m))}" target="_blank" rel="noopener">${pinned?"▶ Watch (pinned)":"▶ Search"}</a>
         <button class="wbtn pinbtn" title="${pinned?"Change or remove the pinned video":"Pin a specific video to this minigame"}">${pinned?"✎ Pin":"📌 Pin"}</button>
         <button class="wbtn favbtn ${fav?"on-Maybe":""}">${fav?"★ Idea saved":"☆ Save idea"}</button>
@@ -3824,7 +4106,7 @@ function renderMyGame(){
 ["myq","myMaybe"].forEach(id=> $("#"+id).addEventListener("input", renderMyGame));
 
 /* ============================= INIT ============================= */
-buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery();
+buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery(); route();
 if(!canSave) flashSave("Local saving unavailable — use Export backup");
 </script>
 </body>

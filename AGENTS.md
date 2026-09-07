@@ -239,6 +239,27 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `games:["<title>",…]` for game-LEVEL changes (details harvested, a cover added) — ids
   cannot name a game row — and every entry must name at least one row or game: an empty
   entry at the top would silently move that first-visit baseline past the real batch.
+- **The game page** (added 2026-09-07) — `#gamePage`, a sibling of `#gamesList` inside the
+  Games view, rendered by `renderGamePage(title)`: cover, GameFAQs details and ratings,
+  the brief, every mechanic and minigame as compact `.gp-row` buttons (never full
+  `.card[data-id]` cards — `gotoCard`'s selector would find two and the accordion state
+  would split), screenshots, the union of the rows' `refs`, the lineages it sits in, the
+  "Games You May Like" list (matched to codex games by GameFAQs path first, then exact
+  normalised title, never fuzzily; the rest get a Queue-it button) and the reverse edges.
+  **The hash is the page's ONLY state and the tabs never touch it**: every game link is a
+  plain `<a href="#game=<encoded title>">`, one reader `route()` runs on `hashchange` and at
+  init (and after Mark-all-seen and import), `gotoGame(title)` sets the hash (or calls
+  `route()` when it is already set, via a document-level click delegate so a link to the
+  open page from another tab still fronts the Games tab), and `closeGame()` replaces the
+  hash away. `renderGames()` re-renders the hidden list underneath freely — it is called
+  from four places. A GameFAQs path becomes an href only through `gfUrl()`, which
+  re-checks the path shape (imported backups flow through the renderer, like `refOk`).
+  `coverHTML()` degrades to the game's initials when there is no cover or the file is
+  missing (`onerror`). Game-level freshness comes from `CHANGES[].games` through
+  `gameChangeMap` / `freshGameBadge(title)`; the strip renders those titles as chips.
+  The Games tab also gained `#gq` (search over title, developer, genre, franchise,
+  platform, aka) and a GameFAQs-rating sort; the candidates panel `#gfCandidates` ranks
+  suggested games by how many codex games point at them.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
   the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
