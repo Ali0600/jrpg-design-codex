@@ -189,7 +189,13 @@ test("game() reads the Game Detail box, the user ratings and the like-list, and 
     "Also on": "PSP, Vita",
   });
   assert.deepEqual(r.links.Release, ["/ps/1-lantern-vale/data"]);
-  assert.deepEqual(r.platforms, [{ plat: "xbox-series-x", u: "/xbox-series-x/9-lantern-vale" }], "sibling platform pages, never this page or its board");
+  // Sibling platform pages: the header tabs AND the "Also on" row both link them — never
+  // this page, never its board.
+  assert.deepEqual(r.platforms, [
+    { plat: "xbox-series-x", u: "/xbox-series-x/9-lantern-vale" },
+    { plat: "psp", u: "/psp/2-lantern-vale" },
+    { plat: "vita", u: "/vita/3-lantern-vale" },
+  ]);
   assert.deepEqual(r.links["Also on"], ["/psp/2-lantern-vale", "/vita/3-lantern-vale"]);
   assert.equal(r.links["Also Known As"], undefined, "plain-text rows carry no hrefs");
   // The precise averages and counts come from each block's title attribute, never from

@@ -298,7 +298,7 @@
     // Message-board links share the game-path shape under /boards/ and are skipped.
     api.search = function (pattern) {
       var seen = {}, rows = [], re = null;
-      if (pattern) { try { re = core.regex(pattern); } catch (e) { return { error: String(e && e.message || e) }; } }
+      if (pattern) { re = core.regex(pattern); if (!re) return { error: "bad pattern: " + String(pattern) }; }
       qa("a[href]").forEach(function (a) {
         var h = a.getAttribute("href") || "";
         // The platform segment may carry hyphens (xbox-series-x): Persona 5 Royal and Sea
