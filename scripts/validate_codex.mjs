@@ -46,7 +46,7 @@ const STATUS = new Set(["Researched", "Researching", "To Research"]);
  * "GameFAQs prose is never stored".
  */
 const GF_KEYS = new Set(["u", "plat", "genre", "dev", "pub", "rel", "fr", "aka", "also", "rating", "diff", "len", "like", "note", "at"]);
-const GF_PATH = /^\/[a-z0-9]+\/\d+-[a-z0-9-]+$/;
+const GF_PATH = /^\/[a-z0-9-]+\/\d+-[a-z0-9-]+$/;
 const GF_MAX_TEXT = 120;
 const GF_YEAR_WINDOW = 2;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;

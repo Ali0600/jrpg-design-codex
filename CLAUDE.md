@@ -307,8 +307,13 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   reaches the agent, so each digest carries a Coverage line naming the biggest sections
   nobody opened. `__gf.game()` reads a game's HOME page (`page().kind === "game"`): the
   Game Detail labels as printed, the user rating / difficulty / length averages with vote
-  counts, and the "Games You May Like" titles with site-relative paths — never the
-  Description pod or the related-game blurbs, which are marketing prose.
+  counts, the "Games You May Like" titles with site-relative paths, and `platforms` — the
+  same game's pages on OTHER platforms, so the original-release page can be reached from
+  whichever one the search listed first (Sea of Stars is filed under `switch-2`, Persona 5
+  Royal under `xbox-series-x`) — never the Description pod or the related-game blurbs,
+  which are marketing prose. `search(pattern)` filters titles BEFORE the size cap (the cap
+  once dropped the one row that mattered) and skips message-board links. A platform segment
+  may carry hyphens; every path shape (probe, splicer, validator, app) allows them.
 - `scripts/gf_bootstrap.mjs` prints the ~500-character line that arms the probe in a page:
   it FETCHES `gf_probe.js` from the public repo (a GameFAQs page is allowed to fetch
   raw.githubusercontent.com — measured 2026-09-06), caches it in the origin's localStorage
@@ -377,8 +382,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   must sit within two years of the row's (`--allow-year-mismatch "<reason>"` writes
   `gf.note`; GameFAQs shows the platform page's NA date, so a JP-first year is absorbed
   and a port or remake page is caught), `len` stores the hours from the word ("Over 80
-  Hours" → 80, not the site's 1–5 bucket), "Also Known As" splits on its bullets, and any
-  string over 120 chars is refused as prose. `--today` pins the harvest date.
+  Hours" → 80, not the site's 1–5 bucket), "Also Known As" splits on its bullets (and
+  lists are deduped), and any string over 120 chars is refused as prose. `--today` pins the
+  harvest date; `--note "<text>"` writes `gf.note` for a page that needs a word of
+  explanation without a year mismatch.
 - All of them are tested offline by
   `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs` (synthetic fixtures
   under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI

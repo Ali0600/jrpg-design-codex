@@ -293,14 +293,22 @@
       return core.fitRows({ n: g.n, rows: core.triage(g.rows) }, "rows", DEF);
     };
 
-    api.search = function () {
-      var seen = {}, rows = [];
+    // `pattern` (a regex source) filters titles BEFORE the cap: a fuzzy search lists ~40
+    // rows and the cap once dropped the one that mattered (Sea of Stars, 2026-09-07).
+    // Message-board links share the game-path shape under /boards/ and are skipped.
+    api.search = function (pattern) {
+      var seen = {}, rows = [], re = null;
+      if (pattern) { re = core.regex(pattern); if (!re) return { error: "bad pattern: " + String(pattern) }; }
       qa("a[href]").forEach(function (a) {
         var h = a.getAttribute("href") || "";
-        var m = h.match(/^\/([a-z0-9]+)\/(\d+-[a-z0-9-]+)$/);
-        if (!m || seen[h]) return;
+        // The platform segment may carry hyphens (xbox-series-x): Persona 5 Royal and Sea
+        // of Stars were invisible until it did (2026-09-07).
+        var m = h.match(/^\/([a-z0-9-]+)\/(\d+-[a-z0-9-]+)$/);
+        if (!m || m[1] === "boards" || seen[h]) return;
+        var title = txt(a);
+        if (re && !re.test(title)) return;
         seen[h] = 1;
-        rows.push({ title: txt(a), platform: m[1], url: h });
+        rows.push({ title: title, platform: m[1], url: h });
       });
       return core.fitRows({ n: rows.length, rows: rows }, "rows", DEF);
     };
@@ -349,8 +357,19 @@
           if (a) like.push({ t: txt(a), u: a.getAttribute("href") || "" });
         });
       });
+      // The same game's pages on OTHER platforms: every link to /<platform>/<id>-<this slug>
+      // that is not this page. The original-release platform is usually among them.
+      var here = (loc && loc.pathname) || "", slug = (here.match(/^\/[a-z0-9-]+\/\d+-([a-z0-9-]+)$/) || [])[1];
+      var platforms = [], seenP = {};
+      if (slug) qa("a[href]").forEach(function (a) {
+        var h = a.getAttribute("href") || "";
+        var m = h.match(new RegExp("^\\/([a-z0-9-]+)\\/(\\d+)-" + slug + "$"));
+        if (!m || m[1] === "boards" || h === here || seenP[h]) return;
+        seenP[h] = 1;
+        platforms.push({ plat: m[1], u: h });
+      });
       return core.fitRows({ url: href(), title: txt(q("h1.page-title")),
-                            platform: txt(q("h3.platform-title span.header_more")),
+                            platform: txt(q("h3.platform-title span.header_more")), platforms: platforms,
                             detail: detail, links: links, ratings: ratings, like: like }, "like", DEF);
     };
 
@@ -478,7 +497,7 @@
       return [
         "page()                      what this page is: listing | faq | game | search | challenge (STOP on challenge)",
         "guides() / triage()         the guide list, raw or scored for codex value",
-        "search()                    game candidates on a /search?game= page — confirm platform + year, never auto-pick",
+        "search(pattern)             game candidates on a /search?game= page, title-filtered before the cap — confirm platform + year, never auto-pick",
         "game()                      a game's home page: Game Detail labels, user rating/difficulty/length, Games You May Like (t,u only) — never the Description pod",
         "meta()                      id, author, version, updated, size, section count",
         "toc({max,min})              section list; min skips sections shorter than N chars; list = a contents/item list folded into one section (grep reaches inside)",

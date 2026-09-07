@@ -152,6 +152,8 @@ export function searchPage() {
     el("a", { href: "/ps4/835628-persona-5/faqs" }, ["Guides"]),
     el("a", { href: "/ps4/835628-persona-5" }, ["Persona 5"]),
     el("a", { href: "/switch/262892-persona-5-strikers" }, ["Persona 5 Strikers"]),
+    el("a", { href: "/boards/835628-persona-5" }, ["Board"]),
+    el("a", { href: "/xbox-series-x/370656-persona-5-royal" }, ["Persona 5 Royal"]),
     el("a", { href: "/community/someone" }, ["someone"]),
   ])]);
   return document({ title: "Game Search - GameFAQs", root, path: "/search" });
@@ -207,6 +209,10 @@ export function gamePage({ withAlso = true, likes = 3 } = {}) {
     el("div", { cls: "header_right" }, [
       el("h1", { cls: "page-title" }, ["Lantern Vale"]),
       el("h3", { cls: "platform-title" }, [el("span", { cls: "header_more" }, ["PlayStation"])]),
+      // The platform tabs: this page, a sibling page on a hyphenated platform, its board.
+      el("a", { href: "/ps/1-lantern-vale" }, ["PS"]),
+      el("a", { href: "/xbox-series-x/9-lantern-vale" }, ["XSX"]),
+      el("a", { href: "/boards/1-lantern-vale" }, ["Board"]),
     ]),
     el("div", { cls: "pod pod_half pod_gamespace" }, [el("div", { cls: "pod" }, [
       el("div", { cls: "head" }, [el("h2", { cls: "title" }, ["Description"])]),
