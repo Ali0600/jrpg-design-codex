@@ -256,3 +256,22 @@ own framing (its contents list, its opening, the vocabulary it uses) against you
 The tell here was available and I nearly walked past it: the file was full of positive
 evidence of a DIFFERENT subject — match counts, difficulty settings, a two-player mode —
 which is much stronger information than the absence of the thing I wanted.
+
+## A cache-buster you did not measure is a superstition, not a fix
+
+Adding `?t=<now>` to a fetch only defeats a cache that keys on the query string; a CDN that
+normalises it away serves the stale copy exactly as before, while the code now claims
+otherwise.
+
+**Why it came up:** the GameFAQs probe is fetched from `raw.githubusercontent.com` at arm
+time, and that CDN serves a just-pushed file's previous version for up to five minutes
+(`cache-control: max-age=300`). After one stale read during the `game()` proof, a `?t=`
+cache-buster went into the arm line with a comment and a test asserting the URL carried it.
+The next stale read, minutes after a merge, happened WITH the buster — the browser received
+the pre-merge probe (26,598 bytes against the merged 27,968) on a URL that had never been
+fetched before. The buster was removed and the docs rewritten to the honest instruction.
+
+**Takeaway:** a workaround for a cache is a claim about how that cache keys its entries —
+verify it with a readout that distinguishes the two versions (a length, a marker string, a
+version number that actually changed) before writing it into the code, and keep the readout
+in the tool's output so the next stale read cannot pass for a fresh one.
