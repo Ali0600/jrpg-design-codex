@@ -180,7 +180,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M265, minigames g001-g092. Continue the
+  - IDs are sequential: mechanics M001-M281, minigames g001-g096. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -200,9 +200,13 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the board throw on `store.myGame.assign`. Add new store keys THERE, not just to the
   literal, or import breaks.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; 32 are tagged, seeded from
-  the brief's own verb->mechanic table so the mapping is sourced, not invented. Filter
-  chips live in a collapsed `<details>` on the Mechanics tab.
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **53 of 281 rows are tagged**
+  (74 tags), seeded from the brief's own verb->mechanic table so the mapping is sourced,
+  not invented. Filter chips live in a collapsed `<details>` on the Mechanics tab. The
+  taxonomy is thin on purpose so far, and it shows: two verbs carry exactly ONE mechanic,
+  so those chips filter to a single row and teach nothing. The tagging pass that fixes
+  this is planned (see the backlog) and must keep the sourcing rule — a tag is defensible
+  from the ROW'S OWN `how`/`loop`/`notes` text or it is not written.
 - **`LINEAGES`** — chains of mechanics where each game answers the previous one.
   Rendered under the Design Pillars tab; clicking a node jumps to that mechanic. An
   optional `counter:"<id>"` marks a chain's counter-example (Tetra Master ends the
@@ -547,11 +551,41 @@ stale this session (frozen at 224 mechanics while CLAUDE.md said 243). **After e
 CLAUDE.md, copy it over AGENTS.md** — two sources of truth always drift.
 
 ## Known backlog / ideas discussed but not built
+Re-derived from the data 2026-09-07. **A backlog line is a claim that something is
+MISSING — the one claim no test can hold true — so check it against the code before
+citing it.** Four lines were cut on that date because the thing they asked for was
+already built or deliberately retired.
+
+Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned in
+`~/.claude/plans/i-want-you-to-eager-riddle.md` under "NEXT":
+1. **Make the 281 rows analysable.** Verb tagging (53/281 today) via a committed
+   `docs/verbs.md` ledger where every tag quotes a span of the row's own text, and a
+   linter that proves the quote is a real substring; LINEAGES from 3 chains to ~12
+   (21 of 281 mechanics are in one today); a pillar-coverage read-out on the My Game
+   board, owner-judged, never derived from `cat`. Four PRs; carries a
+   `check_changes.mjs` carve-out for `verbs` so an analysis retag is not logged as a
+   content rewrite.
+2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and ~40 of
+   those are the Final Fantasy block — the oldest research, written before the
+   "name the actual items and thresholds" rule existed.
+3. **Finish the GameFAQs rollout**, waves 3–5 (9 games), per
+   `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
+
+Standing, not yet scheduled:
 - Merge the user's localStorage backup (they should drop `jrpg-codex-backup.json`
-  into this folder; it contains their ratings/notes/custom entries).
-- Work the research queue (seeded in BASE_GAMES as "To Research" with briefs):
-  Chrono Trigger, FF6, Super Mario RPG, Terranigma, Yakuza 0. Also: non-FF card games.
-- Distill all want:"Yes" mechanics into a design document ("pillars v2") for the
-  owner's own JRPG.
-- Possible features: pin specific YouTube videos per minigame; a "my game" tab for
-  designing their own systems against the pillars.
+  into this folder; it contains their ratings/notes/custom entries). Still stranded.
+- Refill the research queue — EMPTY since 2026-08-12. The Games tab now ranks 158
+  GameFAQs-suggested titles with a Queue-it button, but nothing is rostered, and the
+  leaders include remakes and siblings of games already researched (Persona 5 vs
+  Persona 5 Royal), so this needs curation, not a mechanical top-5.
+- Grow the UI Gallery: 10 of 72 games have a screenshot, and the declared `Field` and
+  `Map` shot types have ZERO rows.
+- Two open research threads: a third way to cue timing; a sibling for KH2's
+  "transformations that pay permanent traversal".
+- Deferred in `docs/DECISIONS.md`: dual scores (original + best remaster);
+  user-defined My Game buckets; private repo + Cloudflare Pages.
+
+Known doc-rot risks with no gate behind them (candidates for a DOC_SABOTAGE):
+the M/g id range quoted above, the verb-tag count above, and the sabotage count in
+the CI section — the validator gates the mechanics/minigames/games/reward-table
+figures in this file and README.md, and nothing else.
