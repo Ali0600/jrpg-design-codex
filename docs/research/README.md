@@ -50,8 +50,14 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
 1b. **Harvest the game page** (added 2026-09-06). On the confirmed game URL itself — no
    `/faqs` — re-arm, check `__gf.page().kind === "game"`, then `__gf.game()`: the Game Detail
    labels as the page prints them, the user rating / difficulty / length averages with their
-   vote counts, and the "Games You May Like" titles with their site-relative paths. Nothing
-   else comes back — not the Description pod, not the blurb under each related game. Save the
+   vote counts, the "Games You May Like" titles with their site-relative paths, and
+   `platforms`, the same game's pages on other platforms. Nothing else comes back — not the
+   Description pod, not the blurb under each related game. The search lists ONE platform
+   page per game, often not the original (Sea of Stars under `switch-2`, Persona 5 Royal
+   under `xbox-series-x`): open that page, read `platforms`, and harvest the
+   original-release platform's page. Use `__gf.search("<title regex>")` so the row you want
+   is never the one the size cap drops. A harvested page's related games carry paths for
+   other roster games — keep them, they save a search each. Save the
    tool result verbatim to `<scratchpad>/gf/<slug>.json`; `node scripts/splice_game.mjs
    --game "<codex title>" <file>` (dry run, then `--write`) turns it into the row's `gf`
    field and refuses any label it has not seen. The platform-and-year rule applies to this
