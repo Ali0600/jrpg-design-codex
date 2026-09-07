@@ -189,6 +189,7 @@ test("game() reads the Game Detail box, the user ratings and the like-list, and 
     "Also on": "PSP, Vita",
   });
   assert.deepEqual(r.links.Release, ["/ps/1-lantern-vale/data"]);
+  assert.deepEqual(r.platforms, [{ plat: "xbox-series-x", u: "/xbox-series-x/9-lantern-vale" }], "sibling platform pages, never this page or its board");
   assert.deepEqual(r.links["Also on"], ["/psp/2-lantern-vale", "/vita/3-lantern-vale"]);
   assert.equal(r.links["Also Known As"], undefined, "plain-text rows carry no hrefs");
   // The precise averages and counts come from each block's title attribute, never from
@@ -232,6 +233,7 @@ test("search() lists game candidates once each, skips board links, and never pic
   assert.deepEqual(s.rows, [
     { title: "Persona 5", platform: "ps4", url: "/ps4/835628-persona-5" },
     { title: "Persona 5 Strikers", platform: "switch", url: "/switch/262892-persona-5-strikers" },
+    { title: "Persona 5 Royal", platform: "xbox-series-x", url: "/xbox-series-x/370656-persona-5-royal" },
   ]);
   // A pattern narrows BEFORE the cap, so the row that matters cannot be the one dropped.
   assert.deepEqual(mount(searchPage()).search("strikers$").rows.map(r => r.url), ["/switch/262892-persona-5-strikers"]);
@@ -448,6 +450,6 @@ test("the probe file is small enough to paste into a page", () => {
   // Paste cost, not correctness: the arm line fetches the probe, but the --paste fallback
   // still inlines the whole file on a page that blocks the fetch. Raised from 24,000 when
   // game() landed (2026-09-06); correctness is the tests above.
-  assert.ok(src.length < 27000, `probe is ${src.length} chars — the --paste fallback inlines all of it`);
+  assert.ok(src.length < 28500, `probe is ${src.length} chars — the --paste fallback inlines all of it`);
   assert.doesNotMatch(src, /^\s*(const|let|class)\s/m, "no top-level bindings — the REPL must be able to eval it twice");
 });

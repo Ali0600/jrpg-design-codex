@@ -64,6 +64,8 @@ test("the page must be a GameFAQs game page for the row it is spliced into", () 
   assert.ok(problemMatching(norm(p => { p.url = "https://gamefaqs.gamespot.com/ps/1-lantern-vale/faqs"; }), /is not a game page/));
   assert.ok(problemMatching(norm(undefined, { title: "Harbor Town", year: 1999 }), /titled "Lantern Vale" but the codex row is "Harbor Town"/));
   assert.deepEqual(norm(undefined, { title: "Harbor Town", year: 1999 }, { allowTitleMismatch: true }).problems, []);
+  const xsx = norm(p => { p.url = "https://gamefaqs.gamespot.com/xbox-series-x/370656-lantern-vale"; });
+  assert.equal(xsx.gf.u, "/xbox-series-x/370656-lantern-vale", "a hyphenated platform segment is a game page too");
   assert.equal(normTitle("The Witcher 3: Wild Hunt"), "thewitcher3wildhunt");
   assert.ok(problemMatching(normalizeGame({ n: 2, rows: [] }, ROW, { today: TODAY }), /not a game\(\) result/));
 });

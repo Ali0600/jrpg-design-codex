@@ -297,11 +297,13 @@
     // rows and the cap once dropped the one that mattered (Sea of Stars, 2026-09-07).
     // Message-board links share the game-path shape under /boards/ and are skipped.
     api.search = function (pattern) {
-      var seen = {}, rows = [], re = pattern ? core.regex(pattern) : null;
-      if (re && re.error) return re;
+      var seen = {}, rows = [], re = null;
+      if (pattern) { try { re = core.regex(pattern); } catch (e) { return { error: String(e && e.message || e) }; } }
       qa("a[href]").forEach(function (a) {
         var h = a.getAttribute("href") || "";
-        var m = h.match(/^\/([a-z0-9]+)\/(\d+-[a-z0-9-]+)$/);
+        // The platform segment may carry hyphens (xbox-series-x): Persona 5 Royal and Sea
+        // of Stars were invisible until it did (2026-09-07).
+        var m = h.match(/^\/([a-z0-9-]+)\/(\d+-[a-z0-9-]+)$/);
         if (!m || m[1] === "boards" || seen[h]) return;
         var title = txt(a);
         if (re && !re.test(title)) return;
@@ -355,8 +357,19 @@
           if (a) like.push({ t: txt(a), u: a.getAttribute("href") || "" });
         });
       });
+      // The same game's pages on OTHER platforms: every link to /<platform>/<id>-<this slug>
+      // that is not this page. The original-release platform is usually among them.
+      var here = (loc && loc.pathname) || "", slug = (here.match(/^\/[a-z0-9-]+\/\d+-([a-z0-9-]+)$/) || [])[1];
+      var platforms = [], seenP = {};
+      if (slug) qa("a[href]").forEach(function (a) {
+        var h = a.getAttribute("href") || "";
+        var m = h.match(new RegExp("^\\/([a-z0-9-]+)\\/(\\d+)-" + slug + "$"));
+        if (!m || m[1] === "boards" || h === here || seenP[h]) return;
+        seenP[h] = 1;
+        platforms.push({ plat: m[1], u: h });
+      });
       return core.fitRows({ url: href(), title: txt(q("h1.page-title")),
-                            platform: txt(q("h3.platform-title span.header_more")),
+                            platform: txt(q("h3.platform-title span.header_more")), platforms: platforms,
                             detail: detail, links: links, ratings: ratings, like: like }, "like", DEF);
     };
 

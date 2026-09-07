@@ -2274,6 +2274,7 @@ wp:"Legend of Mana"},
 {title:"SaGa Frontier",year:1997,dev:"Squaresoft",status:"Researched",
 usN:3,mcPlat:"PS",mcUrl:"https://www.metacritic.com/game/saga-frontier/",mcNote:"page exists, no Metascore (too few critic reviews)",
 why:"Sparking techs mid-battle, seven-protagonist free scenario, behavior-driven growth. Chaotic, visionary.",
+gf:{u:"/ps/198537-saga-frontier",plat:"PlayStation",genre:["Role-Playing","Japanese-Style"],dev:"SquareSoft",pub:"SCEA",rel:"March 31, 1998",fr:["SaGa (Final Fantasy Legend)"],rating:{v:3.83,n:821,w:"Great"},diff:{v:3.81,n:496,w:"Tough"},len:{v:67,n:323,w:"67 Hours"},like:[{t:"Final Fantasy VII",u:"/ps/197341-final-fantasy-vii"},{t:"The Legend of Dragoon",u:"/ps/197765-the-legend-of-dragoon"},{t:"Legend of Legaia",u:"/ps/197766-legend-of-legaia"},{t:"Star Ocean: The Second Story",u:"/ps/198763-star-ocean-the-second-story"},{t:"Grandia",u:"/ps/197483-grandia"}],at:"2026-09-07"},
 cover:"covers/saga-frontier.jpg",
 wp:"SaGa Frontier"},
 {title:"Parasite Eve",year:1998,dev:"Squaresoft",status:"Researched",
@@ -3110,7 +3111,7 @@ function esc(s){ return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"
 
 /* Game-page helpers. A GameFAQs path is re-checked before it becomes an href — the
    same posture as refOk(): imported backups flow through this renderer too. */
-const GF_PATH = /^\/[a-z0-9]+\/\d+-[a-z0-9-]+$/;
+const GF_PATH = /^\/[a-z0-9-]+\/\d+-[a-z0-9-]+$/;
 function gfUrl(p){ return GF_PATH.test(String(p||"")) ? "https://gamefaqs.gamespot.com" + p : null; }
 function wpUrl(t){ return "https://en.wikipedia.org/wiki/" + encodeURIComponent(String(t).replace(/ /g, "_")); }
 function normTitle(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g, ""); }

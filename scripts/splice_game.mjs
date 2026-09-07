@@ -43,7 +43,7 @@ const SPLIT = { genre: /\s*»\s*/, fr: /,\s*/, aka: /\s*•\s*/, also: /,\s*/ };
 const RATINGS = { rate: "rating", difficulty: "diff", length: "len" };
 
 export const GF_ORIGIN = "https://gamefaqs.gamespot.com";
-export const GF_PATH = /^\/[a-z0-9]+\/\d+-[a-z0-9-]+$/;
+export const GF_PATH = /^\/[a-z0-9-]+\/\d+-[a-z0-9-]+$/;
 export const MAX_TEXT = 120;
 export const YEAR_WINDOW = 2;
 export const normTitle = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
