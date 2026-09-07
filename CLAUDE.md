@@ -117,6 +117,12 @@ backup; the HTML file is the source of truth and is more up to date.
   rice→sake), which is the shop-upgrades pillar as an economy. Its two guides disagree on
   whether prices move meaningfully at all, and both readings are kept. The brief's
   castle-facility question came back THIN and is recorded as such.
+  Plus the **game pages** (2026-09-07): every roster row carries its box art (Wikipedia,
+  `covers/`), a Wikipedia link, and its GameFAQs page — platform, genre, developer,
+  publisher, release, franchise, the user rating / difficulty / length, and the five games
+  GameFAQs pairs it with — harvested from the original release's page in four batches
+  (PRs #23–#26). Twenty-odd of those related titles are not in the codex and sit ranked in
+  the Games tab's "Suggested by GameFAQs" panel as the research queue's next candidates.
 - **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
@@ -271,7 +277,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-- **Script-owned game-row fields** (added 2026-09-07) — `gf`, `cover`, `wp` and `digest`
+- **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
+  `cover` and `wp` as of that day, seven carry `digest`) — `gf`, `cover`, `wp` and `digest`
   on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
   written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
   writer replace a line and copy every other line of the row byte for byte. `gf` is the
