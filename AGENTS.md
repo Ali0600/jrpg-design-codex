@@ -323,10 +323,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   spelled `refs/heads/<name>` — a slashed branch 404s the short raw URL); `--paste` prints
   the probe inline for a page that blocks the fetch. Two traps it now handles: the cache is
   never preferred over the network (a stale cached probe makes a fix look like a no-op),
-  and a short body such as a 404 page is refused rather than evaluated. The fetch carries a
-  `?t=<now>` cache-buster because raw.githubusercontent.com's CDN serves a branch's file for
-  five minutes after a push and `cache:"no-store"` cannot reach that cache — the live proof
-  for `game()` ran the pre-fix probe twice before the fetched length gave it away.
+  and a short body such as a 404 page is refused rather than evaluated. It reports where the
+  probe came from (`from`, `len`) because raw.githubusercontent.com's CDN serves a file for
+  up to five minutes after a push WHATEVER the query string (a `?t=` buster was measured
+  useless) and `cache:"no-store"` cannot reach that cache: after pushing a probe change,
+  compare `len` with the file you pushed, and wait or use `--paste` when it is the old one.
 - **A formatted guide is paginated.** `div.ffaq` guides (the norm for post-2010 games) split
   across `?page=N`, zero-based; `meta().pages` and `visited().pages` say how many, and every
   other number describes the page you are on. Before the Witcher 3 pass the probe could not
