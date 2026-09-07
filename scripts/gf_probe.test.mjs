@@ -219,6 +219,8 @@ test("game() reads the Game Detail box, the user ratings and the like-list, and 
     else if (v && typeof v === "object") Object.values(v).forEach(walk);
   };
   walk(r);
+  // A page whose list body lacks the _left class (Terranigma) still yields every row.
+  assert.deepEqual(mount(gamePage({ bareBody: true })).game().detail, r.detail);
   // Without the optional rows the map simply lacks them — no empty keys.
   const short = mount(gamePage({ withAlso: false })).game();
   assert.equal(Object.keys(short.detail).length, 5);
