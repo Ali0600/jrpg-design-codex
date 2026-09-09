@@ -86,7 +86,7 @@ scripts/check_changes.mjs  CI gate: every rewritten row must be logged in the ch
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
 docs/research/             one digest per researched game, every fact with its source
-docs/                      learnings and design decision records
+docs/                      learnings, design decisions, and ost-sources.md (where to buy each soundtrack)
 ```
 
 ## Working on it

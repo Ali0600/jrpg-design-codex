@@ -275,3 +275,18 @@ fetched before. The buster was removed and the docs rewritten to the honest inst
 verify it with a readout that distinguishes the two versions (a length, a marker string, a
 version number that actually changed) before writing it into the code, and keep the readout
 in the tool's output so the next stale read cannot pass for a fresh one.
+
+## A catalogue search answers in the script the label used — query that script before recording an absence
+OTOTOY, a Japanese download store, returned only *Xenoblade 2* for the query "Xenoblade", so
+two rows of the soundtrack list were written as "not on OTOTOY". The katakana query ゼノブレイド
+returned the *Definitive Edition* and *Xenoblade Chronicles 3* albums as well — one of them at
+24-bit/96 kHz, the best file on the whole list for that game. The Latin query had not been
+wrong; it had matched only the albums whose titles the label had typed in Latin letters.
+
+**Why it came up:** sourcing the 37 top-ranked soundtracks for Google Flow
+(`docs/ost-sources.md`). "Store X does not carry Y" is exactly the documented absence that no
+later check can hold true, and it was one search away from being copied into the codex as fact.
+
+**Takeaway:** before writing that a catalogue lacks something, repeat the search in the
+catalogue's own script and under the title's local name. A negative from a single-alphabet query
+is evidence about the index, not the catalogue — the alphabet is one of the instrument's settings.
