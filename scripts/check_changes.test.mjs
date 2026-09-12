@@ -7,15 +7,21 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { diffChanges, readVersion } from "./check_changes.mjs";
 
-/** A miniature codex. `tail` picks the array ending the real file uses (`}` / `},`). */
-function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "" } = {}) {
+/**
+ * A miniature codex. `tail` picks the array ending the real file uses (`}` / `},`).
+ *
+ * `verbs` is opt-in and emits NOTHING when absent, deliberately: the key-reordering test
+ * below hardcodes M117's whole row literal twice, so a `verbs:[]` that appeared by default
+ * would stop those two `.replace()` calls matching.
+ */
+function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "", verbs = null } = {}) {
   const log = changes ?? [
     `{date:"2026-09-05", title:"Pilot", added:["M117-M118","g001"], updated:[]}`,
   ];
   return `<!doctype html><html><body><script>
 const CATS = {"Combat":"#a00"};
 const BASE_MECHS = [
-{id:"M117",game:"Lantern Vale",name:"First",cat:"Combat",how:"h",loop:"l",rating:0,want:"",notes:${JSON.stringify(m117)}},
+{id:"M117",game:"Lantern Vale",name:"First",cat:"Combat",how:"h",loop:"l",rating:0,want:"",notes:${JSON.stringify(m117)}${verbs ? `,verbs:${JSON.stringify(verbs)}` : ""}},
 {id:"M118",game:"Lantern Vale",name:"Second",cat:"Combat",how:"h",loop:"l",rating:0,want:""${extraRow ? "}," + extraRow : tail === "}" ? "}" : "},"}
 ];
 const BASE_GAMES = [{title:"Lantern Vale",year:1999,dev:"d",status:"Researched"}];
@@ -96,6 +102,30 @@ test("reordering a row's keys is not a change", () => {
     '{name:"First",id:"M117",cat:"Combat",game:"Lantern Vale",loop:"l",how:"h",want:"",rating:0,notes:"the original note"}');
   assert.notEqual(head, base, "the fixture must actually differ textually");
   assert.deepEqual(diffChanges(base, head).changed, []);
+});
+
+/*
+ * `verbs` is analysis metadata derived FROM a row, not content the owner re-reads, so a
+ * retagging pass must not have to log every row it touches. The app keeps exactly one
+ * change record per id (buildChangeMap is last-write-wins), and the newest-first sort has
+ * no key but that date — so logging ~44 ids in one entry would collapse them into a single
+ * undated-looking block pinned above the genuinely new rows, permanently. Hence the
+ * carve-out; hence also the second test, which pins how narrow it is.
+ */
+test("adding a verb tag is not a rewrite", () => {
+  const base = page();
+  const head = page({ verbs: ["Guarded"] });
+  assert.notEqual(head, base, "the fixture must actually differ textually");
+  assert.deepEqual(diffChanges(base, head).changed, []);
+  assert.deepEqual(diffChanges(base, head).problems, []);
+});
+
+test("a verbs change alongside a notes change still fires", () => {
+  const { problems, changed } = diffChanges(
+    page(), page({ m117: "a sharper note", verbs: ["Guarded"] }));
+  assert.deepEqual(changed, ["M117"], "the notes edit is still content");
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^M117 was rewritten but is not in any NEW CHANGES entry/);
 });
 
 test("logging an id that does not exist is reported", () => {

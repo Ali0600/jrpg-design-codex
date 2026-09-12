@@ -17,6 +17,10 @@
  * brace — so a textual diff would demand an `updated` entry for M243, M261, M265 … on
  * every single splice. Parsing makes that artifact disappear instead of teaching everyone
  * to ignore the gate.
+ *
+ * `ANALYSIS_KEYS` below carves out the same trap from the other side: a key that is
+ * analysis OF a row rather than content of it is not a rewrite, because demanding a log
+ * entry for a whole tagging pass would wreck the very ordering the log exists to produce.
  */
 
 import { readFileSync } from "node:fs";
@@ -28,6 +32,21 @@ import { extractScript, extractData } from "./validate_codex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = "JRPG_Design_Codex.html";
 
+/**
+ * Keys that are ANALYSIS OF a row rather than content of it, and so are not a "rewrite".
+ *
+ * The app keeps exactly one change record per id — `buildChangeMap` walks the changelog
+ * oldest-first and lets the newest entry win — and "newest changes first" sorts on that
+ * single date with nothing but the id as a tiebreak. So logging a whole tagging pass in one
+ * `updated` list does not date those rows, it FLATTENS them: every id in the pass collapses
+ * to the same date, pins above the genuinely new rows, and flips from a "new" pill to an
+ * "updated" one, with no later edit able to restore the order.
+ *
+ * A tag derived from a row's own text is not worth that. Content still is — change `notes`
+ * in the same edit and the row is caught exactly as before.
+ */
+const ANALYSIS_KEYS = new Set(["verbs"]);
+
 /** The rows and changelog of one version of the page. */
 export function readVersion(html, which) {
   const src = extractData(extractScript(html));
@@ -37,7 +56,8 @@ export function readVersion(html, which) {
     " expandIds: typeof expandIds === 'undefined' ? null : expandIds};"
   )();
   const rows = new Map();
-  const canon = row => JSON.stringify(Object.fromEntries(Object.keys(row).sort().map(k => [k, row[k]])));
+  const canon = row => JSON.stringify(Object.fromEntries(
+    Object.keys(row).sort().filter(k => !ANALYSIS_KEYS.has(k)).map(k => [k, row[k]])));
   for (const r of [...data.BASE_MECHS, ...data.MINIGAMES]) rows.set(r.id, canon(r));
 
   const updated = new Set();
