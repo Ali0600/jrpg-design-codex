@@ -156,10 +156,11 @@ article and `File:` page are recorded in [`covers/SOURCES.md`](covers/SOURCES.md
 
 - **CI/CD pipeline** (GitHub Actions) with a validation gate that blocks deployment on
   failure, SHA-pinned third-party actions, and least-privilege job permissions
-- **Automated data-integrity testing** — a zero-dependency validator enforcing 43
-  structural invariants, with a mutation-testing self-check proving each one can fail,
-  plus an 81-case offline suite and a differential CI gate that compares a pull request
-  against its base revision and fails when an edited record goes unlogged
+- **Automated data-integrity testing** — a zero-dependency structural validator over a
+  single-file HTML database, with a mutation-testing self-check that injects 47 sabotages
+  and fails the build unless every one is caught, plus an 83-case offline suite and a
+  differential CI gate that compares a pull request against its base revision and fails
+  when an edited record goes unlogged
 - **Static site deployment** to GitHub Pages, triggered only after checks pass
 - **Resilient data collection** — API-first Python clients with host allowlisting,
   range validation that rejects malformed upstream values, fail-closed error handling,

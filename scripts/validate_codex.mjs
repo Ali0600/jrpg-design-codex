@@ -159,6 +159,69 @@ function checkFields(row, label, required, errors) {
   }
 }
 
+/**
+ * The restore contract. `let store = {...}` IS the schema, and `normalizeStore` must fill
+ * every slot in it — a backup written before a field existed restores that field as
+ * undefined, which is the failure the page's own comment names: "a restored v1 backup must
+ * never leave store.myGame.assign undefined".
+ *
+ * Both lists are READ out of the page, never restated here: the literal is evaluated, the
+ * handled slots come off the assignment left-hand sides. They are compared WHOLE and both
+ * ways, so a rename landing on one side only is caught from either direction.
+ *
+ * The walk goes one level into plain objects deliberately. `myGame.assign` is the exact
+ * path the comment warns about, and a top-level-only check skips it — it would read as
+ * covering that bug while a forgotten `s.myGame.<new>` sailed through.
+ *
+ * Fails closed: an extraction that quietly returned nothing would satisfy every set
+ * comparison below and gate nothing at all.
+ */
+function checkStoreSchema(script, errors) {
+  const lit = script.match(/\nlet store\s*=\s*(\{[\s\S]*?\});/);
+  const body = script.match(/\nfunction normalizeStore\(s\)\s*\{([\s\S]*?)\n\}/);
+  if (!lit) errors.push("could not find the `let store = {...}` literal — the STATE block moved");
+  if (!body) errors.push("could not find `function normalizeStore(s)` — the STATE block moved");
+  if (!lit || !body) return;
+
+  const declared = [];
+  try {
+    const walk = (o, prefix) => {
+      for (const k of Object.keys(o)) {
+        const path = prefix ? `${prefix}.${k}` : k;
+        declared.push(path);
+        const v = o[k];
+        if (v && typeof v === "object" && !Array.isArray(v)) walk(v, path);
+      }
+    };
+    walk(new Function("return " + lit[1])(), "");
+  } catch (e) {
+    errors.push(`the \`store\` literal does not evaluate: ${e.message}`);
+    return;
+  }
+
+  const handled = [...body[1].matchAll(/^\s*s((?:\.\w+)+)\s*=/gm)].map(m => m[1].slice(1));
+  if (!declared.length) {
+    errors.push("the `store` literal declares no slots — the extraction is broken, not the data");
+    return;
+  }
+  if (!handled.length) {
+    errors.push("normalizeStore assigns no `s.<slot>` — the extraction is broken, not the data");
+    return;
+  }
+
+  const H = new Set(handled), D = new Set(declared);
+  for (const p of declared) {
+    if (!H.has(p)) {
+      errors.push(`store.${p} is declared in the \`store\` literal but normalizeStore never defaults it — a restored backup would leave it undefined`);
+    }
+  }
+  for (const p of H) {
+    if (!D.has(p)) {
+      errors.push(`normalizeStore defaults store.${p}, which the \`store\` literal does not declare — a half-finished rename resurrects a dead slot on every load`);
+    }
+  }
+}
+
 // -------------------------------------------------------------------- checks
 
 export function validate(html, docs = {}) {
@@ -438,6 +501,9 @@ export function validate(html, docs = {}) {
     }
   }
 
+  // --- the restore contract: every slot the schema declares is defaulted on load
+  checkStoreSchema(script, errors);
+
   // --- docs that restate the counts (two sources of truth always drift)
   const stats = {
     mechanics: BASE_MECHS.length,
@@ -468,6 +534,10 @@ export function validate(html, docs = {}) {
       if (Number(dr[2]) !== stats.queued) errors.push(`CLAUDE.md says ${dr[2]} queued games, file has ${stats.queued}`);
       if (Number(dr[3]) !== stats.games) errors.push(`CLAUDE.md says ${dr[3]} games total, file has ${stats.games}`);
     }
+    const dsab = claim(/requires all \*\*(\d+)\*\* sabotages to fire/, "sabotage");
+    if (dsab != null && dsab !== sabotageCount()) {
+      errors.push(`CLAUDE.md says ${dsab} sabotages, the selftest suite has ${sabotageCount()}`);
+    }
   }
   if (docs.readme != null) {
     const cell = (re, what) => {
@@ -479,6 +549,11 @@ export function validate(html, docs = {}) {
     const rg = cell(/\*\*(\d+) minigames\*\*/, "**N minigames**");
     const rt = cell(/\*\*(\d+) games\*\*/, "**N games**");
     const rr = cell(/(\d+) carry concrete reward tables/, "`N carry concrete reward tables`");
+    // `\s+` on both sides: this sentence wraps, and the number can land at a line end.
+    const rsab = cell(/injects\s+(\d+)\s+sabotages/, "`injects N sabotages`");
+    if (rsab != null && rsab !== sabotageCount()) {
+      errors.push(`README.md says ${rsab} sabotages, the selftest suite has ${sabotageCount()}`);
+    }
     if (rm != null && rm !== stats.mechanics) errors.push(`README.md says ${rm} mechanics, file has ${stats.mechanics}`);
     if (rg != null && rg !== stats.minigames) errors.push(`README.md says ${rg} minigames, file has ${stats.minigames}`);
     if (rt != null && rt !== stats.games) errors.push(`README.md says ${rt} games, file has ${stats.games}`);
@@ -498,21 +573,47 @@ export function validate(html, docs = {}) {
 
 // ------------------------------------------------------------------ selftest
 
+const STATE_BANNER = "/* ============================= STATE";
+
+/** The data region: every const the app's rows live in, up to the STATE banner. */
+function dataRegion(src) {
+  return { start: src.indexOf("const CATS"), end: src.indexOf(STATE_BANNER), name: "data region" };
+}
+
 /**
- * Replace the first match, insisting the edit lands inside the data region.
+ * The STATE block: the banner to the NEXT banner, which is the store literal, its
+ * normaliser and the restore path — about 2KB.
+ *
+ * Bounded at both ends on purpose. "Anywhere after STATE" would be barely a guard at all:
+ * the runtime half of the script is far denser in generic idioms than the data is, with
+ * dozens of `{}` and `|| {}` occurrences a loose fixture could silently land on.
+ */
+function stateBlock(src) {
+  const start = src.indexOf(STATE_BANNER);
+  return {
+    start,
+    end: start < 0 ? -1 : src.indexOf("/* =============================", start + 1),
+    name: "STATE block",
+  };
+}
+
+/**
+ * Replace the first match, insisting the edit lands inside the named region.
  *
  * That last part is not paranoia: an early draft's `/us:\d+/` fixture matched
  * `border-radius:4px` in the CSS. It mutated the file, changed the bytes, threw
  * nothing — and tested absolutely nothing.
  */
-function replaceFirst(src, needle, repl, label) {
+function replaceWithin(src, needle, repl, label, region) {
   const at = typeof needle === "string" ? src.indexOf(needle) : src.search(needle);
   if (at < 0) throw new Error(`sabotage "${label}": pattern not found — the validator's own fixtures are stale`);
 
-  const regionStart = src.indexOf("const CATS");
-  const regionEnd = src.indexOf("/* ============================= STATE");
+  const { start: regionStart, end: regionEnd, name } = region(src);
+  if (regionStart < 0 || regionEnd < 0) {
+    throw new Error(`sabotage "${label}": could not bound the ${name} — the page's section banners moved`);
+  }
   if (at < regionStart || at > regionEnd) {
-    throw new Error(`sabotage "${label}": matched at ${at}, outside the data region (${regionStart}-${regionEnd}) — the pattern needs more context`);
+    throw new Error(`sabotage "${label}": matched at ${at}, outside the ${name} (${regionStart}-${regionEnd}) — the pattern needs more context`);
   }
 
   const out = typeof needle === "string"
@@ -520,6 +621,16 @@ function replaceFirst(src, needle, repl, label) {
     : src.slice(0, at) + src.slice(at).replace(needle, repl);
   if (out === src) throw new Error(`sabotage "${label}": source unchanged — the mutation did not apply`);
   return out;
+}
+
+/** Sabotage the data. */
+function replaceFirst(src, needle, repl, label) {
+  return replaceWithin(src, needle, repl, label, dataRegion);
+}
+
+/** Sabotage the state schema, which lives past the banner the data region stops at. */
+function replaceAfterState(src, needle, repl, label) {
+  return replaceWithin(src, needle, repl, label, stateBlock);
 }
 
 /**
@@ -619,6 +730,18 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /added:\[\], updated:\["[^\]]+\]/, "added:[], updated:[]", "changelog entry that names nothing") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
+
+  // The state schema, both arms. A two-way check needs two fixtures: the pair one reaches
+  // for first — add a slot, or delete a handler — exercise the SAME arm, so shipping one
+  // would send the other to production having never once been red.
+  // The anchors are the declarations, not the last key: `seen:""};` would break loudly the
+  // day a slot is appended after `seen`, for no reason.
+  { name: "store gains a slot normalizeStore never defaults (the undefined-slot bug)",
+    expect: /is declared in the `store` literal but normalizeStore never defaults it/,
+    apply: s => replaceAfterState(s, "let store = {", "let store = {ghost:{}, ", "store gains an undefaulted slot") },
+  { name: "normalizeStore defaults a slot the store literal does not declare",
+    expect: /which the `store` literal does not declare/,
+    apply: s => replaceAfterState(s, "\n  return s;\n}", "\n  s.ghost = s.ghost || {};\n  return s;\n}", "normalizeStore defaults an undeclared slot") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */
@@ -660,7 +783,27 @@ const DOC_SABOTAGES = [
       if (d.digestFiles == null) throw new Error('sabotage "orphan digest": digestFiles listing absent');
       return { ...d, digestFiles: new Set([...d.digestFiles, "ghost"]) };
     } },
+
+  // This suite's own size, quoted in two docs. Adding a sabotage and forgetting the docs is
+  // the drift these catch -- starting with the drift caused by adding these two.
+  { name: "CLAUDE.md sabotage-count drift", expect: /CLAUDE\.md says \d+ sabotages/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /requires all \*\*\d+\*\* sabotages/, "requires all **999** sabotages", "CLAUDE.md sabotage-count drift") }) },
+  { name: "README.md sabotage-count drift", expect: /README\.md says \d+ sabotages/,
+    apply: d => ({ ...d, readme: replaceInDoc(d.readme, /injects\s+\d+\s+sabotages/, "injects 999 sabotages", "README.md sabotage-count drift") }) },
 ];
+
+/**
+ * The size of this suite, derived — never restated. Both the docs check and the closing
+ * log read it from here, so the number in CLAUDE.md and README.md is compared against the
+ * arrays themselves rather than against a second copy of the figure.
+ *
+ * `validate()` calls this even though the arrays are declared below it. That is safe and
+ * not an accident: `validate` is a hoisted function declaration, its body runs only when
+ * called, `main()` is this module's last statement, and this file imports nothing local —
+ * so its whole body has run before any importer's. Adding a LOCAL import to this file is
+ * the one change that could put these consts back in the temporal dead zone.
+ */
+function sabotageCount() { return SABOTAGES.length + DOC_SABOTAGES.length; }
 
 function selftest(html, docs) {
   let failed = 0;

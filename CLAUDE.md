@@ -240,6 +240,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   copy, so the ranges the UI renders are the ranges it checks.
   **Edited an existing row in place? Add its id to the newest entry's `updated` list** —
   `scripts/check_changes.mjs` fails CI otherwise. The splicer logs `added` for you.
+  The ONE exception is `verbs`, carved out in that script's `ANALYSIS_KEYS`: a tag derived
+  from a row's own text is analysis OF the row, not content of it, and logging a whole
+  tagging pass would collapse every row it touched onto one date, permanently. Change any
+  other field in the same edit and the row is caught exactly as before.
   Everything else derives from this one list: `changeInfo(id)` maps each id to the NEWEST
   entry naming it, `store.seen` (an ISO date, backfilled by `normalizeStore`) is the
   owner's read marker, and from those come the NEW/UPDATED pills, the "What's new" strip,
@@ -347,7 +351,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
 - `scripts/check_changes.mjs` is the differential gate: it evaluates the codex at the PR's
   base revision and in the working copy, compares each M/g row as a PARSED object with
   sorted keys, and requires every row whose content changed to appear in an `updated` list
-  the base did not already have. Parse, never text-diff — appending a row rewrites the
+  the base did not already have. `ANALYSIS_KEYS` names the keys that are analysis OF a row
+  rather than content of it — `verbs` today — and skips them, so a tagging pass is not a
+  rewrite. Parse, never text-diff — appending a row rewrites the
   previous last row by one comma, so a textual diff would demand an `updated` entry for
   M243, M261, M265 … on every splice and the gate would be trained away in two PRs.
 - `scripts/splice_rows.mjs` writes a digest's `## Codex rows` block into the arrays:
@@ -446,13 +452,17 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   **the changelog** (ISO dates strictly decreasing, every range parseable by the page's
   own `expandIds`, no id added twice, the union of every `added` list EQUAL to the full
   M/g id set — membership, so both a missing row and a phantom one are caught — every
-  `games[]` title on the roster, and no entry that names nothing); and **the counts
+  `games[]` title on the roster, and no entry that names nothing); **the restore contract**
+  (every slot the `store` literal declares, nested paths included, is defaulted by
+  `normalizeStore` and vice versa — both sides read out of the page and compared whole, so
+  a field added without a default is a build failure instead of an undefined slot in a
+  restored backup); and **the counts
   quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
   CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **43** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **47** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -586,6 +596,6 @@ Standing, not yet scheduled:
   user-defined My Game buckets; private repo + Cloudflare Pages.
 
 Known doc-rot risks with no gate behind them (candidates for a DOC_SABOTAGE):
-the M/g id range quoted above, the verb-tag count above, and the sabotage count in
-the CI section — the validator gates the mechanics/minigames/games/reward-table
-figures in this file and README.md, and nothing else.
+the M/g id range quoted above, the verb-tag count above, and README's offline-suite
+case count — the validator gates the mechanics/minigames/games/reward-table figures
+and the sabotage count in this file and README.md, and nothing else.
