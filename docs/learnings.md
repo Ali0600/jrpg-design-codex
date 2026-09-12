@@ -290,3 +290,20 @@ later check can hold true, and it was one search away from being copied into the
 **Takeaway:** before writing that a catalogue lacks something, repeat the search in the
 catalogue's own script and under the title's local name. A negative from a single-alphabet query
 is evidence about the index, not the catalogue — the alphabet is one of the instrument's settings.
+
+## A two-way check needs a mutant per direction, aimed at the example its own comment names
+The restore contract compares the slots the `store` literal declares with the ones
+`normalizeStore` defaults, in both directions. Its first design walked only top-level keys
+and planned one sabotage, and both choices would have passed review while missing. The
+page's own comment names `store.myGame.assign` as the slot that must never restore
+undefined, a nested path the flat check skipped by construction. And the two mutations
+anyone reaches for first, adding a slot to the literal and deleting a handler from the
+normaliser, both land on the SAME arm, so the other arm would have shipped never once red.
+
+**Why it came up:** PR #27, the analysis-layer gates. A design review ran both mutations and
+got the identical error message from each, then tried a forgotten `myGame.tags` handler
+against the flat check and got no error at all.
+
+**Takeaway:** before counting a sabotage as coverage of a two-way comparison, write down
+which arm it exercises; and test the gate against the exact case its motivating comment or
+bug report names, because that example is the one a clean design most easily abstracts away.

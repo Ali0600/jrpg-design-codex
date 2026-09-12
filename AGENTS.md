@@ -404,9 +404,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   lists are deduped), and any string over 120 chars is refused as prose. `--today` pins the
   harvest date; `--note "<text>"` writes `gf.note` for a page that needs a word of
   explanation without a year mismatch.
-- All of them are tested offline by
-  `node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs` (synthetic fixtures
-  under `scripts/fixtures/gf/`, a 100-line DOM stand-in, no jsdom) — that suite runs in CI
+- All of them are tested offline by the `node --test` line in
+  `.github/workflows/validate.yml` (synthetic fixtures under `scripts/fixtures/gf/`, a
+  100-line DOM stand-in, no jsdom). Copy that line; do not keep a list here — this
+  sentence once named three of its six files, so half the suite went unrun. It runs in CI
   too. Both suites have been mutation-swept: every check was deleted in turn and had to
   take a test down with it.
 - `scripts/fetch_scores.py` refreshes the Metacritic critic + user scores. It reads a
@@ -572,12 +573,14 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    `docs/verbs.md` ledger where every tag quotes a span of the row's own text, and a
    linter that proves the quote is a real substring; LINEAGES from 3 chains to ~12
    (21 of 281 mechanics are in one today); a pillar-coverage read-out on the My Game
-   board, owner-judged, never derived from `cat`. Four PRs; carries a
-   `check_changes.mjs` carve-out for `verbs` so an analysis retag is not logged as a
-   content rewrite.
-2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and ~40 of
-   those are the Final Fantasy block — the oldest research, written before the
-   "name the actual items and thresholds" rule existed.
+   board, owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as #27
+   (2026-09-12)**: the `verbs` carve-out in `check_changes.mjs`, the sabotage-count gate
+   and the restore contract, 47 sabotages. **Next is PR 1, the verb pass.** PR 0's
+   corrected spec is in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`; PRs 1–3
+   are still specified in the older file.
+2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
+   in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
+   the "name the actual items and thresholds" rule existed.
 3. **Finish the GameFAQs rollout**, waves 3–5 (9 games), per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
 
