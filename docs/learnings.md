@@ -307,3 +307,19 @@ against the flat check and got no error at all.
 **Takeaway:** before counting a sabotage as coverage of a two-way comparison, write down
 which arm it exercises; and test the gate against the exact case its motivating comment or
 bug report names, because that example is the one a clean design most easily abstracts away.
+
+## A gate that counts its own fixtures goes in before the fixtures, and the docs go last
+The validator now fails the build when the sabotage count quoted in CLAUDE.md or README
+differs from the number of sabotage fixtures. The PR that added that rule also added four
+fixtures, so the rule changes the number it checks. There is exactly one safe order. Add
+the comparison first: fixtures and docs both say 43, so it passes, which proves the rule
+accepts a correct tree. Add the fixtures next: 47 against 43 goes red, which proves the rule
+catches its own arrival. Update the docs last, and it goes green.
+
+**Why it came up:** PR #27. Updating the doc number first would have produced a red build
+whose message read like a typo in the doc, and the natural fix would have been reverting
+the doc.
+
+**Takeaway:** when a check measures something the same change is growing, sequence the
+edits so every intermediate state is green for the right reason or red for the right
+reason, and never leave the only red step looking like somebody else's mistake.
