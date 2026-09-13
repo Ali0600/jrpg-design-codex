@@ -47,8 +47,9 @@ none, because it reads as verified.
 - **A page for every game** — click a game's name anywhere to open it. The page shows box
   art, what its GameFAQs page says (platform, genre, developer, publisher, release,
   franchise, and how GameFAQs readers rate it, its difficulty and length), every mechanic
-  and minigame it contributed, its screenshots and sources, the lineages it sits in, and
-  the games GameFAQs readers pair it with. The address carries the page, so Back and
+  and minigame it contributed, its screenshots and sources, the lineages it sits in, the
+  codex games most like it (a shared series, studio or credited person), and the games GameFAQs
+  readers pair it with. The address carries the page, so Back and
   shared links work
 - **Everything is a filter** — click a platform, genre, studio, series, year, theme, award or a
   name in the credits on a game's page to list every game that shares it, or on a card to narrow
@@ -191,7 +192,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 89 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  154-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  157-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if

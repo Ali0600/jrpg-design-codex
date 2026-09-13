@@ -28,6 +28,27 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — Where a game page's related games come from
+
+**Fork:** each game page should list the codex games most like it, so something has to say what
+"like" means.
+
+- **Weighted overlap of the facets every row already carries** ✔ — series, studio and the people
+  credited count; platform, genre, year and award are left out as too common to mean kinship.
+  It is computed on the page from data already there, and every entry shows what it shares.
+  An entry must also share a series, a studio or a credited person. Measured on the roster before
+  shipping, letting two weak links qualify filled the lists of 14 of 72 games with nothing but
+  shared features and themes: Elden Ring's six were links like *Multiple endings* and *Multiplayer*.
+- **Wikidata claims** — `rejected for now — unmeasured on these items`: every row carries its `wd`,
+  but reading claims is a new harvest, and the credits it would add are already the infobox's.
+- **GameFAQs' "Games You May Like"** — `rejected — already on the page`: it names mostly games
+  outside the codex, and it keeps its own section.
+
+**Chosen:** facet overlap. `RELATED_WEIGHTS` is one table in the data region, so retuning a weight
+is a one-line edit that the tests pin.
+
+---
+
 ## 2026-09-14 — Whether the Mechanics and Minigames searches live in the address
 
 **Fork:** the Games tab keeps its query in the hash (`#games=`), so Back and shared links work.
