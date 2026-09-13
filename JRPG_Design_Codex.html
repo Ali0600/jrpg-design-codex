@@ -3774,19 +3774,24 @@ const MG_KEYS = {table:"table", game:"game", id:"id"};
 const MECH_QUERY_KEYS = {...FACET_KEYS, ...MECH_KEYS};
 const MG_QUERY_KEYS = {...FACET_KEYS, ...MG_KEYS};
 /** Does a mechanic or minigame row answer every facet? `title` is the row's game (m.game or m.g)
-    and `game` its roster row or null. `cat` and `verb` match by normalised prefix, `game` by
-    whole words from the start of the title (so "Final Fantasy X" is not XII), `id` exactly,
+    and `game` its roster row or null. `cat` and `verb` match by normalised prefix; `game` matches
+    exactly when the value names a roster title (`exactTitles`, so "Xenoblade Chronicles" is not
+    Xenoblade Chronicles 3), and otherwise by whole words from the start of the title, so "persona"
+    finds both Persona games and "Final Fantasy X" is not XII; `id` exactly,
     `want` as yes/maybe/no/undecided and `table` as yes/no. */
-function matchesRowQuery(row, title, game, facets){
+/** The spelling a game-title comparison uses: case and spacing folded, punctuation kept. */
+function gameTitleKey(s){ return String(s ?? "").toLowerCase().replace(/\s+/g, " ").trim(); }
+/** Every roster title, keyed for the exact match a `game:` value naming one of them gets. */
+function exactTitlesOf(games){ return new Set((Array.isArray(games) ? games : []).map(g=> gameTitleKey(g && g.title))); }
+function matchesRowQuery(row, title, game, facets, exactTitles){
   if(!facets || !facets.length) return true;
   const gameFacets = facets.filter(f=> FACET_KINDS.includes(f.k));
   if(gameFacets.length && !(game && matchesFacets(game, gameFacets))) return false;
-  const words = s => String(s ?? "").toLowerCase().replace(/\s+/g, " ").trim();
   return facets.filter(f=> !FACET_KINDS.includes(f.k)).every(({k, v})=>{
     const want = facetNorm(v);
     if(k === "cat") return facetNorm(row && row.cat).startsWith(want);
     if(k === "verb") return (Array.isArray(row && row.verbs) ? row.verbs : []).some(x=> facetNorm(x).startsWith(want));
-    if(k === "game"){ const t = words(title), w = words(v); return t === w || t.startsWith(w + " ") || t.startsWith(w + ":"); }
+    if(k === "game"){ const t = gameTitleKey(title), w = gameTitleKey(v); if(exactTitles && exactTitles.has(w)) return t === w; return t === w || t.startsWith(w + " ") || t.startsWith(w + ":"); }
     if(k === "id") return facetNorm(row && row.id) === want;
     if(k === "want") return want === "undecided" || want === "none" ? !(row && row.want) : facetNorm(row && row.want) === want;
     if(k === "table"){ const has = Array.isArray(row && row.rt) && row.rt.length > 0; return want === "yes" ? has : want === "no" ? !has : false; }
@@ -4187,6 +4192,7 @@ function renderCards(){
   const rawQ = $("#q").value.trim(), pq = parseQuery(rawQ, MECH_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#fGame").value, w = $("#fWant").value;
   const gameMemo = new Map(), gameOf = t => { if(!gameMemo.has(t)) gameMemo.set(t, gameByTitle(t)); return gameMemo.get(t); };
+  const exactTitles = exactTitlesOf(allGames());
   renderQueryChips($("#qActive"), rawQ, MECH_QUERY_KEYS, v=>{ $("#q").value = v; renderCards(); });
   const newOnly = $("#fNew").checked, sortBy = $("#mSort").value;
   const list = allMechs().filter(m=>{
@@ -4196,7 +4202,7 @@ function renderCards(){
     if(fVerb && !(m.verbs||[]).includes(fVerb)) return false;
     if(w==="__undecided"){ if(m.want) return false; }
     else if(w && m.want!==w) return false;
-    if(pq.facets.length && !matchesRowQuery(m, m.game, gameOf(m.game), pq.facets)) return false;
+    if(pq.facets.length && !matchesRowQuery(m, m.game, gameOf(m.game), pq.facets, exactTitles)) return false;
     if(q){
       const hay = (m.name+" "+m.game+" "+m.cat+" "+m.how+" "+m.loop+" "+(m.notes||"")).toLowerCase();
       if(!hay.includes(q)) return false;
@@ -4925,13 +4931,14 @@ function renderMinigames(){
   const rawQ = $("#mgq").value.trim(), pq = parseQuery(rawQ, MG_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#mgGame").value, favOnly = $("#mgFav").checked;
   const gameMemo = new Map(), gameOf = t => { if(!gameMemo.has(t)) gameMemo.set(t, gameByTitle(t)); return gameMemo.get(t); };
+  const exactTitles = exactTitlesOf(allGames());
   renderQueryChips($("#mgqActive"), rawQ, MG_QUERY_KEYS, v=>{ $("#mgq").value = v; renderMinigames(); });
   const newOnly = $("#mgNew").checked, sortBy = $("#mgSort").value;
   const list = MINIGAMES.filter(m=>{
     if(g && m.g!==g) return false;
     if(favOnly && !store.minigameFavs[m.id]) return false;
     if(newOnly && !isFresh(m.id)) return false;
-    if(pq.facets.length && !matchesRowQuery(m, m.g, gameOf(m.g), pq.facets)) return false;
+    if(pq.facets.length && !matchesRowQuery(m, m.g, gameOf(m.g), pq.facets, exactTitles)) return false;
     if(q){
       const hay = (m.n+" "+m.g+" "+m.p+" "+m.r+" "+m.l+" "+(m.rt||[]).map(r=>r.at+" "+r.get).join(" ")).toLowerCase();
       if(!hay.includes(q)) return false;

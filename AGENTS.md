@@ -376,7 +376,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `FACET_KEYS` key answers through the row's game, and a row whose game is off the roster fails
   it; the row's own keys (`cat`, `verb`, `want`, `game`, `id` on mechanics; `table`, `game`, `id`
   on minigames) are answered by `matchesRowQuery` in the data region: `cat` and `verb` by
-  normalised prefix, `game` by whole words from the start of the title, `id` exactly, `want` as
+  normalised prefix, `game` exactly when the value names a roster title (else by whole words from
+  the start of the title, so `game:persona` finds both), `id` exactly, `want` as
   yes/maybe/no/undecided and `table` as yes/no. Active filters show as chips in `#qActive` and
   `#mgqActive` through `renderQueryChips`, which the Games tab shares. Those two tabs keep no
   address state; the hash stays the Games tab's contract.

@@ -15,9 +15,9 @@ import { extractScript, extractData, validate } from "./validate_codex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
 const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
-  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "relatedGames", "relatedScore"];
+  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "exactTitlesOf", "relatedGames", "relatedScore"];
 const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
-  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, relatedGames, relatedScore } =
+  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, exactTitlesOf, relatedGames, relatedScore } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -178,7 +178,8 @@ test("the validator folds the real roster through the page's vocabulary without 
 // ---------------------------------------------------------------- the Mechanics and Minigames searches
 
 const gameRow = title => BASE_GAMES.find(x => x.title === title) || null;
-const rowMatches = (row, title, q, keys) => matchesRowQuery(row, title, gameRow(title), parseQuery(q, keys).facets);
+const EXACT_TITLES = exactTitlesOf(BASE_GAMES);
+const rowMatches = (row, title, q, keys) => matchesRowQuery(row, title, gameRow(title), parseQuery(q, keys).facets, EXACT_TITLES);
 const mechsFor = q => BASE_MECHS.filter(m => rowMatches(m, m.game, q, MECH_QUERY_KEYS));
 const minisFor = q => MINIGAMES.filter(m => rowMatches(m, m.g, q, MG_QUERY_KEYS));
 
@@ -220,6 +221,17 @@ test("a row's own keys: category and verb by prefix, game by whole words, id exa
   assert.equal(minisFor("table:no").length, MINIGAMES.filter(m => !m.rt).length);
   assert.equal(minisFor("table:yes").length + minisFor("table:no").length, MINIGAMES.length);
   assert.deepEqual(parseQuery("table:yes", MECH_QUERY_KEYS), { text: "table:yes", facets: [] }, "table is a minigame key; on Mechanics it is plain text");
+});
+
+test("a game key naming a roster title exactly lists only that game, and a partial name still matches by whole words", () => {
+  const titlesFor = q => [...new Set(mechsFor(q).map(m => m.game))].sort();
+  assert.deepEqual(titlesFor('game:"Xenoblade Chronicles"'), ["Xenoblade Chronicles"], "not Xenoblade Chronicles 3");
+  assert.deepEqual(titlesFor('game:"xenoblade  chronicles"'), ["Xenoblade Chronicles"], "case and spacing still fold");
+  assert.deepEqual(titlesFor("game:xenoblade"), ["Xenoblade Chronicles", "Xenoblade Chronicles 3"]);
+  assert.deepEqual(titlesFor('game:"Persona 4"'), ["Persona 4"]);
+  assert.deepEqual(titlesFor("game:persona"), ["Persona 4", "Persona 5 Royal"]);
+  const withoutRoster = BASE_MECHS.filter(m => matchesRowQuery(m, m.game, gameRow(m.game), parseQuery('game:"Xenoblade Chronicles"', MECH_QUERY_KEYS).facets));
+  assert.ok(withoutRoster.some(m => m.game === "Xenoblade Chronicles 3"), "with no roster to check against, the whole-word rule applies");
 });
 
 test("game keys and row keys AND together", () => {
