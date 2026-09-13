@@ -128,3 +128,12 @@ test("the CLI dry-runs by default and writes only with --write", () => {
   assert.equal(rowOf(readFileSync(path, "utf8"), "Lantern Vale").digest, "lantern-vale");
   assert.throws(() => cli("--game", "Lantern Vale", "--set", "why=x"), /not a script-owned field/);
 });
+
+test("infobox is written after wp and before digest, its keys in IB_KEYS order", () => {
+  const html = setOwnedFields(miniCodex(), "Lantern Vale",
+    { digest: "lantern-vale", infobox: { at: "2026-09-13", comp: ["Mira Tone"], plat: ["PlayStation"] }, wp: "Lantern Vale" });
+  const owned = rowText(html, "Lantern Vale").split("\n").filter(l => OWNED.some(k => l.startsWith(k + ":")));
+  assert.deepEqual(owned.map(l => l.slice(0, l.indexOf(":"))), ["wp", "infobox", "digest"]);
+  assert.deepEqual(Object.keys(rowOf(html, "Lantern Vale").infobox), ["plat", "comp", "at"]);
+  assert.throws(() => setOwnedFields(miniCodex(), "Lantern Vale", { infobox: { platforms: ["PlayStation"] } }), /"platforms" is not an infobox key/);
+});
