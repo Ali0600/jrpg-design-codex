@@ -14,8 +14,10 @@ import { extractScript, extractData, validate } from "./validate_codex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
-const NAMES = ["BASE_GAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets"];
-const { BASE_GAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets } =
+const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
+  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery"];
+const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
+  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -171,4 +173,57 @@ test("adding a facet narrows, adding it again is a no-op, removing it keeps the 
 test("the validator folds the real roster through the page's vocabulary without complaint", () => {
   const { errors } = validate(HTML, {});
   assert.deepEqual(errors.filter(e => /FACET_VOCAB|facet/i.test(e)), []);
+});
+
+// ---------------------------------------------------------------- the Mechanics and Minigames searches
+
+const gameRow = title => BASE_GAMES.find(x => x.title === title) || null;
+const rowMatches = (row, title, q, keys) => matchesRowQuery(row, title, gameRow(title), parseQuery(q, keys).facets);
+const mechsFor = q => BASE_MECHS.filter(m => rowMatches(m, m.game, q, MECH_QUERY_KEYS));
+const minisFor = q => MINIGAMES.filter(m => rowMatches(m, m.g, q, MG_QUERY_KEYS));
+
+test("the row searches take the Games grammar plus their own keys, and only their own", () => {
+  assert.deepEqual(parseQuery('cat:traversal platform:SNES verb:"a second" ys', MECH_QUERY_KEYS),
+    { text: "ys", facets: [{ k: "cat", v: "traversal" }, { k: "platform", v: "SNES" }, { k: "verb", v: "a second" }] });
+  assert.deepEqual(parseQuery("table:no cat:traversal", MG_QUERY_KEYS),
+    { text: "cat:traversal", facets: [{ k: "table", v: "no" }] }, "cat is not a minigame key");
+  assert.deepEqual(parseGameQuery("cat:traversal table:no").facets, [], "the Games grammar is unchanged");
+  assert.deepEqual(parseQuery("constructor:x toString:y", MECH_QUERY_KEYS).facets, [], "an inherited property is not a key");
+  assert.equal(withoutFacet("cat:traversal want:yes ys", "cat", "Traversal", MECH_QUERY_KEYS), "want:yes ys");
+  assert.equal(withFacet("ys", "table", "no", MG_QUERY_KEYS), "table:no ys");
+});
+
+test("a game key answers through the row's game, and a row whose game is off the roster fails it", () => {
+  const snesTitles = new Set(BASE_GAMES.filter(g => matches(g, "platform:SNES")).map(g => g.title));
+  const expected = BASE_MECHS.filter(m => snesTitles.has(m.game)).map(m => m.id);
+  assert.ok(expected.length > 0, "the roster still has SNES games with mechanics");
+  assert.deepEqual(mechsFor("platform:SNES").map(m => m.id), expected);
+  const g001 = MINIGAMES.find(m => m.id === "g001");
+  assert.equal(gameRow(g001.g), null, "g001's game is not on the roster");
+  assert.ok(!rowMatches(g001, g001.g, 'series:"Final Fantasy"', MG_QUERY_KEYS));
+  assert.ok(rowMatches(g001, g001.g, "table:no id:g001", MG_QUERY_KEYS), "its own keys still answer");
+});
+
+test("a row's own keys: category and verb by prefix, game by whole words, id exactly, want and table", () => {
+  assert.deepEqual([...new Set(mechsFor("cat:exploration").map(m => m.cat))], ["Exploration & Rewards"]);
+  assert.equal(mechsFor("cat:exploration").length, BASE_MECHS.filter(m => m.cat === "Exploration & Rewards").length);
+  const mastery = BASE_MECHS.filter(m => (m.verbs || []).includes("Mastery reveal")).map(m => m.id);
+  assert.ok(mastery.length > 0);
+  assert.deepEqual(mechsFor("verb:mastery").map(m => m.id), mastery);
+  const titles = q => [...new Set(mechsFor(q).map(m => m.game))].sort();
+  assert.deepEqual(titles('game:"Final Fantasy X"'), ["Final Fantasy X"], "X is not XII");
+  assert.deepEqual(titles("game:persona"), ["Persona 4", "Persona 5 Royal"]);
+  assert.deepEqual(mechsFor("id:m001").map(m => m.id), ["M001"]);
+  assert.equal(mechsFor("want:yes").length, BASE_MECHS.filter(m => m.want === "Yes").length);
+  assert.equal(mechsFor("want:undecided").length, BASE_MECHS.filter(m => !m.want).length);
+  assert.ok(mechsFor("want:undecided").length > 0);
+  assert.equal(minisFor("table:no").length, MINIGAMES.filter(m => !m.rt).length);
+  assert.equal(minisFor("table:yes").length + minisFor("table:no").length, MINIGAMES.length);
+  assert.deepEqual(parseQuery("table:yes", MECH_QUERY_KEYS), { text: "table:yes", facets: [] }, "table is a minigame key; on Mechanics it is plain text");
+});
+
+test("game keys and row keys AND together", () => {
+  const expected = mechsFor("platform:SNES").filter(m => m.cat === "Exploration & Rewards").map(m => m.id);
+  assert.ok(expected.length > 0);
+  assert.deepEqual(mechsFor("platform:SNES cat:exploration").map(m => m.id), expected);
 });

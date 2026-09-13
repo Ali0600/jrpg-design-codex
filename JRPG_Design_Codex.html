@@ -506,7 +506,7 @@
 
     <div class="filters">
       <div class="frow">
-        <input type="search" id="q" placeholder="Search mechanics… (e.g. materia, stagger, painting)">
+        <input type="search" id="q" placeholder="Search mechanics… or cat:traversal verb:guarded platform:SNES">
         <select id="fGame"><option value="">All games</option></select>
         <select id="fWant">
           <option value="">Any decision</option>
@@ -526,6 +526,7 @@
         <div class="frow" id="verbChips"></div>
       </details>
     </div>
+    <div class="gq-active" id="qActive"></div>
 
     <div class="toolbar">
       <button class="btn primary" id="btnAdd">+ Add mechanic</button>
@@ -561,7 +562,7 @@
   <section class="view" id="view-minigames">
     <div class="filters">
       <div class="frow">
-        <input type="search" id="mgq" placeholder="Search minigames… (e.g. cards, racing, piano)">
+        <input type="search" id="mgq" placeholder="Search minigames… or table:no platform:PlayStation">
         <select id="mgGame"><option value="">All games</option></select>
         <select id="mgSort" aria-label="Sort minigames">
           <option value="default">Sort: by ID</option>
@@ -572,6 +573,7 @@
         <label class="chip" style="cursor:pointer"><input type="checkbox" id="mgNew" style="accent-color:#4ec9b0"> New or updated only</label>
       </div>
     </div>
+    <div class="gq-active" id="mgqActive"></div>
     <p class="count-note" id="mgCount"></p>
     <div id="mgCards"></div>
   </section>
@@ -666,7 +668,7 @@
     <h2>The research pipeline</h2>
     <p>The <b>Games</b> tab is a research queue, not just a list. Games sort by status — <i>Researching</i> first, then <i>To Research</i>, then the finished shelf — and each card shows how many mechanics and minigames it has contributed so far, so coverage gaps are visible at a glance.</p>
     <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
-    <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared.</p>
+    <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared. The <b>Mechanics</b> and <b>Minigames</b> searches take the same words, answered through each row's game (<code>platform:SNES</code> on Mechanics lists every mechanic from a SNES game), plus words about the row itself: <code>cat:</code>, <code>verb:</code>, <code>want:</code> (yes, maybe, no or undecided), <code>game:</code> and <code>id:</code> for mechanics, and <code>table:yes</code> or <code>table:no</code> (whether a minigame has a reward table), <code>game:</code> and <code>id:</code> for minigames. Those two searches are not kept in the address.</p>
     <ol>
       <li><b>Queue it.</b> Add the game with status <i>To Research</i>, and write the "why" as a <b>research brief</b>: the specific question this game should answer (the queued cards marked BRIEF show the shape).</li>
       <li><b>Research it.</b> Set it to <i>Researching</i>, then play it or work through deep dives and wikis with the codex open. Log mechanics with <b>+ Add mechanic</b> as you notice them.</li>
@@ -3647,11 +3649,11 @@ function facetsOf(g, keep){
 /* The Games search box's grammar: `key:value` or `key:"two words"` for a known key, and
    everything else is free text. "Metaphor: ReFantazio" stays text (nothing follows the
    colon), and so does an unknown key. Repeated facets collapse to one. */
-function parseGameQuery(q){
-  const facets = [];
+function parseQuery(q, keys){
+  const table = keys || FACET_KEYS, facets = [];
   const text = String(q ?? "").replace(/(^|\s)([A-Za-z]+):(?:"([^"]+)"|([^\s"]+))(?=\s|$)/g,
     (m, pre, key, quoted, bare)=>{
-      const k = FACET_KEYS[key.toLowerCase()];
+      const k = Object.prototype.hasOwnProperty.call(table, key.toLowerCase()) ? table[key.toLowerCase()] : undefined;
       const v = String(quoted ?? bare).trim();
       if(!k || !facetNorm(v)) return m;
       if(!facets.some(f=> f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v)))) facets.push({k, v});
@@ -3659,6 +3661,7 @@ function parseGameQuery(q){
     }).replace(/\s+/g, " ").trim();
   return {text, facets};
 }
+function parseGameQuery(q){ return parseQuery(q, FACET_KEYS); }
 function facetToken(k, v){
   const s = String(v).replace(/"/g, "");
   return `${k}:${/\s/.test(s) ? `"${s}"` : s}`;
@@ -3666,15 +3669,15 @@ function facetToken(k, v){
 function buildGameQuery({text, facets}){
   return [...facets.map(f=> facetToken(f.k, f.v)), text].filter(Boolean).join(" ");
 }
-function withFacet(q, k, v){
-  const p = parseGameQuery(q);
+function withFacet(q, k, v, keys){
+  const p = parseQuery(q, keys);
   if(!p.facets.some(f=> f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v)))) p.facets.push({k, v});
   return buildGameQuery(p);
 }
-function withoutFacet(q, k, v){
-  const p = parseGameQuery(q);
-  p.facets = p.facets.filter(f=> !(f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v))));
-  return buildGameQuery(p);
+function withoutFacet(q, k, v, keys){
+  const rest = parseQuery(q, keys);
+  rest.facets = rest.facets.filter(f=> !(f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v))));
+  return buildGameQuery(rest);
 }
 /** Every facet must hold (AND); a value matches through the same fold the page displays. */
 function matchesFacets(g, facets){
@@ -3683,6 +3686,35 @@ function matchesFacets(g, facets){
   return facets.every(({k, v})=>{
     const want = facetNorm(canonFacet(k, v));
     return !!want && !!f[k] && [...f[k]].some(x=> facetNorm(x) === want);
+  });
+}
+
+/* The Mechanics and Minigames searches take the Games grammar plus keys about the row itself.
+   A game key resolves through the row's game; a row whose game is not on the roster (a custom
+   game, the unrostered Final Fantasy minigame titles) fails every game key and still answers
+   its own. */
+const MECH_KEYS = {cat:"cat", category:"cat", verb:"verb", want:"want", game:"game", id:"id"};
+const MG_KEYS = {table:"table", game:"game", id:"id"};
+const MECH_QUERY_KEYS = {...FACET_KEYS, ...MECH_KEYS};
+const MG_QUERY_KEYS = {...FACET_KEYS, ...MG_KEYS};
+/** Does a mechanic or minigame row answer every facet? `title` is the row's game (m.game or m.g)
+    and `game` its roster row or null. `cat` and `verb` match by normalised prefix, `game` by
+    whole words from the start of the title (so "Final Fantasy X" is not XII), `id` exactly,
+    `want` as yes/maybe/no/undecided and `table` as yes/no. */
+function matchesRowQuery(row, title, game, facets){
+  if(!facets || !facets.length) return true;
+  const gameFacets = facets.filter(f=> FACET_KINDS.includes(f.k));
+  if(gameFacets.length && !(game && matchesFacets(game, gameFacets))) return false;
+  const words = s => String(s ?? "").toLowerCase().replace(/\s+/g, " ").trim();
+  return facets.filter(f=> !FACET_KINDS.includes(f.k)).every(({k, v})=>{
+    const want = facetNorm(v);
+    if(k === "cat") return facetNorm(row && row.cat).startsWith(want);
+    if(k === "verb") return (Array.isArray(row && row.verbs) ? row.verbs : []).some(x=> facetNorm(x).startsWith(want));
+    if(k === "game"){ const t = words(title), w = words(v); return t === w || t.startsWith(w + " ") || t.startsWith(w + ":"); }
+    if(k === "id") return facetNorm(row && row.id) === want;
+    if(k === "want") return want === "undecided" || want === "none" ? !(row && row.want) : facetNorm(row && row.want) === want;
+    if(k === "table"){ const has = Array.isArray(row && row.rt) && row.rt.length > 0; return want === "yes" ? has : want === "no" ? !has : false; }
+    return false;
   });
 }
 
@@ -4044,8 +4076,10 @@ function sortRows(list, mode, nameOf){
 /* ============================= MECHANIC CARDS ============================= */
 const openSet = new Set();
 function renderCards(){
-  const q = $("#q").value.trim().toLowerCase();
+  const rawQ = $("#q").value.trim(), pq = parseQuery(rawQ, MECH_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#fGame").value, w = $("#fWant").value;
+  const gameMemo = new Map(), gameOf = t => { if(!gameMemo.has(t)) gameMemo.set(t, gameByTitle(t)); return gameMemo.get(t); };
+  renderQueryChips($("#qActive"), rawQ, MECH_QUERY_KEYS, v=>{ $("#q").value = v; renderCards(); });
   const newOnly = $("#fNew").checked, sortBy = $("#mSort").value;
   const list = allMechs().filter(m=>{
     if(g && m.game!==g) return false;
@@ -4054,6 +4088,7 @@ function renderCards(){
     if(fVerb && !(m.verbs||[]).includes(fVerb)) return false;
     if(w==="__undecided"){ if(m.want) return false; }
     else if(w && m.want!==w) return false;
+    if(pq.facets.length && !matchesRowQuery(m, m.game, gameOf(m.game), pq.facets)) return false;
     if(q){
       const hay = (m.name+" "+m.game+" "+m.cat+" "+m.how+" "+m.loop+" "+(m.notes||"")).toLowerCase();
       if(!hay.includes(q)) return false;
@@ -4318,6 +4353,19 @@ const FACET_LABELS = {platform:"Platform", genre:"Genre", dev:"Developer", pub:"
   director:"Director", producer:"Producer", designer:"Designer", writer:"Writer", artist:"Artist", composer:"Composer", programmer:"Programmer", engine:"Engine"};
 const FACET_PLURALS = {platform:"Platforms", genre:"Genres", dev:"Developers", pub:"Publishers", series:"Series", theme:"Themes", feature:"Features", award:"Awards",
   director:"Directors", producer:"Producers", designer:"Designers", writer:"Writers", artist:"Artists", composer:"Composers", programmer:"Programmers", engine:"Engines"};
+const QUERY_LABELS = {...FACET_LABELS, cat:"Category", verb:"Verb", want:"Decision", game:"Game", id:"Id", table:"Reward table"};
+/* The removable chips under a search box, one per facet in its query. */
+function renderQueryChips(box, q, keys, setQuery){
+  const {text, facets} = parseQuery(q, keys);
+  box.innerHTML = facets.length
+    ? facets.map((f, i)=>`<button class="chip on" data-drop="${i}" title="Remove this filter">${esc(QUERY_LABELS[f.k] || f.k)}: ${esc(canonFacet(f.k, f.v))} <span aria-hidden="true">×</span></button>`).join("")
+      + `<button class="chip" data-drop="all">Clear filters</button>`
+    : "";
+  box.querySelectorAll("[data-drop]").forEach(b=> b.addEventListener("click", ()=>{
+    const f = facets[+b.dataset.drop];
+    setQuery(b.dataset.drop === "all" ? text : withoutFacet(q, f.k, f.v, keys));
+  }));
+}
 function facetLink(k, v, base){
   const q = base == null ? facetToken(k, v) : withFacet(base, k, v);
   return `<a class="facet" href="${esc(gamesHash(q))}" title="${esc(`${FACET_LABELS[k]}: ${v} — ${base == null ? "list every game" : "narrow the list"}`)}">${esc(v)}</a>`;
@@ -4336,15 +4384,7 @@ function gameSubHTML(g, base){
    the number of games carrying it, counted through the same facetsOf() the filter uses. */
 function renderGameFacets(all, q){
   const {facets} = parseGameQuery(q);
-  const act = $("#gqActive");
-  act.innerHTML = facets.length
-    ? facets.map((f, i)=>`<button class="chip on" data-drop="${i}" title="Remove this filter">${esc(FACET_LABELS[f.k])}: ${esc(canonFacet(f.k, f.v))} <span aria-hidden="true">×</span></button>`).join("")
-      + `<button class="chip" data-drop="all">Clear filters</button>`
-    : "";
-  act.querySelectorAll("[data-drop]").forEach(b=> b.addEventListener("click", ()=>{
-    const f = facets[+b.dataset.drop];
-    setGamesQuery(b.dataset.drop === "all" ? parseGameQuery(q).text : withoutFacet(q, f.k, f.v));
-  }));
+  renderQueryChips($("#gqActive"), q, FACET_KEYS, setGamesQuery);
 
   // Counted by normalised spelling, so a chip's number is the number of games its link lists.
   const counts = {};
@@ -4766,13 +4806,16 @@ function cleanYt(url){
   return u.href;
 }
 function renderMinigames(){
-  const q = $("#mgq").value.trim().toLowerCase();
+  const rawQ = $("#mgq").value.trim(), pq = parseQuery(rawQ, MG_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#mgGame").value, favOnly = $("#mgFav").checked;
+  const gameMemo = new Map(), gameOf = t => { if(!gameMemo.has(t)) gameMemo.set(t, gameByTitle(t)); return gameMemo.get(t); };
+  renderQueryChips($("#mgqActive"), rawQ, MG_QUERY_KEYS, v=>{ $("#mgq").value = v; renderMinigames(); });
   const newOnly = $("#mgNew").checked, sortBy = $("#mgSort").value;
   const list = MINIGAMES.filter(m=>{
     if(g && m.g!==g) return false;
     if(favOnly && !store.minigameFavs[m.id]) return false;
     if(newOnly && !isFresh(m.id)) return false;
+    if(pq.facets.length && !matchesRowQuery(m, m.g, gameOf(m.g), pq.facets)) return false;
     if(q){
       const hay = (m.n+" "+m.g+" "+m.p+" "+m.r+" "+m.l+" "+(m.rt||[]).map(r=>r.at+" "+r.get).join(" ")).toLowerCase();
       if(!hay.includes(q)) return false;
