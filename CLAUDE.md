@@ -123,6 +123,12 @@ backup; the HTML file is the source of truth and is more up to date.
   GameFAQs pairs it with — harvested from the original release's page in four batches
   (PRs #23–#26). Twenty-odd of those related titles are not in the codex and sit ranked in
   the Games tab's "Suggested by GameFAQs" panel as the research queue's next candidates.
+  Plus the **facets** (2026-09-13, PRs #30–#32): every platform, genre, studio, series, year,
+  credit, theme, feature and award on a game is a filter (`#games=<query>`). Platforms and
+  credits come from each game's Wikipedia infobox (`infobox`). Themes, features and awards come
+  from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
+  its Wikidata id (`wd`). The same day's audit of unused research data left three options, with
+  their measurements, in `docs/DECISIONS.md`'s Backlog.
 - **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business

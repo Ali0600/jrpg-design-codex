@@ -190,7 +190,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
   classification tag must quote a verbatim span of the record it labels. Backed by a
   140-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
-- Built fail-closed Python clients with host allowlists and range checks, plus an in-page
-  probe that caps results at 12KB so a 1.4MB Cloudflare-gated guide is never fetched whole
+- Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
+  allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
+  any of 72 records fails a check. Also an in-page probe that caps results at 12KB, so a
+  1.4MB Cloudflare-gated guide is never fetched whole
 - Treated docs as code: CI checks that the figures quoted in the README and the agent docs
   still match the data; the README check caught a real 2-batch drift the day it was added
