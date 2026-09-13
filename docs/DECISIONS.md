@@ -21,6 +21,26 @@ rejected options still offer.
   every row carries its `wd` since 2026-09-13, so what remains is fetching each item's platform
   (P400), genre (P136) and developer (P178) claims as a source in `facetSources()`, which would
   retire most of `FACET_VOCAB`.
+- **The Mechanics and Minigames queries in the address** (from the row-search fork, 2026-09-14) —
+  revisit hook: `route()` reads exactly two hash shapes (`#game=` and `#games=`). A third, say
+  `#mechanics=<query>`, needs its own branch there, a writer in each tab's search listener, and a
+  rule for what a tab click does to a hash that belongs to another tab.
+
+---
+
+## 2026-09-14 — Whether the Mechanics and Minigames searches live in the address
+
+**Fork:** the Games tab keeps its query in the hash (`#games=`), so Back and shared links work.
+The same grammar now runs in the Mechanics and Minigames search boxes.
+
+- **Keep those two queries out of the address** ✔ — the box and its chips are the whole state,
+  exactly as the plain text search always was, and routing does not change.
+- **Give each tab its own hash shape** — `deferred — worth trying`: shareable, Back-able mechanic
+  queries, at the cost of a third branch in `route()` and a rule for what a tab click does to a
+  hash that belongs to another tab. Revisit hook in the Backlog above.
+
+**Chosen:** out of the address. The hash is the Games tab's contract, and its one reader was built
+to answer two shapes; widening it is a change of its own.
 
 ---
 

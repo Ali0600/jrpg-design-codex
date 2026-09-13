@@ -310,7 +310,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `#games=…`: `route()` writes it into `#gq`, typing REPLACES the entry
   (`history.replaceState`, no history per keystroke), and Back from a filtered list returns to
   the page it came from. The grammar is `key:value` or `key:"two words"` plus free text
-  (`parseGameQuery`; keys and their aliases in `FACET_KEYS`). Facets AND together, each shows as
+  (`parseGameQuery`, which is `parseQuery(q, FACET_KEYS)`; keys and their aliases in `FACET_KEYS`). Facets AND together, each shows as
   a removable chip in `#gqActive`, and the collapsed `#gameBrowse` lists every value with its
   count. The logic sits in the DATA REGION after `expandIds` (`facetNorm`, `facetLookup`,
   `canonFacet`, `facetSources`, `facetsOf`, `parseGameQuery`, `withFacet`/`withoutFacet`,
@@ -350,6 +350,15 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `wpcats`, never through the page's code) and every label to at least two games (read through
   the page's `facetsOf`, the consumer's view). A new label is curated from the stored categories,
   not guessed.
+  **The row searches** (added 2026-09-14): the Mechanics and Minigames search boxes take the same
+  grammar through `parseQuery(q, MECH_QUERY_KEYS)` / `parseQuery(q, MG_QUERY_KEYS)`. Every
+  `FACET_KEYS` key answers through the row's game, and a row whose game is off the roster fails
+  it; the row's own keys (`cat`, `verb`, `want`, `game`, `id` on mechanics; `table`, `game`, `id`
+  on minigames) are answered by `matchesRowQuery` in the data region: `cat` and `verb` by
+  normalised prefix, `game` by whole words from the start of the title, `id` exactly, `want` as
+  yes/maybe/no/undecided and `table` as yes/no. Active filters show as chips in `#qActive` and
+  `#mgqActive` through `renderQueryChips`, which the Games tab shares. Those two tabs keep no
+  address state; the hash stays the Games tab's contract.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
   the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
