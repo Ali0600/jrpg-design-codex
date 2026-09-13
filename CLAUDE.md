@@ -606,8 +606,10 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as #27 (2026-09-12)**:
    the `verbs` carve-out, the sabotage-count gate and the restore contract. **PR 1, the verb
    pass, landed as #28 (2026-09-13)**: `docs/verbs.md` and its writer, tags re-derived from
-   the rows' own text. **PR 2, lineages, landed 2026-09-13**: 3 chains became 12 in release
-   order with an explicit `best`, every node quoted in `docs/lineages.md`, 64 sabotages.
+   the rows' own text. **PR 2, lineages, landed as #29 (2026-09-13)**: 3 chains became 12 in
+   release order with an explicit `best`, every node quoted in `docs/lineages.md`, 64
+   sabotages. GitHub shows #29 CLOSED, not merged: its merge call returned 502 after moving
+   `main`, so the content is squash `e5143de` and the deploy ran by `workflow_dispatch`.
    **Next is PR 3, pillar coverage**, specified in
    `~/.claude/plans/i-want-you-to-eager-riddle.md`. The two thin verbs (*The fleeing rare*,
    *Vista sketch*) are research targets for whoever next picks a game.
