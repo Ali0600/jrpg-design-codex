@@ -396,3 +396,9 @@ category and for every row the digest tagged.
 ### M281 — Trade that widens its own catalogue
 - Shop stock · how · `sell enough of the cheap staples and the trade shops begin stocking their refined counterparts`
 - Traded · how · `profit comes from carrying goods along a route rather than from any single shop`
+
+### M282 — A smithy whose shelves are stocked by the materials you sell it
+- Shop stock · how · `sell the smith a set number of one Shadow's material and that piece goes on sale`
+
+### M283 — A fox whose healing gets cheaper as you grant the town's wishes
+- Consequence · how · `the townsfolk's offerings pay to restore the run-down shrine`
