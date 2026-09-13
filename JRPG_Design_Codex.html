@@ -93,6 +93,16 @@
   }
   .chip:hover{color:var(--ink); border-color:var(--steel);}
   .chip.on{color:#fff; border-color:var(--steel); background:#1c2748;}
+  a.chip{text-decoration:none;}
+  .chip .fn{font-size:11px; color:var(--ink-faint);}
+  /* facets: a platform, genre, studio, series or year that lists every game sharing it */
+  a.facet{color:inherit; text-decoration:none; border-bottom:1px dotted color-mix(in srgb, currentColor 55%, transparent);}
+  a.facet:hover{color:var(--gold); border-bottom-color:var(--gold);}
+  .gq-active{display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin:-10px 0 12px;}
+  .gq-active:empty{display:none;}
+  #gameBrowse{margin:0 0 14px;}
+  .browse-group{margin-top:12px;}
+  .browse-chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:5px;}
   .orb{
     width:11px; height:11px; border-radius:50%; flex:none;
     background:radial-gradient(circle at 34% 30%, #fff9 0%, var(--c) 45%, color-mix(in srgb, var(--c) 55%, #000) 100%);
@@ -553,7 +563,7 @@
    <div id="gamesList">
     <div class="toolbar">
       <button class="btn primary" id="btnAddGame">+ Add game to roster</button>
-      <input type="search" id="gq" placeholder="Search games — title, developer, genre, franchise, platform" aria-label="Search games">
+      <input type="search" id="gq" placeholder="Search games — title, studio, genre… or platform:PC genre:RPG" aria-label="Search games">
       <select id="gameSort" aria-label="Sort games">
         <option value="pipeline">Sort: research pipeline</option>
         <option value="mc">Sort: Metascore (critics)</option>
@@ -563,6 +573,11 @@
         <option value="year">Sort: year released</option>
       </select>
     </div>
+    <div class="gq-active" id="gqActive"></div>
+    <details class="verb-box" id="gameBrowse">
+      <summary>Browse by platform, genre, series, studio or decade <span class="vhint" id="gameBrowseSummary"></span></summary>
+      <div id="gameBrowseBody"></div>
+    </details>
     <div class="form" id="gameForm">
       <h3>Add a game</h3>
       <div class="grid">
@@ -629,6 +644,7 @@
     <h2>The research pipeline</h2>
     <p>The <b>Games</b> tab is a research queue, not just a list. Games sort by status — <i>Researching</i> first, then <i>To Research</i>, then the finished shelf — and each card shows how many mechanics and minigames it has contributed so far, so coverage gaps are visible at a glance.</p>
     <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
+    <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series or a year on a game's page to list every game that shares it; click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared.</p>
     <ol>
       <li><b>Queue it.</b> Add the game with status <i>To Research</i>, and write the "why" as a <b>research brief</b>: the specific question this game should answer (the queued cards marked BRIEF show the shape).</li>
       <li><b>Research it.</b> Set it to <i>Researching</i>, then play it or work through deep dives and wikis with the codex open. Log mechanics with <b>+ Add mechanic</b> as you notice them.</li>
@@ -3127,6 +3143,143 @@ function expandIds(list){
   return out;
 }
 
+/* ============================= FACETS ============================= */
+/* Everything a game row names — platform, genre, developer, publisher, series, year —
+   is a filter. Sources spell one thing several ways (GameFAQs "SquareSoft", the row's
+   "Squaresoft"; "Role-Playing" where the owner says RPG), so every raw string is folded
+   to ONE canonical spelling before it is shown or compared: two spellings would be two
+   filters, each listing half the games.
+
+   FACET_VOCAB holds the folds. A spelling merges SPELLINGS of one thing, never two things
+   (Square is not Square Enix). Punctuation, spacing and case never need an entry — they
+   are normalised away. The validator reads this table and these functions from the page:
+   platform and genre are CLOSED (every string the data carries must be listed, so a new
+   console or a stray label fails the build), company and series are OPEN (an unlisted
+   name stands as itself), and every entry must be used by some game. */
+const FACET_VOCAB = {
+  platform: {
+    "PlayStation":[], "PlayStation 2":[], "PlayStation 3":[], "PlayStation 4":[], "PlayStation 5":[],
+    "PlayStation Vita":[], "PSP":[], "PC":[], "SNES":["Super Nintendo"], "Nintendo Switch":[],
+    "3DS":[], "Wii":[], "GameCube":[], "Game Boy Advance":[], "Dreamcast":[], "Xbox 360":[]
+  },
+  genre: {
+    "RPG":["Role-Playing"], "JRPG":["Japanese-Style"], "Action RPG":[], "Tactical RPG":["Tactics"],
+    "Strategy":[], "Turn-Based":[], "Action-Adventure":[], "Open World":[]
+  },
+  company: {
+    "Square":["SquareSoft"], "Square Electronic Arts":["Square EA"], "Enix":["Enix Corporation"],
+    "FromSoftware":[], "Level-5":[], "Chunsoft":[], "Heartbeat":[], "Nihon Falcom":["Falcom"],
+    "Ryu Ga Gotoku Studio":["Ryu ga Gotoku Studios"], "CD Projekt Red":["CD Projekt Red Studio"],
+    "Deck13":["DECK13 Spotlight"], "Bandai Namco":["Bandai Namco Games","Namco Bandai Games"]
+  },
+  series: {
+    "Dragon Quest":["Dragon Quest / Warrior"], "Mother":["EarthBound / Mother"],
+    "Yakuza":["Yakuza / Like a Dragon"], "Mana":["Mana / Seiken Densetsu"],
+    "The Legend of Zelda":["Legend of Zelda"]
+  }
+};
+/** The facet kinds, in display order, and the vocabulary table each one folds through. */
+const FACET_KINDS = ["platform", "genre", "dev", "pub", "series", "year", "status"];
+const FACET_TABLE = {platform:"platform", genre:"genre", dev:"company", pub:"company", series:"series"};
+/** Query keys, with the aliases a person might type. */
+const FACET_KEYS = {platform:"platform", plat:"platform", genre:"genre", dev:"dev", developer:"dev",
+  pub:"pub", publisher:"pub", series:"series", franchise:"series", year:"year", status:"status"};
+
+function facetNorm(s){ return String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
+
+/* One raw string -> {canon, via}: `via` is the vocabulary spelling that matched (null when
+   nothing did). A trailing parenthetical is a release qualifier ("Chunsoft (SFC)") and is
+   dropped before the lookup. Never throws: an imported backup renders whatever it carries. */
+let facetIndex = null;
+function facetLookup(kind, raw){
+  let s = String(raw ?? "").trim().replace(/\s+/g, " ");
+  const bare = s.replace(/\s*\([^()]*\)$/, "");
+  if(facetNorm(bare)) s = bare;
+  const n = facetNorm(s);
+  if(!n) return null;
+  if(!facetIndex){
+    facetIndex = {};
+    for(const [table, rows] of Object.entries(FACET_VOCAB)){
+      const m = facetIndex[table] = new Map();
+      for(const [canon, spellings] of Object.entries(rows)){
+        for(const via of [canon, ...spellings]) if(!m.has(facetNorm(via))) m.set(facetNorm(via), {canon, via});
+      }
+    }
+  }
+  const hit = FACET_TABLE[kind] && facetIndex[FACET_TABLE[kind]] && facetIndex[FACET_TABLE[kind]].get(n);
+  return hit || {canon:s, via:null};
+}
+function canonFacet(kind, raw){ const r = facetLookup(kind, raw); return r ? r.canon : ""; }
+
+/* Every raw string a game contributes, tagged with its kind. The ONE list of where facets
+   come from: facetsOf() and the validator both read it. The row's own `dev` is the fallback
+   for a game with no harvested developer (a custom entry), split on " / " for co-developers. */
+function facetSources(g){
+  const gf = (g && g.gf) || {}, out = [];
+  const add = (kind, vals) => (Array.isArray(vals) ? vals : [vals]).forEach(raw=>{
+    if(typeof raw === "string" && raw.trim()) out.push({kind, raw});
+  });
+  add("platform", gf.plat); add("platform", gf.also || []);
+  add("genre", gf.genre || []);
+  if(typeof gf.dev === "string" && gf.dev.trim()) add("dev", gf.dev);
+  else add("dev", String((g && g.dev) || "").split(/\s+\/\s+/));
+  add("pub", gf.pub);
+  add("series", gf.fr || []);
+  const y = String((g && g.year) ?? "");
+  if(/^\d{4}$/.test(y)){ add("year", y); add("year", y.slice(0, 3) + "0s"); }
+  add("status", g && g.status);
+  return out;
+}
+/** kind -> Set of canonical values. */
+function facetsOf(g){
+  const f = {};
+  FACET_KINDS.forEach(k=> f[k] = new Set());
+  facetSources(g).forEach(({kind, raw})=>{ const c = canonFacet(kind, raw); if(c) f[kind].add(c); });
+  return f;
+}
+
+/* The Games search box's grammar: `key:value` or `key:"two words"` for a known key, and
+   everything else is free text. "Metaphor: ReFantazio" stays text (nothing follows the
+   colon), and so does an unknown key. Repeated facets collapse to one. */
+function parseGameQuery(q){
+  const facets = [];
+  const text = String(q ?? "").replace(/(^|\s)([A-Za-z]+):(?:"([^"]+)"|([^\s"]+))(?=\s|$)/g,
+    (m, pre, key, quoted, bare)=>{
+      const k = FACET_KEYS[key.toLowerCase()];
+      const v = String(quoted ?? bare).trim();
+      if(!k || !facetNorm(v)) return m;
+      if(!facets.some(f=> f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v)))) facets.push({k, v});
+      return pre;
+    }).replace(/\s+/g, " ").trim();
+  return {text, facets};
+}
+function facetToken(k, v){
+  const s = String(v).replace(/"/g, "");
+  return `${k}:${/\s/.test(s) ? `"${s}"` : s}`;
+}
+function buildGameQuery({text, facets}){
+  return [...facets.map(f=> facetToken(f.k, f.v)), text].filter(Boolean).join(" ");
+}
+function withFacet(q, k, v){
+  const p = parseGameQuery(q);
+  if(!p.facets.some(f=> f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v)))) p.facets.push({k, v});
+  return buildGameQuery(p);
+}
+function withoutFacet(q, k, v){
+  const p = parseGameQuery(q);
+  p.facets = p.facets.filter(f=> !(f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(canonFacet(k, v))));
+  return buildGameQuery(p);
+}
+/** Every facet must hold (AND); a value matches through the same fold the page displays. */
+function matchesFacets(g, facets){
+  if(!facets || !facets.length) return true;
+  const f = facetsOf(g);
+  return facets.every(({k, v})=>{
+    const want = facetNorm(canonFacet(k, v));
+    return !!want && !!f[k] && [...f[k]].some(x=> facetNorm(x) === want);
+  });
+}
+
 /* ============================= STATE ============================= */
 const LS_KEY = "jrpg_codex_v1";
 let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}}, seen:""};
@@ -3307,7 +3460,7 @@ function renderWhatsNew(){
   $("#btnSeen").addEventListener("click", ()=>{
     store.seen = CHANGES.length ? CHANGES[0].date : "";
     persist();
-    renderWhatsNew(); renderCards(); renderMinigames(); renderGames(); route();
+    renderWhatsNew(); renderCards(); renderMinigames(); renderGames(); route({front:false});
   });
 }
 
@@ -3316,31 +3469,49 @@ function renderWhatsNew(){
    everywhere are plain <a href="#game=…">, so the browser's own history does the
    work: Back returns to the list, a link can be shared, middle-click opens a tab. One
    reader, route(), runs on hashchange and at init. */
+/* The list has a hash too: `#games=<query>` carries its search, so a facet link is a plain
+   <a>, Back returns from a filtered list to the page it was opened from, and a filtered list
+   can be shared. Typing in #gq REPLACES the entry (no history per keystroke). A re-render
+   (Mark-all-seen, import) passes {front:false}, so it never pulls the owner off another tab. */
 let openGameTitle = null;
-function route(){
-  const m = location.hash.match(/^#game=(.*)$/);
-  let t = null;
+function gamesHash(q){ return q ? "#games=" + encodeURIComponent(q).replace(/%3A/gi, ":") : ""; }
+function route(opts){
+  const front = !(opts && opts.front === false);
   // Firefox hands the hash back decoded, Chrome does not — decode defensively.
-  if(m){ try{ t = decodeURIComponent(m[1]); }catch(e){ t = m[1]; } }
-  if(t && !allGames().some(g=>g.title===t)){
-    $("#gamesNote").textContent = `No game called “${t}” in the roster — showing every game`;
-    t = null;
-  }
+  const dec = s => { try{ return decodeURIComponent(s); }catch(e){ return s; } };
+  const m = location.hash.match(/^#game=(.*)$/), lm = location.hash.match(/^#games=(.*)$/);
+  let t = m ? dec(m[1]) : null;
+  const missing = t && !allGames().some(g=>g.title===t) ? t : null;
+  if(missing) t = null;
+  const wasOpen = openGameTitle;
   openGameTitle = t;
   $("#gamesList").hidden = !!t;
   $("#gamePage").hidden = !t;
-  if(!t) return;
   const tab = document.querySelector('.tab[data-view="games"]');
-  if(tab.getAttribute("aria-selected") !== "true") tab.click();
-  renderGamePage(t);
-  window.scrollTo({top:0, behavior:"instant"});
+  const fronting = front && !!(t || lm) && tab.getAttribute("aria-selected") !== "true";
+  if(fronting) tab.click();
+  if(t){
+    renderGamePage(t);
+    if(front) window.scrollTo({top:0, behavior:"instant"});
+    return;
+  }
+  const q = lm ? dec(lm[1]) : "";
+  if($("#gq").value !== q){ $("#gq").value = q; renderGames(); }
+  if(missing) $("#gamesNote").textContent = `No game called “${missing}” in the roster — showing every game`;
+  if(lm && front && (wasOpen || fronting)) window.scrollTo({top:0, behavior:"instant"});
 }
 window.addEventListener("hashchange", route);
 function gotoGame(title){
   const want = "#game=" + encodeURIComponent(title);
   if(location.hash === want) route(); else location.hash = want;
 }
-function closeGame(){ history.replaceState(null, "", location.pathname + location.search); route(); }
+// Back to the list as it was: the query the list held stays in the hash.
+function closeGame(){ history.replaceState(null, "", location.pathname + location.search + gamesHash($("#gq").value.trim())); route(); }
+function setGamesQuery(q){
+  $("#gq").value = q;
+  history.replaceState(null, "", location.pathname + location.search + gamesHash(q.trim()));
+  renderGames();
+}
 // Every game link goes through gotoGame, so a link to the page that is ALREADY open
 // (from another tab, say) still brings the Games tab forward.
 document.addEventListener("click", e=>{
@@ -3620,11 +3791,17 @@ function gfRatingChip(g){
   if(!r || r.v == null) return "";
   return ` · <span class="g-gf" title="GameFAQs user rating${r.n?` from ${r.n.toLocaleString()} users`:""}">GameFAQs ★ ${esc(r.v)}/5</span>`;
 }
+// Facets AND together; whatever is left of the query is a substring search, which also sees the
+// folded spellings, so typing "rpg" finds what a "Role-Playing" label means.
 function gameMatches(g, q){
   if(!q) return true;
-  const gf = g.gf || {};
-  const hay = [g.title, g.dev, g.status, gf.plat, ...(gf.genre||[]), ...(gf.fr||[]), ...(gf.aka||[]), g.wp].filter(Boolean).join(" ").toLowerCase();
-  return hay.includes(q);
+  const {text, facets} = parseGameQuery(q);
+  if(!matchesFacets(g, facets)) return false;
+  if(!text) return true;
+  const gf = g.gf || {}, f = facetsOf(g);
+  const hay = [g.title, g.dev, g.status, gf.plat, ...(gf.genre||[]), ...(gf.fr||[]), ...(gf.aka||[]), g.wp,
+    ...FACET_KINDS.flatMap(k=> [...f[k]])].filter(Boolean).join(" ").toLowerCase();
+  return hay.includes(text.toLowerCase());
 }
 function renderGames(){
   const box = $("#gameCards"); box.innerHTML = "";
@@ -3633,7 +3810,7 @@ function renderGames(){
   allMechs().forEach(m=>{ mechCount[m.game]=(mechCount[m.game]||0)+1; if(isFresh(m.id)) freshN[m.game]=(freshN[m.game]||0)+1; });
   MINIGAMES.forEach(m=>{ mgCount[m.g]=(mgCount[m.g]||0)+1; if(isFresh(m.id)) freshN[m.g]=(freshN[m.g]||0)+1; });
   const mode = ($("#gameSort")||{}).value || "pipeline";
-  const q = (($("#gq")||{}).value || "").trim().toLowerCase();
+  const q = (($("#gq")||{}).value || "").trim();
   const all = allGames();
   const games = sortGames(all.filter(g=>gameMatches(g, q)), mode);
   const active = games.filter(g=>g.status==="Researching").length;
@@ -3665,7 +3842,7 @@ function renderGames(){
             <h3 class="g-title"><a href="#game=${encodeURIComponent(g.title)}" title="Open the game's page">${esc(g.title)}</a>${freshGameBadge(g.title)}</h3>
             <span>${statusSelectHTML(g)}</span>
           </div>
-          <div class="game-sub">${esc(g.dev)} · ${esc(g.year)}${g.gf && g.gf.plat ? ` · ${esc(g.gf.plat)}` : ""} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}${gfRatingChip(g)}</div>
+          <div class="game-sub">${gameSubHTML(g, q)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}${gfRatingChip(g)}</div>
           ${scoreRowHTML(g)}
           ${gameShotsHTML(g.title)}
           <p class="game-why">${esc(g.why)}</p>
@@ -3675,7 +3852,56 @@ function renderGames(){
     wireShotThumbs(card);
     box.appendChild(card);
   });
+  renderGameFacets(all, q);
   renderCandidates();
+}
+/* The facet links on a card and a page. `base` is the list's current query: a click from a
+   card NARROWS it, and null (the game page, the Browse panel) starts a new one. */
+const FACET_LABELS = {platform:"Platform", genre:"Genre", dev:"Developer", pub:"Publisher", series:"Series", year:"Year", status:"Status"};
+function facetLink(k, v, base){
+  const q = base == null ? facetToken(k, v) : withFacet(base, k, v);
+  return `<a class="facet" href="${esc(gamesHash(q))}" title="${esc(`${FACET_LABELS[k]}: ${v} — ${base == null ? "list every game" : "narrow the list"}`)}">${esc(v)}</a>`;
+}
+/** A raw string from a row, folded and linked; text that folds to nothing stays text. */
+function facetRaw(k, raw, base){ const c = canonFacet(k, raw); return c ? facetLink(k, c, base) : esc(raw); }
+function gameSubHTML(g, base){
+  const f = facetsOf(g);
+  const devs = [...f.dev].map(v=> facetLink("dev", v, base)).join(" / ") || esc(g.dev);
+  const year = /^\d{4}$/.test(String(g.year)) ? facetLink("year", String(g.year), base) : esc(g.year);
+  const plat = [...f.platform][0];
+  return [devs, year, plat ? facetLink("platform", plat, base) : ""].filter(Boolean).join(" · ");
+}
+/* The active filters as removable chips, and the Browse panel: every value of every kind with
+   the number of games carrying it, counted through the same facetsOf() the filter uses. */
+function renderGameFacets(all, q){
+  const {facets} = parseGameQuery(q);
+  const act = $("#gqActive");
+  act.innerHTML = facets.length
+    ? facets.map((f, i)=>`<button class="chip on" data-drop="${i}" title="Remove this filter">${esc(FACET_LABELS[f.k])}: ${esc(canonFacet(f.k, f.v))} <span aria-hidden="true">×</span></button>`).join("")
+      + `<button class="chip" data-drop="all">Clear filters</button>`
+    : "";
+  act.querySelectorAll("[data-drop]").forEach(b=> b.addEventListener("click", ()=>{
+    const f = facets[+b.dataset.drop];
+    setGamesQuery(b.dataset.drop === "all" ? parseGameQuery(q).text : withoutFacet(q, f.k, f.v));
+  }));
+
+  const counts = {};
+  FACET_KINDS.forEach(k=> counts[k] = new Map());
+  all.forEach(g=>{ const f = facetsOf(g); FACET_KINDS.forEach(k=> f[k].forEach(v=> counts[k].set(v, (counts[k].get(v)||0) + 1))); });
+  const on = (k, v) => facets.some(f=> f.k === k && facetNorm(canonFacet(k, f.v)) === facetNorm(v));
+  const groups = [
+    ["platform", "Platform"], ["genre", "Genre"], ["series", "Series"], ["dev", "Developer"], ["pub", "Publisher"],
+    ["year", "Decade", v=> /0s$/.test(v), (a, b)=> a[0].localeCompare(b[0])]
+  ];
+  const byCount = (a, b)=> b[1] - a[1] || a[0].localeCompare(b[0]);
+  $("#gameBrowseBody").innerHTML = groups.map(([k, label, keep, sort])=>{
+    const list = [...counts[k]].filter(([v])=> !keep || keep(v)).sort(sort || byCount);
+    if(!list.length) return "";
+    return `<div class="browse-group"><div class="gp-k">${label}</div><div class="browse-chips">${list.map(([v, n])=>
+      `<a class="chip${on(k, v) ? " on" : ""}" href="${esc(gamesHash(facetToken(k, v)))}" title="List every ${esc(FACET_LABELS[k].toLowerCase())} ${esc(v)} game">${esc(v)} <span class="fn">${n}</span></a>`).join("")}</div></div>`;
+  }).join("");
+  const n = k => [...counts[k].keys()].length;
+  $("#gameBrowseSummary").textContent = `— ${n("platform")} platforms · ${n("genre")} genres · ${n("series")} series · ${new Set([...counts.dev.keys(), ...counts.pub.keys()]).size} studios`;
 }
 function renderCandidates(){
   const box = $("#gfCandBody"), sum = $("#gfCandSummary");
@@ -3721,13 +3947,14 @@ function renderGamePage(title){
 
   const cells = [];
   const cell = (k, v) => { if(v) cells.push(`<div><div class="gp-k">${k}</div><div>${v}</div></div>`); };
-  cell("Platform", esc(gf.plat));
-  cell("Genre", (gf.genre||[]).map(esc).join(" › "));
-  cell("Developer", esc(gf.dev));
-  cell("Publisher", esc(gf.pub));
+  // Every value is a facet link that lists the games sharing it, folded to the vocabulary's spelling.
+  cell("Platform", gf.plat ? facetRaw("platform", gf.plat, null) : "");
+  cell("Genre", (gf.genre||[]).map(x=> facetRaw("genre", x, null)).join(" › "));
+  cell("Developer", gf.dev ? facetRaw("dev", gf.dev, null) : "");
+  cell("Publisher", gf.pub ? facetRaw("pub", gf.pub, null) : "");
   cell("Release", esc(gf.rel));
-  cell("Franchise", (gf.fr||[]).map(esc).join(", "));
-  cell("Also on", (gf.also||[]).map(esc).join(", "));
+  cell("Franchise", (gf.fr||[]).map(x=> facetRaw("series", x, null)).join(", "));
+  cell("Also on", (gf.also||[]).map(x=> facetRaw("platform", x, null)).join(", "));
   cell("Also known as", (gf.aka||[]).map(esc).join(" · "));
   const count = r => r && r.n ? ` <span class="g-gf">(${r.n.toLocaleString()} ratings)</span>` : "";
   if(gf.rating && gf.rating.v!=null) cell("GameFAQs user rating", `★ ${esc(gf.rating.v)}/5${gf.rating.w?` · ${esc(gf.rating.w)}`:""}${count(gf.rating)}`);
@@ -3760,7 +3987,7 @@ function renderGamePage(title){
         ${coverHTML(g, "gp-cover")}
         <div class="gp-main">
           <h2>${esc(g.title)}${freshGameBadge(g.title)}</h2>
-          <div class="game-sub">${esc(g.dev)} · ${esc(g.year)}${gf.plat?` · ${esc(gf.plat)}`:""} · ${mechs.length} mechanic${mechs.length===1?"":"s"}${minis.length?` · ${minis.length} minigame${minis.length===1?"":"s"}`:""}</div>
+          <div class="game-sub">${gameSubHTML(g, null)} · ${mechs.length} mechanic${mechs.length===1?"":"s"}${minis.length?` · ${minis.length} minigame${minis.length===1?"":"s"}`:""}</div>
           <div class="gp-links">${links.join("")}<span>${statusSelectHTML(g)}</span></div>
           ${scoreRowHTML(g)}
           ${cells.length ? `<div class="gp-grid">${cells.join("")}</div>` : `<p class="wn-note">No GameFAQs page harvested yet for this game.</p>`}
@@ -3788,7 +4015,10 @@ function renderGamePage(title){
   wireShotThumbs(box);
 }
 $("#gameSort").addEventListener("change", renderGames);
-$("#gq").addEventListener("input", renderGames);
+$("#gq").addEventListener("input", ()=>{
+  history.replaceState(null, "", location.pathname + location.search + gamesHash($("#gq").value.trim()));
+  renderGames();
+});
 $("#btnAddGame").addEventListener("click", ()=> $("#gameForm").classList.toggle("show"));
 $("#btnCancelGame").addEventListener("click", ()=> $("#gameForm").classList.remove("show"));
 $("#btnSaveGame").addEventListener("click", ()=>{
@@ -3972,7 +4202,7 @@ $("#importFile").addEventListener("change", e=>{
       const data = JSON.parse(r.result);
       if(!data.store) throw new Error("Not a codex backup");
       store = normalizeStore(data.store);
-      persist(); buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery(); route();
+      persist(); buildChangeMap(); renderWhatsNew(); buildFilters(); buildVerbChips(); renderCards(); renderGames(); renderStats(); buildMgFilters(); renderMinigames(); renderMyGame(); renderLineages(); renderGallery(); route({front:false});
       flashSave("Backup restored");
     }catch(err){ alert("Couldn't read that file — it doesn't look like a codex backup."); }
   };

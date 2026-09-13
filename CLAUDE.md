@@ -273,15 +273,42 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   init (and after Mark-all-seen and import), `gotoGame(title)` sets the hash (or calls
   `route()` when it is already set, via a document-level click delegate so a link to the
   open page from another tab still fronts the Games tab), and `closeGame()` replaces the
-  hash away. `renderGames()` re-renders the hidden list underneath freely — it is called
+  hash with the list's own `#games=` query (see Facets). The two re-render call sites pass
+  `route({front:false})`, so Mark-all-seen or an import never pulls the owner off another tab.
+  `renderGames()` re-renders the hidden list underneath freely — it is called
   from four places. A GameFAQs path becomes an href only through `gfUrl()`, which
   re-checks the path shape (imported backups flow through the renderer, like `refOk`).
   `coverHTML()` degrades to the game's initials when there is no cover or the file is
   missing (`onerror`). Game-level freshness comes from `CHANGES[].games` through
   `gameChangeMap` / `freshGameBadge(title)`; the strip renders those titles as chips.
-  The Games tab also gained `#gq` (search over title, developer, genre, franchise,
-  platform, aka) and a GameFAQs-rating sort; the candidates panel `#gfCandidates` ranks
-  suggested games by how many codex games point at them.
+  The Games tab also gained `#gq` (the search, see Facets) and a GameFAQs-rating sort; the
+  candidates panel `#gfCandidates` ranks suggested games by how many codex games point at them.
+- **Facets** (added 2026-09-13; the owner: "I want everything clickable") — every platform,
+  genre, developer, publisher, series and year on a game card or page is a plain
+  `<a href="#games=<query>">` listing the games that share it. From a page it starts a new
+  query; from a card it NARROWS the current one. The list's query lives in the hash as
+  `#games=…`: `route()` writes it into `#gq`, typing REPLACES the entry
+  (`history.replaceState`, no history per keystroke), and Back from a filtered list returns to
+  the page it came from. The grammar is `key:value` or `key:"two words"` plus free text
+  (`parseGameQuery`; keys and their aliases in `FACET_KEYS`). Facets AND together, each shows as
+  a removable chip in `#gqActive`, and the collapsed `#gameBrowse` lists every value with its
+  count. The logic sits in the DATA REGION after `expandIds` (`facetNorm`, `facetLookup`,
+  `canonFacet`, `facetSources`, `facetsOf`, `parseGameQuery`, `withFacet`/`withoutFacet`,
+  `matchesFacets`), so the validator and `scripts/facets.test.mjs` run the page's own code.
+  **`facetSources(g)` is the ONE list of where a facet comes from** — today `gf.plat`, `also`,
+  `genre`, `dev`, `pub` and `fr`, the row's `year` and `status`, and the row's own `dev` (split on
+  " / ") only when there is no `gf.dev`, because `"Enix (tri-Ace)"` would file Star Ocean 2 under
+  its publisher. Add a source there and both the filter and the gate see it.
+  **`FACET_VOCAB`** folds spellings to one canonical name per table (`platform`, `genre`,
+  `company` for developer and publisher, `series`): GameFAQs' "Role-Playing" is **RPG**,
+  "Japanese-Style" **JRPG**, "Super Nintendo" **SNES**, and SquareSoft, Squaresoft and Square are
+  all **Square**. Case, spacing and punctuation are normalised away and need no entry, and a
+  trailing parenthetical ("Chunsoft (SFC)") is a release qualifier, dropped before the lookup.
+  An entry merges SPELLINGS of one thing, never two things: Square is not Square Enix.
+  Platform and genre are CLOSED: a string the table does not list fails the build and names
+  the game, so **a newly harvested game on a new console, or with a new genre label, needs its
+  `FACET_VOCAB` entry in the same change**. Company and series are open, and every entry in
+  every table must be used by some game.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
   the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
@@ -486,14 +513,18 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   `DISCOVERY_CATS` — a policy list checked against CATS so a rename cannot empty it);
   **the lineages** (nodes in release order, a counter-example last, no node twice, at least
   three nodes besides the counter, `best` a real non-counter node, and every node quoted in
-  `docs/lineages.md` with the ledger's lines equal to the chains in both directions); and
+  `docs/lineages.md` with the ledger's lines equal to the chains in both directions);
+  **the facet vocabulary** (every platform and genre a game carries folds to a `FACET_VOCAB`
+  entry, read through the page's own `facetSources` and `facetLookup`; no spelling filed under
+  two names; every entry and spelling used by some game; every table one `FACET_TABLE` reads,
+  and the two closed tables present); and
   **the counts
   quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
   CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **64** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **72** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -613,6 +644,11 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    **Next is PR 3, pillar coverage**, specified in
    `~/.claude/plans/i-want-you-to-eager-riddle.md`. The two thin verbs (*The fleeing rare*,
    *Vista sketch*) are research targets for whoever next picks a game.
+   **Facets came first, at the owner's request (2026-09-13)**: PR 1 made every platform, genre,
+   studio, series and year a filter over the data the rows already hold. PR 2 is next: a
+   script-owned `infobox` field from each game's Wikipedia infobox, bringing every platform and
+   every credited person. Both are planned in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`,
+   and PR 3 of the analysis layer waits behind them.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.

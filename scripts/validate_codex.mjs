@@ -326,6 +326,68 @@ export function readLedger(md, file, mechs) {
 
 // -------------------------------------------------------------------- checks
 
+/**
+ * The facet vocabulary, FACET_VOCAB in the page: canonical -> [other spellings], per table.
+ * Platform and genre are CLOSED — every string the data carries must fold to a listed entry, so
+ * a new console or a leaked label fails the build and names itself; company and series are OPEN.
+ * Every entry is held to being USED, in both directions: a spelling nothing carries is dead
+ * vocabulary, and a table the page never reads (or a closed table that is missing) would leave
+ * a rule checking nothing, the DISCOVERY_CATS failure.
+ */
+const CLOSED_FACET_TABLES = ["platform", "genre"];
+function checkFacets({ FACET_VOCAB, FACET_TABLE, facetNorm, facetLookup, facetSources }, games, errors) {
+  const read = new Set(Object.values(FACET_TABLE));
+  for (const t of CLOSED_FACET_TABLES) {
+    if (!Object.hasOwn(FACET_VOCAB, t)) errors.push(`FACET_VOCAB has no ${t} table — the closed-vocabulary rule would check nothing`);
+  }
+  const owner = new Map();
+  const tables = Object.entries(FACET_VOCAB).filter(([table, rows]) => {
+    if (!read.has(table)) errors.push(`FACET_VOCAB.${table} is not a table FACET_TABLE reads — nothing folds through it`);
+    const ok = rows && typeof rows === "object" && !Array.isArray(rows);
+    if (!ok) errors.push(`FACET_VOCAB.${table} must be an object of canonical -> [spellings]`);
+    return ok;
+  });
+  for (const [table, rows] of tables) {
+    for (const [canon, spellings] of Object.entries(rows)) {
+      if (!Array.isArray(spellings) || !spellings.every(isText)) {
+        errors.push(`FACET_VOCAB.${table}: ${JSON.stringify(canon)} must list its other spellings as an array of text`);
+        continue;
+      }
+      for (const s of [canon, ...spellings]) {
+        const key = `${table}|${facetNorm(s)}`;
+        if (!facetNorm(s)) errors.push(`FACET_VOCAB.${table}: ${JSON.stringify(s)} has no letter or digit to match on`);
+        else if (owner.has(key)) errors.push(`FACET_VOCAB.${table}: ${JSON.stringify(s)} is already a spelling of ${JSON.stringify(owner.get(key))}`);
+        else owner.set(key, canon);
+      }
+    }
+  }
+  const usedCanon = new Set(), usedVia = new Set();
+  for (const g of games) {
+    for (const { kind, raw } of facetSources(g)) {
+      const table = FACET_TABLE[kind];
+      const hit = table ? facetLookup(kind, raw) : null;
+      if (!hit) continue;
+      if (hit.via != null) {
+        usedCanon.add(`${table}|${hit.canon}`);
+        usedVia.add(`${table}|${hit.via}`);
+      } else if (CLOSED_FACET_TABLES.includes(table) && Object.hasOwn(FACET_VOCAB, table)) {
+        errors.push(`game ${JSON.stringify(g.title)}: ${kind} ${JSON.stringify(raw)} is not in FACET_VOCAB.${table} — add it as a ${table}, or as another spelling of one`);
+      }
+    }
+  }
+  for (const [table, rows] of tables) {
+    for (const [canon, spellings] of Object.entries(rows)) {
+      if (!usedCanon.has(`${table}|${canon}`)) {
+        errors.push(`FACET_VOCAB.${table}: ${JSON.stringify(canon)} names no game's ${table} — dead vocabulary`);
+        continue;
+      }
+      for (const s of Array.isArray(spellings) ? spellings : []) {
+        if (!usedVia.has(`${table}|${s}`)) errors.push(`FACET_VOCAB.${table}: spelling ${JSON.stringify(s)} of ${JSON.stringify(canon)} matches nothing — dead vocabulary`);
+      }
+    }
+  }
+}
+
 export function validate(html, docs = {}) {
   const errors = [];
   const script = extractScript(html);
@@ -349,7 +411,11 @@ export function validate(html, docs = {}) {
         " SHOTS: typeof SHOTS === 'undefined' ? null : SHOTS," +
         " SHOT_TYPES: typeof SHOT_TYPES === 'undefined' ? null : SHOT_TYPES," +
         " CHANGES: typeof CHANGES === 'undefined' ? null : CHANGES," +
-        " expandIds: typeof expandIds === 'undefined' ? null : expandIds};"
+        " expandIds: typeof expandIds === 'undefined' ? null : expandIds," +
+        " FACET_VOCAB: typeof FACET_VOCAB === 'undefined' ? null : FACET_VOCAB," +
+        " FACET_TABLE: typeof FACET_TABLE === 'undefined' ? null : FACET_TABLE," +
+        " facetFns: {" + ["facetNorm", "facetLookup", "canonFacet", "facetSources", "facetsOf", "parseGameQuery", "matchesFacets"]
+          .map(n => `${n}: typeof ${n} === 'undefined' ? null : ${n}`).join(", ") + "}};"
     )();
   } catch (e) {
     errors.push(`data region does not evaluate: ${e.message}`);
@@ -357,7 +423,7 @@ export function validate(html, docs = {}) {
   }
 
   const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES,
-          CHANGES, expandIds } = data;
+          CHANGES, expandIds, FACET_VOCAB, FACET_TABLE, facetFns } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -609,6 +675,19 @@ export function validate(html, docs = {}) {
       for (const f of docs.shotFiles) {
         if (!referenced.has(f)) errors.push(`shots folder: ${JSON.stringify(f)} is not referenced by any SHOTS row — delete it or add the row`);
       }
+    }
+  }
+
+  // --- facets: the page's own vocabulary and fold, read through the page's own functions, so
+  // what this gate calls a platform is what the filter lists under it.
+  if (FACET_VOCAB != null) {
+    const missing = Object.keys(facetFns).filter(n => typeof facetFns[n] !== "function");
+    if (missing.length) {
+      errors.push(`FACET_VOCAB exists but the data region defines no ${missing.join(", ")} — the page's filters and this gate would fold spellings differently`);
+    } else if (!FACET_TABLE || typeof FACET_TABLE !== "object") {
+      errors.push("FACET_VOCAB exists but the data region defines no FACET_TABLE — no facet kind would fold through it");
+    } else {
+      checkFacets({ FACET_VOCAB, FACET_TABLE, ...facetFns }, BASE_GAMES, errors);
     }
   }
 
@@ -964,6 +1043,26 @@ const SABOTAGES = [
   // node, so release order still holds; it is quoted for three OTHER chains.
   { name: "a lineage node docs/lineages.md does not quote", expect: /lineage "The timing lineage" lists M160, but docs\/lineages\.md quotes no evidence for it/,
     apply: s => replaceFirst(s, '"M080","M161"], best:"M161"', '"M080","M161","M160"], best:"M161"', "a lineage node docs/lineages.md does not quote") },
+
+  // Facets. Anchors are the vocabulary literal and the gf lines game_rows.mjs writes. A mutation
+  // may trip a second facet rule on the way (a renamed platform also leaves its entry unused), so
+  // each expects its own rule's message, which names the string it planted.
+  { name: "a platform outside the facet vocabulary", expect: /platform "Dreamcast 2" is not in FACET_VOCAB\.platform/,
+    apply: s => replaceFirst(s, 'plat:"Dreamcast"', 'plat:"Dreamcast 2"', "a platform outside the facet vocabulary") },
+  { name: "a genre outside the facet vocabulary", expect: /genre "Tactical" is not in FACET_VOCAB\.genre/,
+    apply: s => replaceFirst(s, 'genre:["Strategy","Turn-Based","Tactics"],dev:"SquareSoft"', 'genre:["Strategy","Turn-Based","Tactical"],dev:"SquareSoft"', "a genre outside the facet vocabulary") },
+  { name: "one spelling filed under two canonical names", expect: /FACET_VOCAB\.genre: "Role-Playing" is already a spelling of "RPG"/,
+    apply: s => replaceFirst(s, '"JRPG":["Japanese-Style"]', '"JRPG":["Japanese-Style","Role-Playing"]', "one spelling filed under two canonical names") },
+  { name: "a spelling no game carries", expect: /FACET_VOCAB\.company: spelling "Squaresoft Co\." of "Square" matches nothing/,
+    apply: s => replaceFirst(s, '"Square":["SquareSoft"]', '"Square":["SquareSoft","Squaresoft Co."]', "a spelling no game carries") },
+  { name: "a platform no game is on", expect: /FACET_VOCAB\.platform: "Virtual Boy" names no game's platform/,
+    apply: s => replaceFirst(s, '"Xbox 360":[]', '"Xbox 360":[], "Virtual Boy":[]', "a platform no game is on") },
+  { name: "a facet function missing from the data region", expect: /FACET_VOCAB exists but the data region defines no facetSources/,
+    apply: s => replaceFirst(s, "function facetSources(g){", "function facetSourcesMoved(g){", "a facet function missing from the data region") },
+  { name: "a vocabulary table no facet kind reads", expect: /FACET_VOCAB\.serie is not a table FACET_TABLE reads/,
+    apply: s => replaceFirst(s, 'series: {\n    "Dragon Quest"', 'serie: {\n    "Dragon Quest"', "a vocabulary table no facet kind reads") },
+  { name: "the closed platform table missing", expect: /FACET_VOCAB has no platform table/,
+    apply: s => replaceFirst(s, 'platform: {\n    "PlayStation"', 'platforms: {\n    "PlayStation"', "the closed platform table missing") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */
