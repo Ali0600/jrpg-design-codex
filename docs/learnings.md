@@ -377,3 +377,18 @@ letting the validator name it, and on the live site that would have broken every
 **Takeaway:** before believing an empty "missed" list, confirm the judge ran its cases. An exit
 code cannot tell "caught everything" from "never started", and a base run that is red for a
 planned reason is exactly that kind of run: read the sabotage results again once it is green.
+
+## `toISOString()` gives the UTC day, which is not the owner's today
+Cutting `new Date().toISOString()` to its first ten characters reads like "today's date" and is
+the date in UTC. East of Greenwich it still says yesterday from local midnight until the offset
+has passed; west of it, the evening already says tomorrow.
+
+**Why it came up:** Persona 4 was spliced at 01:09 CEST on 2026-09-14. The splicer dated its
+changelog entry that way, found an entry already dated 2026-09-13, and merged the new rows into
+the previous day's facets entry, under a title that described none of them. Nothing failed: the
+dates were still strictly decreasing, and two other scripts defaulted their `--today` the same way.
+
+**Takeaway:** a date meaning "the day this happened, for the person using it" comes from the local
+clock, and the tool that writes one takes a `--today` flag so a run can be pinned. Test the
+conversion in a child process with `TZ` set to a zone where the two readings differ, and scan for
+the pattern so the next script cannot copy it.

@@ -21,6 +21,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Refusal, refuse, evalCodex, setOwnedFields, canonGf, lit } from "./game_rows.mjs";
+import { localToday } from "./dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = join(ROOT, "JRPG_Design_Codex.html");
@@ -175,7 +176,7 @@ function main(argv) {
   try { probe = JSON.parse(readFileSync(resolve(file), "utf8")); } catch (e) { refuse(`${file}: not JSON — ${e.message}`); }
 
   const { gf, problems } = normalizeGame(probe, row, {
-    today: arg("--today", new Date().toISOString().slice(0, 10)),
+    today: arg("--today", localToday()),
     allowYearMismatch: arg("--allow-year-mismatch", ""),
     allowTitleMismatch: argv.includes("--allow-title-mismatch"),
     note: arg("--note", ""),

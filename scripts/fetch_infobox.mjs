@@ -43,6 +43,7 @@ import { fileURLToPath } from "node:url";
 import { extractScript, extractData } from "./validate_codex.mjs";
 import { Refusal, refuse, evalCodex, setOwnedFields, canonInfobox } from "./game_rows.mjs";
 import { API, USER_AGENT, RETRY_DELAYS_MS } from "./fetch_covers.mjs";
+import { localToday } from "./dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = join(ROOT, "JRPG_Design_Codex.html");
@@ -307,7 +308,7 @@ async function main(argv) {
   const codexPath = resolve(ROOT, arg("--codex", CODEX));
   const html = readFileSync(codexPath, "utf8");
   const { html: next, results, changed } = await harvest(html, {
-    only, note: arg("--note", null), today: arg("--today", new Date().toISOString().slice(0, 10)),
+    only, note: arg("--note", null), today: arg("--today", localToday()),
     onRow: r => console.log(`${r.problems.length ? "REFUSED" : r.changed ? "changed" : "same   "}  ${r.title}${r.infobox ? ` — ${(r.infobox.plat || []).length} platform(s)` : ""}${r.wpcats ? `, ${r.wpcats.length} categories` : ""}${r.problems.map(p => `\n           ${p}`).join("")}`),
   });
   const refused = results.filter(r => r.problems.length).length;

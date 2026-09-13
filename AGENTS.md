@@ -471,7 +471,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   key for the owner's saved ratings. It imports `extractScript` / `extractData` /
   `readRefHosts` from `validate_codex.mjs` rather than re-deriving them (that file's
   `main()` is guarded so importing it does not run a validation). It also LOGS the splice
-  in `CHANGES` — a new entry dated today, or merged into today's entry if one exists
+  in `CHANGES` — a new entry dated today (the LOCAL calendar day from `scripts/dates.mjs`,
+  never `toISOString()`, which is the UTC day and once filed a 01:09 CEST splice under the day
+  before; `--today YYYY-MM-DD` pins it, as it does for `splice_game` and `fetch_infobox`), or merged into today's entry if one exists
   (two entries sharing a date would break the strictly-decreasing order) — and refuses
   outright if `const CHANGES = [` is missing. **After a same-day merge, re-read that entry's
   `title` and `note`**: the merge keeps the FIRST title, so a second game spliced the same
