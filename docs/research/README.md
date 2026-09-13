@@ -108,7 +108,7 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
 | Section | Maps onto |
 |---|---|
 | `## Sources` | the guides read — id, title, author, version, updated, category, KB, URL — plus a **Coverage** line per guide, from `__gf.visited()` |
-| `## Mechanics candidates` | one `###` per candidate: `cat`, `how`, `loop`, `notes`, `verbs`, `pointers`, `row` |
+| `## Mechanics candidates` | one `###` per candidate: `cat`, `how`, `loop`, `notes`, `verbs`, `pointers`, `row` — after the splice, each tagged row and each row in a discovery category also needs its entry in `docs/verbs.md` (the validator names any that are missing) |
 | `## Minigame candidates` | one `###` per candidate: `p`, `r`, `l`, `pointers`, `row`, and an `rt` table with a `src` column |
 | `## Exploration & upgrade facts` | bullets under `### Hidden`, `### Upgrades`, `### Shops & exchange` — the pillar's raw material |
 | `## Unverified or contradicted` | single-source facts and conflicts, so the next pass doesn't redo them |

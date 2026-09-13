@@ -200,13 +200,16 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the board throw on `store.myGame.assign`. Add new store keys THERE, not just to the
   literal, or import breaks.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **53 of 281 rows are tagged**
-  (74 tags), seeded from the brief's own verb->mechanic table so the mapping is sourced,
-  not invented. Filter chips live in a collapsed `<details>` on the Mechanics tab. The
-  taxonomy is thin on purpose so far, and it shows: two verbs carry exactly ONE mechanic,
-  so those chips filter to a single row and teach nothing. The tagging pass that fixes
-  this is planned (see the backlog) and must keep the sourcing rule — a tag is defensible
-  from the ROW'S OWN `how`/`loop`/`notes` text or it is not written.
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **82 of 281 rows are tagged**
+  (101 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
+  of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
+  an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
+  writer of `verbs`, and the validator holds the page and the ledger equal, so a tag cannot
+  be added, kept or dropped anywhere else. Filter chips live in a collapsed `<details>` on
+  the Mechanics tab. Two verbs stay thin because no row's text supports more: *The fleeing
+  rare* carries 1 mechanic and *Vista sketch* 2. They are RESEARCH targets, not tagging
+  targets — the owner chose (2026-09-13) to ship without an at-least-three gate rather than
+  stretch a quote; the gate waits in `docs/DECISIONS.md`'s backlog.
 - **`LINEAGES`** — chains of mechanics where each game answers the previous one.
   Rendered under the Design Pillars tab; clicking a node jumps to that mechanic. An
   optional `counter:"<id>"` marks a chain's counter-example (Tetra Master ends the
@@ -378,6 +381,18 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   title search misses them), a chunk count that differs from the roster is a refusal, an
   owned key found on a line with any other key is a refusal, and the rewritten row must
   still evaluate or nothing is written. `gf` keys are re-ordered to the canonical list.
+- `docs/verbs.md` is the discovery-verb evidence ledger and `scripts/verb_tags.mjs [--write]`
+  its only writer. An entry is a `### M123 — <exact row name>` header, then one line per tag
+  (a dash, the verb, the field, and the quote in backticks, joined by ` · `) or a single
+  `- none · <reason>`. A quote is a verbatim span of at least 25 characters, and it must show
+  the verb's SHAPE rather than share a word with it; the ledger's intro holds the tagging
+  rules (a `notes` quote must describe the game, not advise the owner). The parser
+  (`parseVerbLedger`, `ledgerProblems`) lives in `validate_codex.mjs`, because that file may
+  import nothing local and the gate and the writer must read one grammar. The writer
+  rewrites only a row's FIRST line (`{id:…,cat:"…",`), always puts `verbs` straight after the
+  id, pairs rows positionally like `game_rows.mjs`, and REFUSES to strip tags from a row the
+  ledger does not name — a freshly spliced digest row keeps its tags until its entry exists.
+  Dry run by default; a second `--write` is a no-op.
 - `scripts/fetch_covers.mjs [--write] [--only "<title>"…] [--file "<File>"] [--force]`
   fetches each roster game's box art from Wikipedia's `pageimages` (the article's lead
   image; `pilicense=any` because box art is non-free, `pithumbsize=240` so no local
@@ -457,13 +472,17 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   (every slot the `store` literal declares, nested paths included, is defaulted by
   `normalizeStore` and vice versa — both sides read out of the page and compared whole, so
   a field added without a default is a build failure instead of an undefined slot in a
-  restored backup); and **the counts
+  restored backup); **the discovery-verb ledger** (every quote a real span of its row's
+  named field, every header naming its row exactly, the page's tags and `docs/verbs.md`'s
+  equal as sets in BOTH directions, no verb twice on a row, and an entry for every row in
+  `DISCOVERY_CATS` — a policy list checked against CATS so a rename cannot empty it); and
+  **the counts
   quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
   CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **47** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **55** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -530,7 +549,9 @@ a game (or to work the queue):
    actual items, amounts, and thresholds in an `rt` table wherever the minigame has
    defined payouts. "Prizes and gil" is not research.
 5. Set status "Researched", update the counts in this file's "Current contents"
-   section, run the parse sanity-check, and verify in the browser.
+   section, run the parse sanity-check, and verify in the browser. Give every new row in a
+   discovery category, and every row the digest tagged, its `docs/verbs.md` entry, then run
+   `node scripts/verb_tags.mjs --write` — the validator names any row still missing one.
 
 ### The batch pipeline (use this for anything over ~3 games)
 Proven across five batches (PS1, Clair Obscur, PS2, popular-classics, modern-hits):
@@ -569,15 +590,15 @@ already built or deliberately retired.
 
 Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned in
 `~/.claude/plans/i-want-you-to-eager-riddle.md` under "NEXT":
-1. **Make the 281 rows analysable.** Verb tagging (53/281 today) via a committed
-   `docs/verbs.md` ledger where every tag quotes a span of the row's own text, and a
-   linter that proves the quote is a real substring; LINEAGES from 3 chains to ~12
-   (21 of 281 mechanics are in one today); a pillar-coverage read-out on the My Game
-   board, owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as #27
-   (2026-09-12)**: the `verbs` carve-out in `check_changes.mjs`, the sabotage-count gate
-   and the restore contract, 47 sabotages. **Next is PR 1, the verb pass.** PR 0's
-   corrected spec is in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`; PRs 1–3
-   are still specified in the older file.
+1. **Make the 281 rows analysable.** Verb tagging via a quoted evidence ledger; LINEAGES
+   from 3 chains to ~12 (21 of 281 mechanics are in one today); a pillar-coverage read-out
+   on the My Game board, owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as
+   #27 (2026-09-12)**: the `verbs` carve-out, the sabotage-count gate and the restore
+   contract. **PR 1, the verb pass, landed 2026-09-13**: `docs/verbs.md` and its writer,
+   every discovery row reviewed, tags re-derived from the rows' own text (52 added, 25
+   dropped), 55 sabotages. **Next is PR 2, lineages**, then PR 3, both specified in
+   `~/.claude/plans/i-want-you-to-eager-riddle.md`. The two thin verbs (*The fleeing rare*,
+   *Vista sketch*) are research targets for whoever next picks a game.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
@@ -599,6 +620,6 @@ Standing, not yet scheduled:
   user-defined My Game buckets; private repo + Cloudflare Pages.
 
 Known doc-rot risks with no gate behind them (candidates for a DOC_SABOTAGE):
-the M/g id range quoted above, the verb-tag count above, and README's offline-suite
-case count — the validator gates the mechanics/minigames/games/reward-table figures
-and the sabotage count in this file and README.md, and nothing else.
+the M/g id range quoted above and README's offline-suite case count — the validator
+gates the mechanics/minigames/games/reward-table figures, the verb-tag count and the
+sabotage count in this file and README.md, and nothing else.

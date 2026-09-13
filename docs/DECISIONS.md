@@ -13,6 +13,52 @@ rejected options still offer.
   hook reached: the 15-game GameFAQs rollout will splice 45–75 rows. Shipped as
   `scripts/splice_rows.mjs` (placeholder ids bind rows to digest candidates; dry run by
   default; 18 checks, each mutation-proven).
+- **An at-least-three gate on discovery verbs** (from the verb-evidence fork, 2026-09-13) —
+  revisit hook: once research adds rows whose own text brings *The fleeing rare* (1 today)
+  and *Vista sketch* (2) to three mechanics each, add the rule to `validate()` beside the
+  ledger checks, with one sabotage that inserts an unused verb into `VERBS`.
+
+---
+
+## 2026-09-13 — Where a discovery-verb tag's evidence lives
+
+**Fork:** 53 rows carried verbs seeded from `GAME_PROMPT_V2.md` §3's verb table, and 62 rows
+in the three discovery categories had never been reviewed. What makes a tag defensible, and
+where is that recorded?
+
+- **A quote from the row, in a committed ledger** ✔ — `docs/verbs.md`, one entry per reviewed
+  row. Each tag carries a verbatim span of the row's own `how`/`loop`/`notes`; the validator
+  proves every quote is a real substring, holds the page's tags equal to the ledger's in both
+  directions, and requires an entry for every discovery-category row. `scripts/verb_tags.mjs`
+  is the only writer. A `none` entry records a row that was read and has no verb.
+- **Keep the brief-seeded tags as sourced** — the brief's table names a root mechanic per verb.
+  `rejected — a tag a reader cannot check against the card is the claim this codex refuses
+  everywhere else; M098 is the brief's root for The fleeing rare and never says a chocobo flees`
+- **`verbs:[]` in the data for a reviewed row with no verb** — completeness readable from the
+  page alone. `rejected — renders nothing, adds ~36 no-op edits to the owner's data file, and
+  would have to be taught to splice_rows.mjs and the digest template`
+
+**Chosen:** the ledger. Measured on the 2026-09-13 pass: 118 entries, tags 74 → 101 (52
+added, 25 dropped). The 25 dropped tags, each with no supporting span in its row: M029 Visible
+but unreachable; M087 Heard, not seen; M098 The fleeing rare; M209 Inscription deduction; M265
+A second layer; M266 Latent geometry; M267 Shop stock and Mastery reveal; M268 Latent geometry
+and Consequence; M269 Vista sketch and Mastery reveal; M270 Traded; M271 The fleeing rare; M272
+Mastery reveal; M273 Latent geometry; M274 The fleeing rare; M275 Mastery reveal; M277 Shop
+stock and Traded; M278 Mastery reveal and Consequence; M279 Consequence and Mastery reveal; M280
+The fleeing rare. Seven seeded rows now read `none` (M029, M267, M269, M272, M277–M279); each
+entry says why.
+
+**Sub-fork (owner, AskUserQuestion, 2026-09-13):** the plan also gated "every verb carries at
+least three mechanics", and the evidence rule leaves two verbs short.
+- **Ship without that gate** ✔ — the thin verbs become research targets, named in CLAUDE.md.
+- **Research first, then gate** — hold the PR for a research pass that adds rows for both.
+  `deferred — worth trying` (see the Backlog)
+- **Merge the two verbs away** — fold them into Guarded and Inscription deduction.
+  `rejected — it rewrites the brief's 15-verb taxonomy to fit what the codex happens to hold`
+
+**Revisit hook:** a second evidence type — `brief · §3` — checked against the brief's own
+table would restore the seeded roots without a quote, if a later pass decides the brief is a
+source in its own right. The parser's field list (`LEDGER_FIELDS`) is where it plugs in.
 
 ---
 

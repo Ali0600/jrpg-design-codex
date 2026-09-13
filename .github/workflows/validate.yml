@@ -37,8 +37,8 @@ jobs:
         run: node scripts/validate_codex.mjs --selftest
 
       # Offline: the GameFAQs probe against synthetic fixtures, plus the digest lint.
-      - name: Probe tests + splicer tests + row-writer tests + cover-fetch tests + digest lint
-        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs scripts/fetch_covers.test.mjs
+      - name: Probe tests + splicer tests + row-writer tests + cover-fetch tests + verb-ledger tests
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs scripts/fetch_covers.test.mjs scripts/verb_tags.test.mjs
 
       # Offline: the cover fetcher's byte and host guards, no network calls.
       - name: Cover guards
