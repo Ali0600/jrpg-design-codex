@@ -339,8 +339,9 @@
   .lin-node:hover{border-color:var(--steel); background:#131c31;}
   .lin-node .lin-game{font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-faint);}
   .lin-node .lin-name{font-size:13px; color:var(--ink); margin-top:2px;}
-  .lin-node.last{border-color:var(--green);}
-  .lin-node.last .lin-name{color:var(--green);}
+  .lin-node .lin-year{margin-left:6px; color:var(--steel); letter-spacing:.04em;}
+  .lin-node.best{border-color:var(--green);}
+  .lin-node.best .lin-name{color:var(--green);}
   .lin-node.counter{border-color:#5f2b2b; background:rgba(248,113,113,.05);}
   .lin-node.counter .lin-name{color:var(--red);}
   .lin-tag{font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin-top:3px;}
@@ -615,7 +616,7 @@
   <section class="view" id="view-pillars">
     <div id="pillarCards"></div>
     <h2 class="section-h">Lineages</h2>
-    <p class="count-note">Chains where each game answers the one before it. Green marks the node worth stealing from; red marks a counter-example. Click any node to open that mechanic.</p>
+    <p class="count-note">Chains of mechanics that share one design shape, in release order. Green marks the one worth stealing from; red marks a counter-example. Click any node to open that mechanic.</p>
     <div id="lineageCards"></div>
   </section>
 
@@ -701,15 +702,35 @@ const VERBS = {
   "Mastery reveal":"Level the act of exploring, and it shows you more.",
 };
 
-/* Chains where one game clearly answers another. Rendered on the Design Pillars
-   tab; the last node of a chain is usually the one worth stealing from. */
+/* Chains of mechanics that share one design shape, in release order, with a counter-
+   example (if any) last. `best` names the node worth stealing from — emphasis is never
+   positional. docs/lineages.md quotes each node's own row as the evidence it belongs.
+   Rendered on the Design Pillars tab. */
 const LINEAGES = [
-  {name:"The timing lineage", ids:["M198","M133","M163","M080","M161"],
+  {name:"The timing lineage", ids:["M198","M133","M163","M080","M161"], best:"M161",
    note:"Super Mario RPG invented the timed hit in 1996 and every entry since has asked what else the button press can pay for. Legend of Dragoon made it a chain you can drop; Shadow Hearts put every action on one ring; Sea of Stars made the timing generate mana. Clair Obscur is the one that matters here — it moved the skill expression to DEFENCE, so knowing a boss's whole moveset converts directly into resources."},
-  {name:"The place that becomes yours", ids:["M137","M122","M109","M201","M166","M221","M224","M083","M233"],
+  {name:"The place that becomes yours", ids:["M201","M137","M109","M122","M166","M221","M224","M233","M083"], best:"M233",
    note:"Your strongest cluster. All nine turn exploration into construction, but they differ in what the world reads back: Suikoden II and Xenoblade grow a place, Dark Cloud 2 and Legend of Mana let you author its layout, and Ys VIII goes furthest — the village population is a NUMBER the map itself checks, so rescuing people is literally the traversal upgrade."},
-  {name:"Collection that converts into power", ids:["M212","M214","M146","M158","M235","M160","M131"], counter:"M131",
+  {name:"Collection that converts into power", ids:["M214","M146","M158","M212","M235","M160","M131"], best:"M160", counter:"M131",
    note:"The test you apply to every collectible: does owning it change what you can DO? Golden Sun gets four systems out of one creature; Clair Obscur's Pictos hand the ability to the whole party and give the slot back. Tetra Master sits at the end as the counter-example — hundreds of cards that never convert into anything, which is the failure to design against."},
+  {name:"The shop that has upgrades too", ids:["M264","M270","M251","M208","M281","M224","M020"], best:"M251",
+   note:"Your second pillar, measured: in every one of these the SHOP itself grows, not just your wallet. Threads of Fate cuts a price once for good, Golden Sun's shops remember every artifact you sell, FF12 and Suikoden V widen the catalogue as you trade, and Bravely Default and FF7 Rebirth level the shop up. Kingdom Hearts II's Moogle is the one to copy — it earns experience from the work it does for you, so your supplier grows alongside you."},
+  {name:"A cast you recruit", ids:["M214","M136","M124","M183","M233","M242"], best:"M136",
+   note:"The people you find are the collection. Dragon Quest V recruits from ordinary fights, Radiata Stories makes a whole city recruitable, Three Houses makes you earn a student's respect and Ys VIII lets the headcount open the map. Suikoden II is the one worth stealing: 108 recruits hidden behind every kind of condition, each paying off as a fighter, an army unit or a shop back at your castle."},
+  {name:"Mastery earned by use", ids:["M200","M139","M276","M133","M250","M160"], best:"M250",
+   note:"The thing you use is the thing that grows. Grandia levels weapon types and elements by use, Xenogears trains combos out of ordinary presses, Legend of Dragoon counts each Addition's completions and Clair Obscur masters a Picto in four battles. Kingdom Hearts II goes furthest: five forms level on five different actions, and every level pays a movement ability you keep."},
+  {name:"A second map", ids:["M197","M203","M099","M122","M069"], best:"M069",
+   note:"One world, two versions: ruined and whole, above and below, past and present. The appeal is that learning one layer teaches you the other. Tears of the Kingdom makes it literal by placing every Lightroot directly beneath a shrine, so knowing the surface maps the Depths."},
+  {name:"Abilities that outlive the class", ids:["M154","M086","M225","M160"], best:"M160",
+   note:"What a job, a piece of gear or a class teaches you stays when you move on. Final Fantasy Tactics and IX banked abilities from jobs and equipment, and Metaphor leaves a permanent stat on anyone who masters a class. Clair Obscur adds the twist worth taking: a mastered Picto's effect becomes usable by the whole party, and its slot is freed for the next thing to learn."},
+  {name:"A new verb reopens old ground", ids:["M148","M213","M250","M064","M054","M162"], best:"M162",
+   note:"An ability earned later changes places you have already walked past. Wild ARMs' Radar lit up the old overworld, Golden Sun's Psynergy reopened blocked routes, Kingdom Hearts II pays movement for mastering combat forms, and Dragon Quest XI and Xenoblade 3 hand the key to a monster or a friend. Clair Obscur's Esquie is the one to copy: every rock turns the coastlines you passed into doors, and the key is a companion."},
+  {name:"The world is the answer key", ids:["M087","M091","M039","M191","M168","M028"], best:"M028",
+   note:"A clue found in one place is solved by recognising, reading or reaching another. FF9's Chocographs and zodiac poems, FFX's primers, Wild ARMs 3's clue-then-search and Dark Cloud 2's camera all pay for knowing the world. Elden Ring's paintings are the purest form: a picture of a real place, solved by going to stand where the painter stood."},
+  {name:"Named monsters as landmarks", ids:["M173","M206","M222","M078","M057","M015"], best:"M222",
+   note:"A named, over-strength monster fixed in the world is a landmark, a goal and a reward at once. Rogue Galaxy sells the hunts as info sheets, FF12 posts them as bills, and Chained Echoes and FF7 Rebirth track them by region. Xenoblade's 157 Unique Monsters are the model: met too early, remembered, and paying a currency only they drop."},
+  {name:"A collection you cash in with someone", ids:["M152","M280","M135","M091","M273","M066","M082"], best:"M135",
+   note:"One collectible spread across the world, and one person who takes your running total and pays in tiers: Alundra's falcons, Parasite Eve's junk, FF9's coins, Paper Mario's Star Pieces, the Koroks and Sea of Stars' conches. Legend of Dragoon's Stardust is the one to copy — Martel wanders the towns to meet you, and the last tier unlocks a superboss."},
 ];
 
 /* UI screenshots. Files live in shots/<game-slug>/ next to this file — committed to
@@ -3796,20 +3817,20 @@ function renderLineages(){
   const byId = Object.fromEntries(allMechs().map(m=>[m.id, m]));
   $("#lineageCards").innerHTML = LINEAGES.map(l=>{
     const nodes = l.ids.map(id=>byId[id]).filter(Boolean);
-    // A chain may end on a counter-example. Highlighting that green as "the payoff"
-    // would say the opposite of the note, so it gets its own warning style and the
-    // green marker moves to the last node that is actually worth copying.
+    // Emphasis is never positional. `best` names the node worth copying, and a counter-
+    // example (always last) gets its own warning style: a chain that ends on a failure once
+    // rendered that failure green, saying the opposite of the note printed under it.
     const counterIdx = l.counter ? nodes.findIndex(m=>m.id===l.counter) : -1;
-    const lastIdx = counterIdx === nodes.length-1 ? nodes.length-2 : nodes.length-1;
     return `<article class="card lineage">
       <h3>${esc(l.name)}</h3>
-      <div class="chain">${nodes.map((m,i)=>
-        `<button class="lin-node${i===counterIdx?" counter":i===lastIdx?" last":""}" data-goto="${esc(m.id)}" title="Show this mechanic">
-           <div class="lin-game">${esc(m.game)}</div>
+      <div class="chain">${nodes.map((m,i)=>{
+        const year = gameByTitle(m.game)?.year;
+        return `<button class="lin-node${i===counterIdx?" counter":m.id===l.best?" best":""}" data-goto="${esc(m.id)}" title="Show this mechanic">
+           <div class="lin-game">${esc(m.game)}${year?`<span class="lin-year">${esc(year)}</span>`:""}</div>
            <div class="lin-name">${esc(m.name)}</div>
            ${i===counterIdx?'<div class="lin-tag">the counter-example</div>':""}
-         </button>` + (i<nodes.length-1 ? `<span class="lin-arrow">${i+1===counterIdx?"✕":"→"}</span>` : "")
-      ).join("")}</div>
+         </button>` + (i<nodes.length-1 ? `<span class="lin-arrow">${i+1===counterIdx?"✕":"→"}</span>` : "");
+      }).join("")}</div>
       <p style="color:var(--ink-dim); margin-top:10px">${esc(l.note)}</p>
     </article>`;
   }).join("");

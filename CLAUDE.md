@@ -210,11 +210,16 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   rare* carries 1 mechanic and *Vista sketch* 2. They are RESEARCH targets, not tagging
   targets — the owner chose (2026-09-13) to ship without an at-least-three gate rather than
   stretch a quote; the gate waits in `docs/DECISIONS.md`'s backlog.
-- **`LINEAGES`** — chains of mechanics where each game answers the previous one.
-  Rendered under the Design Pillars tab; clicking a node jumps to that mechanic. An
-  optional `counter:"<id>"` marks a chain's counter-example (Tetra Master ends the
-  collection chain) — it renders RED and moves the green "worth stealing" marker to
-  the previous node. Without that flag the styling asserts the opposite of the note.
+- **`LINEAGES`** — chains of mechanics that share one design shape, `{name, ids, best,
+  counter?, note}`; **12 lineages** covering 65 mechanics. Rendered under the Design Pillars
+  tab with each node's release year; clicking a node jumps to that mechanic. `ids` run in
+  RELEASE ORDER (ties allowed) — the page says so, and the older copy's "each game answers
+  the one before it" was an influence claim no row can support. `best` is REQUIRED and
+  names the green "worth stealing" node; emphasis is never positional, because a chain
+  ending on a counter-example once rendered the failure green. An optional
+  `counter:"<id>"` is always the last node and renders RED after a ✕. **Every node is
+  quoted in `docs/lineages.md`** — the verb ledger's grammar, with the chain's name where a
+  verb would go — and the validator holds each chain's nodes and the ledger's lines equal.
 - **`SHOTS` / `SHOT_TYPES`** — the UI Gallery (its own tab + thumbnail strips on game
   cards + a shared lightbox). Each row: `{game, src, type, cap, from}`; files live in
   `shots/<game-slug>/` NEXT to the HTML (the one exception to single-file — a bare copy
@@ -387,8 +392,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `- none · <reason>`. A quote is a verbatim span of at least 25 characters, and it must show
   the verb's SHAPE rather than share a word with it; the ledger's intro holds the tagging
   rules (a `notes` quote must describe the game, not advise the owner). The parser
-  (`parseVerbLedger`, `ledgerProblems`) lives in `validate_codex.mjs`, because that file may
-  import nothing local and the gate and the writer must read one grammar. The writer
+  (`parseLedger`, `ledgerProblems`, and `readLedger`, which returns both kinds of problem)
+  lives in `validate_codex.mjs`, because that file may import nothing local and the gate and
+  the writer must read one grammar. `docs/lineages.md` uses the same grammar with a
+  lineage's name in the tag slot, and has no writer: chains are edited by hand in
+  `LINEAGES`, and the validator names every node or line that falls out of step. The writer
   rewrites only a row's FIRST line (`{id:…,cat:"…",`), always puts `verbs` straight after the
   id, pairs rows positionally like `game_rows.mjs`, and REFUSES to strip tags from a row the
   ledger does not name — a freshly spliced digest row keeps its tags until its entry exists.
@@ -475,14 +483,17 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   restored backup); **the discovery-verb ledger** (every quote a real span of its row's
   named field, every header naming its row exactly, the page's tags and `docs/verbs.md`'s
   equal as sets in BOTH directions, no verb twice on a row, and an entry for every row in
-  `DISCOVERY_CATS` — a policy list checked against CATS so a rename cannot empty it); and
+  `DISCOVERY_CATS` — a policy list checked against CATS so a rename cannot empty it);
+  **the lineages** (nodes in release order, a counter-example last, no node twice, at least
+  three nodes besides the counter, `best` a real non-counter node, and every node quoted in
+  `docs/lineages.md` with the ledger's lines equal to the chains in both directions); and
   **the counts
   quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
   CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **55** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **64** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -590,13 +601,14 @@ already built or deliberately retired.
 
 Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned in
 `~/.claude/plans/i-want-you-to-eager-riddle.md` under "NEXT":
-1. **Make the 281 rows analysable.** Verb tagging via a quoted evidence ledger; LINEAGES
-   from 3 chains to ~12 (21 of 281 mechanics are in one today); a pillar-coverage read-out
-   on the My Game board, owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as
-   #27 (2026-09-12)**: the `verbs` carve-out, the sabotage-count gate and the restore
-   contract. **PR 1, the verb pass, landed 2026-09-13**: `docs/verbs.md` and its writer,
-   every discovery row reviewed, tags re-derived from the rows' own text (52 added, 25
-   dropped), 55 sabotages. **Next is PR 2, lineages**, then PR 3, both specified in
+1. **Make the 281 rows analysable.** Verb tagging via a quoted evidence ledger; lineages in
+   release order with quoted nodes; a pillar-coverage read-out on the My Game board,
+   owner-judged, never derived from `cat`. Four PRs. **PR 0 landed as #27 (2026-09-12)**:
+   the `verbs` carve-out, the sabotage-count gate and the restore contract. **PR 1, the verb
+   pass, landed as #28 (2026-09-13)**: `docs/verbs.md` and its writer, tags re-derived from
+   the rows' own text. **PR 2, lineages, landed 2026-09-13**: 3 chains became 12 in release
+   order with an explicit `best`, every node quoted in `docs/lineages.md`, 64 sabotages.
+   **Next is PR 3, pillar coverage**, specified in
    `~/.claude/plans/i-want-you-to-eager-riddle.md`. The two thin verbs (*The fleeing rare*,
    *Vista sketch*) are research targets for whoever next picks a game.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit

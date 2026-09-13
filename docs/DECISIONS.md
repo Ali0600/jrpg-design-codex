@@ -20,6 +20,33 @@ rejected options still offer.
 
 ---
 
+## 2026-09-13 — What a lineage claims, and which node it marks
+
+**Fork:** the Pillars tab called each lineage a chain "where each game answers the one before
+it", two of the three chains were not even in release order, and the green "worth stealing"
+marker went to whichever node came last.
+
+- **A shared shape, in release order, with an explicit `best`** ✔ — the copy claims only what
+  the data can show: a shape each node's own text carries (quoted in `docs/lineages.md`) and a
+  release year. The validator enforces the order, and `best` names the green node, so sorting a
+  chain can never move the emphasis.
+- **Keep "answers the one before it"** — `rejected — an influence claim; no row's text says one
+  game's designers responded to another's, so it could only ever be asserted`
+- **Strictly increasing years** — `rejected — 1998 alone has seven roster games; a tie is two
+  releases in one year, not a broken order, and forbidding it would drop real nodes`
+- **Keep the positional marker** — `rejected — it once rendered a counter-example green
+  (docs/learnings.md), and release order moves the best node mid-chain (Ys VIII)`
+
+**Chosen:** the first. 3 chains became 12, covering 65 mechanics from 44 games. The evidence
+pass moved one planned node: Suikoden II's castle left *The shop that has upgrades too*,
+because its card says shops appear inside the castle, never that a shop itself grows.
+
+**Revisit hook:** an influence claim could return as its own field (`answers:"<id>"` on a node)
+the day a cited source, such as a developer interview, supports one; the ledger's quote slot is
+where that citation would sit.
+
+---
+
 ## 2026-09-13 — Where a discovery-verb tag's evidence lives
 
 **Fork:** 53 rows carried verbs seeded from `GAME_PROMPT_V2.md` §3's verb table, and 62 rows

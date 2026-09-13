@@ -13,7 +13,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { syncVerbs } from "./verb_tags.mjs";
-import { parseVerbLedger, ledgerProblems, extractScript, extractData } from "./validate_codex.mjs";
+import { parseLedger, ledgerProblems, readLedger, extractScript, extractData } from "./validate_codex.mjs";
 import { Refusal } from "./game_rows.mjs";
 import { miniCodex } from "./fixtures/mini_codex.mjs";
 
@@ -152,7 +152,7 @@ test("the command line is a dry run until --write, and --write is idempotent", (
 // ------------------------------------------------------------------ the parser
 
 test("parses tags, none entries and a name containing ' — ', and ignores the intro", () => {
-  const { entries, problems } = parseVerbLedger(LEDGER);
+  const { entries, problems } = parseLedger(LEDGER);
   assert.deepEqual(problems, []);
   assert.deepEqual([...entries.keys()], ["M001", "M002", "M003"]);
   assert.equal(entries.get("M003").name, "Third — with a dash");
@@ -162,37 +162,37 @@ test("parses tags, none entries and a name containing ' — ', and ignores the i
 });
 
 test("a second entry for one id is a problem", () => {
-  const { problems } = parseVerbLedger(LEDGER + "\n### M001 — First\n- none · again\n");
+  const { problems } = parseLedger(LEDGER + "\n### M001 — First\n- none · again\n");
   assert.ok(problems.some(p => /M001 has a second entry \(the first is at line 6\)/.test(p)), problems.join("\n"));
 });
 
 test("the same verb twice in one entry is a problem", () => {
   const md = LEDGER.replace("\n\n### M002", "\n- Latent geometry · loop · `Light the lantern → find the door`\n\n### M002");
-  const { problems } = parseVerbLedger(md);
+  const { problems } = parseLedger(md);
   assert.ok(problems.some(p => /M001 tags "Latent geometry" twice/.test(p)), problems.join("\n"));
 });
 
 test("none mixed with tags is a problem, in either order", () => {
-  const after = parseVerbLedger(LEDGER.replace("\n\n### M002", "\n- none · changed my mind\n\n### M002")).problems;
-  const before = parseVerbLedger(LEDGER.replace("\n\n### M003", "\n- Guarded · how · `sits on the chest at the top of the tower`\n\n### M003")).problems;
+  const after = parseLedger(LEDGER.replace("\n\n### M002", "\n- none · changed my mind\n\n### M002")).problems;
+  const before = parseLedger(LEDGER.replace("\n\n### M003", "\n- Guarded · how · `sits on the chest at the top of the tower`\n\n### M003")).problems;
   assert.ok(after.some(p => /M001 mixes `- none` with other lines/.test(p)), after.join("\n"));
   assert.ok(before.some(p => /M002 mixes `- none` with other lines/.test(p)), before.join("\n"));
 });
 
 test("an entry with no lines is a problem", () => {
-  const { problems } = parseVerbLedger(LEDGER.replace("- none · the knight guards a tower chest, but the row is about the fight\n", ""));
+  const { problems } = parseLedger(LEDGER.replace("- none · the knight guards a tower chest, but the row is about the fight\n", ""));
   assert.ok(problems.some(p => /### M002 has no tag line and no `- none` line/.test(p)), problems.join("\n"));
 });
 
 test("an unreadable line or a field outside how/loop/notes is a problem", () => {
-  const typo = parseVerbLedger(LEDGER.replace("- Traded · how", "-Traded · how")).problems;
-  const field = parseVerbLedger(LEDGER.replace("- Traded · how", "- Traded · name")).problems;
+  const typo = parseLedger(LEDGER.replace("- Traded · how", "-Traded · how")).problems;
+  const field = parseLedger(LEDGER.replace("- Traded · how", "- Traded · name")).problems;
   assert.ok(typo.some(p => /M003: cannot read "-Traded/.test(p)), typo.join("\n"));
   assert.ok(field.some(p => /M003: field "name" is not one of how, loop, notes/.test(p)), field.join("\n"));
 });
 
 test("a ### header without an id and a name is a problem", () => {
-  const { problems } = parseVerbLedger(LEDGER.replace("### M002 — Second", "### M002 Second"));
+  const { problems } = parseLedger(LEDGER.replace("### M002 — Second", "### M002 Second"));
   assert.ok(problems.some(p => /a ### header must read/.test(p)), problems.join("\n"));
 });
 
@@ -200,22 +200,42 @@ test("a ### header without an id and a name is a problem", () => {
 
 test("a quote shorter than the minimum is a problem even when it is in the row", () => {
   const md = LEDGER.replace("`trades a rare lure for every ten shells`", "`a rare lure`");
-  const out = ledgerProblems(parseVerbLedger(md), rows(page()));
+  const out = ledgerProblems(parseLedger(md), rows(page()));
   assert.ok(out.some(p => /M003 · Traded: quote is 11 chars — evidence needs at least 25/.test(p)), out.join("\n"));
 });
 
 test("a quote is checked against the field it names, including a field the row lacks", () => {
   const wrongField = LEDGER.replace("- Traded · how", "- Traded · loop");
   const noNotes = LEDGER.replace("- Traded · how", "- Traded · notes");
-  const a = ledgerProblems(parseVerbLedger(wrongField), rows(page()));
-  const b = ledgerProblems(parseVerbLedger(noNotes), rows(page()));
+  const a = ledgerProblems(parseLedger(wrongField), rows(page()));
+  const b = ledgerProblems(parseLedger(noNotes), rows(page()));
   assert.ok(a.some(p => /M003 · Traded: quote is not in the row's loop/.test(p)), a.join("\n"));
   assert.ok(b.some(p => /M003 · Traded: quote is not in the row's notes/.test(p)), b.join("\n"));
 });
 
+test("a grammar problem in the ledger is a refusal too", () => {
+  const ledger = LEDGER.replace("- Traded · how", "-Traded · how");
+  assert.throws(() => syncVerbs(page(), ledger), /M003: cannot read "-Traded/);
+});
+
+test("a ledger's problems name the file they came from", () => {
+  const md = LEDGER.replace("### M002 — Second", "### M002 — Secnd").replace("- Traded · how", "-Traded · how");
+  const parsed = parseLedger(md, "docs/lineages.md");
+  assert.ok(parsed.problems.length && parsed.problems.every(p => p.startsWith("docs/lineages.md:")), parsed.problems.join("\n"));
+  const rowProblems = ledgerProblems(parsed, rows(page()));
+  assert.ok(rowProblems.length && rowProblems.every(p => p.startsWith("docs/lineages.md:")), rowProblems.join("\n"));
+});
+
+test("readLedger reports grammar problems and row problems together", () => {
+  const md = LEDGER.replace("### M002 — Second", "### M002 — Secnd").replace("- Traded · how", "-Traded · how");
+  const { problems } = readLedger(md, "docs/lineages.md", rows(page()));
+  assert.ok(problems.some(p => /M003: cannot read "-Traded/.test(p)), problems.join("\n"));
+  assert.ok(problems.some(p => /### M002 names "Secnd", the row is named "Second"/.test(p)), problems.join("\n"));
+});
+
 test("a header must name a real row by its exact name", () => {
-  const renamed = ledgerProblems(parseVerbLedger(LEDGER.replace("### M002 — Second", "### M002 — Secnd")), rows(page()));
-  const missing = ledgerProblems(parseVerbLedger(LEDGER.replace("### M002 — Second", "### M099 — Second")), rows(page()));
+  const renamed = ledgerProblems(parseLedger(LEDGER.replace("### M002 — Second", "### M002 — Secnd")), rows(page()));
+  const missing = ledgerProblems(parseLedger(LEDGER.replace("### M002 — Second", "### M099 — Second")), rows(page()));
   assert.ok(renamed.some(p => /### M002 names "Secnd", the row is named "Second"/.test(p)), renamed.join("\n"));
   assert.ok(missing.some(p => /### M099 names no mechanic in the codex/.test(p)), missing.join("\n"));
 });
