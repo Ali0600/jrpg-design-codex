@@ -32,6 +32,78 @@ export function pointerKey(p) {
   return w ? "wiki:" + w[1] : p;
 }
 
+// The bookkeeping between a digest's Sources table, its Coverage lines and its Triage record.
+// Coverage lines arrived with `__gf.visited()` on 2026-09-06 and the Triage record on 2026-09-14.
+// A digest is held to each rule from its own "digest started" date, so one written before a rule
+// existed is never back-filled from memory; a missing or unparseable date (the template's
+// "<date>") counts as new.
+const COVERAGE_FROM = "2026-09-06";
+const TRIAGE_FROM = "2026-09-14";
+const GUIDE_HEADINGS = new Set(["Full Game Guides", "In-Depth Guides"]);
+const NO_GUIDE = /^No GameFAQs guide used\b/i;
+const DECISION = /^(read|grep only|skipped [—–-] \S.*)$/;
+
+/** One `## <name>` section: its lines and its table rows as [{line, cells}], header and separator skipped. */
+function section(L, name) {
+  const at = L.indexOf(`## ${name}`);
+  if (at < 0) return null;
+  const lines = [], rows = [];
+  let fence = false, header = false;
+  for (let i = at + 1; i < L.length && !/^## /.test(L[i]); i++) {
+    const l = L[i];
+    lines.push(l);
+    if (/^```/.test(l)) { fence = !fence; continue; }
+    if (fence || !/^\|/.test(l) || /^\|\s*:?-/.test(l)) continue;
+    if (!header) { header = true; continue; }
+    rows.push({ line: i + 1, cells: l.split("|").slice(1, -1).map(c => c.trim()) });
+  }
+  return { line: at + 1, lines, rows };
+}
+
+export function bookkeepingProblems(md) {
+  const L = md.split("\n"), out = [];
+  const started = (md.match(/digest started (\d{4}-\d{2}-\d{2})\b/) || [])[1] || null;
+  const since = from => !started || started >= from;
+  const sourceRows = (section(L, "Sources") || { rows: [] }).rows;
+  const gfSources = sourceRows.filter(r => /^\d+$/.test(r.cells[0] || ""));
+  const described = new Set(gfSources.map(r => r.cells[0]));
+
+  // Every guide a pointer cites is described in the Sources table.
+  const cited = new Map();
+  let fence = false;
+  L.forEach((l, i) => {
+    if (/^```/.test(l)) { fence = !fence; return; }
+    if (fence) return;
+    for (const m of l.matchAll(/\[gf:(\d+)/g)) if (!cited.has(m[1])) cited.set(m[1], i + 1);
+  });
+  for (const [id, line] of cited) if (!described.has(id)) out.push(`${line}: cites gf:${id}, which is not a row of ## Sources`);
+
+  // Every GameFAQs source says what this pass read of it. A wiki source has no Coverage line.
+  if (since(COVERAGE_FROM)) {
+    const covered = new Set([...md.matchAll(/^Coverage (\d+):/gm)].map(m => m[1]));
+    for (const r of gfSources) if (!covered.has(r.cells[0])) out.push(`${r.line}: source ${r.cells[0]} has no "Coverage ${r.cells[0]}:" line saying what was read`);
+  }
+
+  // The Triage record: which Full Game Guides and In-Depth Guides were read, grepped or skipped.
+  if (since(TRIAGE_FROM)) {
+    const tri = section(L, "Triage");
+    if (!tri || (!tri.rows.length && !tri.lines.some(l => NO_GUIDE.test(l.trim())))) {
+      out.push(`${tri ? tri.line : 1}: digest started ${started || "<no date>"} needs a ## Triage table of the guides listed under Full Game Guides and In-Depth Guides (or a "No GameFAQs guide used" line)`);
+    } else {
+      const listed = new Set();
+      for (const r of tri.rows) {
+        const [id = "", , , cat = "", , , decision = ""] = r.cells;
+        listed.add(id);
+        if (!GUIDE_HEADINGS.has(cat)) out.push(`${r.line}: triage row ${id}: category must be Full Game Guides or In-Depth Guides (other headings go in the summary line)`);
+        if (!DECISION.test(decision)) out.push(`${r.line}: triage row ${id}: decision must be read, grep only, or "skipped — <why>"`);
+        else if (/^(read|grep only)$/.test(decision) && !described.has(id)) out.push(`${r.line}: triage marks ${id} as ingested, but ## Sources has no row for it`);
+      }
+      for (const r of gfSources) if (!listed.has(r.cells[0])) out.push(`${r.line}: source ${r.cells[0]} is not in the ## Triage table`);
+    }
+  }
+  return out;
+}
+
 export function lintDigest(md, name = "digest") {
   const out = [];
   const L = md.split("\n");
@@ -70,6 +142,7 @@ export function lintDigest(md, name = "digest") {
     }
   });
   flush();
+  out.push(...bookkeepingProblems(md));
   return out.map(m => `${name}:${m}`);
 }
 

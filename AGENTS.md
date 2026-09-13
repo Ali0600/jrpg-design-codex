@@ -414,7 +414,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   reference only; with direct file access, edit the arrays in place instead.
 - `scripts/gf_probe.js` is the GameFAQs in-page probe (see the Research playbook, step
   2b, and `docs/research/README.md`); `scripts/digest_lint.mjs` enforces the pointer
-  grammar on `docs/research/*.md`. `__gf.visited()` reports what a session actually READ
+  grammar on `docs/research/*.md` and the bookkeeping between a digest's Sources table, Coverage
+  lines and Triage record, each rule applied from the digest's own start date
+  (`scripts/digest_lint.test.mjs`). It runs in CI since 2026-09-14; before that the docs said it did
+  and no step ran it. `__gf.visited()` reports what a session actually READ
   of a guide — the probe indexes every line, but only what returns through a tool result
   reaches the agent, so each digest carries a Coverage line naming the biggest sections
   nobody opened. `__gf.game()` reads a game's HOME page (`page().kind === "game"`): the
@@ -668,7 +671,9 @@ a game (or to work the queue):
    `scripts/gf_probe.js` evaluated in the page, following the runbook in
    `docs/research/README.md`: search → confirm platform+year against BASE_GAMES →
    `triage()` → per guide `meta()` → `toc({min:800})` → PILLAR `grep`s → ≤4 `section()`
-   reads, ~12 pages per game. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
+   reads, ~12 pages per game. The whole guide listing goes in the digest's
+   `## Triage` table first (every Full Game Guide and In-Depth Guide with its decision: read, grep
+   only, or skipped and why), which the linter holds to the Sources table. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
    every one with a `[gf:<id> §<section>, <author> v<ver>]` pointer; that digest is the
    committed staging file. Never `get_page_text` on gamefaqs (14KB of consent text),
    never curl it or reuse its cookie, never store guide text. Stop on

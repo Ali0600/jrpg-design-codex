@@ -11,10 +11,27 @@ digest started <date>
 | id | title | author | version | updated | category | KB | url |
 |---|---|---|---|---|---|---|---|
 | 00000 | Example FAQ | author | 1.0 | 01/01/2000 | In-Depth Guides | 29 | https://gamefaqs.gamespot.com/ps/0-example/faqs/00000 |
+| 00001 | Example Walkthrough (grep only) | author | 2.0 | 01/01/2000 | Full Game Guides | 614 | https://gamefaqs.gamespot.com/ps/0-example/faqs/00001 |
 
 Coverage 00000: read 4/22 sections (Power-Ups 100%, Relics 60%, …); greps: threshold,
 rewards, hidden, upgrades, economy; unread ≥800: Walkthrough Part 2 (12,400), Enemy List
 (3,100). — from `__gf.visited()`; says what this pass did NOT look at.
+
+Coverage 00001: grep only; greps: threshold, rewards, hidden. A walkthrough is a lookup table,
+not a document to read.
+
+## Triage
+
+`__gf.triage()` on <date>: <N> guides listed (<n> Full Game Guides, <n> In-Depth Guides, <n> under
+other headings, none read). Every guide under those two headings gets a row whose decision says
+whether this pass read it, only grepped it, or skipped it and why. A digest that used no GameFAQs
+guide writes a line starting "No GameFAQs guide used" instead of the table.
+
+| id | title | author | category | KB | score | decision |
+|---|---|---|---|---|---|---|
+| 00000 | Example FAQ | author | In-Depth Guides | 29 | 9 | read |
+| 00001 | Example Walkthrough | author | Full Game Guides | 614 | 4 | grep only |
+| 00002 | Example Boss FAQ | author | In-Depth Guides | 12 | -1 | skipped — boss guide, no pillar words |
 
 ## Mechanics candidates
 

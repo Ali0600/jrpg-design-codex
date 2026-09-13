@@ -293,8 +293,13 @@ test("HTML-formatted guides fall back to heading sentinels and flattened tables"
 });
 
 test("digest lint: every fact needs a pointer, every row needs two sources", () => {
+  // A complete digest under every rule. The Sources/Coverage/Triage bookkeeping has its own tests
+  // in scripts/digest_lint.test.mjs; these fixtures carry just enough of it to stay clean there.
   const good = [
-    "# Lantern Vale", "", "## Sources", "| id | title |", "|---|---|", "| 103 | Power-Up/Item FAQ |", "",
+    "# Lantern Vale", "", "digest started 2026-09-14", "",
+    "## Sources", "| id | title |", "|---|---|", "| 103 | Power-Up/Item FAQ |", "", "Coverage 103: read 2/9 sections.", "",
+    "## Triage", "| id | title | author | category | KB | score | decision |", "|---|---|---|---|---|---|---|",
+    "| 103 | Power-Up/Item FAQ | cinder | In-Depth Guides | 30 | 9 | read |", "",
     "## Mechanics candidates", "### Cores", "cat: Progression & Upgrades",
     "pointers: [gf:103 §Power-Ups, cinder v1.0] [wiki:lanternvale.fandom.com/Cores]", "row: M262",
     "- eight cores in the base game [gf:103 §Power-Ups, cinder v1.0]", "",
@@ -310,6 +315,10 @@ test("digest lint: every fact needs a pointer, every row needs two sources", () 
     "## Minigame candidates", "### Arena", "pointers: [gf:103 §SECRETS, cinder v1.0]", "row: g090",
     "| at | get | src |", "|---|---|---|", "| 30 wins | Sun Sigil | no pointer here |",
     "### Lottery", "- ticket prices [gf:103 §Shops, cinder v1.0]",
+    // Appended, so the problems above keep their line numbers.
+    "", "## Sources", "| id | title |", "|---|---|", "| 103 | Power-Up/Item FAQ |", "", "Coverage 103: read 1/9 sections.", "",
+    "## Triage", "| id | title | author | category | KB | score | decision |", "|---|---|---|---|---|---|---|",
+    "| 103 | Power-Up/Item FAQ | cinder | In-Depth Guides | 30 | 9 | read |",
   ].join("\n");
   const problems = lintDigest(bad, "bad");
   assert.ok(problems.some(p => /2: fact bullet without/.test(p)), problems.join("\n"));

@@ -8,8 +8,8 @@ from — committed, so it survives a lost session.
 **The rule.** Facts only. Item names, amounts and thresholds may be quoted; a guide's prose
 may not — GameFAQs guides are their authors' copyright and this repo is public. Every fact
 bullet and every reward-table row carries a pointer, and a candidate becomes a codex row
-only once two distinct sources agree. `node scripts/digest_lint.mjs` enforces the grammar;
-it also runs in CI.
+only once two distinct sources agree. `node scripts/digest_lint.mjs` enforces the grammar
+and the bookkeeping below, and runs in CI.
 
 ```
 [gf:38095 §Power-Ups, SIMSteven v1.0]     a GameFAQs guide: id, section, author, version
@@ -67,6 +67,14 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    it), `__gf.triage()`. Take the top three; keep the full walkthroughs for `grep` only.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
    translations out, `toc first` on anything over 200KB.
+   **Record the whole listing in the digest's `## Triage` table before reading anything**: every
+   guide under *Full Game Guides* and *In-Depth Guides*, with its KB, score and a decision (`read`,
+   `grep only`, or `skipped — <why>`), plus one summary line counting the guides under other
+   headings. That table is what answers "which guides did this pass ingest?" without re-opening the
+   site. If `triage()` reports `dropped`, the listing was cut by the size cap: say so in the summary
+   line. The linter holds the table to the Sources table both ways (a guide read or grepped has a
+   Sources row, and every GameFAQs source is in the table); a digest that used no GameFAQs guide
+   writes a line starting "No GameFAQs guide used" instead.
 3. **Read one guide.** Check `__gf.meta().pages` FIRST: a formatted guide is split across
    pages (The Witcher 3's walkthrough is 19 of them) and every other number describes only
    the page you are on. Move with `?page=N`, zero-based. Then, in this order: `__gf.meta()` →
@@ -108,6 +116,7 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
 | Section | Maps onto |
 |---|---|
 | `## Sources` | the guides read — id, title, author, version, updated, category, KB, URL — plus a **Coverage** line per guide, from `__gf.visited()` |
+| `## Triage` | every guide listed under Full Game Guides and In-Depth Guides, with its score and decision (read, grep only, skipped — why): which guides the pass ingested |
 | `## Mechanics candidates` | one `###` per candidate: `cat`, `how`, `loop`, `notes`, `verbs`, `pointers`, `row` — after the splice, each tagged row and each row in a discovery category also needs its entry in `docs/verbs.md` (the validator names any that are missing) |
 | `## Minigame candidates` | one `###` per candidate: `p`, `r`, `l`, `pointers`, `row`, and an `rt` table with a `src` column |
 | `## Exploration & upgrade facts` | bullets under `### Hidden`, `### Upgrades`, `### Shops & exchange` — the pillar's raw material |
