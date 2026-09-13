@@ -38,8 +38,10 @@ none, because it reads as verified.
   tool-gated, a second layer…). It lets you ask "who else solved this shape?" Every tag
   quotes the line of the card that earns it, and the quotes live in
   [`docs/verbs.md`](docs/verbs.md)
-- **Lineages** — chains where each game answers the one before it. Each chain ends on
-  the node worth stealing from, or on a counter-example worth designing against
+- **Lineages** — chains of mechanics that share one design shape, in release order, with
+  the year on every node. Each marks the one worth stealing from, and some end on a
+  counter-example worth designing against. Every node quotes the card that puts it there,
+  in [`docs/lineages.md`](docs/lineages.md)
 - **A page for every game** — click a game's name anywhere to open it. The page shows box
   art, what its GameFAQs page says (platform, genre, developer, publisher, release,
   franchise, and how GameFAQs readers rate it, its difficulty and length), every mechanic
@@ -93,6 +95,7 @@ scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
 docs/research/             one digest per researched game, every fact with its source
 docs/verbs.md              the evidence ledger: each verb tag with the quote that earns it
+docs/lineages.md           the lineage ledger: each chain node with the quote that places it
 docs/                      learnings, design decisions, and ost-sources.md (where to buy each soundtrack)
 ```
 
@@ -165,9 +168,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 55 sabotages and fails the build unless every one is caught, and every
+  injects 64 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  105-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  108-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed Python clients with host allowlists and range checks, plus an in-page
   probe that caps results at 12KB so a 1.4MB Cloudflare-gated guide is never fetched whole

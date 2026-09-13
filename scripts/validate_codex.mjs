@@ -230,17 +230,18 @@ function checkStoreSchema(script, errors) {
   }
 }
 
-// ------------------------------------------------------- discovery-verb ledger
+// ------------------------------------------------------------ evidence ledgers
 
 /**
- * `docs/verbs.md` is the one place a discovery-verb tag is justified: each tag carries a
- * verbatim span of the row's own text, so "defensible from the row, or not written" is
- * something a build can check rather than a sentence it trusts.
+ * An evidence ledger is where a claim about a row is justified by quoting the row itself,
+ * so "defensible from the row's own text, or not written" is something a build can check
+ * rather than a sentence it trusts. Two use one grammar: `docs/verbs.md` (the tag slot holds
+ * a discovery verb) and `docs/lineages.md` (it holds the name of a lineage the row sits in).
  *
- * Grammar, one entry per reviewed row:
+ * Grammar, one entry per row:
  *   ### M021 — <the row's exact name>
- *   - <Verb> · <how|loop|notes> · `<quote>`        one line per tag, or
- *   - none · <why no verb applies>                  exactly one line
+ *   - <Tag> · <how|loop|notes> · `<quote>`         one line per tag, or
+ *   - none · <why nothing applies>                  exactly one line
  *
  * Text before the first `###`, and under any `#`/`##` heading, is free prose. Inside an
  * entry every non-blank line must parse: a typo that silently dropped a tag would leave
@@ -252,10 +253,10 @@ function checkStoreSchema(script, errors) {
 export const LEDGER_FIELDS = ["how", "loop", "notes"];
 export const MIN_QUOTE = 25;
 
-export function parseVerbLedger(md) {
+export function parseLedger(md, file = "docs/verbs.md") {
   const entries = new Map(), problems = [];
   let cur = null;
-  const at = n => `docs/verbs.md:${n}`;
+  const at = n => `${file}:${n}`;
   const finish = () => {
     if (cur && !cur.none && !cur.tags.length) problems.push(`${at(cur.line)}: ### ${cur.id} has no tag line and no \`- none\` line`);
     cur = null;
@@ -290,7 +291,7 @@ export function parseVerbLedger(md) {
     cur.tags.push({ verb, field, quote, line: n });
   });
   finish();
-  return { entries, problems };
+  return { entries, problems, file };
 }
 
 /**
@@ -299,22 +300,28 @@ export function parseVerbLedger(md) {
  * quote is a real span of the named field — compared with the EVALUATED string, never the
  * source text, so an escape in the file cannot make a quote match or miss.
  */
-export function ledgerProblems({ entries }, mechs) {
+export function ledgerProblems({ entries, file = "docs/verbs.md" }, mechs) {
   const byId = new Map(mechs.map(m => [m.id, m]));
   const out = [];
   for (const e of entries.values()) {
     const row = byId.get(e.id);
-    if (!row) { out.push(`docs/verbs.md:${e.line}: ### ${e.id} names no mechanic in the codex`); continue; }
-    if (row.name !== e.name) out.push(`docs/verbs.md:${e.line}: ### ${e.id} names ${JSON.stringify(e.name)}, the row is named ${JSON.stringify(row.name)}`);
+    if (!row) { out.push(`${file}:${e.line}: ### ${e.id} names no mechanic in the codex`); continue; }
+    if (row.name !== e.name) out.push(`${file}:${e.line}: ### ${e.id} names ${JSON.stringify(e.name)}, the row is named ${JSON.stringify(row.name)}`);
     for (const t of e.tags) {
       if (t.quote.length < MIN_QUOTE) {
-        out.push(`docs/verbs.md:${t.line}: ${e.id} · ${t.verb}: quote is ${t.quote.length} chars — evidence needs at least ${MIN_QUOTE}`);
+        out.push(`${file}:${t.line}: ${e.id} · ${t.verb}: quote is ${t.quote.length} chars — evidence needs at least ${MIN_QUOTE}`);
       } else if (!(typeof row[t.field] === "string" && row[t.field].includes(t.quote))) {
-        out.push(`docs/verbs.md:${t.line}: ${e.id} · ${t.verb}: quote is not in the row's ${t.field} — ${JSON.stringify(t.quote.slice(0, 60))}`);
+        out.push(`${file}:${t.line}: ${e.id} · ${t.verb}: quote is not in the row's ${t.field} — ${JSON.stringify(t.quote.slice(0, 60))}`);
       }
     }
   }
   return out;
+}
+
+/** Parse a ledger and check it against its rows: grammar problems and row problems, one list. */
+export function readLedger(md, file, mechs) {
+  const parsed = parseLedger(md, file);
+  return { ...parsed, problems: [...parsed.problems, ...ledgerProblems(parsed, mechs)] };
 }
 
 // -------------------------------------------------------------------- checks
@@ -462,15 +469,56 @@ export function validate(html, docs = {}) {
 
   // --- optional structures (present once the power-features work lands)
   if (LINEAGES) {
-    const mechIds = new Set(BASE_MECHS.map(m => m.id));
+    const mechById = new Map(BASE_MECHS.map(m => [m.id, m]));
+    const yearOf = new Map(BASE_GAMES.map(g => [g.title, g.year]));
+    const chainsOf = new Map();                     // mechanic id -> the chain names listing it
     for (const l of LINEAGES) {
-      checkFields(l, `lineage ${JSON.stringify(l.name ?? "(unnamed)")}`, ["name", "note"], errors);
-      for (const id of l.ids ?? []) {
-        if (!mechIds.has(id)) errors.push(`lineage ${JSON.stringify(l.name)}: references missing mechanic ${id}`);
+      const label = `lineage ${JSON.stringify(l.name ?? "(unnamed)")}`;
+      checkFields(l, label, ["name", "note"], errors);
+      const ids = l.ids ?? [];
+      const seen = new Set();
+      for (const id of ids) {
+        if (!mechById.has(id)) errors.push(`${label}: references missing mechanic ${id}`);
+        if (seen.has(id)) errors.push(`${label}: lists ${id} twice`);
+        seen.add(id);
+        if (!chainsOf.has(id)) chainsOf.set(id, new Set());
+        chainsOf.get(id).add(l.name);
       }
-      // A counter-example must be a node of its own chain, or it renders as nothing.
-      if (l.counter != null && !(l.ids ?? []).includes(l.counter)) {
-        errors.push(`lineage ${JSON.stringify(l.name)}: counter ${l.counter} is not in its own ids list`);
+      // A counter-example must be a node of its own chain, or it renders as nothing — and the
+      // LAST one, because the renderer draws it after a ✕ and the note says it ends the chain.
+      if (l.counter != null && !ids.includes(l.counter)) {
+        errors.push(`${label}: counter ${l.counter} is not in its own ids list`);
+      } else if (l.counter != null && ids[ids.length - 1] !== l.counter) {
+        errors.push(`${label}: counter ${l.counter} must be the last node`);
+      }
+      const nodes = ids.filter(id => id !== l.counter);
+      if (nodes.length < 3) errors.push(`${label}: has ${nodes.length} nodes besides its counter — a lineage needs at least 3`);
+      // Emphasis is never positional: the green node is named, and it must be a real node.
+      if (!nodes.includes(l.best)) errors.push(`${label}: best ${JSON.stringify(l.best)} must name a node of its own chain that is not the counter`);
+      // "In release order" is the page's claim, so it is the rule. Ties are fine.
+      let prev = null;
+      for (const id of nodes) {
+        const year = yearOf.get(mechById.get(id)?.game);
+        if (prev && year < prev.year) errors.push(`${label}: ${id} (${year}) follows ${prev.id} (${prev.year}) — nodes run in release order`);
+        prev = { id, year };
+      }
+    }
+    // --- the lineage ledger: every node quoted from its own row, compared both ways.
+    if (docs.lineageLedger == null) {
+      errors.push("docs/lineages.md could not be read — every lineage node must be quoted there");
+    } else {
+      const ledger = readLedger(docs.lineageLedger, "docs/lineages.md", BASE_MECHS);
+      errors.push(...ledger.problems);
+      for (const [id, names] of chainsOf) {
+        const quoted = new Set((ledger.entries.get(id)?.tags ?? []).map(t => t.verb));
+        for (const n of names) {
+          if (!quoted.has(n)) errors.push(`lineage ${JSON.stringify(n)} lists ${id}, but docs/lineages.md quotes no evidence for it`);
+        }
+      }
+      for (const e of ledger.entries.values()) {
+        for (const t of e.tags) {
+          if (!chainsOf.get(e.id)?.has(t.verb)) errors.push(`docs/lineages.md quotes ${e.id} for ${JSON.stringify(t.verb)}, but that lineage does not list it`);
+        }
       }
     }
   }
@@ -490,8 +538,8 @@ export function validate(html, docs = {}) {
     if (docs.verbLedger == null) {
       errors.push("docs/verbs.md could not be read — every discovery-verb tag must be justified there");
     } else {
-      const ledger = parseVerbLedger(docs.verbLedger);
-      errors.push(...ledger.problems, ...ledgerProblems(ledger, BASE_MECHS));
+      const ledger = readLedger(docs.verbLedger, "docs/verbs.md", BASE_MECHS);
+      errors.push(...ledger.problems);
       for (const m of BASE_MECHS) {
         const carried = new Set(m.verbs ?? []);
         const justified = new Set((ledger.entries.get(m.id)?.tags ?? []).map(t => t.verb));
@@ -644,6 +692,8 @@ export function validate(html, docs = {}) {
     rewardTables: MINIGAMES.filter(m => m.rt).length,
     tagged: BASE_MECHS.filter(m => (m.verbs ?? []).length).length,
     tags: BASE_MECHS.reduce((n, m) => n + (m.verbs ?? []).length, 0),
+    lineages: (LINEAGES ?? []).length,
+    lineageMechs: new Set((LINEAGES ?? []).flatMap(l => l.ids ?? [])).size,
   };
 
   if (docs.claude != null) {
@@ -668,6 +718,11 @@ export function validate(html, docs = {}) {
     if (!dv) errors.push("CLAUDE.md: could not find the `**N of M rows are tagged** (T tags)` line");
     else if (Number(dv[1]) !== stats.tagged || Number(dv[2]) !== stats.mechanics || Number(dv[3]) !== stats.tags) {
       errors.push(`CLAUDE.md says ${dv[1]} of ${dv[2]} rows are tagged (${dv[3]} tags), file has ${stats.tagged} of ${stats.mechanics} (${stats.tags} tags)`);
+    }
+    const dl = docs.claude.match(/\*\*(\d+) lineages\*\*\s+covering\s+(\d+) mechanics/);
+    if (!dl) errors.push("CLAUDE.md: could not find the `**N lineages** covering M mechanics` line");
+    else if (Number(dl[1]) !== stats.lineages || Number(dl[2]) !== stats.lineageMechs) {
+      errors.push(`CLAUDE.md says ${dl[1]} lineages covering ${dl[2]} mechanics, file has ${stats.lineages} covering ${stats.lineageMechs}`);
     }
     const dsab = claim(/requires all \*\*(\d+)\*\* sabotages to fire/, "sabotage");
     if (dsab != null && dsab !== sabotageCount()) {
@@ -892,6 +947,23 @@ const SABOTAGES = [
   // its own rule and its own fixture.
   { name: "the same verb twice on one row", expect: /carries "[^"]+" twice/,
     apply: s => replaceFirst(s, /verbs:\["([^"]+)"/, 'verbs:["$1","$1"', "the same verb twice on one row") },
+
+  // Lineages. Each anchor is a literal of the chain data, and each mutation keeps every other
+  // lineage rule satisfied so the rule it aims at is the one that must fire.
+  { name: "a lineage out of release order", expect: /M198 \(1996\) follows M133 \(1999\) — nodes run in release order/,
+    apply: s => replaceFirst(s, 'ids:["M198","M133"', 'ids:["M133","M198"', "a lineage out of release order") },
+  { name: "a counter-example that is not the last node", expect: /counter M131 must be the last node/,
+    apply: s => replaceFirst(s, 'ids:["M214","M146","M158","M212","M235","M160","M131"]', 'ids:["M131","M214","M146","M158","M212","M235","M160"]', "a counter-example that is not the last node") },
+  { name: "a lineage listing a mechanic twice", expect: /lineage "The timing lineage": lists M161 twice/,
+    apply: s => replaceFirst(s, '"M080","M161"]', '"M080","M161","M161"]', "a lineage listing a mechanic twice") },
+  { name: "a lineage too short to be a lineage", expect: /lineage "Abilities that outlive the class": has 2 nodes besides its counter/,
+    apply: s => replaceFirst(s, 'ids:["M154","M086","M225","M160"]', 'ids:["M154","M160"]', "a lineage too short to be a lineage") },
+  { name: "a best node outside its own chain", expect: /lineage "The timing lineage": best "M131" must name a node/,
+    apply: s => replaceFirst(s, 'best:"M161"', 'best:"M131"', "a best node outside its own chain") },
+  // Page side of the lineage ledger: a node nobody quoted. M160 is 2025, like the chain's last
+  // node, so release order still holds; it is quoted for three OTHER chains.
+  { name: "a lineage node docs/lineages.md does not quote", expect: /lineage "The timing lineage" lists M160, but docs\/lineages\.md quotes no evidence for it/,
+    apply: s => replaceFirst(s, '"M080","M161"], best:"M161"', '"M080","M161","M160"], best:"M161"', "a lineage node docs/lineages.md does not quote") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */
@@ -956,6 +1028,19 @@ const DOC_SABOTAGES = [
       "a ledger verb the page does not carry") }) },
   { name: "CLAUDE.md verb-tag count drift", expect: /CLAUDE\.md says \d+ of \d+ rows are tagged/,
     apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ of \d+ rows are tagged\*\*/, "**999 of 281 rows are tagged**", "CLAUDE.md verb-tag count drift") }) },
+
+  // The lineage ledger, ledger side: a line naming a chain that does not list the row (the
+  // first entry is outside the timing chain, and its quote stays valid), and a spoiled quote,
+  // which proves this ledger's problems reach `errors` at all — the shared checks are
+  // already proven through docs/verbs.md, but not this call site.
+  { name: "a lineage-ledger line naming a chain that does not list the row", expect: /docs\/lineages\.md quotes M\d{3} for "The timing lineage", but that lineage does not list it/,
+    apply: d => ({ ...d, lineageLedger: replaceInDoc(d.lineageLedger,
+      /^(### M\d{3} — [^\n]+\n- (?!The timing lineage · )[^\n]+? · (how|loop|notes) · (`[^`\n]+`))$/m,
+      "$1\n- The timing lineage · $2 · $3", "a lineage-ledger line naming a chain that does not list the row") }) },
+  { name: "a lineage-ledger quote that is not in its row", expect: /docs\/lineages\.md:\d+: M\d{3} · [^:]+: quote is not in the row's/,
+    apply: d => ({ ...d, lineageLedger: replaceInDoc(d.lineageLedger, /^(- [^\n]+? · (?:how|loop|notes) · `)[^`]/m, "$1§", "a lineage-ledger quote that is not in its row") }) },
+  { name: "CLAUDE.md lineage count drift", expect: /CLAUDE\.md says \d+ lineages covering \d+ mechanics/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ lineages\*\*/, "**999 lineages**", "CLAUDE.md lineage count drift") }) },
 ];
 
 /**
@@ -1050,7 +1135,7 @@ function main() {
     coverFiles = new Set(readdirSync(join(ROOT, "covers")).filter(f => /\.(jpg|png|webp)$/.test(f)).map(f => "covers/" + f));
   } catch { /* no covers/ yet — rows naming a cover then fail closed */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), shotFiles, digestFiles, coverFiles };
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), lineageLedger: read("docs/lineages.md"), shotFiles, digestFiles, coverFiles };
 
   const { errors, stats } = validate(html, docs);
 

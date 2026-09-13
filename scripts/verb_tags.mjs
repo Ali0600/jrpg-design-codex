@@ -24,7 +24,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { extractScript, extractData, parseVerbLedger, ledgerProblems } from "./validate_codex.mjs";
+import { extractScript, extractData, readLedger } from "./validate_codex.mjs";
 import { Refusal, refuse } from "./game_rows.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -80,10 +80,10 @@ export function mechFirstLines(html) {
 
 /** The file with every ledger-named row's verbs set to the ledger's. Returns { html, changed }. */
 export function syncVerbs(html, ledgerMd) {
-  const ledger = parseVerbLedger(ledgerMd);
   const { lines, BASE_MECHS, VERBS } = mechFirstLines(html);
+  const ledger = readLedger(ledgerMd, "docs/verbs.md", BASE_MECHS);
 
-  const problems = [...ledger.problems, ...ledgerProblems(ledger, BASE_MECHS)];
+  const problems = [...ledger.problems];
   if (!VERBS) problems.push("the codex defines no VERBS — there is nothing to check a verb against");
   else {
     for (const e of ledger.entries.values()) {
