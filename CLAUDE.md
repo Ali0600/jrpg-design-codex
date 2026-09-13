@@ -285,7 +285,13 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   Games view, rendered by `renderGamePage(title)`: cover, GameFAQs details and ratings,
   the brief, every mechanic and minigame as compact `.gp-row` buttons (never full
   `.card[data-id]` cards — `gotoCard`'s selector would find two and the accordion state
-  would split), screenshots, the union of the rows' `refs`, the lineages it sits in, the
+  would split), screenshots, the union of the rows' `refs`, the lineages it sits in,
+  **Related in the codex** (`relatedGames(g, all)` in the data region: the facets two games
+  share, weighted by `RELATED_WEIGHTS` — series 3; developer, director and composer 2; other
+  credits, publisher, engine, theme and feature 1 — listed at a score of 2 or more and only when
+  they share a series, a studio or a credited person (`RELATED_KIN`; a publisher, engine, theme
+  or feature adds weight but never qualifies alone), at most six, each with its shared values as
+  facet links; the item is a `div` so those links never nest), the
   "Games You May Like" list (matched to codex games by GameFAQs path first, then exact
   normalised title, never fuzzily; the rest get a Queue-it button) and the reverse edges.
   **The hash is the page's ONLY state and the tabs never touch it**: every game link is a
@@ -310,9 +316,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `#games=…`: `route()` writes it into `#gq`, typing REPLACES the entry
   (`history.replaceState`, no history per keystroke), and Back from a filtered list returns to
   the page it came from. The grammar is `key:value` or `key:"two words"` plus free text
-  (`parseGameQuery`, which is `parseQuery(q, FACET_KEYS)`; keys and their aliases in `FACET_KEYS`). Facets AND together, each shows as
-  a removable chip in `#gqActive`, and the collapsed `#gameBrowse` lists every value with its
-  count. The logic sits in the DATA REGION after `expandIds` (`facetNorm`, `facetLookup`,
+  (`parseGameQuery`, which is `parseQuery(q, FACET_KEYS)`; keys and their aliases in
+  `FACET_KEYS`). Facets AND together, each shows as a removable chip in `#gqActive`, and the
+  collapsed `#gameBrowse` lists every value with its count. The logic sits in the DATA REGION after `expandIds` (`facetNorm`, `facetLookup`,
   `canonFacet`, `facetSources`, `facetsOf`, `parseGameQuery`, `withFacet`/`withoutFacet`,
   `matchesFacets`), so the validator and `scripts/facets.test.mjs` run the page's own code.
   **`facetSources(g)` is the ONE list of where a facet comes from** — `gf.plat`, `also`,
@@ -554,6 +560,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `data:` snapshot where `scrollIntoView` does nothing, so screenshots show the hero
   whatever you scroll. Reach a card with `find` + `scroll_to`, and take the DOM (anchors,
   hrefs, computed visibility) as the proof, not the picture.
+  The local preview (`codex-static`, port 8891) can hand the tab a CACHED copy of the page after
+  an edit, and a check run against it reads the old code as a missing feature (it did, 2026-09-14):
+  confirm the tab has the new code (`typeof <newFunction>`) or load it with a `?v=` query before
+  believing an absence.
 
 ## Deployment & CI — main is a PRODUCTION TRIGGER
 Live at **https://ali0600.github.io/jrpg-design-codex/** (public repo `Ali0600/jrpg-design-codex`).

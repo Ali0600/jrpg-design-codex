@@ -236,6 +236,10 @@
   .gp-like-item:hover{border-color:var(--gold);}
   .gp-like-item.cand{border-style:dashed;}
   .gp-like-item small{display:block; color:var(--ink-faint); font-size:11px;}
+  .gp-like-item.rel{align-items:flex-start;}
+  .gp-like-item.rel .rel-t{color:inherit; text-decoration:none; font-weight:600;}
+  .gp-like-item.rel .rel-t:hover{color:var(--gold);}
+  .gp-like-item.rel small{max-width:300px; margin-top:2px;}
   .cand{display:flex; gap:10px; align-items:center; padding:7px 0; border-top:1px solid var(--line-soft); flex-wrap:wrap;}
   .cand-n{min-width:24px; text-align:center; font-weight:700; color:var(--gold);}
   .cand-t{font-weight:600;}
@@ -667,7 +671,7 @@
 
     <h2>The research pipeline</h2>
     <p>The <b>Games</b> tab is a research queue, not just a list. Games sort by status — <i>Researching</i> first, then <i>To Research</i>, then the finished shelf — and each card shows how many mechanics and minigames it has contributed so far, so coverage gaps are visible at a glance.</p>
-    <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
+    <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, the codex games most related to it (a shared series, studio, director, composer or other credit, each shown as a link), and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
     <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared. The <b>Mechanics</b> and <b>Minigames</b> searches take the same words, answered through each row's game (<code>platform:SNES</code> on Mechanics lists every mechanic from a SNES game), plus words about the row itself: <code>cat:</code>, <code>verb:</code>, <code>want:</code> (yes, maybe, no or undecided), <code>game:</code> and <code>id:</code> for mechanics, and <code>table:yes</code> or <code>table:no</code> (whether a minigame has a reward table), <code>game:</code> and <code>id:</code> for minigames. Those two searches are not kept in the address.</p>
     <ol>
       <li><b>Queue it.</b> Add the game with status <i>To Research</i>, and write the "why" as a <b>research brief</b>: the specific question this game should answer (the queued cards marked BRIEF show the shape).</li>
@@ -3718,6 +3722,38 @@ function matchesRowQuery(row, title, game, facets){
   });
 }
 
+/* Kinship weights for a game page's "Related in the codex". Platform, genre, year, status and
+   award are left out: shared by too many games to mean anything, or not kinship at all. A series
+   outweighs a studio or a person. A publisher, engine, theme or feature adds weight but never
+   qualifies on its own: an entry must share a series, a studio or a credited person (RELATED_KIN).
+   Measured 2026-09-14, letting two weak links qualify filled 14 of 72 lists with shared features. */
+const RELATED_WEIGHTS = {series:3, dev:2, director:2, composer:2, designer:1, writer:1, producer:1, artist:1, programmer:1, pub:1, engine:1, theme:1, feature:1};
+const RELATED_MIN_SCORE = 2;
+const RELATED_KIN = new Set(["series", "dev", "director", "composer", "designer", "writer", "producer", "artist", "programmer"]);
+/** What two games' facets have in common: {score, shared:[{k, v}]}, each shared value weighted
+    by its kind, listed strongest kind first and spelled as in `fa`. */
+function relatedScore(fa, fb){
+  let score = 0;
+  const shared = [];
+  Object.entries(RELATED_WEIGHTS).forEach(([k, w])=>{
+    const other = new Set([...((fb && fb[k]) || [])].map(facetNorm));
+    [...((fa && fa[k]) || [])].forEach(v=>{ if(other.has(facetNorm(v))){ score += w; shared.push({k, v}); } });
+  });
+  return {score, shared};
+}
+/** The codex games most like `g`: [{title, score, shared}] scoring at least RELATED_MIN_SCORE,
+    at most `limit`, sorted by score, then title. */
+function relatedGames(g, all, limit = 6){
+  if(!g) return [];
+  const fa = facetsOf(g);
+  return (Array.isArray(all) ? all : [])
+    .filter(o=> o && o.title !== g.title)
+    .map(o=> ({title: o.title, ...relatedScore(fa, facetsOf(o))}))
+    .filter(r=> r.score >= RELATED_MIN_SCORE && r.shared.some(s=> RELATED_KIN.has(s.k)))
+    .sort((a, b)=> b.score - a.score || a.title.localeCompare(b.title))
+    .slice(0, limit);
+}
+
 /** Coverage of the owner's pillars over a shortlist. `judged` is store.myGame.pillars: an entry
     (even an empty list) means the mechanic was judged, no entry means not yet. A number that is
     not a declared pillar, a repeat, or an entry that is not a list is ignored, never thrown on:
@@ -4505,6 +4541,13 @@ function renderGamePage(title){
     return `<span class="gp-like-item cand"><span class="g-cover mini ph" aria-hidden="true">?</span><span>${esc(l.t)}<small>not in the codex</small></span>${href?`<a class="wbtn" href="${esc(href)}" target="_blank" rel="noopener">GameFAQs ↗</a>`:""}<button class="wbtn" data-queue="${esc(l.t)}">Queue it</button></span>`;
   }).join("");
   const suggestedBy = [...(li.likedBy.get(title)||[])].sort();
+  // Codex games that share a series, a studio or the people who made this one, strongest first.
+  // The item is a div: its title and its shared values are separate links, never nested ones.
+  const relatedItems = relatedGames(g, allGames()).map(r=>{
+    const href = `#game=${encodeURIComponent(r.title)}`;
+    const why = r.shared.slice(0, 4).map(s=> facetLink(s.k, s.v, null)).join(" · ") + (r.shared.length > 4 ? ` · +${r.shared.length - 4}` : "");
+    return `<div class="gp-like-item rel"><a href="${href}" tabindex="-1" aria-hidden="true">${coverHTML(gameByTitle(r.title) || {title:r.title}, "g-cover mini")}</a><span><a class="rel-t" href="${href}">${esc(r.title)}</a><small>${why}</small></span></div>`;
+  }).join("");
 
   const section = (h, inner) => inner ? `<div class="gp-section"><h3>${h}</h3>${inner}</div>` : "";
   box.innerHTML = `
@@ -4528,6 +4571,7 @@ function renderGamePage(title){
       ${section("Screenshots", gameShotsHTML(title))}
       ${section("Sources", refs.length ? refsHTML(refs) : "")}
       ${section("Lineages", lineages.length ? `<div class="wn-ids">${lineages.map(l=>`<button class="idchip game" data-lineage="${esc(l.name)}">${esc(l.name)}</button>`).join("")}</div>` : "")}
+      ${section("Related in the codex", relatedItems ? `<div class="gp-like">${relatedItems}</div>` : "")}
       ${section("GameFAQs also suggests", likeItems ? `<div class="gp-like">${likeItems}</div>` : "")}
       ${section("Suggested beside", suggestedBy.length ? `<div class="gp-like">${suggestedBy.map(t=>`<a class="gp-like-item" href="#game=${encodeURIComponent(t)}">${coverHTML(gameByTitle(t)||{title:t}, "g-cover mini")}<span>${esc(t)}<small>its GameFAQs page lists this game</small></span></a>`).join("")}</div>` : "")}
     </article>`;

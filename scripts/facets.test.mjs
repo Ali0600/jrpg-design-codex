@@ -15,9 +15,9 @@ import { extractScript, extractData, validate } from "./validate_codex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
 const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
-  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery"];
+  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "relatedGames", "relatedScore"];
 const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
-  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery } =
+  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, relatedGames, relatedScore } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -226,4 +226,43 @@ test("game keys and row keys AND together", () => {
   const expected = mechsFor("platform:SNES").filter(m => m.cat === "Exploration & Rewards").map(m => m.id);
   assert.ok(expected.length > 0);
   assert.deepEqual(mechsFor("platform:SNES cat:exploration").map(m => m.id), expected);
+});
+
+// ---------------------------------------------------------------- related games on a game page
+
+const kin = (title, infobox, extra = {}) => ({ title, infobox: { plat: ["PC"], at: "2026-09-14", ...infobox }, ...extra });
+
+test("a publisher, an engine, a theme or a feature adds weight but never makes a relative on its own", () => {
+  const themes = ["Video games about time travel", "Science fantasy video games"];
+  const one = kin("One", { pub: ["Pub Co"], engine: ["Unity"], comp: ["Composer C"], des: ["Designer D"] }, { wpcats: themes });
+  const two = kin("Two", { pub: ["Pub Co"], engine: ["Unity"] }, { wpcats: themes });
+  const three = kin("Three", { comp: ["Composer C"] });
+  const four = kin("Four", { des: ["Designer D"] });
+  assert.equal(relatedScore(facetsOf(one), facetsOf(two)).score, 4, "the weak links still count");
+  assert.deepEqual(relatedGames(one, [one, two, three, four]).map(r => [r.title, r.score]), [["Three", 2]],
+    "Two shares only weak links; Four shares a person but scores 1");
+});
+
+test("relatives sort by score, then title, list the strongest kind first, and stop at the limit", () => {
+  const home = kin("Home", { series: ["Saga S"], comp: ["Composer C"] });
+  const all = [home, kin("Zed", { series: ["Saga S"], comp: ["Composer C"] }), kin("Beta", { comp: ["Composer C"] }), kin("Alpha", { comp: ["Composer C"] })];
+  assert.deepEqual(relatedGames(home, all).map(r => `${r.title} ${r.score}`), ["Zed 5", "Alpha 2", "Beta 2"]);
+  assert.deepEqual(relatedGames(home, all)[0].shared, [{ k: "series", v: "Saga S" }, { k: "composer", v: "Composer C" }]);
+  assert.deepEqual(relatedGames(home, all, 1).map(r => r.title), ["Zed"]);
+  assert.deepEqual(relatedGames(null, all), []);
+});
+
+test("a game is never its own relative, and kinship is symmetric across the roster", () => {
+  const F = new Map(BASE_GAMES.map(g => [g.title, facetsOf(g)]));
+  for (const a of BASE_GAMES) {
+    assert.ok(!relatedGames(a, BASE_GAMES).some(r => r.title === a.title), a.title);
+    for (const b of BASE_GAMES) {
+      if (a !== b) assert.equal(relatedScore(F.get(a.title), F.get(b.title)).score, relatedScore(F.get(b.title), F.get(a.title)).score, `${a.title} / ${b.title}`);
+    }
+  }
+  const ff7 = game("Final Fantasy VII (1997)"), ff8 = game("Final Fantasy VIII");
+  const ff8InFf7 = relatedGames(ff7, BASE_GAMES).find(r => r.title === ff8.title);
+  assert.ok(ff8InFf7, "FF7 lists FF8");
+  assert.ok(relatedGames(ff8, BASE_GAMES).some(r => r.title === ff7.title), "FF8 lists FF7");
+  assert.deepEqual(ff8InFf7.shared[0], { k: "series", v: "Final Fantasy" });
 });
