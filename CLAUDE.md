@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **281 mechanics** (`BASE_MECHS` array, M001-M281) across **72 researched games**: FF7 Rebirth,
+- **283 mechanics** (`BASE_MECHS` array, M001-M283) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -117,6 +117,12 @@ backup; the HTML file is the source of truth and is more up to date.
   rice→sake), which is the shop-upgrades pillar as an economy. Its two guides disagree on
   whether prices move meaningfully at all, and both readings are kept. The brief's
   castle-facility question came back THIN and is recorded as such.
+  **Wave 3** — **Persona 4** (M282-M283, g097): Daidara's smithy, where nearly every weapon is a
+  recipe paid for in Shadow materials sold to the smith, who hints at what he is short of (the
+  legible version of FF12's bazaar, M208); a fox whose in-dungeon SP healing falls from 60 to 15
+  yen a point as the town's wishes are granted, until the offerings restore its shrine; and the
+  old man's monthly fishing prizes (g097, an 18-row table), settled across three walkthroughs that
+  disagreed on item names. It is the first digest whose Triage table records every guide listed.
   Plus the **game pages** (2026-09-07): every roster row carries its box art (Wikipedia,
   `covers/`), a Wikipedia link, and its GameFAQs page — platform, genre, developer,
   publisher, release, franchise, the user rating / difficulty / length, and the five games
@@ -129,7 +135,7 @@ backup; the HTML file is the source of truth and is more up to date.
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
   its Wikidata id (`wd`). The same day's audit of unused research data offered three more
   options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
-- **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
+- **97 minigames** (`MINIGAMES` array, g001-g097): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
   sims), each with a highlighted Rewards field and a
@@ -186,7 +192,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M281, minigames g001-g096. Continue the
+  - IDs are sequential: mechanics M001-M283, minigames g001-g097. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -220,8 +226,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **82 of 281 rows are tagged**
-  (101 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **84 of 283 rows are tagged**
+  (103 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
   writer of `verbs`, and the validator holds the page and the ledger equal, so a tag cannot
