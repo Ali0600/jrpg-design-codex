@@ -201,10 +201,19 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   (plus `Maybe` behind a toggle) is placed into one of six system buckets defined by
   the `BUCKETS` const (discovery / combat / progress / venues / world / parked), each
   with a free-text design note. Persists as `store.myGame = {assign:{mechId->bucket},
-  notes:{bucket->text}}`. **`normalizeStore()` backfills every store slot on load AND
+  notes:{bucket->text}, pillars:{mechId->[n,…]}}`. **`normalizeStore()` backfills every store slot on load AND
   on import** — backups predate newer keys, and without it a restored v1 backup makes
   the board throw on `store.myGame.assign`. Add new store keys THERE, not just to the
   literal, or import breaks.
+  **Pillar coverage** (added 2026-09-14, Direction A's last PR): every shortlisted row carries
+  chips I–V and *none*, and `store.myGame.pillars` maps a mechanic id to the pillars it serves.
+  An entry, even `[]` ("none"), means JUDGED; no entry means not yet, and un-ticking the last
+  pillar deletes the entry rather than recording "none". The strip and each Design Pillars card
+  count through `pillarCoverage(mechs, judged)` in the data region (`scripts/mygame.test.mjs`)
+  over `myPool()`, the pool the bucket tallies use, and always show the not-yet-judged count so
+  a partial answer never reads as complete. `renderMyGame()` calls `renderPillars()`, so every
+  path that can change the shortlist refreshes both. Owner-judged by design, never derived from
+  `cat` (the fork is in `docs/DECISIONS.md`).
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
   (like CATS). Mechanics carry an optional `verbs:[...]`; **82 of 281 rows are tagged**
   (101 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
@@ -700,8 +709,8 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    release order with an explicit `best`, every node quoted in `docs/lineages.md`, 64
    sabotages. GitHub shows #29 CLOSED, not merged: its merge call returned 502 after moving
    `main`, so the content is squash `e5143de` and the deploy ran by `workflow_dispatch`.
-   **Next is PR 3, pillar coverage**, specified in
-   `~/.claude/plans/i-want-you-to-eager-riddle.md`. The two thin verbs (*The fleeing rare*,
+   **PR 3, pillar coverage, landed as #33 (2026-09-14)**, completing Direction A: owner-judged
+   pillar chips on the My Game board, counted there and on the Design Pillars tab. The two thin verbs (*The fleeing rare*,
    *Vista sketch*) are research targets for whoever next picks a game.
    **Facets came first, at the owner's request (2026-09-13)**: PR 1 made every platform, genre,
    studio, series and year a filter over the data the rows already hold (#30). PR 2 added the
@@ -710,9 +719,9 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    made chosen Wikipedia categories into themes, features and awards. The audit's other findings
    (Famitsu and per-platform scores, original platform with length and difficulty, digest facts
    and soundtracks) were declined by the owner on 2026-09-14. The next pieces, in the owner's
-   order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: pillar
-   coverage and board credits, the query grammar on the Mechanics and Minigames tabs, related
-   games on the game page, then the two research directions below.
+   order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: board
+   credits, the query grammar on the Mechanics and Minigames tabs, related games on the game
+   page, then the two research directions below.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
