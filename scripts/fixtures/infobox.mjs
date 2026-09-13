@@ -32,3 +32,17 @@ export const LANTERN_VALE_INFOBOX = {
   series: ["Lantern"],
   comp: ["Mira Tone", "Kai & Sons"],
 };
+
+/** A synthetic `action=query` answer (categories and page properties). By default the categories
+    come out of order, one repeated and one written with an underscore. */
+export const LANTERN_VALE_CATEGORIES = [
+  { ns: 14, title: "Category:Video games about lanterns" },
+  { ns: 14, title: "Category:Harbor_Soft games" },
+  { ns: 14, title: "Category:1999 video games" },
+  { ns: 14, title: "Category:Video games about lanterns" },
+];
+export const LANTERN_VALE_WPCATS = ["1999 video games", "Harbor Soft games", "Video games about lanterns"];
+export const meta = ({ title = "Lantern Vale", wd = "Q4242", categories = LANTERN_VALE_CATEGORIES, extra = {} } = {}) => ({
+  batchcomplete: true, ...extra,
+  query: { pages: [{ pageid: 7, ns: 0, title, ...(wd ? { pageprops: { wikibase_item: wd } } : {}), categories }] },
+});

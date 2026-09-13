@@ -75,7 +75,7 @@ test("a harvested game's facets fold GameFAQs and Wikipedia together, GameFAQs' 
   assert.deepEqual(values(cc, "year"), ["2018", "2010s"]);
   assert.deepEqual(values(ct, "platform").slice(0, 2), ["SNES", "PlayStation"]);
   assert.ok(values(ct, "platform").includes("PC"), "Wikipedia's Windows is PC");
-  assert.deepEqual(values(ct, "genre"), ["RPG", "JRPG"]);
+  assert.deepEqual(values(ct, "genre"), ["RPG", "JRPG", "Turn-Based"], "Wikipedia's turn-based RPG category widens the GameFAQs genre");
   assert.deepEqual(values(ct, "dev"), ["Square"]);
   assert.deepEqual(values(ct, "composer"), ["Yasunori Mitsuda", "Nobuo Uematsu", "Noriko Matsueda"]);
 });
@@ -133,6 +133,30 @@ test("every spelling of a studio lands in ONE filter", () => {
   assert.ok(raw.length > 1, "the roster still has Square games");
   assert.equal(BASE_GAMES.filter(g => matches(g, "dev:Square")).length, raw.length);
   assert.equal(BASE_GAMES.filter(g => matches(g, "dev:squaresoft")).length, raw.length);
+});
+
+test("a Wikipedia category is a facet only when CATEGORY_FACETS names it, and may widen a genre", () => {
+  const g = { title: "Lantern Vale", year: 1999, dev: "d", status: "Researched", wp: "Lantern Vale",
+    gf: { plat: "PlayStation", genre: ["Role-Playing"] },
+    wpcats: ["1999 video games", "Japan Game Award winners", "Single-player video games", "Turn-based role-playing video games",
+      "Video games about time travel", "Science fantasy role-playing video games", "Science fantasy video games"] };
+  assert.deepEqual(values(g, "theme"), ["Time travel", "Science fantasy"], "two categories naming one theme are one value");
+  assert.deepEqual(values(g, "genre"), ["RPG", "Turn-Based"]);
+  assert.deepEqual(values(g, "award"), ["Japan Game Award"]);
+  assert.deepEqual(values(g, "feature"), [], "an unmapped category is not a facet");
+  assert.ok(matches(g, 'theme:"time travel" award:"japan game award" genre:turn-based'));
+  assert.ok(!matches(g, "theme:dragons"));
+  assert.deepEqual([...facetsOf(g, s => s.from !== "wp").theme], [], "a card's summary never reads categories");
+  assert.deepEqual(values({ ...g, wpcats: undefined }, "theme"), []);
+});
+
+test("the roster's categories land where the table puts them", () => {
+  const ct = game("Chrono Trigger");
+  assert.ok(values(ct, "theme").includes("Time travel"));
+  assert.ok(values(ct, "feature").includes("Silent protagonist"));
+  assert.ok(values(game("Elden Ring"), "award").includes("The Game Awards Game of the Year"));
+  assert.ok(matches(game("Persona 5 Royal"), 'theme:tokyo genre:"social sim"'));
+  assert.ok(!matches(game("CrossCode"), "genre:turn-based"));
 });
 
 test("adding a facet narrows, adding it again is a no-op, removing it keeps the rest", () => {

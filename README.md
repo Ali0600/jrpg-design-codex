@@ -48,13 +48,14 @@ none, because it reads as verified.
   and minigame it contributed, its screenshots and sources, the lineages it sits in, and
   the games GameFAQs readers pair it with. The address carries the page, so Back and
   shared links work
-- **Everything is a filter** — click a platform, genre, studio, series, year or a name in the
-  credits on a game's page to list every game that shares it, or on a card to narrow the list
-  you already have. Every platform a game came out on, and its credits down to the composer
-  and the engine, come from its Wikipedia infobox. The search takes the same filters as words
-  (`platform:PC composer:"Nobuo Uematsu"`) and a Browse panel counts every value. Each value
-  has one spelling, so GameFAQs' "Role-Playing" reads RPG and SquareSoft, Squaresoft and
-  Square are one studio
+- **Everything is a filter** — click a platform, genre, studio, series, year, theme, award or a
+  name in the credits on a game's page to list every game that shares it, or on a card to narrow
+  the list you already have. Every platform a game came out on, and its credits down to the
+  composer and the engine, come from its Wikipedia infobox. Its themes (time travel, airships),
+  features (female protagonist, multiple endings) and awards come from the article's categories.
+  The search takes the same filters as words (`theme:"time travel" platform:PC`) and a Browse
+  panel counts every value. Each value has one spelling, so GameFAQs' "Role-Playing" reads RPG
+  and SquareSoft, Squaresoft and Square are one studio
 - **Covers** — a box-art thumbnail beside every game. Each comes from Wikipedia at
   thumbnail size, with its source recorded and a Wikipedia link on the page
 - **GameFAQs suggestions** — the games GameFAQs lists beside the codex's own, ranked by
@@ -98,7 +99,7 @@ scripts/digest_lint.mjs    pointer-grammar lint for the research digests
 scripts/splice_rows.mjs    writes a research digest's rows into the app, and logs them
 scripts/check_changes.mjs  CI gate: every rewritten row must be logged in the changelog
 scripts/verb_tags.mjs      writes each row's discovery verbs from the evidence ledger
-scripts/fetch_infobox.mjs  every platform and credit, from each game's Wikipedia infobox
+scripts/fetch_infobox.mjs  every platform, credit, theme and award, from each game's Wikipedia article
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
 docs/research/             one digest per researched game, every fact with its source
@@ -133,7 +134,9 @@ more than two, or any string long enough to be prose. The third fetches every ga
 art from Wikipedia at thumbnail size. It records each file's article and `File:` page in
 `covers/SOURCES.md`. It also builds a contact sheet to look at before you commit, because
 a lead image is sometimes a logo or the remake's box. The fourth reads every game's Wikipedia
-infobox: every platform it came out on, its studios and series, and its credits. It refuses a
+infobox: every platform it came out on, its studios and series, and its credits. It also stores
+the article's categories and its Wikidata id; the page picks which categories become themes,
+features and awards, so choosing a new one never means fetching again. It refuses a
 platform or genre the page's vocabulary does not yet list, so a new console gets its one
 spelling by hand before any game can carry it.
 
@@ -183,9 +186,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 77 sabotages and fails the build unless every one is caught, and every
+  injects 89 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  133-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  140-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed Python clients with host allowlists and range checks, plus an in-page
   probe that caps results at 12KB so a 1.4MB Cloudflare-gated guide is never fetched whole

@@ -368,5 +368,12 @@ check told the truth: with the source gone, the planted "Linux 2" raised no erro
 **Why it came up:** the infobox PR's fail-first run. 31 of 32 mutants showed their expected
 failure, and the 32nd showed exit 1 with nothing MISSED.
 
-**Takeaway:** before believing an empty "missed" list, confirm the judge ran its cases. An
-exit code cannot tell "caught everything" from "never started".
+It happened again one PR later, from the other side. The category sabotages went in before the
+docs caught up, on purpose, so the base run failed on the quoted sabotage count and ran nothing,
+which read as "red for the right reason". Once the counts matched, one sabotage turned out to be
+MISSED: a misspelled kind in the category table made the page's `facetsOf` throw instead of
+letting the validator name it, and on the live site that would have broken every game page.
+
+**Takeaway:** before believing an empty "missed" list, confirm the judge ran its cases. An exit
+code cannot tell "caught everything" from "never started", and a base run that is red for a
+planned reason is exactly that kind of run: read the sabotage results again once it is green.
