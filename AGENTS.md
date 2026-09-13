@@ -127,8 +127,8 @@ backup; the HTML file is the source of truth and is more up to date.
   credit, theme, feature and award on a game is a filter (`#games=<query>`). Platforms and
   credits come from each game's Wikipedia infobox (`infobox`). Themes, features and awards come
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
-  its Wikidata id (`wd`). The same day's audit of unused research data left three options, with
-  their measurements, in `docs/DECISIONS.md`'s Backlog.
+  its Wikidata id (`wd`). The same day's audit of unused research data offered three more
+  options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
 - **96 minigames** (`MINIGAMES` array, g001-g096): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
@@ -709,8 +709,10 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    every credited person (#31). A third, picked from the owner's audit of unused research data,
    made chosen Wikipedia categories into themes, features and awards. The audit's other findings
    (Famitsu and per-platform scores, original platform with length and difficulty, digest facts
-   and soundtracks) wait in `docs/DECISIONS.md`'s Backlog with their measurements. Both are planned in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`,
-   and PR 3 of the analysis layer waits behind them.
+   and soundtracks) were declined by the owner on 2026-09-14. The next pieces, in the owner's
+   order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: pillar
+   coverage and board credits, the query grammar on the Mechanics and Minigames tabs, related
+   games on the game page, then the two research directions below.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
@@ -718,8 +720,6 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
 
 Standing, not yet scheduled:
-- Merge the user's localStorage backup (they should drop `jrpg-codex-backup.json`
-  into this folder; it contains their ratings/notes/custom entries). Still stranded.
 - Refill the research queue — EMPTY since 2026-08-12. The Games tab now ranks 158
   GameFAQs-suggested titles with a Queue-it button, but nothing is rostered, and the
   leaders include remakes and siblings of games already researched (Persona 5 vs
