@@ -17,6 +17,36 @@ rejected options still offer.
   revisit hook: once research adds rows whose own text brings *The fleeing rare* (1 today)
   and *Vista sketch* (2) to three mechanics each, add the rule to `validate()` beside the
   ledger checks, with one sabotage that inserts an unused verb into `VERBS`.
+- **Wikidata ids for facets** (from the facet-vocabulary fork, 2026-09-13) — revisit hook:
+  `facetSources()` in the page is the one list of where a facet's values come from. A resolved
+  `wd` item per game would add ids as a source there and retire most of `FACET_VOCAB`.
+
+---
+
+## 2026-09-13 — How one platform, genre or studio becomes one filter
+
+**Fork:** the owner asked for every platform and genre on a game to be clickable, and for
+"Role-Playing" to read RPG. The sources spell one thing several ways: SquareSoft (GameFAQs),
+Squaresoft (the hand-written row) and Square (Wikipedia). A filter on the raw string would list
+a fraction of the games under each spelling.
+
+- **A canonical vocabulary in the page, closed for platform and genre** ✔ — one table folds
+  every spelling to one name. The filter and the validator run the same fold, and a new console
+  or label is a build failure that names the string, not a quietly thin filter.
+- **Relabel at render time only** (`Role-Playing` → `RPG` in the markup) — `rejected — the
+  labels would agree while the filter still split SquareSoft from Squaresoft into two lists`
+- **Match by substring** (`dev:square` finds anything containing "square") — `rejected —
+  Square Enix and Square Electronic Arts are other companies, and "PlayStation" would list
+  every PlayStation 2, 4 and 5 game`
+- **Wikidata ids** (platform P400, genre P136, developer P178) — `deferred — worth trying`:
+  ids end the spelling problem at the source, but every roster game's item has to be resolved
+  and checked first, which is a harvest of its own. Revisit hook in the Backlog above.
+
+**Chosen:** the first. Two calls sit inside it. The developer comes from GameFAQs' `gf.dev`, not
+the hand-written row, because the row's `"Enix (tri-Ace)"` would file Star Ocean 2 under its
+publisher. And an entry merges spellings of one company or series, never a parent and its
+child, so Shin Megami Tensei stays apart from Megami Tensei. Every platform from Wikipedia's
+infobox, with every credited person, is the planned second PR.
 
 ---
 

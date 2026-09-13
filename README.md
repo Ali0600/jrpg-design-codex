@@ -48,6 +48,11 @@ none, because it reads as verified.
   and minigame it contributed, its screenshots and sources, the lineages it sits in, and
   the games GameFAQs readers pair it with. The address carries the page, so Back and
   shared links work
+- **Everything is a filter** — click a platform, genre, studio, series or year on a game's
+  page to list every game that shares it, or on a card to narrow the list you already have.
+  The search takes the same filters as words (`platform:PC genre:"Action RPG"`) and a Browse
+  panel counts every value. Each value has one spelling, so GameFAQs' "Role-Playing" reads
+  RPG and SquareSoft, Squaresoft and Square are one studio
 - **Covers** — a box-art thumbnail beside every game. Each comes from Wikipedia at
   thumbnail size, with its source recorded and a Wikipedia link on the page
 - **GameFAQs suggestions** — the games GameFAQs lists beside the codex's own, ranked by
@@ -168,9 +173,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 64 sabotages and fails the build unless every one is caught, and every
+  injects 72 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  108-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  119-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed Python clients with host allowlists and range checks, plus an in-page
   probe that caps results at 12KB so a 1.4MB Cloudflare-gated guide is never fetched whole
