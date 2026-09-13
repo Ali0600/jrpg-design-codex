@@ -385,6 +385,20 @@
   .mine-row select{width:auto; max-width:180px; font-size:12.5px; padding:5px 8px; flex:none;}
   .bucket-note{width:100%; margin-top:13px; min-height:60px; resize:vertical; font-size:14px;}
   .bucket-note::placeholder{color:var(--ink-faint); font-style:italic;}
+  .pchips{display:flex; gap:4px; flex-wrap:wrap; align-items:center; margin-top:7px;}
+  .pchips .plabel{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin-right:3px;}
+  .pchip{
+    font:inherit; font-size:11px; line-height:1.4; padding:2px 9px; border-radius:999px; cursor:pointer;
+    border:1px solid var(--line); background:#0e1526; color:var(--ink-faint);
+  }
+  .pchip:hover{color:var(--ink); border-color:var(--steel);}
+  .pchip.on{color:#0b1020; border-color:var(--green); background:var(--green); font-weight:600;}
+  .pchip.none.on{color:var(--ink); border-color:var(--steel); background:#1c2748; font-weight:400;}
+  .mine-tally.pill b{color:var(--green);}
+  .mine-tally.pill.empty-b b{color:var(--ink-faint);}
+  .pcov{margin-top:10px; font-size:13px; color:var(--ink-faint);}
+  .pcov b{color:var(--ink);}
+  .pcov .wbtn{margin-left:6px;}
   @media (max-width:640px){ .mine-row{flex-wrap:wrap;} .mine-row select{max-width:none; width:100%;} }
 
   /* ---------- UI gallery ---------- */
@@ -656,6 +670,7 @@
 
     <h2>Turning research into a design</h2>
     <p>The <b>My Game</b> tab is where the codex stops being a library. Everything marked <b>Yes</b> collects there as a shortlist, and each one gets placed into a system of the game you're building — discovery, combat, progression, venues, world. Each system has its own notes box for the rules those mechanics have to serve.</p>
+    <p>Each shortlisted mechanic also carries the five design pillars as chips, <b>I</b> to <b>V</b>, and a <b>none</b>. Tick the pillars it really serves; hover a chip for that pillar's test question. The strip at the top counts how many mechanics serve each pillar and how many you have not judged yet, and each card on the <b>Design Pillars</b> tab carries the same count. A pillar with little behind it is the part of your design the shortlist does not support yet. Nothing here is worked out from a mechanic's category: the judgement is yours.</p>
     <p>The value is in the placing. A mechanic you can't assign to a system is a mechanic you liked without knowing what it's <i>for</i>, and a system holding twelve entries is one you're overbuilding. Use <b>Parked</b> honestly — "worth loving, not worth building here" is a real answer, and a shortlist with nothing parked usually means nothing has been decided.</p>
 
     <h2>The UI Gallery</h2>
@@ -3662,9 +3677,27 @@ function matchesFacets(g, facets){
   });
 }
 
+/** Coverage of the owner's pillars over a shortlist. `judged` is store.myGame.pillars: an entry
+    (even an empty list) means the mechanic was judged, no entry means not yet. A number that is
+    not a declared pillar, a repeat, or an entry that is not a list is ignored, never thrown on:
+    an imported backup may carry anything. Lives in the data region so the tests run this copy. */
+function pillarCoverage(mechs, judged){
+  const valid = new Set(PILLARS.map(p=>p.n));
+  const per = Object.fromEntries(PILLARS.map(p=>[p.n, 0]));
+  const list = Array.isArray(mechs) ? mechs : [];
+  let judgedN = 0;
+  list.forEach(m=>{
+    const j = judged && judged[m.id];
+    if(!Array.isArray(j)) return;
+    judgedN++;
+    new Set(j.filter(n=> valid.has(n))).forEach(n=> per[n]++);
+  });
+  return {per, judged: judgedN, unjudged: list.length - judgedN, total: list.length};
+}
+
 /* ============================= STATE ============================= */
 const LS_KEY = "jrpg_codex_v1";
-let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}}, seen:""};
+let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}, pillars:{}}, seen:""};
 let canSave = true;
 
 /* Backups predate later fields, so fill every slot rather than trusting the shape.
@@ -3679,6 +3712,7 @@ function normalizeStore(s){
   s.myGame       = s.myGame       || {};
   s.myGame.assign = s.myGame.assign || {};
   s.myGame.notes  = s.myGame.notes  || {};
+  s.myGame.pillars = s.myGame.pillars || {};
   s.seen         = typeof s.seen === "string" ? s.seen : "";
   return s;
 }
@@ -4077,6 +4111,8 @@ $("#btnSaveNew").addEventListener("click", ()=>{
   ["nName","nGame","nHow","nLoop","nNotes"].forEach(i=> $("#"+i).value="");
   $("#addForm").classList.remove("show");
   persist(); buildFilters(); renderCards();
+  // A custom mechanic marked Yes joins the shortlist, and the pillar counts with it.
+  renderMyGame();
 });
 
 /* ============================= GAMES TAB ============================= */
@@ -4447,13 +4483,31 @@ $("#btnSaveGame").addEventListener("click", ()=>{
 });
 
 /* ============================= PILLARS + LEGEND ============================= */
-$("#pillarCards").innerHTML = PILLARS.map(p=>`
+const PILLAR_NUM = ["I","II","III","IV","V"];
+/* Each card also says how much of the owner's shortlist serves it: the same pool and the same
+   judgements as the My Game strip, counted by the same pillarCoverage(). renderMyGame() calls
+   this, so every path that can change the shortlist refreshes both. */
+function renderPillars(){
+  const pool = myPool(), cov = pillarCoverage(pool, store.myGame.pillars);
+  $("#pillarCards").innerHTML = PILLARS.map(p=>{
+    const n = cov.per[p.n];
+    const line = pool.length
+      ? `<b>${n}</b> of your <b>${pool.length}</b> shortlisted mechanic${pool.length===1?"":"s"} serve${n===1?"s":""} this pillar · <b>${cov.unjudged}</b> not yet judged${cov.unjudged?`<button type="button" class="wbtn" data-judge>Judge them on My Game</button>`:""}`
+      : `Mark mechanics <b>Yes</b> on the Mechanics tab, then judge them on My Game, to measure this pillar.`;
+    return `
   <article class="card pillar">
-    <div class="num">${["I","II","III","IV","V"][p.n-1]}</div>
+    <div class="num">${PILLAR_NUM[p.n-1]}</div>
     <h3>${esc(p.t)}</h3>
     <p style="color:var(--ink-dim)">${esc(p.m)}</p>
     <div class="test"><b>Test question</b>${esc(p.q)}</div>
-  </article>`).join("");
+    <p class="pcov">${line}</p>
+  </article>`;
+  }).join("");
+  $("#pillarCards").querySelectorAll("[data-judge]").forEach(b=> b.addEventListener("click", ()=>{
+    document.querySelector('.tab[data-view="mygame"]').click();
+    window.scrollTo({top:0, behavior:"instant"});
+  }));
+}
 $("#legend").innerHTML = Object.entries(CATS).map(([c,color])=>`<span class="chip"><span class="orb" style="--c:${color}"></span>${esc(c)}</span>`).join("");
 
 /* ============================= LINEAGES ============================= */
@@ -4747,6 +4801,18 @@ const BUCKETS = [
 const BUCKET_NAME = Object.fromEntries(BUCKETS.map(b=>[b.k,b.n]));
 let myFocus = "";
 
+/* A shortlisted mechanic's pillar chips. An entry in store.myGame.pillars, even an empty one
+   ("none"), means judged; no entry means not yet. */
+function pillarChipsHTML(id){
+  const j = store.myGame.pillars[id], judged = Array.isArray(j), none = judged && !j.length;
+  return `<div class="pchips" role="group" aria-label="Pillars this mechanic serves"><span class="plabel">Pillars</span>${
+    PILLARS.map(p=>{
+      const on = judged && j.includes(p.n);
+      return `<button type="button" class="pchip${on?" on":""}" data-pillar="${esc(id)}" data-n="${p.n}" aria-pressed="${on}" title="${esc(`${PILLAR_NUM[p.n-1]}. ${p.t} — ${p.q}`)}">${PILLAR_NUM[p.n-1]}</button>`;
+    }).join("")
+  }<button type="button" class="pchip none${none?" on":""}" data-pillar="${esc(id)}" data-n="none" aria-pressed="${none}" title="Judged: it serves none of the five pillars">none</button></div>`;
+}
+
 function myPool(){
   const wantMaybe = $("#myMaybe").checked;
   return allMechs().filter(m => m.want==="Yes" || (wantMaybe && m.want==="Maybe"));
@@ -4761,9 +4827,13 @@ function renderMyGame(){
   const counts = {};
   pool.forEach(m => { const b = store.myGame.assign[m.id] || ""; counts[b] = (counts[b]||0) + 1; });
   const sorted = pool.length - (counts[""]||0);
+  const cov = pillarCoverage(pool, store.myGame.pillars);
   $("#myTally").innerHTML =
     `<span class="mine-tally"><b>${sorted}</b>of ${pool.length} placed</span>` +
-    BUCKETS.map(b=>`<span class="mine-tally${counts[b.k]?"":" empty-b"}"><b>${counts[b.k]||0}</b>${esc(b.n)}</span>`).join("");
+    BUCKETS.map(b=>`<span class="mine-tally${counts[b.k]?"":" empty-b"}"><b>${counts[b.k]||0}</b>${esc(b.n)}</span>`).join("") +
+    PILLARS.map(p=>`<span class="mine-tally pill${cov.per[p.n]?"":" empty-b"}" title="${esc(`${p.t} — ${p.q}`)}"><b>${cov.per[p.n]}</b>Pillar ${PILLAR_NUM[p.n-1]}</span>`).join("") +
+    `<span class="mine-tally${cov.unjudged?"":" empty-b"}" title="Shortlisted mechanics not yet marked with a pillar or none"><b>${cov.unjudged}</b>not yet judged</span>`;
+  renderPillars();
 
   const chips = $("#myChips");
   const chipDefs = [{k:"",label:"Everything"}].concat(BUCKETS.map(b=>({k:b.k,label:b.n})), [{k:"__unsorted",label:"Unsorted"}]);
@@ -4806,6 +4876,7 @@ function renderMyGame(){
           <div class="mine-main">
             <h4>${esc(m.name)}</h4>
             <div class="meta"><span>${esc(m.game)}</span><span class="cat" style="--c:${color}">${esc(m.cat)}</span>${m.want==="Maybe"?'<span style="color:var(--gold)">Maybe</span>':""}</div>
+            ${pillarChipsHTML(m.id)}
             ${m.notes?`<p class="notes-p">${esc(m.notes)}</p>`:""}
           </div>
           <select data-assign="${esc(m.id)}" aria-label="Place ${esc(m.name)} in a system">
@@ -4823,6 +4894,24 @@ function renderMyGame(){
       if(sel.value) store.myGame.assign[id] = sel.value;
       else delete store.myGame.assign[id];
       persist(); renderMyGame();
+    });
+  });
+  // Ticking a pillar judges the mechanic. Un-ticking the last one returns it to "not yet judged",
+  // and "none" is its own deliberate answer, so an undo never records a judgement nobody made.
+  board.querySelectorAll("[data-pillar]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.dataset.pillar, which = btn.dataset.n, cur = store.myGame.pillars[id];
+      const list = Array.isArray(cur) ? cur.filter(n=> PILLARS.some(p=> p.n === n)) : [];
+      if(which === "none"){
+        if(Array.isArray(cur) && !cur.length) delete store.myGame.pillars[id];
+        else store.myGame.pillars[id] = [];
+      }else{
+        const n = Number(which), next = list.includes(n) ? list.filter(x=> x !== n) : [...list, n].sort((a,b)=> a - b);
+        if(next.length) store.myGame.pillars[id] = next; else delete store.myGame.pillars[id];
+      }
+      persist(); renderMyGame();
+      const again = [...$("#myBoard").querySelectorAll("[data-pillar]")].find(b=> b.dataset.pillar === id && b.dataset.n === which);
+      if(again) again.focus();
     });
   });
   // Save on blur, not per keystroke: a re-render mid-sentence would steal the caret.

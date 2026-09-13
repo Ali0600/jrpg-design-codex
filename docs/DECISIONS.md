@@ -24,6 +24,31 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — How the board measures pillar coverage
+
+**Fork:** the My Game board should say how well the shortlist serves each of the five design
+pillars, so something has to decide which pillars a mechanic serves.
+
+- **Owner-judged chips** ✔ — five chips and a *none* on every shortlisted mechanic, stored in the
+  owner's own `store.myGame.pillars`. An entry, even an empty one, means judged, and the read-out
+  always shows how many are not judged yet, so a partial answer never reads as complete.
+- **Derived from `cat`** — `rejected — a relabelled category histogram`: pillars 1, 2 and 5 map
+  roughly onto categories, while pillars 3 (discovery breeds discovery) and 4 (rewards are
+  layered) have no signal in `cat` at all. A computed number would read near zero on exactly the
+  two pillars the owner cannot otherwise see, with the confidence of arithmetic.
+- **A `pillar:` field on base rows** — `rejected — pillars are tests, not places`: the same reason
+  the board's structure fork (2026-08-12) turned down grouping by pillar, and a base-row value
+  would be the codex's judgement rather than the owner's.
+
+**Chosen:** owner-judged. The strip and the Design Pillars cards count through one function,
+`pillarCoverage()`, over the same pool the bucket tallies use, so the read-outs cannot disagree
+about what is on the shortlist.
+
+**Revisit hook:** none needed; a derived suggestion, if ever wanted, would pre-tick chips the owner
+confirms, never replace the judgement.
+
+---
+
 ## 2026-09-13 — Which unused research data to put to work first
 
 **Fork:** an audit of what each source returns against what the codex keeps found four kinds of

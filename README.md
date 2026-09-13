@@ -33,7 +33,8 @@ none, because it reads as verified.
   Researched. Each queued game carries a written brief for the question it should answer
 - **My Game board** — everything you mark *Yes* collects into a workspace. You place each
   item into one of six systems of the game you are designing. Each system has its own
-  design notes
+  design notes, and you mark which of the five design pillars each item serves. The board
+  counts every pillar's support and how much you have not judged yet
 - **Discovery verbs** — a 15-verb taxonomy of *how* a reward is found (guarded, traded,
   tool-gated, a second layer…). It lets you ask "who else solved this shape?" Every tag
   quotes the line of the card that earns it, and the quotes live in
@@ -188,7 +189,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 89 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  140-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  146-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
