@@ -35,6 +35,14 @@ const KNOWN_UNROSTERED = new Set([
   "Final Fantasy XV",
 ]);
 
+/**
+ * The categories a discovery verb can describe. Every mechanic in them needs a docs/verbs.md
+ * entry — tags, or a reasoned `none` — so "reviewed" is a checkable claim rather than a
+ * sweep someone once did. A policy list like KNOWN_UNROSTERED, checked against CATS so a
+ * rename cannot quietly empty it.
+ */
+const DISCOVERY_CATS = new Set(["Exploration & Rewards", "Traversal", "Side Content & Minigames"]);
+
 const WANT = new Set(["Yes", "Maybe", "No", ""]);
 const STATUS = new Set(["Researched", "Researching", "To Research"]);
 
@@ -222,6 +230,93 @@ function checkStoreSchema(script, errors) {
   }
 }
 
+// ------------------------------------------------------- discovery-verb ledger
+
+/**
+ * `docs/verbs.md` is the one place a discovery-verb tag is justified: each tag carries a
+ * verbatim span of the row's own text, so "defensible from the row, or not written" is
+ * something a build can check rather than a sentence it trusts.
+ *
+ * Grammar, one entry per reviewed row:
+ *   ### M021 — <the row's exact name>
+ *   - <Verb> · <how|loop|notes> · `<quote>`        one line per tag, or
+ *   - none · <why no verb applies>                  exactly one line
+ *
+ * Text before the first `###`, and under any `#`/`##` heading, is free prose. Inside an
+ * entry every non-blank line must parse: a typo that silently dropped a tag would leave
+ * the row looking reviewed.
+ *
+ * The parser lives in this file, not beside the writer, because this file must import
+ * nothing local (see sabotageCount) and the gate and the writer must read one grammar.
+ */
+export const LEDGER_FIELDS = ["how", "loop", "notes"];
+export const MIN_QUOTE = 25;
+
+export function parseVerbLedger(md) {
+  const entries = new Map(), problems = [];
+  let cur = null;
+  const at = n => `docs/verbs.md:${n}`;
+  const finish = () => {
+    if (cur && !cur.none && !cur.tags.length) problems.push(`${at(cur.line)}: ### ${cur.id} has no tag line and no \`- none\` line`);
+    cur = null;
+  };
+  String(md).split("\n").forEach((raw, i) => {
+    const n = i + 1, line = raw.replace(/\s+$/, "");
+    if (/^#{1,2} /.test(line)) { finish(); return; }
+    if (/^###/.test(line)) {
+      finish();
+      const h = line.match(/^### (M\d{3}) — (.+)$/);
+      if (!h) { problems.push(`${at(n)}: a ### header must read \`### M123 — <row name>\`, got ${JSON.stringify(line)}`); return; }
+      cur = { id: h[1], name: h[2], tags: [], none: null, line: n };
+      if (entries.has(h[1])) problems.push(`${at(n)}: ${h[1]} has a second entry (the first is at line ${entries.get(h[1]).line})`);
+      else entries.set(h[1], cur);
+      return;
+    }
+    if (!cur || line === "") return;
+    const none = line.match(/^- none · (\S.*)$/);
+    const tag = none ? null : line.match(/^- (\S.*?) · ([a-z]+) · `([^`]+)`$/);
+    if (!none && !tag) {
+      problems.push(`${at(n)}: ${cur.id}: cannot read ${JSON.stringify(line)} — a tag line is "- <Verb> · <how|loop|notes> · \`quote\`", or "- none · <reason>"`);
+      return;
+    }
+    if (none ? cur.none || cur.tags.length : cur.none) {
+      problems.push(`${at(n)}: ${cur.id} mixes \`- none\` with other lines — an entry is either tags or one none`);
+      return;
+    }
+    if (none) { cur.none = none[1]; return; }
+    const [, verb, field, quote] = tag;
+    if (!LEDGER_FIELDS.includes(field)) { problems.push(`${at(n)}: ${cur.id}: field ${JSON.stringify(field)} is not one of ${LEDGER_FIELDS.join(", ")}`); return; }
+    if (cur.tags.some(t => t.verb === verb)) { problems.push(`${at(n)}: ${cur.id} tags ${JSON.stringify(verb)} twice`); return; }
+    cur.tags.push({ verb, field, quote, line: n });
+  });
+  finish();
+  return { entries, problems };
+}
+
+/**
+ * Checks a parsed ledger against the rows it describes: the header names the row it claims
+ * to (a `none` entry has no quote, so this is its only guard against a typo'd id), and every
+ * quote is a real span of the named field — compared with the EVALUATED string, never the
+ * source text, so an escape in the file cannot make a quote match or miss.
+ */
+export function ledgerProblems({ entries }, mechs) {
+  const byId = new Map(mechs.map(m => [m.id, m]));
+  const out = [];
+  for (const e of entries.values()) {
+    const row = byId.get(e.id);
+    if (!row) { out.push(`docs/verbs.md:${e.line}: ### ${e.id} names no mechanic in the codex`); continue; }
+    if (row.name !== e.name) out.push(`docs/verbs.md:${e.line}: ### ${e.id} names ${JSON.stringify(e.name)}, the row is named ${JSON.stringify(row.name)}`);
+    for (const t of e.tags) {
+      if (t.quote.length < MIN_QUOTE) {
+        out.push(`docs/verbs.md:${t.line}: ${e.id} · ${t.verb}: quote is ${t.quote.length} chars — evidence needs at least ${MIN_QUOTE}`);
+      } else if (!(typeof row[t.field] === "string" && row[t.field].includes(t.quote))) {
+        out.push(`docs/verbs.md:${t.line}: ${e.id} · ${t.verb}: quote is not in the row's ${t.field} — ${JSON.stringify(t.quote.slice(0, 60))}`);
+      }
+    }
+  }
+  return out;
+}
+
 // -------------------------------------------------------------------- checks
 
 export function validate(html, docs = {}) {
@@ -382,8 +477,40 @@ export function validate(html, docs = {}) {
   if (VERBS) {
     const verbSet = new Set(Array.isArray(VERBS) ? VERBS : Object.keys(VERBS));
     for (const m of BASE_MECHS) {
+      const seen = new Set();
       for (const v of m.verbs ?? []) {
         if (!verbSet.has(v)) errors.push(`mechanic ${m.id}: unknown discovery verb ${JSON.stringify(v)}`);
+        if (seen.has(v)) errors.push(`mechanic ${m.id} carries ${JSON.stringify(v)} twice`);
+        seen.add(v);
+      }
+    }
+    // --- the evidence ledger. Tags are compared as SETS both ways, so a tag added to the page
+    // without a quote and a quote whose tag never reached the page are each caught — and a
+    // missing entry justifies nothing, which is what stops a hand-added tag from passing.
+    if (docs.verbLedger == null) {
+      errors.push("docs/verbs.md could not be read — every discovery-verb tag must be justified there");
+    } else {
+      const ledger = parseVerbLedger(docs.verbLedger);
+      errors.push(...ledger.problems, ...ledgerProblems(ledger, BASE_MECHS));
+      for (const m of BASE_MECHS) {
+        const carried = new Set(m.verbs ?? []);
+        const justified = new Set((ledger.entries.get(m.id)?.tags ?? []).map(t => t.verb));
+        for (const v of carried) {
+          if (!justified.has(v)) errors.push(`${m.id} carries ${JSON.stringify(v)}, which docs/verbs.md does not justify — quote the row in its entry, or drop the tag there and run scripts/verb_tags.mjs --write`);
+        }
+        for (const v of justified) {
+          if (!carried.has(v)) errors.push(`docs/verbs.md justifies ${JSON.stringify(v)} on ${m.id}, which the codex does not carry — run scripts/verb_tags.mjs --write`);
+        }
+      }
+      // Review coverage. Named categories must exist, or a CATS rename would leave this rule
+      // checking an empty set and passing forever.
+      for (const c of DISCOVERY_CATS) {
+        if (!cats.has(c)) errors.push(`DISCOVERY_CATS names ${JSON.stringify(c)}, which is not a CATS key — the review-coverage rule would cover nothing`);
+      }
+      for (const m of BASE_MECHS) {
+        if (DISCOVERY_CATS.has(m.cat) && !ledger.entries.has(m.id)) {
+          errors.push(`${m.id} (${m.cat}) has no docs/verbs.md entry — quote the verbs that apply, or write \`- none · <reason>\``);
+        }
       }
     }
   }
@@ -515,6 +642,8 @@ export function validate(html, docs = {}) {
     queued: BASE_GAMES.filter(g => g.status !== "Researched").length,
     want: BASE_MECHS.filter(m => m.want === "Yes").length,
     rewardTables: MINIGAMES.filter(m => m.rt).length,
+    tagged: BASE_MECHS.filter(m => (m.verbs ?? []).length).length,
+    tags: BASE_MECHS.reduce((n, m) => n + (m.verbs ?? []).length, 0),
   };
 
   if (docs.claude != null) {
@@ -533,6 +662,12 @@ export function validate(html, docs = {}) {
       if (Number(dr[1]) !== stats.researched) errors.push(`CLAUDE.md says ${dr[1]} researched games, file has ${stats.researched}`);
       if (Number(dr[2]) !== stats.queued) errors.push(`CLAUDE.md says ${dr[2]} queued games, file has ${stats.queued}`);
       if (Number(dr[3]) !== stats.games) errors.push(`CLAUDE.md says ${dr[3]} games total, file has ${stats.games}`);
+    }
+    // `\s*`: the sentence wraps between the bold count and the tag total.
+    const dv = docs.claude.match(/\*\*(\d+) of (\d+) rows are tagged\*\*\s*\((\d+) tags\)/);
+    if (!dv) errors.push("CLAUDE.md: could not find the `**N of M rows are tagged** (T tags)` line");
+    else if (Number(dv[1]) !== stats.tagged || Number(dv[2]) !== stats.mechanics || Number(dv[3]) !== stats.tags) {
+      errors.push(`CLAUDE.md says ${dv[1]} of ${dv[2]} rows are tagged (${dv[3]} tags), file has ${stats.tagged} of ${stats.mechanics} (${stats.tags} tags)`);
     }
     const dsab = claim(/requires all \*\*(\d+)\*\* sabotages to fire/, "sabotage");
     if (dsab != null && dsab !== sabotageCount()) {
@@ -742,6 +877,21 @@ const SABOTAGES = [
   { name: "normalizeStore defaults a slot the store literal does not declare",
     expect: /which the `store` literal does not declare/,
     apply: s => replaceAfterState(s, "\n  return s;\n}", "\n  s.ghost = s.ghost || {};\n  return s;\n}", "normalizeStore defaults an undeclared slot") },
+
+  // The discovery-verb ledger, page side. The two-way tag comparison gets a fixture per
+  // direction: this one is the page carrying a tag nobody quoted (the ledger-side arm is a
+  // DOC sabotage below). Both M001 fixtures rely on M001 (Materia System) being a
+  // Progression row with no verbs and no ledger entry — re-check that if either goes BROKEN.
+  { name: "a tag docs/verbs.md does not justify", expect: /M001 carries "Guarded", which docs\/verbs\.md does not justify/,
+    apply: s => replaceFirst(s, '{id:"M001",', '{id:"M001",verbs:["Guarded"],', "a tag docs/verbs.md does not justify") },
+  { name: "a discovery-category row with no ledger entry", expect: /M001 \(Traversal\) has no docs\/verbs\.md entry/,
+    apply: s => replaceFirst(s, /(\{id:"M001",[^\n]*?)cat:"Progression & Upgrades"/, '$1cat:"Traversal"', "a discovery-category row with no ledger entry") },
+  { name: "DISCOVERY_CATS naming a category CATS no longer has", expect: /DISCOVERY_CATS names "Traversal", which is not a CATS key/,
+    apply: s => replaceFirst(s, '"Traversal":"#', '"Travel":"#', "DISCOVERY_CATS naming a category CATS no longer has") },
+  // Sets on both sides would call ["X","X"] equal to a ledger saying X, so the repeat has
+  // its own rule and its own fixture.
+  { name: "the same verb twice on one row", expect: /carries "[^"]+" twice/,
+    apply: s => replaceFirst(s, /verbs:\["([^"]+)"/, 'verbs:["$1","$1"', "the same verb twice on one row") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */
@@ -790,6 +940,22 @@ const DOC_SABOTAGES = [
     apply: d => ({ ...d, claude: replaceInDoc(d.claude, /requires all \*\*\d+\*\* sabotages/, "requires all **999** sabotages", "CLAUDE.md sabotage-count drift") }) },
   { name: "README.md sabotage-count drift", expect: /README\.md says \d+ sabotages/,
     apply: d => ({ ...d, readme: replaceInDoc(d.readme, /injects\s+\d+\s+sabotages/, "injects 999 sabotages", "README.md sabotage-count drift") }) },
+
+  // The discovery-verb ledger, ledger side. Each lands on exactly one rule: the first spoils a
+  // quote; the second renames a `none` entry, which has no quote to fail instead; the third
+  // adds a verb under a quote that is still valid, so only the ledger-side arm of the tag
+  // comparison can fire.
+  { name: "a ledger quote that is not in its row", expect: /M\d{3} · [^:]+: quote is not in the row's/,
+    apply: d => ({ ...d, verbLedger: replaceInDoc(d.verbLedger, /^(- [^\n]+? · (?:how|loop|notes) · `)[^`]/m, "$1§", "a ledger quote that is not in its row") }) },
+  { name: "a none entry whose header names another row", expect: /### M\d{3} names "Not this row's name", the row is named/,
+    apply: d => ({ ...d, verbLedger: replaceInDoc(d.verbLedger, /^(### M\d{3} — )[^\n]+(\n- none · )/m, "$1Not this row's name$2", "a none entry whose header names another row") }) },
+  { name: "a ledger verb the page does not carry", expect: /docs\/verbs\.md justifies "(Consequence|Traded)" on M\d{3}, which the codex does not carry/,
+    apply: d => ({ ...d, verbLedger: replaceInDoc(d.verbLedger,
+      /^(### M\d{3} — [^\n]+\n- ([^\n]+?) · (how|loop|notes) · (`[^`\n]+`))$(?!\n- )/m,
+      (line, _entry, verb, field, quote) => `${line}\n- ${verb === "Consequence" ? "Traded" : "Consequence"} · ${field} · ${quote}`,
+      "a ledger verb the page does not carry") }) },
+  { name: "CLAUDE.md verb-tag count drift", expect: /CLAUDE\.md says \d+ of \d+ rows are tagged/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ of \d+ rows are tagged\*\*/, "**999 of 281 rows are tagged**", "CLAUDE.md verb-tag count drift") }) },
 ];
 
 /**
@@ -884,7 +1050,7 @@ function main() {
     coverFiles = new Set(readdirSync(join(ROOT, "covers")).filter(f => /\.(jpg|png|webp)$/.test(f)).map(f => "covers/" + f));
   } catch { /* no covers/ yet — rows naming a cover then fail closed */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), shotFiles, digestFiles, coverFiles };
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), shotFiles, digestFiles, coverFiles };
 
   const { errors, stats } = validate(html, docs);
 

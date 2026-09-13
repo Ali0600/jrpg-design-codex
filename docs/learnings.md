@@ -323,3 +323,19 @@ the doc.
 **Takeaway:** when a check measures something the same change is growing, sequence the
 edits so every intermediate state is green for the right reason or red for the right
 reason, and never leave the only red step looking like somebody else's mistake.
+
+## A coverage floor has to be measured under the evidence rule that will feed it
+The verb pass planned two gates: every tag must quote its own row, and every verb must carry
+at least three mechanics. Each was reasonable alone. Together they could not both pass: the
+quote rule dropped 25 of the 74 seeded tags, and two verbs, *The fleeing rare* and *Vista
+sketch*, ended on one and two rows with no further support anywhere in 281 rows. The only
+ways left to meet the floor were stretching a quote or inventing a tag, which is exactly what
+the first gate exists to stop.
+
+**Why it came up:** PR 1 of the analysis layer. The review surfaced the conflict before the
+floor was written, and the owner chose to ship without the floor rather than loosen the
+evidence.
+
+**Takeaway:** before promising a minimum-count gate over data another gate filters, run the
+filter and count what survives. If the floor then fails, the choice is the owner's (more
+data, a lower floor, or no floor), never a quietly looser filter.

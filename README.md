@@ -35,7 +35,9 @@ none, because it reads as verified.
   item into one of six systems of the game you are designing. Each system has its own
   design notes
 - **Discovery verbs** — a 15-verb taxonomy of *how* a reward is found (guarded, traded,
-  tool-gated, a second layer…). It lets you ask "who else solved this shape?"
+  tool-gated, a second layer…). It lets you ask "who else solved this shape?" Every tag
+  quotes the line of the card that earns it, and the quotes live in
+  [`docs/verbs.md`](docs/verbs.md)
 - **Lineages** — chains where each game answers the one before it. Each chain ends on
   the node worth stealing from, or on a counter-example worth designing against
 - **A page for every game** — click a game's name anywhere to open it. The page shows box
@@ -86,9 +88,11 @@ scripts/gf_probe.js        in-page probe for reading GameFAQs guides (tests alon
 scripts/digest_lint.mjs    pointer-grammar lint for the research digests
 scripts/splice_rows.mjs    writes a research digest's rows into the app, and logs them
 scripts/check_changes.mjs  CI gate: every rewritten row must be logged in the changelog
+scripts/verb_tags.mjs      writes each row's discovery verbs from the evidence ledger
 scripts/wiki_fetch.py      MediaWiki API client used for research
 scripts/fetch_scores.py    Metacritic critic + user score fetcher
 docs/research/             one digest per researched game, every fact with its source
+docs/verbs.md              the evidence ledger: each verb tag with the quote that earns it
 docs/                      learnings, design decisions, and ost-sources.md (where to buy each soundtrack)
 ```
 
@@ -161,8 +165,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 47 sabotages and fails the build unless every one is caught, backed by an 83-case
-  offline suite and a CI diff gate that fails a PR on any unlogged edit
+  injects 55 sabotages and fails the build unless every one is caught, and every
+  classification tag must quote a verbatim span of the record it labels. Backed by a
+  105-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed Python clients with host allowlists and range checks, plus an in-page
   probe that caps results at 12KB so a 1.4MB Cloudflare-gated guide is never fetched whole
