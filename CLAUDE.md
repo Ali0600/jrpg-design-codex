@@ -214,6 +214,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   a partial answer never reads as complete. `renderMyGame()` calls `renderPillars()`, so every
   path that can change the shortlist refreshes both. Owner-judged by design, never derived from
   `cat` (the fork is in `docs/DECISIONS.md`).
+  **Board credits** (added 2026-09-14): each row names its game's director, designer, writer
+  and composer (`BOARD_CREDITS`, at most three per kind) as facet links, and the collapsed
+  "Whose work you keep picking" panel lists the names on two or more distinct shortlisted games,
+  counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
+  one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
   (like CATS). Mechanics carry an optional `verbs:[...]`; **82 of 281 rows are tagged**
   (101 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
@@ -719,9 +724,9 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    made chosen Wikipedia categories into themes, features and awards. The audit's other findings
    (Famitsu and per-platform scores, original platform with length and difficulty, digest facts
    and soundtracks) were declined by the owner on 2026-09-14. The next pieces, in the owner's
-   order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: board
-   credits, the query grammar on the Mechanics and Minigames tabs, related games on the game
-   page, then the two research directions below.
+   order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: the
+   query grammar on the Mechanics and Minigames tabs, related games on the game page, then the
+   two research directions below.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
