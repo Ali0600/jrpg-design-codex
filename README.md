@@ -99,7 +99,7 @@ shots/                     UI screenshots for the gallery (sources in SOURCES.md
 covers/                    box-art thumbnails, one per game (sources in SOURCES.md)
 scripts/validate_codex.mjs structural validator (runs in CI)
 scripts/gf_probe.js        in-page probe for reading GameFAQs guides (tests alongside)
-scripts/digest_lint.mjs    pointer-grammar lint for the research digests
+scripts/digest_lint.mjs    lint for the research digests: pointers, Coverage lines, the Triage record
 scripts/splice_rows.mjs    writes a research digest's rows into the app, and logs them
 scripts/check_changes.mjs  CI gate: every rewritten row must be logged in the changelog
 scripts/verb_tags.mjs      writes each row's discovery verbs from the evidence ledger
@@ -192,7 +192,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 89 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  157-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  167-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
