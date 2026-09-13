@@ -23,6 +23,7 @@ import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { extractScript, extractData, readRefHosts } from "./validate_codex.mjs";
 import { Refusal, refuse, setOwnedFields } from "./game_rows.mjs";
+import { localToday } from "./dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = join(ROOT, "JRPG_Design_Codex.html");
@@ -305,7 +306,7 @@ function mergeIds(existing, ids) {
 }
 
 /** Point each candidate's `row:` line at its new id, and retire the ```js block. */
-export function updateDigest(md, assignments, digest) {
+export function updateDigest(md, assignments, digest, date = localToday()) {
   const lines = digest.lines.slice();
   for (const a of assignments) {
     let i = a.candidate.line + 1;
@@ -332,7 +333,7 @@ export function updateDigest(md, assignments, digest) {
     `// ${a.id}  ${a.candidate.name.padEnd(width)}  ${a.kind === "M" ? a.row.cat : (a.row.rt ? `rt: ${a.row.rt.length} rows` : "no reward table")}`
   );
   const block = "```js\n"
-    + `// Spliced into JRPG_Design_Codex.html on ${new Date().toISOString().slice(0, 10)} by\n`
+    + `// Spliced into JRPG_Design_Codex.html on ${date} by\n`
     + "// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).\n"
     + map.join("\n") + "\n```";
 
@@ -346,9 +347,15 @@ export function updateDigest(md, assignments, digest) {
 
 function main(argv) {
   const write = argv.includes("--write");
-  const path = argv.find(a => !a.startsWith("--"));
+  const arg = (flag, dflt) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : dflt);
+  const today = arg("--today", localToday());
+  const path = argv.find((a, i) => !a.startsWith("--") && argv[i - 1] !== "--today");
   if (!path) {
-    console.error("usage: node scripts/splice_rows.mjs docs/research/<slug>.md [--write]");
+    console.error("usage: node scripts/splice_rows.mjs docs/research/<slug>.md [--write] [--today YYYY-MM-DD]");
+    process.exit(2);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(today))) {
+    console.error(`--today ${JSON.stringify(today)} is not YYYY-MM-DD`);
     process.exit(2);
   }
   const digestPath = resolve(ROOT, path);
@@ -371,10 +378,13 @@ function main(argv) {
   next = appendToArray(next, "MINIGAMES", minis.map(serializeRow));
   const title = (md.match(/^#\s+(.+?)\s*$/m) || [, "Research"])[1].replace(/\s+—\s+research digest$/i, "");
   next = logChange(next, {
-    date: new Date().toISOString().slice(0, 10),
+    date: today,
     title,
     ids: assignments.map(a => a.id),
   });
+  // Report the date the entry really carries, read back out of the page, not the variable it was
+  // meant to receive: a message that echoes `today` stays true while the entry is dated otherwise.
+  const logged = (next.match(/const CHANGES = \[\s*\{date:"(\d{4}-\d{2}-\d{2})"/) || [, "?"])[1];
   const slug = basename(digestPath, ".md");
   const touched = assignments.map(a => (a.kind === "M" ? a.row.game : a.row.g));
   next = stampDigest(next, touched, slug);
@@ -382,16 +392,16 @@ function main(argv) {
   if (!write) {
     console.log(`\n--- dry run: ${next.length - html.length} chars would be added to the codex ---`);
     for (const a of assignments) console.log(serializeRow(a).split("\n")[0].slice(0, 120) + " …");
-    console.log(`changelog: would log ${ranges(assignments.map(a => a.id)).join(", ")} under today's date`);
+    console.log(`changelog: would log ${ranges(assignments.map(a => a.id)).join(", ")} under ${logged}`);
     console.log(`digest: would stamp digest:${JSON.stringify(slug)} on ${[...new Set(touched)].map(t => JSON.stringify(t)).join(", ")}`);
     console.log("\nnothing written. Re-run with --write to apply.");
     return;
   }
 
   writeFileSync(CODEX, next);
-  writeFileSync(digestPath, updateDigest(md, assignments, digest));
+  writeFileSync(digestPath, updateDigest(md, assignments, digest, today));
   console.log(`\nwrote ${assignments.length} rows into JRPG_Design_Codex.html and updated ${path}.`);
-  console.log(`Logged in CHANGES as ${ranges(assignments.map(a => a.id)).join(", ")}; stamped digest:${JSON.stringify(slug)} on the game row(s).`);
+  console.log(`Logged in CHANGES under ${logged} as ${ranges(assignments.map(a => a.id)).join(", ")}; stamped digest:${JSON.stringify(slug)} on the game row(s).`);
   console.log("If you also SHARPENED an existing row, add its id to that entry's `updated` list —");
   console.log("scripts/check_changes.mjs fails the build otherwise.");
   console.log("Now update the counts in CLAUDE.md and README.md, copy CLAUDE.md to AGENTS.md,");
