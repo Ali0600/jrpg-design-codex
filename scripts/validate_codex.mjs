@@ -411,6 +411,67 @@ function checkFacets({ FACET_VOCAB, FACET_TABLE, facetNorm, facetLookup, facetSo
   }
 }
 
+/**
+ * The page's CATEGORY_FACETS: {kind: {label: [category, …]}} over each row's raw `wpcats`. A kind
+ * must be one the page's filters know; a category sits under one label only; every category must
+ * be one some game carries, read from the raw `wpcats` and never through the page's code, so the
+ * expectation cannot move with the thing it checks; and every label must list at least two games,
+ * counted through the page's own facetsOf, the view the filter shows.
+ */
+const CATEGORY_LABEL_MIN_GAMES = 2;
+function checkCategoryFacets({ CATEGORY_FACETS, FACET_KINDS, facetsOf, facetNorm }, games, errors) {
+  if (!CATEGORY_FACETS || typeof CATEGORY_FACETS !== "object" || Array.isArray(CATEGORY_FACETS)) {
+    errors.push("CATEGORY_FACETS must be an object of kind -> {label: [categories]}");
+    return;
+  }
+  const kinds = new Set(Array.isArray(FACET_KINDS) ? FACET_KINDS : []);
+  const carried = new Set(games.flatMap(g => (Array.isArray(g.wpcats) ? g.wpcats : [])).map(c => facetNorm(c)));
+  const shown = games.map(g => facetsOf(g));
+  const owner = new Map();
+  for (const [kind, labels] of Object.entries(CATEGORY_FACETS)) {
+    if (!kinds.has(kind)) { errors.push(`CATEGORY_FACETS.${kind} is not a facet kind (FACET_KINDS) — no filter would list it`); continue; }
+    if (!labels || typeof labels !== "object" || Array.isArray(labels)) { errors.push(`CATEGORY_FACETS.${kind} must be an object of label -> [categories]`); continue; }
+    for (const [label, cats] of Object.entries(labels)) {
+      if (!Array.isArray(cats) || !cats.length || !cats.every(isText)) {
+        errors.push(`CATEGORY_FACETS.${kind}: ${JSON.stringify(label)} must list its categories as a non-empty array of text`);
+        continue;
+      }
+      for (const c of cats) {
+        const n = facetNorm(c);
+        if (owner.has(n)) errors.push(`CATEGORY_FACETS: category ${JSON.stringify(c)} is already under ${JSON.stringify(owner.get(n))}`);
+        else owner.set(n, `${kind}: ${label}`);
+        if (!carried.has(n)) errors.push(`CATEGORY_FACETS.${kind}: category ${JSON.stringify(c)} of ${JSON.stringify(label)} is carried by no game's wpcats — dead vocabulary`);
+      }
+      const want = facetNorm(label);
+      const listed = shown.filter(f => f[kind] && [...f[kind]].some(v => facetNorm(v) === want)).length;
+      if (listed < CATEGORY_LABEL_MIN_GAMES) {
+        errors.push(`CATEGORY_FACETS.${kind}: ${JSON.stringify(label)} lists ${listed} game${listed === 1 ? "" : "s"} — a filter needs at least ${CATEGORY_LABEL_MIN_GAMES}`);
+      }
+    }
+  }
+}
+
+/** `wd` and `wpcats`, harvested with `infobox` from the same article by fetch_infobox.mjs. */
+function checkWikiMeta(g, label, errors, wdRefs) {
+  if (g.wd != null) {
+    if (!isText(g.wp)) errors.push(`${label}: has a wd but no wp — the Wikidata item is read from its Wikipedia article`);
+    if (!/^Q[1-9]\d*$/.test(String(g.wd))) errors.push(`${label}: wd must be a Wikidata item id (Q and digits), got ${JSON.stringify(g.wd)}`);
+    else if (wdRefs.has(g.wd)) errors.push(`${label}: wd ${g.wd} is also claimed by ${JSON.stringify(wdRefs.get(g.wd))}`);
+    else wdRefs.set(g.wd, g.title);
+  }
+  if (g.wpcats == null) return;
+  if (!isText(g.wp)) errors.push(`${label}: has wpcats but no wp — the categories are read from its Wikipedia article`);
+  if (!Array.isArray(g.wpcats) || !g.wpcats.length) { errors.push(`${label}: wpcats must be a non-empty array of category names`); return; }
+  const seen = new Set();
+  for (const c of g.wpcats) {
+    if (typeof c !== "string" || !c.trim() || /^Category:/i.test(c) || c.includes("_")) {
+      errors.push(`${label}: wpcats entry ${JSON.stringify(c)} must be a bare category name as the harvest stores it — no "Category:" prefix, spaces not underscores`);
+    } else if (c.length > GF_MAX_TEXT) errors.push(`${label}: wpcats entry is ${c.length} chars — longer than ${GF_MAX_TEXT}, and prose is not stored`);
+    else if (seen.has(c)) errors.push(`${label}: wpcats lists ${JSON.stringify(c)} twice`);
+    seen.add(c);
+  }
+}
+
 export function validate(html, docs = {}) {
   const errors = [];
   const script = extractScript(html);
@@ -437,7 +498,9 @@ export function validate(html, docs = {}) {
         " expandIds: typeof expandIds === 'undefined' ? null : expandIds," +
         " FACET_VOCAB: typeof FACET_VOCAB === 'undefined' ? null : FACET_VOCAB," +
         " FACET_TABLE: typeof FACET_TABLE === 'undefined' ? null : FACET_TABLE," +
-        " facetFns: {" + ["facetNorm", "facetLookup", "canonFacet", "facetSources", "facetsOf", "parseGameQuery", "matchesFacets"]
+        " FACET_KINDS: typeof FACET_KINDS === 'undefined' ? null : FACET_KINDS," +
+        " CATEGORY_FACETS: typeof CATEGORY_FACETS === 'undefined' ? null : CATEGORY_FACETS," +
+        " facetFns: {" + ["facetNorm", "facetLookup", "canonFacet", "categoryFacet", "facetSources", "facetsOf", "parseGameQuery", "matchesFacets"]
           .map(n => `${n}: typeof ${n} === 'undefined' ? null : ${n}`).join(", ") + "}};"
     )();
   } catch (e) {
@@ -446,7 +509,7 @@ export function validate(html, docs = {}) {
   }
 
   const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES,
-          CHANGES, expandIds, FACET_VOCAB, FACET_TABLE, facetFns } = data;
+          CHANGES, expandIds, FACET_VOCAB, FACET_TABLE, FACET_KINDS, CATEGORY_FACETS, facetFns } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -460,7 +523,7 @@ export function validate(html, docs = {}) {
 
   // --- games
   const seenTitle = new Set();
-  const seenU = new Map(), coverRefs = new Set(), digestRefs = new Map();
+  const seenU = new Map(), coverRefs = new Set(), digestRefs = new Map(), wdRefs = new Map();
   for (const g of BASE_GAMES) {
     const label = `game ${JSON.stringify(g.title ?? "(untitled)")}`;
     checkFields(g, label, ["title", "dev", "status"], errors);
@@ -497,6 +560,7 @@ export function validate(html, docs = {}) {
     }
     if (g.wp != null && !isText(g.wp)) errors.push(`${label}: wp must be a non-empty Wikipedia article title`);
     if (g.infobox != null) checkInfobox(g, label, errors);
+    checkWikiMeta(g, label, errors, wdRefs);
     if (g.digest != null) {
       if (!/^[a-z0-9-]+$/.test(g.digest)) errors.push(`${label}: digest must be a docs/research slug, got ${JSON.stringify(g.digest)}`);
       else if (digestRefs.has(g.digest)) errors.push(`${label}: digest ${JSON.stringify(g.digest)} is also claimed by ${JSON.stringify(digestRefs.get(g.digest))}`);
@@ -712,6 +776,7 @@ export function validate(html, docs = {}) {
       errors.push("FACET_VOCAB exists but the data region defines no FACET_TABLE — no facet kind would fold through it");
     } else {
       checkFacets({ FACET_VOCAB, FACET_TABLE, ...facetFns }, BASE_GAMES, errors);
+      if (CATEGORY_FACETS != null) checkCategoryFacets({ CATEGORY_FACETS, FACET_KINDS, ...facetFns }, BASE_GAMES, errors);
     }
   }
 
@@ -1091,7 +1156,7 @@ const SABOTAGES = [
   // The Wikipedia infobox. Anchors are the owned `infobox:` lines fetch_infobox.mjs writes; the
   // first such line is Final Fantasy VII Rebirth's, and the first "Linux" is Chained Echoes'.
   { name: "an infobox without its wp", expect: /"CrossCode": has an infobox but no wp/,
-    apply: s => replaceFirst(s, 'wp:"CrossCode",\ninfobox:{', 'infobox:{', "an infobox without its wp") },
+    apply: s => replaceFirst(s, 'wp:"CrossCode",\nwd:', 'wd:', "an infobox without its wp") },
   { name: "an infobox key the harvest never writes", expect: /infobox: unknown key "platforms"/,
     apply: s => replaceFirst(s, '\ninfobox:{plat:[', '\ninfobox:{platforms:[', "an infobox key the harvest never writes") },
   { name: "prose stored in the infobox", expect: /infobox\.plat holds a 121-char string/,
@@ -1101,6 +1166,37 @@ const SABOTAGES = [
   // The infobox is a facet SOURCE: a platform only Wikipedia names must still be in the vocabulary.
   { name: "an infobox platform outside the facet vocabulary", expect: /platform "Linux 2" is not in FACET_VOCAB\.platform/,
     apply: s => replaceFirst(s, '"Linux"', '"Linux 2"', "an infobox platform outside the facet vocabulary") },
+
+  // The Wikidata item and categories (`wd`, `wpcats`), harvested from the same article. The first
+  // `wd:` and `wpcats:` lines are Final Fantasy VII Rebirth's. Removing CrossCode's `wp` trips the
+  // infobox, wd and wpcats checks at once, so each of the three has its own entry on that mutation.
+  { name: "a wd without its wp", expect: /"CrossCode": has a wd but no wp/,
+    apply: s => replaceFirst(s, 'wp:"CrossCode",\nwd:', 'wd:', "a wd without its wp") },
+  { name: "wpcats without its wp", expect: /"CrossCode": has wpcats but no wp/,
+    apply: s => replaceFirst(s, 'wp:"CrossCode",\nwd:', 'wd:', "wpcats without its wp") },
+  { name: "a wd that is not a Wikidata item id", expect: /wd must be a Wikidata item id/,
+    apply: s => replaceFirst(s, '\nwd:"Q', '\nwd:"X', "a wd that is not a Wikidata item id") },
+  { name: "two rows claiming one Wikidata item", expect: /wd Q\d+ is also claimed by "Final Fantasy VII Rebirth"/,
+    apply: s => replaceFirst(s, /(\nwd:"(Q\d+)"[\s\S]*?\nwd:")Q\d+"/, '$1$2"', "two rows claiming one Wikidata item") },
+  { name: "wpcats with nothing in it", expect: /wpcats must be a non-empty array of category names/,
+    apply: s => replaceFirst(s, /\nwpcats:\[[^\]]*\]/, '\nwpcats:[]', "wpcats with nothing in it") },
+  { name: "a category stored with its Category: prefix", expect: /must be a bare category name as the harvest stores it/,
+    apply: s => replaceFirst(s, '\nwpcats:["', '\nwpcats:["Category:', "a category stored with its Category: prefix") },
+  { name: "prose stored as a category", expect: /wpcats entry is 121 chars/,
+    apply: s => replaceFirst(s, '\nwpcats:["', `\nwpcats:["${"x".repeat(121)}","`, "prose stored as a category") },
+  { name: "a category listed twice on one row", expect: /wpcats lists "[^"]+" twice/,
+    apply: s => replaceFirst(s, /\nwpcats:\["([^"]+)"/, '\nwpcats:["$1","$1"', "a category listed twice on one row") },
+
+  // CATEGORY_FACETS. Anchors are the table's own literal lines; the one data mutation renames the
+  // first "Video games set in castles", which is Super Mario RPG's, leaving that label one game.
+  { name: "a category table kind no filter knows", expect: /CATEGORY_FACETS\.awards is not a facet kind/,
+    apply: s => replaceFirst(s, '\n  award: {\n', '\n  awards: {\n', "a category table kind no filter knows") },
+  { name: "one category under two labels", expect: /category "Video games about magic \(supernatural\)" is already under/,
+    apply: s => replaceFirst(s, '"Dragons":["Video games about dragons"]', '"Dragons":["Video games about dragons","Video games about magic (supernatural)"]', "one category under two labels") },
+  { name: "a mapped category no game carries", expect: /category "Video games about ghosts" of "Dragons" is carried by no game's wpcats/,
+    apply: s => replaceFirst(s, '"Dragons":["Video games about dragons"]', '"Dragons":["Video games about dragons","Video games about ghosts"]', "a mapped category no game carries") },
+  { name: "a category label that lists one game", expect: /CATEGORY_FACETS\.theme: "Castles" lists 1 game — a filter needs at least 2/,
+    apply: s => replaceFirst(s, '"Video games set in castles"', '"Video games set in castle ruins"', "a category label that lists one game") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */

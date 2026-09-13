@@ -28,6 +28,13 @@
  * (the validator would refuse the page anyway; add the entry by hand), a string over 120
  * characters, an article with no infobox or no platforms, and a resolved title that is not the
  * row's `wp`. A failed fetch is recorded against its row and the run carries on.
+ *
+ * A second call per row (`action=query` for categories and page properties) records `wd`, the
+ * article's Wikidata item, and `wpcats`, every visible category as Wikipedia names it: the
+ * "Category:" prefix dropped, underscores read as spaces, sorted and deduped. Which categories
+ * become filters is the page's CATEGORY_FACETS, so re-curating never needs a re-harvest. It
+ * refuses a truncated list (`continue` in the answer), an article with no Wikidata item or no
+ * categories, a category over 120 characters, and a resolved title that is not `wp`.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -156,9 +163,9 @@ export function infoboxOf(rows, { lookup } = {}) {
   return { infobox: ib, problems };
 }
 
-/** One article's rendered section 0. A 429 or a 5xx is retried with backoff; anything else refuses. */
-export async function fetchArticle(wp, { fetchImpl = fetch, delays = RETRY_DELAYS_MS, sleepImpl = sleep } = {}) {
-  const url = API + "?" + new URLSearchParams({ action: "parse", page: wp, prop: "text", section: "0", redirects: "1", format: "json", formatversion: "2", disabletoc: "1" });
+/** One MediaWiki API call's JSON. A 429 or a 5xx is retried with backoff; any other failure refuses. */
+async function apiJson(params, wp, { fetchImpl = fetch, delays = RETRY_DELAYS_MS, sleepImpl = sleep } = {}) {
+  const url = API + "?" + new URLSearchParams(params);
   let res;
   for (let attempt = 0; ; attempt++) {
     res = await fetchImpl(url, { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } });
@@ -167,9 +174,44 @@ export async function fetchArticle(wp, { fetchImpl = fetch, delays = RETRY_DELAY
     await sleepImpl(delays[attempt]);
   }
   if (!res.ok) refuse(`Wikipedia API answered HTTP ${res.status} for ${JSON.stringify(wp)}`);
-  const body = await res.json();
+  return res.json();
+}
+
+/** One article's rendered section 0. */
+export async function fetchArticle(wp, opts) {
+  const body = await apiJson({ action: "parse", page: wp, prop: "text", section: "0", redirects: "1", format: "json", formatversion: "2", disabletoc: "1" }, wp, opts);
   if (!body || !body.parse || typeof body.parse.text !== "string") refuse(`Wikipedia API answered without a parse for ${JSON.stringify(wp)}: ${JSON.stringify(body).slice(0, 160)}`);
   return { title: body.parse.title, text: body.parse.text };
+}
+
+/**
+ * The article's Wikidata item and visible categories, from one `action=query` answer. Pure, so
+ * the tests drive it with a synthetic body. Returns {wd, wpcats, problems}.
+ */
+export function metaOf(body, wp) {
+  if (!body || !body.query || !Array.isArray(body.query.pages)) {
+    return { problems: [`the Wikipedia API answered the category query for ${JSON.stringify(wp)} without a pages list`] };
+  }
+  const problems = [];
+  if (body.continue) problems.push("the category list came back truncated (the answer carries `continue`) — refusing to store part of it");
+  const p = body.query.pages[0] || {};
+  if (p.missing || p.invalid) return { problems: [...problems, `no Wikipedia page titled ${JSON.stringify(wp)}`] };
+  if (p.title !== wp) problems.push(`the category query resolved ${JSON.stringify(wp)} to ${JSON.stringify(p.title)} — set wp to the article itself`);
+  const wd = p.pageprops && p.pageprops.wikibase_item;
+  if (!/^Q[1-9]\d*$/.test(String(wd ?? ""))) problems.push(`the article carries no Wikidata item (wikibase_item ${JSON.stringify(wd ?? null)})`);
+  const wpcats = [...new Set((Array.isArray(p.categories) ? p.categories : [])
+    .map(c => String((c && c.title) || "").replace(/^Category:/, "").replace(/_/g, " ").replace(/\s+/g, " ").trim())
+    .filter(Boolean))].sort();
+  if (!wpcats.length) problems.push("the article has no visible categories");
+  for (const c of wpcats) if (c.length > MAX_TEXT) problems.push(`category ${JSON.stringify(c.slice(0, 50))}… is ${c.length} chars — longer than ${MAX_TEXT}`);
+  return { wd, wpcats, problems };
+}
+
+/** The article's categories (hidden ones excluded) and its Wikidata item. */
+export async function fetchMeta(wp, opts) {
+  const body = await apiJson({ action: "query", titles: wp, prop: "categories|pageprops", clshow: "!hidden", cllimit: "max",
+    ppprop: "wikibase_item", redirects: "1", format: "json", formatversion: "2" }, wp, opts);
+  return metaOf(body, wp);
 }
 
 /** The page's own facetLookup, so this script refuses exactly what the validator would. */
@@ -200,8 +242,8 @@ export function logGames(html, { date, title, note, games }) {
   return head + `\n  {date:${JSON.stringify(date)}, title:${JSON.stringify(title)},\n   note:${JSON.stringify(note)},\n   added:[], updated:[],\n   games:${JSON.stringify(games)}},` + rest;
 }
 
-export const CHANGE_TITLE = "Every platform and credit, from Wikipedia";
-export const CHANGE_NOTE = "Each game's page now lists every platform it came out on, its developers, publishers and series, its credits and its engine, from the infobox of the Wikipedia article its cover came from. Every name is a filter.";
+export const CHANGE_TITLE = "Every platform, credit, theme and award, from Wikipedia";
+export const CHANGE_NOTE = "Each game's page now lists every platform it came out on, its developers, publishers and series, its credits and engine, and its themes, features and awards, from the Wikipedia article its cover came from. Every one is a filter.";
 
 const withoutAt = ib => { const { at, ...rest } = canonInfobox(ib); return JSON.stringify(rest); };
 
@@ -230,9 +272,14 @@ export async function harvest(html, { only = [], note = null, today, fetchImpl =
       else {
         const { infobox, problems } = infoboxOf(parseInfobox(text), { lookup: look });
         r.problems.push(...problems);
+        const meta = await fetchMeta(g.wp, { fetchImpl, sleepImpl });
+        r.problems.push(...meta.problems);
         const keptNote = note ?? g.infobox?.note;
         r.infobox = canonInfobox({ ...infobox, ...(keptNote ? { note: keptNote } : {}), at: today });
-        r.changed = !g.infobox || withoutAt(g.infobox) !== withoutAt(r.infobox);
+        r.wd = meta.wd;
+        r.wpcats = meta.wpcats;
+        r.changed = !g.infobox || withoutAt(g.infobox) !== withoutAt(r.infobox)
+          || g.wd !== r.wd || JSON.stringify(g.wpcats ?? null) !== JSON.stringify(r.wpcats ?? null);
       }
     } catch (e) {
       r.problems.push(e instanceof Refusal ? e.message : `fetch failed: ${e.message}`);
@@ -243,7 +290,10 @@ export async function harvest(html, { only = [], note = null, today, fetchImpl =
   const changed = results.filter(r => !r.problems.length && r.changed).map(r => r.title);
   if (results.some(r => r.problems.length) || !changed.length) return { html, results, changed };
   let next = html;
-  for (const t of changed) next = setOwnedFields(next, t, { infobox: results.find(r => r.title === t).infobox });
+  for (const t of changed) {
+    const r = results.find(x => x.title === t);
+    next = setOwnedFields(next, t, { infobox: r.infobox, wd: r.wd, wpcats: r.wpcats });
+  }
   next = logGames(next, { date: today, title: CHANGE_TITLE, note: CHANGE_NOTE, games: changed });
   return { html: next, results, changed };
 }
@@ -258,7 +308,7 @@ async function main(argv) {
   const html = readFileSync(codexPath, "utf8");
   const { html: next, results, changed } = await harvest(html, {
     only, note: arg("--note", null), today: arg("--today", new Date().toISOString().slice(0, 10)),
-    onRow: r => console.log(`${r.problems.length ? "REFUSED" : r.changed ? "changed" : "same   "}  ${r.title}${r.infobox ? ` — ${(r.infobox.plat || []).length} platform(s)` : ""}${r.problems.map(p => `\n           ${p}`).join("")}`),
+    onRow: r => console.log(`${r.problems.length ? "REFUSED" : r.changed ? "changed" : "same   "}  ${r.title}${r.infobox ? ` — ${(r.infobox.plat || []).length} platform(s)` : ""}${r.wpcats ? `, ${r.wpcats.length} categories` : ""}${r.problems.map(p => `\n           ${p}`).join("")}`),
   });
   const refused = results.filter(r => r.problems.length).length;
   if (refused) { console.error(`\n${refused} of ${results.length} row(s) refused; nothing written.`); process.exit(1); }

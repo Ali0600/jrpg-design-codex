@@ -298,7 +298,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   **`facetSources(g)` is the ONE list of where a facet comes from** — `gf.plat`, `also`,
   `genre`, `dev`, `pub` and `fr`; every key of the Wikipedia `infobox` (below), including the
   credit kinds `director`, `producer`, `designer`, `writer`, `artist`, `composer`, `programmer`
-  and `engine`; the row's `year` and `status`; and the row's own `dev` (split on " / ") only when
+  and `engine`; the categories in `wpcats` that `CATEGORY_FACETS` names (below); the row's `year`
+  and `status`; and the row's own `dev` (split on " / ") only when
   there is no `gf.dev`, because `"Enix (tri-Ace)"` would file Star Ocean 2 under its publisher.
   Add a source there and both the filter and the gate see it. Each source says where it came
   from (`from`: "gf", "wp" or "row"): a card's one-line summary reads only the non-"wp" ones,
@@ -315,6 +316,20 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the game, so **a newly harvested game on a new console, or with a new genre label, needs its
   `FACET_VOCAB` entry in the same change**. Company and series are open, and every entry in
   every table must be used by some game.
+  **`CATEGORY_FACETS`** (added 2026-09-13, from the owner's audit of unused research data) turns
+  chosen Wikipedia categories into facets: `{kind: {label: [category, …]}}` over each row's raw
+  `wpcats`, matched through `facetNorm`. It adds the kinds `theme`, `feature` and `award`, and may
+  also widen a vocabulary kind. A label under `genre` must be a `FACET_VOCAB.genre` canonical, so
+  "Turn-based role-playing video games" lists under the GameFAQs genre Turn-Based instead of
+  starting a near-identical second filter. Categories that restate an existing facet (platforms,
+  years, companies, composers, engines, series) are deliberately left unmapped, as are media
+  adaptations. Several categories share a label only when every game in each is that thing: a
+  theme crossed with a genre ("Science fantasy role-playing video games") folds into the theme,
+  while two different things (an award and its Game of the Year) never share one.
+  The validator holds every category in the table to one some game carries (read from the raw
+  `wpcats`, never through the page's code) and every label to at least two games (read through
+  the page's `facetsOf`, the consumer's view). A new label is curated from the stored categories,
+  not guessed.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
   the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
@@ -327,8 +342,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
-  `cover` and `wp` as of that day, all 72 carry `infobox` since 2026-09-13, seven carry `digest`)
-  — `gf`, `cover`, `wp`, `infobox` and `digest` on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
+  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, seven carry `digest`)
+  — `gf`, `cover`, `wp`, `wd`, `infobox`, `wpcats` and `digest` on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
   written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
   writer replace a line and copy every other line of the row byte for byte. `gf` is the
   GameFAQs game-page harvest: `{u, plat, genre[], dev, pub, rel, fr[], aka[], also[],
@@ -347,7 +362,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `scripts/fetch_infobox.mjs`: `{plat[], genre[], dev[], pub[], series[], dir[], prod[], des[],
   prog[], art[], wri[], comp[], engine[], note?, at}`, each string as the article writes it (a
   qualifier such as "(SFC)" is kept, and the page's fold drops it) under the same 120-char cap,
-  with `plat` and `at` required and never without `wp`. Custom games never carry any of these, so every renderer must degrade
+  with `plat` and `at` required and never without `wp`. `wd` is the article's Wikidata item
+  and `wpcats` every visible category of it, stored raw (the "Category:" prefix dropped, sorted,
+  deduped), both from the same run and both never without `wp`. Custom games never carry any of these, so every renderer must degrade
   without them.
 
 ## Conventions for extending
@@ -467,7 +484,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   run carries on. A re-run whose only difference is the date writes nothing. `--note` (with
   exactly one `--only`) explains an article broader than the row and survives later harvests:
   Persona 5 Royal's article is Persona 5's, PS3 included. `--write` logs the harvest in
-  `CHANGES` as a `games` entry, widening a same-day one.
+  `CHANGES` as a `games` entry, widening a same-day one. A second call per row (`action=query`,
+  `prop=categories|pageprops`, hidden categories excluded) records `wd` and `wpcats`. It refuses
+  a truncated category list (`continue` in the answer), a missing Wikidata item, zero categories,
+  a category over 120 characters and a redirected title. It stores every category and never reads
+  `CATEGORY_FACETS`, so re-curating is a page edit, never a re-harvest.
 - `scripts/splice_game.mjs --game "<title>" <game.json> [--write]` turns a saved
   `__gf.game()` result into the row's `gf`. It is the strict side of the harvest: an unseen
   Game Detail label is a refusal that PRINTS the label (extend `LABELS` deliberately — an
@@ -526,7 +547,10 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   against its key whitelist, path shapes, rating ranges, the 120-char prose cap and the
   two-year release window unless `note`; `gf.u` unique across rows; `digest` two-way
   equal to `docs/research/`; `cover` two-way equal to `covers/` and never without `wp`; `infobox` against its key
-  whitelist and the same cap, with `plat` and `at` required and never without `wp`);
+  whitelist and the same cap, with `plat` and `at` required and never without `wp`; `wd` a
+  unique Wikidata id and `wpcats` a list of bare category names under the cap, both never without
+  `wp`; `CATEGORY_FACETS` kinds in FACET_KINDS, no category under two labels, every category
+  carried by some game, and every label on two or more games);
   **the changelog** (ISO dates strictly decreasing, every range parseable by the page's
   own `expandIds`, no id added twice, the union of every `added` list EQUAL to the full
   M/g id set — membership, so both a missing row and a phantom one are caught — every
@@ -551,7 +575,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **77** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **89** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -676,7 +700,10 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    **Facets came first, at the owner's request (2026-09-13)**: PR 1 made every platform, genre,
    studio, series and year a filter over the data the rows already hold (#30). PR 2 added the
    script-owned `infobox` field from each game's Wikipedia infobox, bringing every platform and
-   every credited person. Both are planned in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`,
+   every credited person (#31). A third, picked from the owner's audit of unused research data,
+   made chosen Wikipedia categories into themes, features and awards. The audit's other findings
+   (Famitsu and per-platform scores, original platform with length and difficulty, digest facts
+   and soundtracks) wait in `docs/DECISIONS.md`'s Backlog with their measurements. Both are planned in `~/.claude/plans/ok-i-want-you-reactive-hartmanis.md`,
    and PR 3 of the analysis layer waits behind them.
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before

@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
  * Sets the script-owned fields on a BASE_GAMES row: `gf` (the GameFAQs game-page data),
- * `cover` (the thumbnail path), `wp` (the Wikipedia article), `infobox` (that article's infobox,
- * harvested by fetch_infobox.mjs) and `digest` (the docs/research slug).
+ * `cover` (the thumbnail path), `wp` (the Wikipedia article), `wd` (its Wikidata item), `infobox`
+ * (that article's infobox) and `wpcats` (its visible categories) — the last three harvested by
+ * fetch_infobox.mjs — and `digest` (the docs/research slug).
  *
  *   node scripts/game_rows.mjs --game "<title>" --set wp="Parasite Eve (video game)"
  *   node scripts/game_rows.mjs --game "<title>" --set digest=parasite-eve --unset cover --write
  *
  * The invariant that makes this safe: each owned field sits on ITS OWN LINE, LAST in the
- * row, in the fixed order gf, cover, wp, infobox, digest. The writer replaces those lines and copies
+ * row, in the fixed order gf, cover, wp, wd, infobox, wpcats, digest. The writer replaces those lines and copies
  * every other line of the row byte for byte, so a hand-written field (`why`, the score
  * fields) cannot be damaged by it. The one runtime check is that the rewritten row still
  * evaluates: broken JavaScript is refused, never written. (An earlier draft also compared
@@ -20,7 +21,7 @@
  * differs from the roster is a refusal, never a guess.
  *
  * This is the deliberate exception to splice_rows.mjs's rule that existing rows are hand
- * edits: game rows have no id and no user overrides keyed to them, and these five fields
+ * edits: game rows have no id and no user overrides keyed to them, and these seven fields
  * are written by scripts (splice_game.mjs, fetch_covers.mjs, splice_rows.mjs), not by hand.
  */
 
@@ -35,7 +36,7 @@ const CODEX = join(ROOT, "JRPG_Design_Codex.html");
 export class Refusal extends Error {}
 export const refuse = msg => { throw new Refusal(msg); };
 
-export const OWNED = ["gf", "cover", "wp", "infobox", "digest"];
+export const OWNED = ["gf", "cover", "wp", "wd", "infobox", "wpcats", "digest"];
 /** The keys `gf` may carry, in the order they are written. The validator holds the same list. */
 export const GF_KEYS = ["u", "plat", "genre", "dev", "pub", "rel", "fr", "aka", "also", "rating", "diff", "len", "like", "note", "at"];
 /** The keys `infobox` may carry, in the order they are written (fetch_infobox.mjs). The validator holds the same list. */
@@ -136,7 +137,10 @@ export function canonInfobox(ib) {
   return out;
 }
 
-const OWNED_LINE = /^\s*(gf|cover|wp|infobox|digest):/;
+// Both patterns are derived from OWNED. They were once two hand copies of the list, which is how a
+// new field ends up written by one check and missed by the other.
+const OWNED_LINE = new RegExp(String.raw`^\s*(${OWNED.join("|")}):`);
+const OWNED_AFTER_KEY = new RegExp(String.raw`[,{]\s*(${OWNED.join("|")})\s*:`);
 const stripStrings = line => line.replace(/"(?:[^"\\]|\\.)*"/g, '""');
 
 /**
@@ -169,7 +173,7 @@ export function setOwnedFields(html, title, patch, { unset = [] } = {}) {
       existing[m[1]] = one[m[1]];
       return;
     }
-    if (/[,{]\s*(gf|cover|wp|infobox|digest)\s*:/.test(stripStrings(line))) {
+    if (OWNED_AFTER_KEY.test(stripStrings(line))) {
       refuse(`${what}: line ${i + 1} carries an owned field after another key — the invariant is one owned field per line, last in the row`);
     }
     kept.push(line);

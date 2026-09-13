@@ -137,3 +137,15 @@ test("infobox is written after wp and before digest, its keys in IB_KEYS order",
   assert.deepEqual(Object.keys(rowOf(html, "Lantern Vale").infobox), ["plat", "comp", "at"]);
   assert.throws(() => setOwnedFields(miniCodex(), "Lantern Vale", { infobox: { platforms: ["PlayStation"] } }), /"platforms" is not an infobox key/);
 });
+
+test("wd and wpcats take their places in the owned order, and every owned name is refused after another key", () => {
+  const html = setOwnedFields(miniCodex(), "Lantern Vale", { wpcats: ["Video games about lanterns"], digest: "lantern-vale", wd: "Q42",
+    infobox: { plat: ["PlayStation"], at: "2026-09-13" }, wp: "Lantern Vale" });
+  const owned = rowText(html, "Lantern Vale").split("\n").filter(l => OWNED.some(k => l.startsWith(k + ":"))).map(l => l.slice(0, l.indexOf(":")));
+  assert.deepEqual(owned, ["wp", "wd", "infobox", "wpcats", "digest"]);
+  assert.deepEqual(rowOf(html, "Lantern Vale").wpcats, ["Video games about lanterns"]);
+  for (const k of OWNED) {
+    const games = DEFAULT_GAMES.replace('why:"w"}', `why:"w",${k}:"x"}`);
+    assert.throws(() => setOwnedFields(miniCodex({ games }), "Harbor Town", { digest: "harbor-town" }), /carries an owned field after another key/, k);
+  }
+});

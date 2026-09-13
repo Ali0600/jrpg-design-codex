@@ -18,8 +18,49 @@ rejected options still offer.
   and *Vista sketch* (2) to three mechanics each, add the rule to `validate()` beside the
   ledger checks, with one sabotage that inserts an unused verb into `VERBS`.
 - **Wikidata ids for facets** (from the facet-vocabulary fork, 2026-09-13) — revisit hook:
-  `facetSources()` in the page is the one list of where a facet's values come from. A resolved
-  `wd` item per game would add ids as a source there and retire most of `FACET_VOCAB`.
+  every row carries its `wd` since 2026-09-13, so what remains is fetching each item's platform
+  (P400), genre (P136) and developer (P178) claims as a source in `facetSources()`, which would
+  retire most of `FACET_VOCAB`.
+- **Famitsu and per-platform scores** (from the unused-research-data fork, 2026-09-13) — revisit
+  hook: `scores_from_composer()` in `scripts/fetch_scores.py` already parses the response that
+  holds `product.platforms[]` (a score, review count and release date per platform), the
+  positive/mixed/negative counts and `mustPlay`, and keeps two numbers. Famitsu is the `Fam` field
+  of each article's `{{Video game reviews}}` (60 of 72, including all 9 with no Metascore), one
+  wikitext call beside `fetchMeta()` in `scripts/fetch_infobox.mjs`.
+- **Original platform, length and difficulty as facets** (same fork) — revisit hook: `LABELS`
+  maps `Release` to `null` in `scripts/fetch_infobox.mjs`. On 48 of 72 articles that cell groups
+  dates under bold platform headers, which parse with the rule that already drops them from other
+  cells. `gf.len` and `gf.diff` sit on all 72 rows and would be two more kinds in `facetSources()`.
+- **Digest facts and soundtracks on the game page** (same fork) — revisit hook: the digests'
+  `## Exploration & upgrade facts` (47 bullets) and `## Unverified or contradicted` (27) sections,
+  and the 37-row table in `docs/ost-sources.md`, each copied into an owned field by a script in the
+  `splice_rows.mjs` posture, with an `OST_HOSTS` allowlist beside `REF_HOSTS`.
+
+---
+
+## 2026-09-13 — Which unused research data to put to work first
+
+**Fork:** an audit of what each source returns against what the codex keeps found four kinds of
+unused data. The owner picked one to build.
+
+- **Themes, features and awards from Wikipedia categories** ✔ — 538 visible categories across
+  the 72 articles, 91 of them shared by four or more games. The ones no other facet covers
+  (story themes, protagonists, presentation, awards) became filters, and every row gained its
+  Wikidata id on the way.
+- **Fill the score gaps** — `deferred — worth trying`: Famitsu scores, and the per-platform
+  Metascores `fetch_scores.py` downloads and discards. Revisit hook in the Backlog above.
+- **Original platform, length and difficulty** — `deferred — worth trying`: the dropped Release
+  row and two stored-but-inert GameFAQs fields. Revisit hook in the Backlog above.
+- **Show research already done** — `deferred — worth trying`: digest facts, source disagreements
+  and soundtracks that never reach the page. Revisit hook in the Backlog above.
+
+**Chosen:** themes, features and awards. Two calls sit inside it. Categories are stored raw
+(`wpcats`) and chosen on the page (`CATEGORY_FACETS`), because storing only the mapped ones would
+turn every re-curation into a re-harvest; this is the same reason infobox values are stored as
+written. And a category may widen an existing vocabulary kind: "Turn-based role-playing video
+games" joins the GameFAQs genre Turn-Based instead of becoming a second filter that nearly
+duplicates it. Wikidata's "main subject" (P921) as the theme source — `rejected for now —
+unmeasured on these items, while the categories were already one call away and measured`.
 
 ---
 
