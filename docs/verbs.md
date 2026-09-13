@@ -402,3 +402,9 @@ category and for every row the digest tagged.
 
 ### M283 — A fox whose healing gets cheaper as you grant the town's wishes
 - Consequence · how · `the townsfolk's offerings pay to restore the run-down shrine`
+
+### M284 — A cookbook filled by tasting your way around the kingdom
+- none · a dish is learned by tasting it where it is served, and no verb names eating as the way a reward is found
+
+### M285 — Hidden jobs that exist only between two story beats
+- Latent geometry · how · `a faint blue trail on the road that gives away a hidden cliffside path`
