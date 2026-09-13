@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **285 mechanics** (`BASE_MECHS` array, M001-M285) across **72 researched games**: FF7 Rebirth,
+- **288 mechanics** (`BASE_MECHS` array, M001-M288) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -127,6 +127,11 @@ backup; the HTML file is the source of truth and is more up to date.
   at bars, stands, a border gate's mess hall or read from a lab's cookbook), and eleven hidden guild
   jobs that exist only between two story beats, found by noticing things, graded in Bracer Points
   by how they were done and carried into the sequel. Fishing and the casino came back thin.
+  **Xenoblade Chronicles** (M286-M288): the Collectopaedia, where every row and page of an area's
+  collection book pays a gem or gear and the last page can only be traded for; gem crafting, where
+  a pair's affinity sets the turns and the best gems come from refining a quality into 99% cylinders
+  first; and trading, whose stock widens with each region's affinity and pays a fixed bonus item for
+  overpaying. Wave 3 is complete.
   Plus the **game pages** (2026-09-07): every roster row carries its box art (Wikipedia,
   `covers/`), a Wikipedia link, and its GameFAQs page — platform, genre, developer,
   publisher, release, franchise, the user rating / difficulty / length, and the five games
@@ -196,7 +201,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M285, minigames g001-g097. Continue the
+  - IDs are sequential: mechanics M001-M288, minigames g001-g097. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -230,8 +235,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **85 of 285 rows are tagged**
-  (104 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 288 rows are tagged**
+  (105 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
   writer of `verbs`, and the validator holds the page and the ledger equal, so a tag cannot

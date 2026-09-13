@@ -408,3 +408,9 @@ category and for every row the digest tagged.
 
 ### M285 — Hidden jobs that exist only between two story beats
 - Latent geometry · how · `a faint blue trail on the road that gives away a hidden cliffside path`
+
+### M286 — A collection book that pays for every row, every page, and a last page you can only trade for
+- none · collectables picked up across an area fill a checklist, a shape no verb names; the last page's trades are the subject of M288
+
+### M288 — Trade stock that opens with a region's affinity, and a bonus for overpaying
+- Traded · loop · `trade a found item worth more than you need`
