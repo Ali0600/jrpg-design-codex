@@ -339,3 +339,34 @@ evidence.
 **Takeaway:** before promising a minimum-count gate over data another gate filters, run the
 filter and count what survives. If the floor then fails, the choice is the owner's (more
 data, a lower floor, or no floor), never a quietly looser filter.
+
+## A filter needs one spelling per thing, and a closed list turns a new spelling into a build failure
+Clicking "Square" should list every Square game. GameFAQs writes SquareSoft, the hand-written
+rows say Squaresoft and Wikipedia says Square, so a filter on the raw string lists a fraction
+of the games under each spelling. Every value therefore goes through one fold table that the
+filter and the validator both read. Case, spacing and punctuation are normalised away without
+an entry, and the table holds only true spellings of one entity: Square is not Square Enix.
+Platforms and genres are closed. A value the table does not list fails the build and names
+the game. Studios and series stay open, since an unlisted studio name is still one studio.
+Every entry must be used by some game, so the table cannot fill up with guesses.
+
+**Why it came up:** the facets work (#30 and the Wikipedia infobox PR). The first infobox
+harvest refused 20 platform strings and 10 genre strings in one printed list, and the
+vocabulary grew by hand from that list instead of from memory.
+
+**Takeaway:** before making free-text labels filterable, fold them through one table the
+filter and the gate share. Close the table wherever its values are few and meaningful, and
+hold every entry to being used.
+
+## A mutant that also breaks the real data blinds the selftest
+`--selftest` runs its sabotages only after the unmutated page validates. Removing the line
+that reads Wikipedia's platforms makes Linux, macOS and Windows dead vocabulary. Base
+validation then fails, no sabotage runs, and a harness reading the MISSED lines sees an empty
+list. Read naively, that says the sabotage aimed at that line was still caught. An in-memory
+check told the truth: with the source gone, the planted "Linux 2" raised no error at all.
+
+**Why it came up:** the infobox PR's fail-first run. 31 of 32 mutants showed their expected
+failure, and the 32nd showed exit 1 with nothing MISSED.
+
+**Takeaway:** before believing an empty "missed" list, confirm the judge ran its cases. An
+exit code cannot tell "caught everything" from "never started".

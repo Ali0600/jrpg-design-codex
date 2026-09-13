@@ -58,6 +58,29 @@ const GF_PATH = /^\/[a-z0-9-]+\/\d+-[a-z0-9-]+$/;
 const GF_MAX_TEXT = 120;
 const GF_YEAR_WINDOW = 2;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+/**
+ * `infobox`, the Wikipedia infobox harvest (fetch_infobox.mjs): lists of short strings per key,
+ * an optional `note` and the harvest date. The same 120-char cap as `gf`, for the same reason.
+ * Which platforms and genres it may name is the facet vocabulary's business (checkFacets).
+ */
+const IB_KEYS = new Set(["plat", "genre", "dev", "pub", "series", "dir", "prod", "des", "prog", "art", "wri", "comp", "engine", "note", "at"]);
+function checkInfobox(g, label, errors) {
+  const ib = g.infobox;
+  if (!ib || typeof ib !== "object" || Array.isArray(ib)) { errors.push(`${label}: infobox must be an object`); return; }
+  if (!isText(g.wp)) errors.push(`${label}: has an infobox but no wp — the infobox's provenance is its Wikipedia article`);
+  for (const k of Object.keys(ib)) {
+    if (!IB_KEYS.has(k)) { errors.push(`${label}: infobox: unknown key ${JSON.stringify(k)}`); continue; }
+    if (k === "at") continue;
+    const vals = k === "note" ? [ib.note] : ib[k];
+    if (!Array.isArray(vals) || !vals.length) { errors.push(`${label}: infobox.${k} must be a non-empty array of text`); continue; }
+    for (const v of vals) {
+      if (!isText(v)) errors.push(`${label}: infobox.${k} must hold non-empty text, got ${JSON.stringify(v)}`);
+      else if (v.length > GF_MAX_TEXT) errors.push(`${label}: infobox.${k} holds a ${v.length}-char string — longer than ${GF_MAX_TEXT}, and prose is not stored`);
+    }
+  }
+  if (!ISO_DATE.test(ib.at ?? "")) errors.push(`${label}: infobox.at must be the ISO harvest date, got ${JSON.stringify(ib.at)}`);
+  if (!Array.isArray(ib.plat) || !ib.plat.length) errors.push(`${label}: infobox.plat is required — the platforms are what the harvest is for`);
+}
 const twoDp = v => typeof v === "number" && Number.isFinite(v) && Math.abs(v * 100 - Math.round(v * 100)) < 1e-9;
 
 function checkGf(g, label, errors, seenU) {
@@ -473,6 +496,7 @@ export function validate(html, docs = {}) {
       if (!isText(g.wp)) errors.push(`${label}: has a cover but no wp — the cover's provenance is its Wikipedia article`);
     }
     if (g.wp != null && !isText(g.wp)) errors.push(`${label}: wp must be a non-empty Wikipedia article title`);
+    if (g.infobox != null) checkInfobox(g, label, errors);
     if (g.digest != null) {
       if (!/^[a-z0-9-]+$/.test(g.digest)) errors.push(`${label}: digest must be a docs/research slug, got ${JSON.stringify(g.digest)}`);
       else if (digestRefs.has(g.digest)) errors.push(`${label}: digest ${JSON.stringify(g.digest)} is also claimed by ${JSON.stringify(digestRefs.get(g.digest))}`);
@@ -1063,6 +1087,20 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, 'series: {\n    "Dragon Quest"', 'serie: {\n    "Dragon Quest"', "a vocabulary table no facet kind reads") },
   { name: "the closed platform table missing", expect: /FACET_VOCAB has no platform table/,
     apply: s => replaceFirst(s, 'platform: {\n    "PlayStation"', 'platforms: {\n    "PlayStation"', "the closed platform table missing") },
+
+  // The Wikipedia infobox. Anchors are the owned `infobox:` lines fetch_infobox.mjs writes; the
+  // first such line is Final Fantasy VII Rebirth's, and the first "Linux" is Chained Echoes'.
+  { name: "an infobox without its wp", expect: /"CrossCode": has an infobox but no wp/,
+    apply: s => replaceFirst(s, 'wp:"CrossCode",\ninfobox:{', 'infobox:{', "an infobox without its wp") },
+  { name: "an infobox key the harvest never writes", expect: /infobox: unknown key "platforms"/,
+    apply: s => replaceFirst(s, '\ninfobox:{plat:[', '\ninfobox:{platforms:[', "an infobox key the harvest never writes") },
+  { name: "prose stored in the infobox", expect: /infobox\.plat holds a 121-char string/,
+    apply: s => replaceFirst(s, '\ninfobox:{plat:["', `\ninfobox:{plat:["${"x".repeat(121)}","`, "prose stored in the infobox") },
+  { name: "an infobox with no ISO harvest date", expect: /infobox\.at must be the ISO harvest date/,
+    apply: s => replaceFirst(s, ',at:"2026-09-13"}', ',at:"13 September"}', "an infobox with no ISO harvest date") },
+  // The infobox is a facet SOURCE: a platform only Wikipedia names must still be in the vocabulary.
+  { name: "an infobox platform outside the facet vocabulary", expect: /platform "Linux 2" is not in FACET_VOCAB\.platform/,
+    apply: s => replaceFirst(s, '"Linux"', '"Linux 2"', "an infobox platform outside the facet vocabulary") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */

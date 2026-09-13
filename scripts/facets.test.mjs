@@ -67,15 +67,39 @@ test("a trailing release qualifier is dropped, an unlisted studio stands as itse
   assert.equal(facetLookup("dev", "Radical Fish Games").via, null);
 });
 
-test("a harvested game's facets come from its GameFAQs details, folded", () => {
+test("a harvested game's facets fold GameFAQs and Wikipedia together, GameFAQs' first", () => {
   const cc = game("CrossCode"), ct = game("Chrono Trigger");
-  assert.deepEqual(values(cc, "platform"), ["PC"]);
-  assert.deepEqual(values(cc, "genre"), ["RPG", "Action RPG"]);
-  assert.deepEqual(values(cc, "pub"), ["Deck13"]);
+  assert.deepEqual(values(cc, "platform"), ["PC", "Linux", "macOS", "Nintendo Switch", "PlayStation 4", "Xbox One", "Xbox Series X/S", "PlayStation 5"]);
+  assert.deepEqual(values(cc, "genre"), ["RPG", "Action RPG"], "Wikipedia's Action role-playing folds into GameFAQs' label");
+  assert.deepEqual(values(cc, "pub"), ["Deck13"], "GameFAQs' Deck 13 and Wikipedia's Deck13 are one publisher");
   assert.deepEqual(values(cc, "year"), ["2018", "2010s"]);
-  assert.deepEqual(values(ct, "platform"), ["SNES"]);
+  assert.deepEqual(values(ct, "platform").slice(0, 2), ["SNES", "PlayStation"]);
+  assert.ok(values(ct, "platform").includes("PC"), "Wikipedia's Windows is PC");
   assert.deepEqual(values(ct, "genre"), ["RPG", "JRPG"]);
   assert.deepEqual(values(ct, "dev"), ["Square"]);
+  assert.deepEqual(values(ct, "composer"), ["Yasunori Mitsuda", "Nobuo Uematsu", "Noriko Matsueda"]);
+});
+
+test("a card's summary reads only the primary sources", () => {
+  const primary = (g, k) => [...facetsOf(g, s => s.from !== "wp")[k]];
+  assert.deepEqual(primary(game("CrossCode"), "platform"), ["PC"]);
+  assert.deepEqual(primary(game("Chrono Trigger"), "composer"), []);
+});
+
+test("an infobox's credits and engine are facets, qualifiers dropped, and one spelling is one value", () => {
+  const g = { title: "Lantern Vale", year: 2001, dev: "d", status: "Researched",
+    gf: { plat: "PC", genre: ["Role-Playing"], dev: "Lantern Works", pub: "XSEED Games" },
+    infobox: { plat: ["Windows", "Linux"], genre: ["hack and slash"], dev: ["LANTERN works", "Harbor Soft"], pub: ["Xseed Games", "Harbor Soft (JP)"],
+      series: ["Lantern"], comp: ["Mira Tone (Remaster)"], engine: ["Unity (HD)"], at: "2026-09-13" } };
+  assert.deepEqual(values(g, "platform"), ["PC", "Linux"]);
+  assert.deepEqual(values(g, "genre"), ["RPG", "Hack and Slash"]);
+  assert.deepEqual(values(g, "dev"), ["Lantern Works", "Harbor Soft"]);
+  assert.deepEqual(values(g, "pub"), ["XSEED Games", "Harbor Soft"]);
+  assert.deepEqual(values(g, "series"), ["Lantern"]);
+  assert.deepEqual(values(g, "composer"), ["Mira Tone"]);
+  assert.deepEqual(values(g, "engine"), ["Unity"]);
+  assert.ok(matches(g, 'composer:"mira tone" engine:unity platform:linux'));
+  assert.ok(!matches(g, "platform:macOS"));
 });
 
 test("a custom game with no GameFAQs details falls back to its own row, co-developers split", () => {
@@ -91,7 +115,9 @@ test("a custom game with no GameFAQs details falls back to its own row, co-devel
 test("a facet matches its games and not their neighbours, and facets AND together", () => {
   const cc = game("CrossCode"), ct = game("Chrono Trigger"), terra = game("Terranigma"), eb = game("EarthBound");
   assert.ok(matches(cc, "platform:PC"));
-  assert.ok(!matches(ct, "platform:PC"));
+  assert.ok(!matches(game("Final Fantasy X"), "platform:PC"), "Final Fantasy X is on PlayStation 2 alone");
+  assert.ok(matches(ct, 'composer:"Nobuo Uematsu"') && matches(game("Final Fantasy X"), "music:\"nobuo uematsu\""));
+  assert.ok(!matches(cc, 'composer:"Nobuo Uematsu"'));
   assert.ok(matches(cc, "genre:RPG") && matches(ct, "genre:RPG"));
   assert.ok(matches(ct, "genre:JRPG") && !matches(cc, "genre:JRPG"));
   assert.ok(matches(ct, "platform:SNES year:1995") && matches(terra, "platform:SNES year:1995"));
@@ -102,7 +128,8 @@ test("a facet matches its games and not their neighbours, and facets AND togethe
 });
 
 test("every spelling of a studio lands in ONE filter", () => {
-  const raw = BASE_GAMES.filter(g => ["SquareSoft", "Squaresoft", "Square"].includes(g.gf?.dev));
+  const square = /^(SquareSoft|Squaresoft|Square)( \(.*\))?$/;
+  const raw = BASE_GAMES.filter(g => [g.gf?.dev, ...(g.infobox?.dev ?? [])].some(d => square.test(d ?? "")));
   assert.ok(raw.length > 1, "the roster still has Square games");
   assert.equal(BASE_GAMES.filter(g => matches(g, "dev:Square")).length, raw.length);
   assert.equal(BASE_GAMES.filter(g => matches(g, "dev:squaresoft")).length, raw.length);

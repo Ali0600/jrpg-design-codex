@@ -46,7 +46,25 @@ a fraction of the games under each spelling.
 the hand-written row, because the row's `"Enix (tri-Ace)"` would file Star Ocean 2 under its
 publisher. And an entry merges spellings of one company or series, never a parent and its
 child, so Shin Megami Tensei stays apart from Megami Tensei. Every platform from Wikipedia's
-infobox, with every credited person, is the planned second PR.
+infobox, with every credited person, came in the next PR (the fork below).
+
+---
+
+## 2026-09-13 — Reading a Wikipedia infobox: rendered HTML, not wikitext
+
+**Fork:** every platform a game came out on and every credited person sits in its article's
+infobox, which can be read as the wikitext editors write or as the HTML the parser renders.
+
+- **The rendered HTML** (`action=parse`, section 0) ✔ — all 72 articles rendered to one
+  `infobox-label` / `infobox-data` table. Its traps show up in that one shape, and each has a
+  rule: bold re-release headers, region prefixes, footnotes, comma-joined cells.
+- **The wikitext** — `rejected — the roster's articles spell one list with {{Plainlist}},
+  {{Video game release}}, <br> and commas, inside templates the parser expands; reading it means
+  reimplementing part of MediaWiki`
+- **Wikidata** — `deferred — worth trying`, as recorded in the facet-vocabulary fork above.
+
+**Chosen:** the rendered HTML. Values are stored as the article writes them, qualifiers included,
+and the page's fold does the normalising, so a better fold never needs a re-harvest.
 
 ---
 
