@@ -28,19 +28,26 @@ walkthrough, written from the Japanese release, and the other minigame chapters.
 
 `__gf.triage()` on 2026-09-14: the listing is long because the page also files guides for older games
 and for games playable inside this one (Virtua Fighter move lists among them), and the probe's cap cut
-it at 25 of 54. Reading the page's own list once, the guides with this game's ids (70000 and up) are 7:
-4 Full Game Guides and 3 In-Depth Guides. The older entries were not read. Both big walkthroughs are
-split into chapters at their own addresses and were reached by chapter name.
+it at 25 of 54. Reading the page's own list once, the guides with this game's ids (70000 and up) looked
+like 7, and on 2026-09-15 turned out to be 6: 3 Full Game Guides and 3 In-Depth Guides. The older entries
+were not read. Both big walkthroughs are split into chapters at their own addresses and were reached by
+chapter name.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 78799 | Transferable Skills Guide | qasilq | In-Depth Guides | 4 | 6 | skipped — job skills, outside this pass's questions |
-| 78832 | Job Guide | Silvertip_M | In-Depth Guides | 59 | 4 | skipped — jobs, the subject of M229 |
-| 78735 | Guide and Walkthrough | CyricZ | Full Game Guides | 663 | 3 | grep only |
-| 78191 | Guide and Walkthrough | shockinblue | Full Game Guides | 406 | 3 | grep only |
-| 81972 | Gardening Guide | GameDevSurj | In-Depth Guides | 9 | 3 | skipped — outside this pass's questions |
-| 80160 | Guide and Walkthrough | Clownboss | Full Game Guides | 58 | 2 | skipped — two walkthroughs already covered the questions |
-| 76350 | Guide and Walkthrough | Murpheus | Full Game Guides | 11 | 2 | skipped — a short walkthrough, not needed |
+On 2026-09-15 `__gf.pick()` over the whole listing named 15481, TheGreatSeventh's FAQ, one of two plain
+Highest Rated walkthroughs; its opening lines are a Super Hang-On FAQ from 2002, filed on this page. The
+other, 76350, Murpheus's short walkthrough that the first pass had counted as this game's, was read
+whole to check and is a Super Hang-On guide too (bike parts, passwords and race levels), so it has left
+the table. All three of this game's own Full Game Guides carry the HTML flair, so there is no plain-text
+walkthrough to read under the owner's rule. The flags column copies the listing on that day.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 78799 | Transferable Skills Guide | qasilq | In-Depth Guides | 4 | 6 | skipped — job skills, outside this pass's questions | — |
+| 78832 | Job Guide | Silvertip_M | In-Depth Guides | 59 | 4 | skipped — jobs, the subject of M229 | HTML |
+| 78735 | Guide and Walkthrough | CyricZ | Full Game Guides | 663 | 3 | grep only | FAQ of the Month Winner: January 2021 · HTML |
+| 78191 | Guide and Walkthrough | shockinblue | Full Game Guides | 406 | 3 | grep only | FAQ of the Month Winner: February 2020 · HTML |
+| 81972 | Gardening Guide | GameDevSurj | In-Depth Guides | 9 | 3 | skipped — outside this pass's questions | HTML |
+| 80160 | Guide and Walkthrough | Clownboss | Full Game Guides | 58 | 2 | skipped — two walkthroughs already covered the questions | HTML |
 
 ## Mechanics candidates
 
@@ -113,3 +120,4 @@ row: g103
 ## Codex delta
 - (ids after the splice)
 - The GameFAQs rollout's last game: all 15 are done.
+- 2026-09-15: no plain-text Full Game Guide of this game exists to read under the owner's rule (its three are HTML; the two plain ones on the page are Super Hang-On guides), so nothing changed beyond the Triage flags.

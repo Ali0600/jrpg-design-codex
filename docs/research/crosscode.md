@@ -29,12 +29,15 @@ Boss Cup, 5,202 chars, the largest), Consumables and the Monster Fibula.
 
 `__gf.triage()` on 2026-09-14: 2 guides listed (1 Full Game Guide, 1 In-Depth Guide, none under other
 headings). Both were used. The race guide is short and was read whole; SpriteRain's guide is split
-into chapters at their own addresses, reached by name from its contents page.
+into chapters at their own addresses, reached by name from its contents page. On 2026-09-15
+`__gf.pick()` returned no guide: the only Full Game Guide, SpriteRain's chaptered one, carries the HTML
+flair, so there is no plain-text walkthrough to read under the owner's rule. The flags column copies
+the listing on that day.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 79506 | Guide and Walkthrough | SpriteRain | Full Game Guides | 768 | 3 | grep only |
-| 82669 | Dungeon Race Guide | LooperXT | In-Depth Guides | 8 | 3 | read |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 79506 | Guide and Walkthrough | SpriteRain | Full Game Guides | 768 | 3 | grep only | FAQ of the Month Winner: September 2021 · HTML |
+| 82669 | Dungeon Race Guide | LooperXT | In-Depth Guides | 8 | 3 | read | — |
 
 ## Mechanics candidates
 
@@ -109,3 +112,4 @@ row: g100
 
 ## Codex delta
 - (ids after the splice)
+- 2026-09-15: no plain-text Full Game Guide exists to read under the owner's rule (the only one is HTML), so nothing changed beyond the Triage flags.

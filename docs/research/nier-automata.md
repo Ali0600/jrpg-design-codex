@@ -31,12 +31,14 @@ the weapons trader's first quest. Pages 2–7 not opened.
 headings: a Portuguese walkthrough, not read). With no In-Depth guide, both walkthroughs carried the
 pass. PuppyLand's 21-page guide has chapters on chip fusion, weapons, weapon stories and fishing,
 reached through its own page list, and vinheim's first page was grepped for the weapons trader's
-quest and the fishing chip's price.
+quest and the fishing chip's price. On 2026-09-15 `__gf.pick()` returned no guide: both Full Game
+Guides carry the HTML flair, so neither is a plain-text walkthrough to read under the owner's rule,
+and the grep-only readings stand. The flags column copies the listing on that day.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 75141 | Guide and Walkthrough | PuppyLand | Full Game Guides | 946 | 3 | grep only |
-| 74472 | Guide and Walkthrough | vinheim | Full Game Guides | 314 | 3 | grep only |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 75141 | Guide and Walkthrough | PuppyLand | Full Game Guides | 946 | 3 | grep only | Highest Rated · HTML |
+| 74472 | Guide and Walkthrough | vinheim | Full Game Guides | 314 | 3 | grep only | FAQ of the Month Winner: March 2017 · HTML |
 
 ## Mechanics candidates
 
@@ -109,3 +111,4 @@ row: g099
 ## Codex delta
 - (ids after the splice)
 - M235 (Plug-in Chips) sharpened in place: the fusion cost formula, the +6 ceiling at the camp's merchant, the Canyon Machine that a quest opens for the last two levels, and the doubling cost of a +8. It gained its first sources. The brief's question about hidden vendors came back as the Canyon Machine and Masamune.
+- 2026-09-15: no plain-text Full Game Guide exists to read under the owner's rule (both are HTML), so nothing changed beyond the Triage flags.

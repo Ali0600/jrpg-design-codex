@@ -72,6 +72,9 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    means no pick, and the summary line says so. Of the other guides take the top three by score;
    the other walkthroughs stay `grep` only. The flag comes from the flair's TEXT: GameFAQs gives
    every flaired guide the `rec` class, so the class cannot tell Most Recommended from Highest Rated.
+   A listing can also file guides for other games (Yakuza: Like a Dragon's carries Super Hang-On and
+   Virtua Fighter guides), which `pick()` cannot tell apart, so read a pick's opening lines before
+   trusting it, and leave another game's guide out of the Triage table with a word in its summary.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
    translations out, `toc first` on anything over 200KB.
    **Record the whole listing in the digest's `## Triage` table before reading anything**: every
