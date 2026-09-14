@@ -15,9 +15,11 @@ import { extractScript, extractData, validate } from "./validate_codex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
 const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
-  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "exactTitlesOf", "relatedGames", "relatedScore"];
+  "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "exactTitlesOf", "relatedGames", "relatedScore",
+  "CHANGES", "expandIds", "gameChangeDates", "sortByLastChange"];
 const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
-  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, exactTitlesOf, relatedGames, relatedScore } =
+  MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, exactTitlesOf, relatedGames, relatedScore,
+  CHANGES, expandIds, gameChangeDates, sortByLastChange } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -282,4 +284,60 @@ test("a game is never its own relative, and kinship is symmetric across the rost
   assert.ok(ff8InFf7, "FF7 lists FF8");
   assert.ok(relatedGames(ff8, BASE_GAMES).some(r => r.title === ff7.title), "FF8 lists FF7");
   assert.deepEqual(ff8InFf7.shared[0], { k: "series", v: "Final Fantasy" });
+});
+
+// ---------------------------------------------------------------- the Games tab's default sort
+
+// Each adjacent pair in the expected order is split by one rule: Mid by any change, Zed over Alpha
+// by row changes, Alpha over Beta by title, Lone (a games[] entry, no rows) over Custom (never named).
+const CHANGE_FIXTURE = [
+  { date: "2026-09-14", added: ["M003"], updated: [] },
+  { date: "2026-09-13", added: [], updated: [], games: ["Alpha", "Beta", "Zed", "Mid", "Lone"] },
+  { date: "2026-09-06", added: [], updated: ["M001"] },
+  { date: "2026-08-07", added: ["M001-M002", "g001"], updated: [] },
+];
+const FIX_MECHS = [{ id: "M001", game: "Zed" }, { id: "M002", game: "Alpha" }, { id: "M003", game: "Mid" }];
+const FIX_MINIS = [{ id: "g001", g: "Beta" }];
+
+test("last update sorts by any change, then by row changes, then by title, and an unnamed game sinks", () => {
+  const dates = gameChangeDates(CHANGE_FIXTURE, FIX_MECHS, FIX_MINIS);
+  const games = ["Custom", "Beta", "Lone", "Alpha", "Zed", "Mid"].map(title => ({ title }));
+  assert.deepEqual(sortByLastChange(games, dates).map(g => g.title), ["Mid", "Zed", "Alpha", "Beta", "Lone", "Custom"]);
+  assert.deepEqual(dates.get("Alpha"), { any: "2026-09-13", rows: "2026-08-07" }, "a games[] entry counts as an update");
+  assert.deepEqual(dates.get("Zed"), { any: "2026-09-13", rows: "2026-09-06" }, "the newest row change, not the first add");
+  assert.deepEqual(dates.get("Beta"), { any: "2026-09-13", rows: "2026-08-07" }, "a minigame is a row of its game");
+  assert.equal(dates.get("Custom"), undefined);
+});
+
+test("the newest date wins whatever order the changelog entries come in", () => {
+  const forward = gameChangeDates(CHANGE_FIXTURE, FIX_MECHS, FIX_MINIS);
+  assert.deepEqual(gameChangeDates([...CHANGE_FIXTURE].reverse(), FIX_MECHS, FIX_MINIS), forward);
+  assert.equal(forward.get("Zed").rows, "2026-09-06");
+});
+
+test("on the real roster, every game with a row in the newest entry is listed above every game without one", () => {
+  const newest = CHANGES[0];
+  const titleOf = id => (BASE_MECHS.find(m => m.id === id) || {}).game ?? (MINIGAMES.find(m => m.id === id) || {}).g;
+  const touched = new Set([...expandIds(newest.added), ...expandIds(newest.updated)].map(titleOf));
+  const dates = gameChangeDates(CHANGES, BASE_MECHS, MINIGAMES);
+  const order = sortByLastChange([...BASE_GAMES], dates).map(g => g.title);
+  const lead = order.filter(t => touched.has(t));
+  assert.ok(lead.length > 0, "the newest entry names a row of some roster game");
+  assert.deepEqual(order.slice(0, lead.length), lead, "no game without a row in the newest entry sits among them");
+  assert.equal(dates.get(order[0]).any, newest.date);
+});
+
+test("the page opens on the Games tab, sorted by last update, with What's new above the list", () => {
+  const tabs = [...HTML.matchAll(/<button class="tab"[^>]*>/g)].map(m => m[0]);
+  assert.match(tabs[0], /data-view="games"/, "Games is the first tab");
+  const selected = tabs.filter(t => /aria-selected="true"/.test(t));
+  assert.equal(selected.length, 1, "exactly one tab is selected");
+  assert.match(selected[0], /data-view="games"/);
+  assert.deepEqual([...HTML.matchAll(/<section class="view active[^"]*" id="([^"]+)"/g)].map(m => m[1]), ["view-games"]);
+  const sort = HTML.match(/<select id="gameSort"[^>]*>([\s\S]*?)<\/select>/);
+  assert.ok(sort, "the Games sort exists");
+  const chosen = [...sort[1].matchAll(/<option value="([^"]+)"([^>]*)>/g)].filter(m => /\bselected\b/.test(m[2])).map(m => m[1]);
+  assert.deepEqual(chosen, ["updated"]);
+  const view = HTML.indexOf('id="view-games"'), next = HTML.indexOf("<section", view + 1), wn = HTML.indexOf('id="whatsNew"');
+  assert.ok(view > 0 && wn > view && wn < next, "What's new sits inside the Games view");
 });

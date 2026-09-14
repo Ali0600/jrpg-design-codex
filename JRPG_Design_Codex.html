@@ -490,9 +490,9 @@
 </header>
 
 <nav><div class="wrap"><div class="tabs" role="tablist">
-  <button class="tab" role="tab" aria-selected="true" data-view="mechanics">Mechanics</button>
+  <button class="tab" role="tab" aria-selected="true" data-view="games">Games</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="mechanics">Mechanics</button>
   <button class="tab" role="tab" aria-selected="false" data-view="minigames">Minigames</button>
-  <button class="tab" role="tab" aria-selected="false" data-view="games">Games</button>
   <button class="tab" role="tab" aria-selected="false" data-view="mygame">My Game</button>
   <button class="tab" role="tab" aria-selected="false" data-view="gallery">UI Gallery</button>
   <button class="tab" role="tab" aria-selected="false" data-view="pillars">Design Pillars</button>
@@ -502,12 +502,7 @@
 <main class="wrap">
 
   <!-- ================= MECHANICS ================= -->
-  <section class="view active" id="view-mechanics">
-    <details class="verb-box" id="whatsNew">
-      <summary>What's new <span class="vhint" id="wnSummary"></span></summary>
-      <div id="wnBody"></div>
-    </details>
-
+  <section class="view" id="view-mechanics">
     <div class="filters">
       <div class="frow">
         <input type="search" id="q" placeholder="Search mechanics… or cat:traversal verb:guarded platform:SNES">
@@ -583,12 +578,17 @@
   </section>
 
   <!-- ================= GAMES ================= -->
-  <section class="view" id="view-games">
+  <section class="view active" id="view-games">
    <div id="gamesList">
+    <details class="verb-box" id="whatsNew">
+      <summary>What's new <span class="vhint" id="wnSummary"></span></summary>
+      <div id="wnBody"></div>
+    </details>
     <div class="toolbar">
       <button class="btn primary" id="btnAddGame">+ Add game to roster</button>
       <input type="search" id="gq" placeholder="Search games — title, studio, genre… or platform:PC genre:RPG" aria-label="Search games">
       <select id="gameSort" aria-label="Sort games">
+        <option value="updated" selected>Sort: last updated</option>
         <option value="pipeline">Sort: research pipeline</option>
         <option value="mc">Sort: Metascore (critics)</option>
         <option value="us">Sort: user score</option>
@@ -670,7 +670,7 @@
     <div class="legend" id="legend"></div>
 
     <h2>The research pipeline</h2>
-    <p>The <b>Games</b> tab is a research queue, not just a list. Games sort by status — <i>Researching</i> first, then <i>To Research</i>, then the finished shelf — and each card shows how many mechanics and minigames it has contributed so far, so coverage gaps are visible at a glance.</p>
+    <p>The <b>Games</b> tab opens first. The <b>What's new</b> strip at its top lists the latest research, and the games below it sort by their last update, newest first: the newest changelog entry that names the game or one of its mechanics or minigames, a date each card shows. Each card also shows how many mechanics and minigames the game has contributed so far, so coverage gaps are visible at a glance. The tab is a research queue as well as a list: <i>Sort: research pipeline</i> puts <i>Researching</i> first, then <i>To Research</i>, then the finished shelf.</p>
     <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, the codex games most related to it (a shared series, studio, director, composer or other credit, each shown as a link), and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
     <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared. The <b>Mechanics</b> and <b>Minigames</b> searches take the same words, answered through each row's game (<code>platform:SNES</code> on Mechanics lists every mechanic from a SNES game), plus words about the row itself: <code>cat:</code>, <code>verb:</code>, <code>want:</code> (yes, maybe, no or undecided), <code>game:</code> and <code>id:</code> for mechanics, and <code>table:yes</code> or <code>table:no</code> (whether a minigame has a reward table), <code>game:</code> and <code>id:</code> for minigames. Those two searches are not kept in the address.</p>
     <ol>
@@ -3695,6 +3695,42 @@ function expandIds(list){
   return out;
 }
 
+/* When each game last changed, for the Games tab's default sort. `any` is the newest entry
+   naming the game itself (`games`) or one of its mechanics or minigames; `rows` counts only
+   the rows. The newest date wins, whatever order the entries arrive in, and an id with no
+   row (a stale or custom one) names no game. */
+function gameChangeDates(changes, mechs, minigames){
+  const titleOf = new Map();
+  (mechs || []).forEach(m=> titleOf.set(m.id, m.game));
+  (minigames || []).forEach(m=> titleOf.set(m.id, m.g));
+  const dates = new Map();
+  const raise = (title, key, date)=>{
+    if(!dates.has(title)) dates.set(title, {any:"", rows:""});
+    const d = dates.get(title);
+    if(date > d[key]) d[key] = date;
+  };
+  (changes || []).forEach(c=>{
+    [...expandIds(c.added), ...expandIds(c.updated)].forEach(id=>{
+      const title = titleOf.get(id);
+      if(title == null) return;
+      raise(title, "rows", c.date);
+      raise(title, "any", c.date);
+    });
+    (c.games || []).forEach(t=> raise(t, "any", c.date));
+  });
+  return dates;
+}
+/* Newest first. A tie on `any` falls to `rows`, then to the title: the harvest entries
+   (covers on 2026-09-07, infoboxes on 2026-09-13) name every game, so `any` alone would
+   leave most of the roster in one alphabetical block. A game no entry names sinks. */
+function sortByLastChange(games, dates){
+  const none = {any:"", rows:""}, of = g => dates.get(g.title) || none;
+  return games.sort((a,b)=>
+    of(b).any.localeCompare(of(a).any) ||
+    of(b).rows.localeCompare(of(a).rows) ||
+    a.title.localeCompare(b.title));
+}
+
 /* ============================= FACETS ============================= */
 /* Everything a game row names — platform, genre, developer, publisher, series, year —
    is a filter. Sources spell one thing several ways (GameFAQs "SquareSoft", the row's
@@ -4566,7 +4602,7 @@ function scoreRowHTML(g){
          (g.mcNote ? `<p class="mc-note">${esc(g.mcNote)}</p>` : "");
 }
 
-function sortGames(games, mode){
+function sortGames(games, mode, dates){
   // Games with no score always sink to the bottom of a score sort — never
   // treated as a zero, which would read as "critics hated it".
   const byScore = get => (a,b) => {
@@ -4579,6 +4615,7 @@ function sortGames(games, mode){
   if(mode==="mc")  return games.sort(byScore(g=>g.mc));
   if(mode==="us")  return games.sort(byScore(g=>g.us));
   if(mode==="gf")  return games.sort(byScore(g=> g.gf && g.gf.rating && g.gf.rating.v != null ? g.gf.rating.v : null));
+  if(mode==="updated") return sortByLastChange(games, dates || gameChangeDates(CHANGES, allMechs(), MINIGAMES));
   if(mode==="year")return games.sort((a,b)=>(b.year||0)-(a.year||0));
   if(mode==="gap") return games.sort((a,b)=>{
     const ag=userGap(a), bg=userGap(b);
@@ -4645,10 +4682,11 @@ function renderGames(){
   const mechCount = {}, mgCount = {}, freshN = {};
   allMechs().forEach(m=>{ mechCount[m.game]=(mechCount[m.game]||0)+1; if(isFresh(m.id)) freshN[m.game]=(freshN[m.game]||0)+1; });
   MINIGAMES.forEach(m=>{ mgCount[m.g]=(mgCount[m.g]||0)+1; if(isFresh(m.id)) freshN[m.g]=(freshN[m.g]||0)+1; });
-  const mode = ($("#gameSort")||{}).value || "pipeline";
+  const mode = ($("#gameSort")||{}).value || "updated";
+  const dates = mode === "updated" ? gameChangeDates(CHANGES, allMechs(), MINIGAMES) : null;
   const q = (($("#gq")||{}).value || "").trim();
   const all = allGames();
-  const games = sortGames(all.filter(g=>gameMatches(g, q)), mode);
+  const games = sortGames(all.filter(g=>gameMatches(g, q)), mode, dates);
   const active = games.filter(g=>g.status==="Researching").length;
   const queued = games.filter(g=>g.status==="To Research").length;
   const scored = games.filter(g=>g.mc!=null).length;
@@ -4661,7 +4699,8 @@ function renderGames(){
     us:   `Sorted by Metacritic user score (0–10) · unscored games sink to the bottom`,
     gap:  `Sorted by how much higher USERS rate a game than critics — the cult-classic finder`,
     gf:   `Sorted by GameFAQs user rating (0–5) · ${rated}/${games.length} have their GameFAQs page harvested so far`,
-    year: `Sorted newest first`
+    year: `Sorted newest first`,
+    updated: `Sorted by last update: the newest changelog entry naming the game or one of its mechanics or minigames`
   };
   $("#gamesNote").textContent = (q ? `${games.length} of ${all.length} games match “${q}” · ` : "") + (notes[mode] || notes.pipeline);
   if(!games.length){ box.innerHTML = '<div class="empty">No game matches that search.</div>'; }
@@ -4678,7 +4717,7 @@ function renderGames(){
             <h3 class="g-title"><a href="#game=${encodeURIComponent(g.title)}" title="Open the game's page">${esc(g.title)}</a>${freshGameBadge(g.title)}</h3>
             <span>${statusSelectHTML(g)}</span>
           </div>
-          <div class="game-sub">${gameSubHTML(g, q)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}${gfRatingChip(g)}</div>
+          <div class="game-sub">${gameSubHTML(g, q)} · ${mN} mechanic${mN===1?"":"s"} logged${gN?` · ${gN} minigame${gN===1?"":"s"} cataloged`:""}${freshN[g.title]?` · <span class="g-new">${freshN[g.title]} new or updated</span>`:""}${dates && (dates.get(g.title)||{}).any ? ` · updated ${esc(dates.get(g.title).any)}` : ""}${gfRatingChip(g)}</div>
           ${scoreRowHTML(g)}
           ${gameShotsHTML(g.title)}
           <p class="game-why">${esc(g.why)}</p>

@@ -28,6 +28,26 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — What a game's "last update" means, for the Games tab's default sort
+
+**Fork:** the owner asked for the page to open on the Games tab, sorted by last update. The
+changelog records changes to rows (`added`, `updated`) and to games (`games`), but the two
+harvest entries (covers on 2026-09-07, infoboxes on 2026-09-13) name all 72 games, so a date
+alone ties most of the roster.
+
+- **A: any change, ties broken by row changes, then A–Z** *(chosen by the owner, AskUserQuestion
+  2026-09-14)*. A game's date is the newest entry naming it or one of its mechanics or minigames;
+  a tie falls to the newest row change, so research order shows through the harvest dates.
+- **B: row changes only.** Research order at full resolution, but a game whose details or cover
+  were just harvested would not read as updated.
+- **C: any change, ties A–Z.** The honest date, but about 52 games sit in one alphabetical block
+  under 2026-09-13.
+
+**Status:** B `rejected — it hides game-level updates`. C `rejected — the harvest entries tie most
+of the roster`. **Revisit hook:** `gameChangeDates` in the page's data region is the one place a
+change becomes a date, so a new kind of change (a `shots` list on an entry, say) is one more loop
+there.
+
 ## 2026-09-14 — How a duplicate row leaves under a never-renumber rule
 
 **Fork:** g006 and g081 are both Final Fantasy VI's Dragon's Neck Coliseum. g006 carries the

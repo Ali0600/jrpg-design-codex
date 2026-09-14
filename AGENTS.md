@@ -246,7 +246,13 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   persists in `localStorage` under key `jrpg_codex_v1`, merged over the base arrays at
   runtime via `store.overrides`. Export/Import backup buttons serialize this to JSON.
   IMPORTANT: base-array edits are safe; renaming/removing IDs breaks user overrides.
-- Tabs: Mechanics / Minigames / Games / **My Game** / Design Pillars / How to Use.
+- Tabs: Games / Mechanics / Minigames / **My Game** / UI Gallery / Design Pillars / How to Use.
+  The page opens on **Games** (since 2026-09-14, at the owner's request), with the What's new strip at
+  the top of its list and *Sort: last updated* as the list's default. `gameChangeDates(changes, mechs,
+  minigames)` in the data region gives each game the newest `CHANGES` entry naming it (`games`) or one
+  of its rows, and `sortByLastChange` breaks a tie on that date by the newest ROW change, then the
+  title: the cover and infobox harvest entries name every game, so the date alone ties most of the
+  roster (`scripts/facets.test.mjs`; the fork is in `docs/DECISIONS.md`).
 - **My Game tab** — the codex's output surface. Every effective `want:"Yes"` mechanic
   (plus `Maybe` behind a toggle) is placed into one of six system buckets defined by
   the `BUCKETS` const (discovery / combat / progress / venues / world / parked), each
@@ -708,7 +714,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   if present, so the validator does not need editing when they land.
 
 ## Research playbook (the system for "research <game>")
-The Games tab is a pipeline: cards sort Researching -> To Research -> Researched, each
+The Games tab is a pipeline: its research-pipeline sort orders cards Researching -> To Research -> Researched, each
 shows its mechanics/minigames coverage counts, and queued cards carry a `why` written as
 a research BRIEF (the question this game should answer). When the owner asks to research
 a game (or to work the queue):

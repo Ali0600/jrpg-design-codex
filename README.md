@@ -29,7 +29,7 @@ none, because it reads as verified.
 - **Reception scores** as colour-banded chips, sortable five ways. One sort is the
   *users-vs-critics gap*, which works as a cult-classic finder (Legend of Dragoon +13,
   Radiata Stories +9, Suikoden II +8)
-- **Research pipeline** on the Games tab: cards sort Researching → To Research →
+- **Research pipeline** on the Games tab: a sort that orders cards Researching → To Research →
   Researched. Each queued game carries a written brief for the question it should answer
 - **My Game board** — everything you mark *Yes* collects into a workspace. You place each
   item into one of six systems of the game you are designing. Each system has its own
@@ -68,10 +68,11 @@ none, because it reads as verified.
 - **UI Gallery** — captioned screenshots of the researched games' actual interfaces
   (battle HUDs, menus, minigames, field screens and world maps). Filter them by game and screen type. Each game's card
   shows thumbnails
-- **What's new** — a changelog strip on the Mechanics tab, `NEW` / `UPDATED` pills on
-  the cards themselves, a *newest changes first* sort, a "new or updated only" filter,
-  and a **Mark all as seen** button. A fresh batch of research becomes a glance rather
-  than a hunt. Clicking any ID chip jumps straight to that card
+- **What's new** — the page opens on the Games tab, with a changelog strip on top and
+  the games sorted by their last update. `NEW` / `UPDATED` pills sit on the cards
+  themselves, beside a *newest changes first* sort, a "new or updated only" filter and a
+  **Mark all as seen** button. A fresh batch of research becomes a glance rather than a
+  hunt. Clicking any ID chip jumps straight to that card
 - **Sources** — rows can carry links back to the guide or wiki page each claim came
   from. Everything a research pass found that did not fit a row lives in a per-game
   digest under [`docs/research/`](docs/research/)
@@ -192,7 +193,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 99 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  176-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  180-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
