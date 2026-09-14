@@ -4,7 +4,7 @@ Codex: `<title>` (<year>, <platform>) · GameFAQs: `/<plat>/<id>-<slug>` confirm
 digest started <date>
 
 > Facts only, in our own words. Item names and numbers may be quoted; guide prose may not.
-> Every fact carries a pointer: `[gf:<id> §<section>, <author> v<ver>]` or `[wiki:<host>/<Page>]`.
+> Every fact carries a pointer: `[gf:<id> §<section>, <author> v<ver>]`, `[wiki:<host>/<Page>]` or `[web:<host>/<path>]`.
 
 ## Sources
 

@@ -10,12 +10,15 @@
  *
  * Pointer grammar:  [gf:<faq id> §<section>, <author> v<version>]   a GameFAQs guide
  *                   [wiki:<host>/<Page Title>]                        a MediaWiki page
+ *                   [web:<host>/<path>]                               any other page (never GameFAQs)
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const POINTER = /\[gf:\d+ §[^\]\n]{1,40}(?:, [^\]\n]+)?\]|\[wiki:[a-z0-9.-]+\/[^\]\n]+\]/;
+export const POINTER = /\[gf:\d+ §[^\]\n]{1,40}(?:, [^\]\n]+)?\]|\[wiki:[a-z0-9.-]+\/[^\]\n]+\]|\[web:[a-z0-9.-]+\/[^\]\n]+\]/;
+// A GameFAQs guide is always a gf: pointer, so its Sources, Coverage and Triage bookkeeping cannot be skipped.
+const WEB_GAMEFAQS = /\[web:(?:[a-z0-9-]+\.)*gamefaqs\.gamespot\.com\//;
 const FACT_H2 = /^## (Mechanics candidates|Minigame candidates|Exploration & upgrade facts|Unverified or contradicted)\b/;
 // Only candidate blocks carry `pointers:` / `row:`; the fact sections use ### as plain grouping.
 const CAND_H2 = /^## (Mechanics candidates|Minigame candidates)\b/;
@@ -24,12 +27,12 @@ export function allPointers(s) {
   return s.match(new RegExp(POINTER.source, "g")) || [];
 }
 
-/** The source a pointer names, ignoring section/version: "gf:38095" or "wiki:host/Title". */
+/** The source a pointer names, ignoring section/version: "gf:38095", "wiki:host/Title" or "web:host/path". */
 export function pointerKey(p) {
   const g = p.match(/^\[gf:(\d+)/);
   if (g) return "gf:" + g[1];
-  const w = p.match(/^\[wiki:([^\]]+)\]$/);
-  return w ? "wiki:" + w[1] : p;
+  const w = p.match(/^\[(wiki|web):([^\]]+)\]$/);
+  return w ? w[1] + ":" + w[2] : p;
 }
 
 // The bookkeeping between a digest's Sources table, its Coverage lines and its Triage record.
@@ -120,6 +123,7 @@ export function lintDigest(md, name = "digest") {
     const n = idx + 1;
     if (/^```/.test(line)) { fence = !fence; return; }
     if (fence) return;
+    if (WEB_GAMEFAQS.test(line)) out.push(`${n}: GameFAQs is cited as [gf:<id> §<section>, <author> v<ver>], never as a web pointer`);
     if (/^## /.test(line)) { flush(); h2 = line; return; }
     if (!FACT_H2.test(h2)) return;
     if (/^### /.test(line)) {

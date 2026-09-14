@@ -14,6 +14,7 @@ and the bookkeeping below, and runs in CI.
 ```
 [gf:38095 §Power-Ups, SIMSteven v1.0]     a GameFAQs guide: id, section, author, version
 [wiki:threadsoffate.fandom.com/Power-Ups]  a MediaWiki page: host, title
+[web:www.cavesofnarshe.com/ff6/colosseum.php]  any other page: host and path (never GameFAQs, which is always gf:)
 ```
 
 Start a digest by copying [`_template.md`](_template.md) to `<game-slug>.md`.

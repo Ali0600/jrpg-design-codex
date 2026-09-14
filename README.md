@@ -14,7 +14,7 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 | | |
 |---|---|
 | **294 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
-| **103 minigames** | 76 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
+| **103 minigames** | 79 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
 
@@ -192,7 +192,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 92 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  172-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  174-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
