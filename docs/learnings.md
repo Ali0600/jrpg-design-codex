@@ -421,3 +421,18 @@ quietly completed.
 **Takeaway:** after a compaction, take every pointer, section name and number from the recorded tool
 output, never from the summary. Copy a section name from the probe's own `sec` or `head` field,
 narrow a row to what its sources actually say, and drop a claim no passage carries.
+
+## A difference of unions forgets which record said what
+Subtracting everything logged before from everything logged now cannot tell a row logged again in
+a new record from one still sitting in its old record.
+
+**Why it came up:** `check_changes.mjs` took the union of every changelog entry's `updated` list at
+the PR's base and in the working copy, and counted a row as newly logged only if the base's union
+lacked it. That correctly refused a re-edit covered by an old entry, but it also refused a row named
+again in a brand-new entry, so the 85 rows logged at least once could never be logged again. It
+surfaced when Final Fantasy XIV's three rows, logged that morning, were given a second source, and
+a probe with a next-day entry was still refused.
+
+**Takeaway:** when a gate asks "is this new since the base?", diff each record against its own
+counterpart (here each changelog entry, matched by date) rather than the pooled contents, and test
+the case where one item appears in two records.

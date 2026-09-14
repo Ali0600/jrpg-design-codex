@@ -151,3 +151,26 @@ test("a working copy with no changelog fails loudly instead of passing", () => {
   assert.doesNotThrow(() => readVersion(noLog, "base"));
   assert.deepEqual(diffChanges(noLog, page({ changes: LOGGED })).problems, []);
 });
+
+test("a row logged in an old entry can be logged again in a new one", () => {
+  // The old entry licenses nothing (the test above), but a NEW entry naming the row again must
+  // count, or a row sharpened once could never be sharpened again.
+  const base = page({ changes: LOGGED });
+  const head = page({ m117: "sharpened a second time", changes: [
+    `{date:"2026-09-07", title:"Sharpened again", added:[], updated:["M117"]}`, ...LOGGED] });
+  const { problems, newlyLogged } = diffChanges(base, head);
+  assert.deepEqual([...newlyLogged], ["M117"]);
+  assert.deepEqual(problems, []);
+});
+
+test("a row added to an entry the base already had counts as newly logged", () => {
+  // A same-day splice merges into that day's entry instead of adding a second one on the date.
+  const base = page({ changes: LOGGED });
+  const head = page({ changes: [
+    `{date:"2026-09-06", title:"Sharpened", added:[], updated:["M117","M118"]}`, LOGGED[1]] })
+    .replace('name:"Second"', 'name:"Second, sharpened"');
+  const { problems, changed, newlyLogged } = diffChanges(base, head);
+  assert.deepEqual(changed, ["M118"]);
+  assert.deepEqual([...newlyLogged], ["M118"]);
+  assert.deepEqual(problems, []);
+});
