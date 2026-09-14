@@ -101,6 +101,22 @@ test("every GameFAQs source must appear in the triage table", () => {
   assert.ok(hit(p, /22222.*Triage/), p.join("\n"));
 });
 
+test("a page that is neither a guide nor a wiki is cited with a web pointer, and counts as a source", () => {
+  const body = [
+    "## Minigame candidates", "",
+    "### Lantern race",
+    "pointers: [wiki:lanternvale.fandom.com/Race] [web:www.lanternvale.net/race.php?lap=2]",
+    "row: g+1",
+    "- A race prize [web:www.lanternvale.net/race.php?lap=2]", "",
+  ];
+  assert.deepEqual(lint({ body }), []);
+});
+
+test("GameFAQs is never cited through a web pointer", () => {
+  const p = lint({ body: [...BODY, "- A guide fact [web:gamefaqs.gamespot.com/ps/1-lantern-vale/faqs/11111]", ""] });
+  assert.ok(hit(p, /GameFAQs.*\[gf:/), p.join("\n"));
+});
+
 test("the committed digests and the template lint clean", () => {
   const { files, problems } = lintDir(join(ROOT, "docs", "research"));
   assert.ok(files.includes("_template.md") && files.length >= 8, files.join(", "));

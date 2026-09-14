@@ -470,7 +470,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   reference only; with direct file access, edit the arrays in place instead.
 - `scripts/gf_probe.js` is the GameFAQs in-page probe (see the Research playbook, step
   2b, and `docs/research/README.md`); `scripts/digest_lint.mjs` enforces the pointer
-  grammar on `docs/research/*.md` and the bookkeeping between a digest's Sources table, Coverage
+  grammar on `docs/research/*.md` (`gf:` for a GameFAQs guide, `wiki:` for a MediaWiki page,
+  `web:` for any other site, never GameFAQs) and the bookkeeping between a digest's Sources table, Coverage
   lines and Triage record, each rule applied from the digest's own start date
   (`scripts/digest_lint.test.mjs`). It runs in CI since 2026-09-14; before that the docs said it did
   and no step ran it. `__gf.visited()` reports what a session actually READ
@@ -811,8 +812,9 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    query grammar on the Mechanics and Minigames tabs, related games on the game page, then the
    two research directions below.
 2. **Backfill the reward tables** (Section F, under way). 45 minigame rows had no `rt`, all
-   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight, Final Fantasy X's five and
-   Final Fantasy XV's five were tabled and sourced on 2026-09-14, leaving 27 — the oldest research, written before
+   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight, Final Fantasy X's five,
+   Final Fantasy XV's five and Final Fantasy VI's four were sourced on 2026-09-14, leaving 24
+   without a table (FF6's opera, g005, was researched and pays no prize) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
 3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
