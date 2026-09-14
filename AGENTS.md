@@ -429,8 +429,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
+  **41 of 294 mechanics and 59 of 103 minigames carry `refs`**, and every row without them
+  predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
-  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, seven carry `digest`)
+  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 23 carry `digest`)
   — `gf`, `cover`, `wp`, `wd`, `infobox`, `wpcats` and `digest` on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
   written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
   writer replace a line and copy every other line of the row byte for byte. `gf` is the
@@ -672,12 +674,14 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   two names; every entry and spelling used by some game; every table one `FACET_TABLE` reads,
   and the two closed tables present); and
   **the counts
-  quoted in CLAUDE.md AND README.md match the data**, with AGENTS.md byte-identical to
-  CLAUDE.md. The last two
+  quoted in CLAUDE.md AND README.md match the data** (among them every copy of the
+  whole-array id ranges, the gallery, `refs` and `digest` coverage, and README's
+  offline-suite case count, counted from the files on the workflow's `node --test` line),
+  with AGENTS.md byte-identical to CLAUDE.md. The last two
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **92** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **99** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -831,7 +835,9 @@ Standing, not yet scheduled:
 - Deferred in `docs/DECISIONS.md`: dual scores (original + best remaster);
   user-defined My Game buckets; private repo + Cloudflare Pages.
 
-Known doc-rot risks with no gate behind them (candidates for a DOC_SABOTAGE):
-the M/g id range quoted above and README's offline-suite case count — the validator
-gates the mechanics/minigames/games/reward-table figures, the verb-tag count and the
-sabotage count in this file and README.md, and nothing else.
+Figures in this file with no gate behind them (candidates for a DOC_SABOTAGE): the
+Metacritic coverage (63/72 critic, 67/72 user), the 158 GameFAQs-suggested titles and the
+per-batch id ranges in "Current contents". Across this file and README.md the validator
+gates the mechanics, minigames, games, reward-table, verb-tag, lineage and sabotage counts,
+every copy of the whole-array id ranges, the gallery, `refs` and `digest` coverage, and
+README's offline-suite case count.
