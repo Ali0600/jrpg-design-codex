@@ -41,6 +41,12 @@ ALLOWED_IMAGE_HOST_RE = re.compile(
     r"|^mario\.wiki\.gallery$|(^|\.)wikibound\.info$", re.IGNORECASE
 )
 
+# The hosts this script may call: wiki_fetch.py's research allowlist plus English Wikipedia,
+# whose game articles carry fair-use gameplay screenshots. Wikipedia became the gallery's source
+# when Fandom's image CDN began refusing every script download (2026-09-14, docs/DECISIONS.md).
+# It is accepted here only, so research reads through wiki_fetch.py stay on the wikis.
+SHOT_HOST_RE = re.compile(ALLOWED_HOST_RE.pattern + r"|^en\.wikipedia\.org$", re.IGNORECASE)
+
 PNG = b"\x89PNG\r\n\x1a\n"
 JPG = b"\xff\xd8\xff"
 
@@ -50,8 +56,8 @@ def die(msg):
 
 
 def api_get(host, params):
-    if not ALLOWED_HOST_RE.match(host):
-        die(f"refusing host {host!r}: not on the wiki allowlist (see wiki_fetch.py)")
+    if not SHOT_HOST_RE.match(host):
+        die(f"refusing host {host!r}: not on the screenshot host allowlist (SHOT_HOST_RE)")
     url = api_base(host) + "?" + urllib.parse.urlencode({**params, "format": "json"})
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
@@ -142,6 +148,16 @@ def post_process(blob, out_base):
         os.unlink(tmp)
 
 
+def ledger_with(text, line):
+    """The ledger with one provenance line added to its list of files. The list ends where the
+    first `## ` section begins (the games that yielded nothing), so a plain append would file
+    the line under that heading."""
+    at = text.find("\n## ")
+    if at < 0:
+        return text + line
+    return text[:at].rstrip("\n") + "\n" + line + "\n" + text[at + 1:]
+
+
 def record_source(out_path, host, page, file_title):
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     ledger = os.path.join(root, "shots", "SOURCES.md")
@@ -154,11 +170,50 @@ def record_source(out_path, host, page, file_title):
                     "resolution for design study and commentary.\n\n")
     rel = os.path.relpath(out_path, root)
     page_url = f"https://{host}/wiki/{urllib.parse.quote(page.replace(' ', '_'))}"
-    with open(ledger, "a", encoding="utf-8") as f:
-        f.write(f"- `{rel}` — [{page}]({page_url}) ({file_title}, {host})\n")
+    with open(ledger, encoding="utf-8") as f:
+        text = f.read()
+    with open(ledger, "w", encoding="utf-8") as f:
+        f.write(ledger_with(text, f"- `{rel}` — [{page}]({page_url}) ({file_title}, {host})\n"))
+
+
+def selftest():
+    """The guards between an untrusted response and the repo, proven offline."""
+    failed = []
+    def check(name, ok):
+        print(f"  {'ok  ' if ok else 'FAIL'} {name}")
+        if not ok:
+            failed.append(name)
+    def refused(fn):
+        try:
+            fn()
+        except SystemExit:
+            return True
+        return False
+    check("calls en.wikipedia.org", bool(SHOT_HOST_RE.match("en.wikipedia.org")))
+    check("calls a Fandom wiki", bool(SHOT_HOST_RE.match("finalfantasy.fandom.com")))
+    check("refuses a host that only starts with en.wikipedia.org", not SHOT_HOST_RE.match("en.wikipedia.org.evil.example"))
+    check("refuses another language's Wikipedia", not SHOT_HOST_RE.match("fr.wikipedia.org"))
+    check("wiki_fetch.py's research allowlist still refuses Wikipedia", not ALLOWED_HOST_RE.match("en.wikipedia.org"))
+    for host in ["upload.wikimedia.org", "static.wikia.nocookie.net", "mario.wiki.gallery", "cdn.wikibound.info"]:
+        check(f"takes image bytes from {host}", bool(ALLOWED_IMAGE_HOST_RE.search(host)))
+    for host in ["evilwikimedia.org", "upload.wikimedia.org.evil.example", "example.com"]:
+        check(f"refuses image bytes from {host}", not ALLOWED_IMAGE_HOST_RE.search(host))
+    check("knows PNG bytes", magic_ext(PNG + b"rest") == "png")
+    check("knows JPEG bytes", magic_ext(JPG + b"rest") == "jpg")
+    check("knows WebP under any name", magic_ext(b"RIFF\x00\x00\x00\x00WEBPVP8 ") == "webp")
+    check("refuses an HTML error page", refused(lambda: magic_ext(b"<!doctype html><title>403</title>")))
+    check("refuses a download host off the list", refused(lambda: download("https://example.com/shot.png")))
+    check("a ledger with no sections gains the line at its end",
+          ledger_with("# S\n\n- a\n", "- b\n") == "# S\n\n- a\n- b\n")
+    check("a ledger with a section gains the line before it, not under it",
+          ledger_with("# S\n\n- a\n\n## No yield\nx\n", "- b\n") == "# S\n\n- a\n- b\n\n## No yield\nx\n")
+    print(f"selftest: {len(failed)} failed" if failed else "selftest: all guards hold")
+    sys.exit(1 if failed else 0)
 
 
 def main():
+    if "--selftest" in sys.argv[1:]:
+        selftest()
     ap = argparse.ArgumentParser()
     ap.add_argument("--list", nargs=2, metavar=("HOST", "PAGE"))
     ap.add_argument("--get", nargs=2, metavar=("HOST", "FILE_TITLE"))
