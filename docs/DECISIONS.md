@@ -76,7 +76,7 @@ sourced reward table; g081, the July copy, has no sources and a four-row table o
 Ids are the join key for the owner's saved favourites and pinned videos, so a row cannot simply
 vanish or be reused.
 
-- **A: retire g081 into g006** *(chosen by the owner, AskUserQuestion 2026-09-14; not yet built)*.
+- **A: retire g081 into g006** *(chosen by the owner, AskUserQuestion 2026-09-14; built 2026-09-15)*.
   g081's lesson folds into g006, a `RETIRED` map names g081 → g006 so the gap is deliberate and
   the id never returns, a load-time migration moves a favourite or pinned video to g006, and the
   validator and `check_changes.mjs` learn that a row may leave only through the map.

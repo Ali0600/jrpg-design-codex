@@ -53,6 +53,7 @@ export function readVersion(html, which) {
   const data = new Function(
     src + "; return {BASE_MECHS, MINIGAMES," +
     " CHANGES: typeof CHANGES === 'undefined' ? null : CHANGES," +
+    " RETIRED: typeof RETIRED === 'undefined' ? null : RETIRED," +
     " expandIds: typeof expandIds === 'undefined' ? null : expandIds};"
   )();
   const rows = new Map();
@@ -62,18 +63,20 @@ export function readVersion(html, which) {
 
   // Each entry's `updated` ids, keyed by its date: the validator holds dates unique and
   // strictly decreasing, so the date names the entry.
-  const updated = new Set(), updatedByDate = new Map();
+  const updated = new Set(), updatedByDate = new Map(), retiredByDate = new Map();
   if (data.CHANGES && data.expandIds) {
     for (const c of data.CHANGES) {
       const ids = updatedByDate.get(c.date) ?? new Set();
       updatedByDate.set(c.date, ids);
       // A malformed range is the validator's error to report, not this one's.
       try { data.expandIds(c.updated).forEach(id => { updated.add(id); ids.add(id); }); } catch { /* ignore */ }
+      if (Array.isArray(c.retired)) retiredByDate.set(c.date, new Set(c.retired.map(String)));
     }
   } else if (which === "head") {
     throw new Error("the working copy has no CHANGES / expandIds — the changelog is gone");
   }
-  return { rows, updated, updatedByDate };
+  const retired = data.RETIRED && typeof data.RETIRED === "object" ? data.RETIRED : {};
+  return { rows, updated, updatedByDate, retired, retiredByDate };
 }
 
 /**
@@ -110,7 +113,23 @@ export function diffChanges(baseHtml, headHtml) {
   for (const id of newlyLogged) {
     if (!head.rows.has(id)) problems.push(`CHANGES logs ${id} as updated, but no such row exists`);
   }
-  return { problems, changed, newlyLogged };
+
+  // A row leaves the file only through RETIRED, logged in a NEW entry's `retired` list: the
+  // owner's favourites and notes are keyed on the id, and a silent deletion orphans them.
+  const newlyRetired = new Set();
+  for (const [date, ids] of head.retiredByDate) {
+    const had = base.retiredByDate.get(date) ?? new Set();
+    for (const id of ids) if (!had.has(id)) newlyRetired.add(id);
+  }
+  const deleted = [...base.rows.keys()].filter(id => !head.rows.has(id)).sort();
+  for (const id of deleted) {
+    if (!Object.prototype.hasOwnProperty.call(head.retired, id)) {
+      problems.push(`${id} was deleted but RETIRED does not name it — a row leaves only by being retired into the row that absorbed it`);
+    } else if (!newlyRetired.has(id)) {
+      problems.push(`${id} was retired but no NEW CHANGES entry lists it in \`retired\``);
+    }
+  }
+  return { problems, changed, newlyLogged, deleted };
 }
 
 // ---------------------------------------------------------------------- main
@@ -131,11 +150,12 @@ function main(argv) {
     return;
   }
   const headHtml = readFileSync(join(ROOT, CODEX), "utf8");
-  const { problems, changed, newlyLogged } = diffChanges(baseHtml, headHtml);
+  const { problems, changed, newlyLogged, deleted } = diffChanges(baseHtml, headHtml);
 
   console.log(`${changed.length} row${changed.length === 1 ? "" : "s"} rewritten since ${rev}` +
               (changed.length ? `: ${changed.join(", ")}` : "") +
-              ` · ${newlyLogged.size} newly logged as updated`);
+              ` · ${newlyLogged.size} newly logged as updated` +
+              (deleted.length ? ` · left the file: ${deleted.join(", ")}` : ""));
   if (problems.length) {
     console.error(`\n${problems.length} problem${problems.length === 1 ? "" : "s"}:`);
     for (const p of problems) console.error(`  - ${p}`);

@@ -15,8 +15,8 @@ import { extractScript, extractData } from "./validate_codex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
-const { PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally } =
-  new Function(extractData(extractScript(HTML)) + "; return {PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally};")();
+const { PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired } =
+  new Function(extractData(extractScript(HTML)) + "; return {PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired};")();
 
 // ---------------------------------------------------------------- pillar coverage
 
@@ -97,4 +97,63 @@ test("sorted by games, then mechanics, then name", () => {
   const t = creditTally(mechs("S1", "S2", "S3", "S4", "S4", "S4", "S4", "S4"), byTitle(S));
   assert.deepEqual(t.names.map(n => `${n.v} ${n.games.length}g ${n.mechs}m`),
     ["Composer C 3g 3m", "Writer V 2g 6m", "Designer P 2g 2m", "Designer Q 2g 2m"]);
+});
+
+// ---------------------------------------------------------------- saved data follows a retired id
+
+// A synthetic map, so these tests pin the migration's rules rather than today's one retirement.
+const MAP = { g081: "g006", M300: "M200" };
+const blank = () => ({ overrides: {}, minigameFavs: {}, myGame: { assign: {}, notes: {}, pillars: {} }, seen: "" });
+const PIN_A = "https://www.youtube.com/watch?v=aaaaaaaaaaa", PIN_B = "https://www.youtube.com/watch?v=bbbbbbbbbbb";
+
+test("a favourite, a pinned video, a board placement and a pillar judgement follow a retired id", () => {
+  const s = blank();
+  s.minigameFavs.g081 = true;
+  s.overrides.g081 = { yt: PIN_A };
+  s.myGame.assign.M300 = "discovery";
+  s.myGame.pillars.M300 = [1, 3];
+  migrateRetired(s, MAP);
+  assert.deepEqual(s.minigameFavs, { g006: true });
+  assert.deepEqual(s.overrides, { g006: { yt: PIN_A } });
+  assert.deepEqual(s.myGame.assign, { M200: "discovery" });
+  assert.deepEqual(s.myGame.pillars, { M200: [1, 3] });
+});
+
+test("the successor's own saved data wins, and the retired id's fills only its gaps", () => {
+  const s = blank();
+  s.overrides = { M300: { rating: 4, notes: "old notes" }, M200: { rating: 2 }, g081: { yt: PIN_A }, g006: { yt: PIN_B } };
+  s.myGame.assign = { M300: "combat", M200: "parked" };
+  s.myGame.pillars = { M300: [2], M200: [] };
+  migrateRetired(s, MAP);
+  assert.deepEqual(s.overrides, { M200: { rating: 2, notes: "old notes" }, g006: { yt: PIN_B } });
+  assert.deepEqual(s.myGame.assign, { M200: "parked" });
+  assert.deepEqual(s.myGame.pillars, { M200: [] }, "an empty judgement is still the successor's judgement");
+});
+
+test("running the migration twice changes nothing, and unrelated keys are untouched", () => {
+  const s = blank();
+  s.minigameFavs = { g081: true, g010: true };
+  s.overrides = { g010: { yt: PIN_B } };
+  s.seen = "2026-09-14";
+  migrateRetired(s, MAP);
+  const once = JSON.stringify(s);
+  migrateRetired(s, MAP);
+  assert.equal(JSON.stringify(s), once);
+  assert.deepEqual(s.minigameFavs, { g010: true, g006: true });
+  assert.deepEqual(s.overrides, { g010: { yt: PIN_B } });
+  assert.equal(s.seen, "2026-09-14");
+});
+
+test("a store with no retired keys, an older store without a board, or no map, never throws", () => {
+  assert.deepEqual(migrateRetired(blank(), MAP), blank());
+  assert.doesNotThrow(() => migrateRetired({ overrides: {}, minigameFavs: {} }, MAP));
+  assert.deepEqual(migrateRetired(blank(), undefined), blank());
+});
+
+test("the page's normalizeStore runs the migration on every load and import", () => {
+  // normalizeStore sits past the data region, so its call is pinned in the source; the browser
+  // check drives it for real.
+  const body = HTML.match(/\nfunction normalizeStore\(s\)\{([\s\S]*?)\n\}/);
+  assert.ok(body, "normalizeStore found");
+  assert.match(body[1], /\n  migrateRetired\(s, RETIRED\);\n  return s;$/, "the migration runs after every default, just before the return");
 });

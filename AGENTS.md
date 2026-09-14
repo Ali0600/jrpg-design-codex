@@ -179,10 +179,10 @@ backup; the HTML file is the source of truth and is more up to date.
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
   its Wikidata id (`wd`). The same day's audit of unused research data offered three more
   options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
-- **103 minigames** (`MINIGAMES` array, g001-g103): the Final Fantasy series (g001-g054)
+- **102 minigames** (`MINIGAMES` array, g001-g103; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
-  (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
-  sims), each with a highlighted Rewards field and a
+  (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
+  sims; FF6's Colosseum, g081, was a copy of g006 and is retired), each with a highlighted Rewards field and a
   design lesson. The 9 substantive FFIX entries (g027-g035) and the 13 PS1-batch entries
   carry concrete `rt` reward tables — the exemplar standard for future minigame research.
   As of 2026-07-20 the FFIX entries were verified row-by-row directly against the Final
@@ -236,7 +236,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M294, minigames g001-g103. Continue the
+  - IDs are sequential: mechanics M001-M294, minigames g001-g103, skipping a retired id. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -350,6 +350,16 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `games:["<title>",…]` for game-LEVEL changes (details harvested, a cover added) — ids
   cannot name a game row — and every entry must name at least one row or game: an empty
   entry at the top would silently move that first-visit baseline past the real batch.
+- **`RETIRED`** (added 2026-09-15) — the only way a row leaves the file. `{g081:"g006"}` in the
+  data region maps an id to the row that absorbed it: FF6's Dragon's Neck Coliseum had two cards,
+  and g081's lesson went into g006. A retired id is never reused. `migrateRetired(s, RETIRED)`,
+  called by `normalizeStore` on every load and import, moves a favourite, a board placement or a
+  pillar judgement to the successor unless it has its own, fills the successor's override gaps (a
+  pinned video, a rating, notes) and deletes the retired key; it is a frozen migration that reads
+  only the map (`scripts/mygame.test.mjs`). The entry that retires an id lists it in `retired`.
+  The validator skips a retired id in the sequence and refuses a retired id that still has a row,
+  a successor with no row and a retired id no entry lists; `scripts/check_changes.mjs` refuses a
+  deleted row `RETIRED` does not name, and a retirement no NEW entry lists.
 - **The game page** (added 2026-09-07) — `#gamePage`, a sibling of `#gamesList` inside the
   Games view, rendered by `renderGamePage(title)`: cover, GameFAQs details and ratings,
   the brief, every mechanic and minigame as compact `.gp-row` buttons (never full
@@ -446,7 +456,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **41 of 294 mechanics and 59 of 103 minigames carry `refs`**, and every row without them
+  **41 of 294 mechanics and 59 of 102 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
   `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 23 carry `digest`)
@@ -702,7 +712,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **99** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **103** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
