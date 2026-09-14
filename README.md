@@ -66,7 +66,7 @@ none, because it reads as verified.
   how many codex games point at each. One click on *Queue it* adds a game to your
   research queue
 - **UI Gallery** — captioned screenshots of the researched games' actual interfaces
-  (battle HUDs, menus, minigames). Filter them by game and screen type. Each game's card
+  (battle HUDs, menus, minigames, field screens and world maps). Filter them by game and screen type. Each game's card
   shows thumbnails
 - **What's new** — a changelog strip on the Mechanics tab, `NEW` / `UPDATED` pills on
   the cards themselves, a *newest changes first* sort, a "new or updated only" filter,

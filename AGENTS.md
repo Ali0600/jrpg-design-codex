@@ -303,6 +303,11 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   to ≤960px JPEG, and appends provenance to `shots/SOURCES.md`. CURATE VISUALLY: view
   every candidate before keeping it — wiki pages are mostly character art, and one
   "battle screenshot" turned out to be a scanned strategy-guide page.
+  **Since 2026-09-14 the source is English Wikipedia** (`--list en.wikipedia.org "<article>"`).
+  Fandom's image CDN refuses every script download with a Cloudflare 403, so the script's
+  `SHOT_HOST_RE` adds `en.wikipedia.org` to `wiki_fetch.py`'s allowlist for this script only.
+  Wikipedia's game articles carry small fair-use gameplay screenshots, about 300×250, which stay
+  PNG. `--selftest` proves the host and byte guards in CI; the fork is in `docs/DECISIONS.md`.
 - Minigame videos: base rows never hardcode a video id (they rot). The owner can pin
   a specific URL per minigame, stored in `store.overrides[gID].yt` and validated by
   `cleanYt()` — https + a real YouTube host + an actual video id, so a stray paste
@@ -833,8 +838,8 @@ Standing, not yet scheduled:
   GameFAQs-suggested titles with a Queue-it button, but nothing is rostered, and the
   leaders include remakes and siblings of games already researched (Persona 5 vs
   Persona 5 Royal), so this needs curation, not a mechanical top-5.
-- Grow the UI Gallery: 10 of 72 games have a screenshot, and the declared `Field` and
-  `Map` shot types have ZERO rows.
+- Grow the UI Gallery: 21 of 72 games have a screenshot. The pass from Wikipedia began on
+  2026-09-14, and the `Field` and `Map` shot types have their first rows.
 - Two open research threads: a third way to cue timing; a sibling for KH2's
   "transformations that pay permanent traversal".
 - Deferred in `docs/DECISIONS.md`: dual scores (original + best remaster);

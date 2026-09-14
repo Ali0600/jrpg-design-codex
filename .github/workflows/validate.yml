@@ -50,6 +50,10 @@ jobs:
       - name: Cover guards
         run: node scripts/fetch_covers.mjs --selftest
 
+      # Offline: the screenshot fetcher's host and byte guards, no network calls.
+      - name: Screenshot guards
+        run: python3 scripts/fetch_ui_shots.py --selftest
+
       # A row EDITED in place changes nothing the structural validator can measure, so
       # the app would keep showing it with its original date and the owner's review would
       # miss the edit. This compares against the base revision and requires the edit to be

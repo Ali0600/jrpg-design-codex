@@ -28,6 +28,30 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — Where the UI Gallery's screenshots come from, now that Fandom blocks scripts
+
+**Fork:** `scripts/fetch_ui_shots.py` took every gallery image from a game's Fandom wiki. On
+2026-09-14 Fandom's image CDN (`static.wikia.nocookie.net`) answered every script download with a
+Cloudflare 403, for the full file and the thumbnail, with the helper's user agent and a browser's,
+including a file the pipeline fetched on 2026-08-29. A retry twelve minutes later was refused the
+same way. The wiki API still answers, so research reads are unaffected, and the Mario wiki's and
+WikiBound's CDNs still serve images. Most of the 62 games without a screenshot are Fandom-only.
+
+- **A: Wikipedia only** *(chosen by the owner, AskUserQuestion 2026-09-14)*. The screenshot
+  fetcher accepts `en.wikipedia.org`, whose game articles carry small fair-use gameplay
+  screenshots (about 300×250) served from `upload.wikimedia.org`. That is the same source and
+  licence basis as the covers. It gives about one shot per game, mostly battle screens.
+- **B: Wikipedia now, Fandom later**: the same baseline, plus a retry of Fandom's CDN on later days
+  for its larger, typed shots.
+- **C: Wait for Fandom**: land the three non-Fandom shots, and resume only if the CDN reopens.
+- **D: Stop at three shots.**
+
+**Status:** B `rejected — the owner chose not to wait on Fandom`. C `rejected — an indefinite
+wait on a block with no known end`. D `rejected — leaves 59 games without a screenshot`.
+**Revisit hook:** `fetch_ui_shots.py` still accepts `wikia.nocookie.net` image bytes, so if a
+later need for larger shots arises and the CDN answers a single request with 200, a pass can add
+them beside the Wikipedia ones.
+
 ## 2026-09-14 — Where a minigame-only title's research digest is claimed
 
 **Fork:** eight Final Fantasy titles own minigame rows but no roster row, so nothing can carry
