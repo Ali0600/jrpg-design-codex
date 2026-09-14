@@ -492,7 +492,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   grammar on `docs/research/*.md` (`gf:` for a GameFAQs guide, `wiki:` for a MediaWiki page,
   `web:` for any other site, never GameFAQs) and the bookkeeping between a digest's Sources table, Coverage
   lines and Triage record, each rule applied from the digest's own start date
-  (`scripts/digest_lint.test.mjs`). It runs in CI since 2026-09-14; before that the docs said it did
+  (`scripts/digest_lint.test.mjs`). From 2026-09-15 that includes a `flags` column in the Triage
+  table and a `read` decision on the Full Game Guide the probe's own `core.pick` chooses from it,
+  which the linter imports rather than restating. It runs in CI since 2026-09-14; before that the docs said it did
   and no step ran it. `__gf.visited()` reports what a session actually READ
   of a guide — the probe indexes every line, but only what returns through a tool result
   reaches the agent, so each digest carries a Coverage line naming the biggest sections
@@ -753,10 +755,14 @@ a game (or to work the queue):
    even with a browser UA; no API). Read it in the **Browser pane** with
    `scripts/gf_probe.js` evaluated in the page, following the runbook in
    `docs/research/README.md`: search → confirm platform+year against BASE_GAMES →
-   `triage()` → per guide `meta()` → `toc({min:800})` → PILLAR `grep`s → ≤4 `section()`
+   `triage()` and `pick()` → per guide `meta()` → `toc({min:800})` → PILLAR `grep`s → ≤4 `section()`
    reads, ~12 pages per game. The whole guide listing goes in the digest's
    `## Triage` table first (every Full Game Guide and In-Depth Guide with its decision: read, grep
-   only, or skipped and why), which the linter holds to the Sources table. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
+   only, or skipped and why, and its flags), which the linter holds to the Sources table.
+   **The Full Game Guide `pick()` names is always read** (owner, 2026-09-14): the one flagged Most
+   Recommended, unless its listing row carries the `HTML` flair (a formatted, paginated guide); then
+   the largest plain-text Highest Rated one; then the largest plain-text one. The flag is the flair's
+   TEXT, because GameFAQs styles every flaired guide with the same `rec` class. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
    every one with a `[gf:<id> §<section>, <author> v<ver>]` pointer; that digest is the
    committed staging file. Never `get_page_text` on gamefaqs (14KB of consent text),
    never curl it or reuse its cookie, never store guide text. Stop on

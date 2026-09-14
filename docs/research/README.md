@@ -65,17 +65,26 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    field and refuses any label it has not seen. The platform-and-year rule applies to this
    page too: a port or remake page carries the wrong release line, and the splicer says so.
 2. **Triage the guides.** Navigate to `<game url>/faqs`, re-eval the probe (the page reset
-   it), `__gf.triage()`. Take the top three; keep the full walkthroughs for `grep` only.
+   it), `__gf.triage()` and `__gf.pick()`. **`pick()` names the Full Game Guide this pass reads**
+   (the owner's rule, 2026-09-14): the one GameFAQs flags *Most Recommended*, unless its listing
+   row carries the `HTML` flair (a formatted guide, split over pages); then the largest plain-text
+   guide flagged *Highest Rated*; then the largest plain-text one. No plain-text Full Game Guide
+   means no pick, and the summary line says so. Of the other guides take the top three by score;
+   the other walkthroughs stay `grep` only. The flag comes from the flair's TEXT: GameFAQs gives
+   every flaired guide the `rec` class, so the class cannot tell Most Recommended from Highest Rated.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
    translations out, `toc first` on anything over 200KB.
    **Record the whole listing in the digest's `## Triage` table before reading anything**: every
-   guide under *Full Game Guides* and *In-Depth Guides*, with its KB, score and a decision (`read`,
-   `grep only`, or `skipped — <why>`), plus one summary line counting the guides under other
-   headings. That table is what answers "which guides did this pass ingest?" without re-opening the
-   site. If `triage()` reports `dropped`, the listing was cut by the size cap: say so in the summary
-   line. The linter holds the table to the Sources table both ways (a guide read or grepped has a
-   Sources row, and every GameFAQs source is in the table); a digest that used no GameFAQs guide
-   writes a line starting "No GameFAQs guide used" instead.
+   guide under *Full Game Guides* and *In-Depth Guides*, with its KB, score, a decision (`read`,
+   `grep only`, or `skipped — <why>`) and its flags as the listing prints them (`Most Recommended`,
+   `Highest Rated`, `HTML`, joined by ` · `, or `—`), plus one summary line counting the guides
+   under other headings. That table is what answers "which guides did this pass ingest?" without
+   re-opening the site. If `triage()` reports `dropped`, the listing was cut by the size cap: say
+   so in the summary line (`pick()` reads the uncapped listing). The linter holds the table to the
+   Sources table both ways (a guide read or grepped has a Sources row, and every GameFAQs source is
+   in the table), and from 2026-09-15 it requires the flags column and runs the probe's own `pick()`
+   over it, so the guide it names must say `read`; a digest that used no GameFAQs guide writes a
+   line starting "No GameFAQs guide used" instead.
 3. **Read one guide.** Check `__gf.meta().pages` FIRST: a formatted guide is split across
    pages (The Witcher 3's walkthrough is 19 of them) and every other number describes only
    the page you are on. Move with `?page=N`, zero-based. Then, in this order: `__gf.meta()` →
@@ -87,6 +96,9 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    through a tool result reaches the agent — the Coverage line is what stops "we harvested
    this guide" from meaning more than it does, and tells the next pass where to start.
    Budget: about 60KB of context per guide, about twelve pages per game per session.
+   The picked walkthrough is usually 400KB to 1.6MB of plain text: never `section()` it blind.
+   Run `toc({min:800})`, the five greps and the nouns of the game's own rows (its minigames,
+   shops and collectibles), then read at most four sections.
    If `__gf.page().kind` is `"challenge"`, **stop** — never loop. The fallback is the owner's
    real Chrome (`claude-in-chrome`) with the same probe text.
 4. **Write the digest as facts land** — not at the end. A lost session then costs a page,
@@ -117,7 +129,7 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
 | Section | Maps onto |
 |---|---|
 | `## Sources` | the guides read — id, title, author, version, updated, category, KB, URL — plus a **Coverage** line per guide, from `__gf.visited()` |
-| `## Triage` | every guide listed under Full Game Guides and In-Depth Guides, with its score and decision (read, grep only, skipped — why): which guides the pass ingested |
+| `## Triage` | every guide listed under Full Game Guides and In-Depth Guides, with its score, decision (read, grep only, skipped — why) and flags (Most Recommended, Highest Rated, HTML): which guides the pass ingested, and that it read the Full Game Guide `pick()` names |
 | `## Mechanics candidates` | one `###` per candidate: `cat`, `how`, `loop`, `notes`, `verbs`, `pointers`, `row` — after the splice, each tagged row and each row in a discovery category also needs its entry in `docs/verbs.md` (the validator names any that are missing) |
 | `## Minigame candidates` | one `###` per candidate: `p`, `r`, `l`, `pointers`, `row`, and an `rt` table with a `src` column |
 | `## Exploration & upgrade facts` | bullets under `### Hidden`, `### Upgrades`, `### Shops & exchange` — the pillar's raw material |

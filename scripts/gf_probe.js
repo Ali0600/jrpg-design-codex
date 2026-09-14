@@ -192,7 +192,7 @@
     var id = (it.href || "").match(/\/(faqs|map)\/(\d+)/);
     return { id: id ? id[2] : "", kind: id && id[1] === "map" ? "map" : "text", title: it.title || "",
              author: it.author || "", cat: it.cat || "", ver: v ? v[1] : "", kb: kb ? +kb[1] : 0,
-             year: y ? +y[1] : 0, date: it.date || "", rec: !!it.rec, flags: it.flags || [], url: it.href || "" };
+             year: y ? +y[1] : 0, date: it.date || "", rec: !!it.rec, flags: it.flags || [], html: !!it.html, url: it.href || "" };
   };
 
   var TITLE_HI = /item|equip|weapon|armou?r|accessor|secret|side[- ]?quest|mini[- ]?game|shop|synth|alchem|craft|power[- ]?up|upgrade|collect|treasure|chest|100%|completion|hidden|unlock|abilit|skill|\bcard|fishing|arena|casino|reward/ig;
@@ -215,11 +215,32 @@
       if (g.kb >= 20) { s += 1; why.push("size +1"); }
       if (g.kb && g.kb < 8) why.push("thin");
       if (g.kb >= 200) why.push("toc first, never section() blind");
-      if (g.rec || (g.flags || []).some(function (f) { return /highest rated/i.test(f); })) { s += 1; why.push("recommended +1"); }
+      var mr = flagged(g, /^most recommended$/i), hr = flagged(g, /^highest rated$/i);
+      if (g.rec || mr || hr) { s += 1; why.push((mr ? "most recommended" : hr ? "highest rated" : "recommended") + " +1"); }
+      if (g.html) why.push("html, paginated");
       var row = { score: s, why: why.join(", ") };
       for (var k in g) if (Object.prototype.hasOwnProperty.call(g, k)) row[k] = g[k];
       return row;
     }).sort(function (a, b) { return b.score - a.score || b.kb - a.kb; });
+  };
+
+  // The flair TEXT, never the `rec` class: GameFAQs styles every flaired guide `rec`.
+  function flagged(g, re) { return (g.flags || []).some(function (f) { return re.test(String(f).trim()); }); }
+
+  // The Full Game Guide a pass READS (runbook step 2): the one flagged Most Recommended unless
+  // it is HTML (formatted, paginated); else the largest plain Highest Rated one; else the
+  // largest plain one. Ties go to listing order. digest_lint.mjs runs this over a Triage table.
+  core.pick = function (guides) {
+    var full = (guides || []).filter(function (g) { return /^full game guides$/i.test(String(g.cat || "").trim()); });
+    var plain = full.filter(function (g) { return !g.html; });
+    var big = function (list) { return list.reduce(function (a, g) { return a && (a.kb || 0) >= (g.kb || 0) ? a : g; }, null); };
+    var star = plain.filter(function (g) { return flagged(g, /^most recommended$/i); })[0];
+    if (star) return { pick: star, why: "most recommended" };
+    var was = full.some(function (g) { return flagged(g, /^most recommended$/i); }) ? "the Most Recommended one is HTML; " : "";
+    var rated = plain.filter(function (g) { return flagged(g, /^highest rated$/i); });
+    if (rated.length) return { pick: big(rated), why: was + "highest rated, largest" };
+    if (plain.length) return { pick: big(plain), why: was + "largest plain text" };
+    return { pick: null, why: full.length ? "every Full Game Guide is HTML" : "no Full Game Guides" };
   };
 
   /* ============================================================== DOM layer */
@@ -270,7 +291,7 @@
       return { kind: kind, url: href(), title: title, page: pg.page, pages: pg.pages };
     };
 
-    api.guides = function () {
+    function allGuides() {
       var cat = "", rows = [];
       qa("h2, h3, h4, ol.gf_guides > li").forEach(function (el) {
         if (/^H[234]$/i.test(String(el.tagName))) { cat = txt(el); return; }
@@ -282,10 +303,22 @@
           title: txt(a), href: a.getAttribute("href") || "", author: txt(el.querySelector("a.link_color")),
           meta: txt(meta), rec: !!(meta && /\brec\b/.test(String(meta.className || ""))),
           flags: txt(el.querySelector("div.meta.bold.ital")).split("*").map(function (s) { return s.trim(); }).filter(Boolean),
+          html: Array.prototype.slice.call(el.querySelectorAll("span.flair")).some(function (f) { return /^html$/i.test(txt(f)); }),
           date: date ? (date.getAttribute("title") || "") : "", cat: cat
         }));
       });
+      return rows;
+    }
+
+    api.guides = function () {
+      var rows = allGuides();
       return core.fitRows({ n: rows.length, rows: rows }, "rows", DEF);
+    };
+
+    // Over the UNCAPPED listing: the size cap once dropped the one row that mattered.
+    api.pick = function () {
+      var g = allGuides(), r = core.pick(g), p = r.pick;
+      return { n: g.length, why: r.why, pick: p && { id: p.id, title: p.title, author: p.author, ver: p.ver, kb: p.kb, flags: p.flags, html: p.html, url: p.url } };
     };
 
     api.triage = function () {
@@ -499,6 +532,7 @@
       return [
         "page()                      what this page is: listing | faq | game | search | challenge (STOP on challenge)",
         "guides() / triage()         the guide list, raw or scored for codex value",
+        "pick()                      the Full Game Guide to READ: Most Recommended, never HTML (runbook step 2)",
         "search(pattern)             game candidates on a /search?game= page, title-filtered before the cap — confirm platform + year, never auto-pick",
         "game()                      a game's home page: Game Detail labels, user rating/difficulty/length, Games You May Like (t,u only) — never the Description pod",
         "meta()                      id, author, version, updated, size, section count",

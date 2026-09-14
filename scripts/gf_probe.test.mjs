@@ -11,7 +11,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   FAQ_TEXT, splitFaq, listingPage, bigListingPage, faqPage, htmlFaqPage, ffaqPage, challengePage, searchPage,
-  gamePage,
+  gamePage, customListingPage,
 } from "./fixtures/gf/pages.mjs";
 import { lintDigest, lintDir } from "./digest_lint.mjs";
 import { armText, pasteText, probeUrl, KEY } from "./gf_bootstrap.mjs";
@@ -162,6 +162,69 @@ test("triage ranks guides by codex value", () => {
   assert.match(t.rows[2].why, /script/i);
   assert.match(t.rows[1].why, /toc first/);
   assert.match(t.rows[3].why, /thin/);
+});
+
+// ---------------------------------------------------------------- the walkthrough a pass reads
+
+const fgg = (id, author, kb, extra = {}) =>
+  ({ title: "Guide and Walkthrough", href: `/ps/1-lantern-vale/faqs/${id}`, author, meta: `v.1.0, ${kb}KB, 2010`, ...extra });
+const pickOf = pods => mount(customListingPage(pods)).pick();
+
+test("guides() reads the HTML flair, and only a flair that says HTML", () => {
+  const g = mount(customListingPage([["Full Game Guides", [
+    fgg(201, "ash", 900, { rec: true, flags: "*Most Recommended*", flair: ["HTML", "PS4"] }),
+    fgg(202, "birch", 500, { flair: ["PS4"] }),
+  ]]])).guides();
+  assert.deepEqual(g.rows.map(r => [r.id, r.html]), [["201", true], ["202", false]]);
+  assert.deepEqual(g.rows[0].flags, ["Most Recommended"]);
+});
+
+test("pick() reads the plain-text Most Recommended Full Game Guide, never an In-Depth one", () => {
+  const r = pickOf([
+    ["Full Game Guides", [fgg(301, "ash", 1200, { rec: true, flags: "*Highest Rated*" }), fgg(302, "birch", 400, { rec: true, flags: "*Most Recommended*" })]],
+    ["In-Depth Guides", [fgg(303, "cedar", 90, { rec: true, flags: "*Most Recommended*" })]],
+  ]);
+  assert.equal(r.n, 3);
+  assert.equal(r.pick.id, "302", "the star wins over a bigger Highest Rated guide");
+  assert.equal(r.why, "most recommended");
+});
+
+test("an HTML Most Recommended guide gives way to the largest plain Highest Rated one", () => {
+  const r = pickOf([["Full Game Guides", [
+    fgg(311, "ash", 900, { rec: true, flags: "*Most Recommended*", flair: ["HTML"] }),
+    fgg(312, "birch", 300, { rec: true, flags: "*Highest Rated*" }),
+    fgg(313, "cedar", 700, { rec: true, flags: "*Highest Rated* *FAQ of the Month Winner: May 2010*" }),
+    fgg(314, "dune", 1500),
+    fgg(315, "elm", 2000, { rec: true, flags: "*Highest Rated*", flair: ["HTML"] }),
+  ]]]);
+  assert.equal(r.pick.id, "313");
+  assert.equal(r.why, "the Most Recommended one is HTML; highest rated, largest");
+});
+
+test("with nothing flagged the largest plain guide is read, and an all-HTML section picks nothing", () => {
+  const none = pickOf([["Full Game Guides", [fgg(321, "ash", 300), fgg(322, "birch", 800), fgg(323, "cedar", 1600, { flair: ["HTML"] })]]]);
+  assert.equal(none.pick.id, "322");
+  assert.equal(none.why, "largest plain text");
+  const html = pickOf([
+    ["Full Game Guides", [fgg(331, "ash", 900, { rec: true, flags: "*Most Recommended*", flair: ["HTML"] })]],
+    ["In-Depth Guides", [fgg(332, "birch", 60, { rec: true, flags: "*Most Recommended*" })]],
+  ]);
+  assert.equal(html.pick, null);
+  assert.equal(html.why, "every Full Game Guide is HTML");
+});
+
+test("the rec class alone is styling, not the Most Recommended flag", () => {
+  const r = pickOf([["Full Game Guides", [fgg(341, "ash", 1000, { rec: true }), fgg(342, "birch", 400, { rec: true, flags: "*Highest Rated*" })]]]);
+  assert.equal(r.pick.id, "342");
+});
+
+test("pick() reads past the size cap that guides() applies", () => {
+  const many = Array.from({ length: 200 }, (_, i) =>
+    ({ title: "In-Depth Guide Number " + i, href: "/ps/1-lantern-vale/faqs/" + (1000 + i), author: "author" + i, meta: "v.1.0, 40KB, 2010" }));
+  const g = mount(customListingPage([["In-Depth Guides", many], ["Full Game Guides", [fgg(351, "ash", 700, { rec: true, flags: "*Most Recommended*" })]]]));
+  const capped = g.guides();
+  assert.ok(capped.dropped > 0 && !capped.rows.some(r => r.id === "351"), "the cap drops the walkthrough from guides()");
+  assert.equal(g.pick().pick.id, "351");
 });
 
 test("page() tells the five page kinds apart, including the challenge", () => {
@@ -317,8 +380,8 @@ test("digest lint: every fact needs a pointer, every row needs two sources", () 
     "### Lottery", "- ticket prices [gf:103 §Shops, cinder v1.0]",
     // Appended, so the problems above keep their line numbers.
     "", "## Sources", "| id | title |", "|---|---|", "| 103 | Power-Up/Item FAQ |", "", "Coverage 103: read 1/9 sections.", "",
-    "## Triage", "| id | title | author | category | KB | score | decision |", "|---|---|---|---|---|---|---|",
-    "| 103 | Power-Up/Item FAQ | cinder | In-Depth Guides | 30 | 9 | read |",
+    "## Triage", "| id | title | author | category | KB | score | decision | flags |", "|---|---|---|---|---|---|---|---|",
+    "| 103 | Power-Up/Item FAQ | cinder | In-Depth Guides | 30 | 9 | read | — |",
   ].join("\n");
   const problems = lintDigest(bad, "bad");
   assert.ok(problems.some(p => /2: fact bullet without/.test(p)), problems.join("\n"));
@@ -461,7 +524,8 @@ test("the probe file is small enough to paste into a page", () => {
   const src = readFileSync(join(ROOT, "scripts", "gf_probe.js"), "utf8");
   // Paste cost, not correctness: the arm line fetches the probe, but the --paste fallback
   // still inlines the whole file on a page that blocks the fetch. Raised from 24,000 when
-  // game() landed (2026-09-06); correctness is the tests above.
-  assert.ok(src.length < 28500, `probe is ${src.length} chars — the --paste fallback inlines all of it`);
+  // game() landed (2026-09-06), and from 28,500 when pick() and the HTML flair landed
+  // (2026-09-15); correctness is the tests above.
+  assert.ok(src.length < 31000, `probe is ${src.length} chars — the --paste fallback inlines all of it`);
   assert.doesNotMatch(src, /^\s*(const|let|class)\s/m, "no top-level bindings — the REPL must be able to eval it twice");
 });

@@ -436,3 +436,15 @@ a probe with a next-day entry was still refused.
 **Takeaway:** when a gate asks "is this new since the base?", diff each record against its own
 counterpart (here each changelog entry, matched by date) rather than the pooled contents, and test
 the case where one item appears in two records.
+
+## A class named like a label is a styling hook, not the label
+A CSS class that shares a word with a badge can sit on more elements than the badge does.
+
+**Why it came up:** the GameFAQs probe read a guide's `rec` class as "recommended". On live
+listings (2026-09-14) Persona 4's two *Most Recommended* guides carried it, and so did every one of
+The Witcher 3's *Highest Rated* guides, a listing with no Most Recommended guide at all. The flag the
+owner asked for exists only in the flair's text, so a pick built on the class would have read a
+Highest Rated walkthrough as the recommended one.
+
+**Takeaway:** read the label the user sees, and keep the class for styling. Before building on a
+class, list which elements carry it on a real page.

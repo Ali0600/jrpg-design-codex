@@ -117,6 +117,39 @@ test("GameFAQs is never cited through a web pointer", () => {
   assert.ok(hit(p, /GameFAQs.*\[gf:/), p.join("\n"));
 });
 
+// ---------------------------------------------------------------- the walkthrough a pass reads
+
+const FLAG_HEAD = [TRIAGE_HEAD[0], "", "| id | title | author | category | KB | score | decision | flags |", "|---|---|---|---|---|---|---|---|"];
+const flagRows = (walkthrough, extra = []) => [
+  "| 11111 | Item FAQ | Ann | In-Depth Guides | 30 | 9 | read | — |",
+  walkthrough,
+  "| 33333 | Boss FAQ | Cy | In-Depth Guides | 12 | -1 | skipped — boss guide, no pillar words | Most Recommended |",
+  ...extra,
+];
+
+test("the plain-text Most Recommended walkthrough must be read, and an In-Depth star need not be", () => {
+  const graze = lint({ triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | grep only | Most Recommended |")] });
+  assert.ok(hit(graze, /22222 is the Full Game Guide to read \(most recommended\), but its decision is "grep only"/), graze.join("\n"));
+  assert.equal(graze.length, 1, graze.join("\n"));
+  assert.deepEqual(lint({ triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | read | Most Recommended |")] }), []);
+});
+
+test("an HTML star gives way to the plain Highest Rated walkthrough, and an all-HTML section asks nothing", () => {
+  const star = "| 44444 | Guide and Walkthrough | Di | Full Game Guides | 900 | 3 | skipped — HTML, paginated | Most Recommended · HTML |";
+  const graze = lint({ triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | grep only | Highest Rated |", [star])] });
+  assert.ok(hit(graze, /22222 is the Full Game Guide to read \(the Most Recommended one is HTML; highest rated, largest\)/), graze.join("\n"));
+  assert.deepEqual(lint({ triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | read | Highest Rated |", [star])] }), []);
+  assert.deepEqual(lint({ triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | grep only | Highest Rated · HTML |", [star])] }), []);
+});
+
+test("a digest started on or after 2026-09-15 needs the flags column; an older one does not", () => {
+  assert.ok(hit(lint({ started: "2026-09-15" }), /flags column/));
+  assert.ok(hit(lint({ started: "<date>" }), /flags column/), "the template's placeholder date counts as new");
+  assert.deepEqual(lint({ started: "2026-09-14" }), []);
+  const read = flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | read | Most Recommended |");
+  assert.deepEqual(lint({ started: "2026-09-15", triage: [...FLAG_HEAD, ...read] }), []);
+});
+
 test("the committed digests and the template lint clean", () => {
   const { files, problems } = lintDir(join(ROOT, "docs", "research"));
   assert.ok(files.includes("_template.md") && files.length >= 8, files.join(", "));

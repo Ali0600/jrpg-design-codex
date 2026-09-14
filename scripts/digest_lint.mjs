@@ -13,8 +13,13 @@
  *                   [web:<host>/<path>]                               any other page (never GameFAQs)
  */
 import { readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+// The walkthrough a pass must read is decided by the probe's own pick(), so the page and this
+// check can never disagree about the rule.
+const { core: probe } = createRequire(import.meta.url)("./gf_probe.js");
 
 export const POINTER = /\[gf:\d+ §[^\]\n]{1,40}(?:, [^\]\n]+)?\]|\[wiki:[a-z0-9.-]+\/[^\]\n]+\]|\[web:[a-z0-9.-]+\/[^\]\n]+\]/;
 // A GameFAQs guide is always a gf: pointer, so its Sources, Coverage and Triage bookkeeping cannot be skipped.
@@ -42,25 +47,42 @@ export function pointerKey(p) {
 // "<date>") counts as new.
 const COVERAGE_FROM = "2026-09-06";
 const TRIAGE_FROM = "2026-09-14";
+// The owner's rule of 2026-09-14: read the Most Recommended Full Game Guide, never its HTML version.
+const PICK_FROM = "2026-09-15";
 const GUIDE_HEADINGS = new Set(["Full Game Guides", "In-Depth Guides"]);
 const NO_GUIDE = /^No GameFAQs guide used\b/i;
 const DECISION = /^(read|grep only|skipped [—–-] \S.*)$/;
 
-/** One `## <name>` section: its lines and its table rows as [{line, cells}], header and separator skipped. */
+/** One `## <name>` section: its lines, its table's header cells, and its rows as [{line, cells}]. */
 function section(L, name) {
   const at = L.indexOf(`## ${name}`);
   if (at < 0) return null;
-  const lines = [], rows = [];
-  let fence = false, header = false;
+  const lines = [], rows = [], cells = l => l.split("|").slice(1, -1).map(c => c.trim());
+  let fence = false, header = null;
   for (let i = at + 1; i < L.length && !/^## /.test(L[i]); i++) {
     const l = L[i];
     lines.push(l);
     if (/^```/.test(l)) { fence = !fence; continue; }
     if (fence || !/^\|/.test(l) || /^\|\s*:?-/.test(l)) continue;
-    if (!header) { header = true; continue; }
-    rows.push({ line: i + 1, cells: l.split("|").slice(1, -1).map(c => c.trim()) });
+    if (!header) { header = cells(l); continue; }
+    rows.push({ line: i + 1, cells: cells(l) });
   }
-  return { line: at + 1, lines, rows };
+  return { line: at + 1, lines, rows, header: header || [] };
+}
+
+/** The Triage row the pass had to read, from the table's flags column (`Most Recommended · HTML`). */
+function pickProblems(tri) {
+  const col = tri.header.findIndex(c => /^flags$/i.test(c));
+  if (col < 0) return null;
+  const guides = tri.rows.map(r => {
+    const flags = (r.cells[col] || "").split("·").map(f => f.trim()).filter(f => f && f !== "—");
+    return { row: r, id: r.cells[0], cat: r.cells[3] || "", kb: parseInt(r.cells[4], 10) || 0,
+             html: flags.some(f => /^html$/i.test(f)), flags: flags.filter(f => !/^html$/i.test(f)) };
+  });
+  const { pick, why } = probe.pick(guides);
+  const decision = pick ? pick.row.cells[6] || "" : "read";
+  return decision === "read" ? []
+    : [`${pick.row.line}: triage row ${pick.id} is the Full Game Guide to read (${why}), but its decision is "${decision}"`];
 }
 
 export function bookkeepingProblems(md) {
@@ -102,6 +124,10 @@ export function bookkeepingProblems(md) {
         else if (/^(read|grep only)$/.test(decision) && !described.has(id)) out.push(`${r.line}: triage marks ${id} as ingested, but ## Sources has no row for it`);
       }
       for (const r of gfSources) if (!listed.has(r.cells[0])) out.push(`${r.line}: source ${r.cells[0]} is not in the ## Triage table`);
+      // A re-opened older digest opts in by adding the column; a new one must carry it.
+      const picked = pickProblems(tri);
+      if (picked) out.push(...picked);
+      else if (tri.rows.length && since(PICK_FROM)) out.push(`${tri.line}: digest started ${started || "<no date>"} needs a flags column in its ## Triage table, saying which Full Game Guide is Most Recommended and which are HTML`);
     }
   }
   return out;
