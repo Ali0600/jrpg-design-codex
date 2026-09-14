@@ -813,8 +813,9 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    two research directions below.
 2. **Backfill the reward tables** (Section F, under way). 45 minigame rows had no `rt`, all
    in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight, Final Fantasy X's five,
-   Final Fantasy XV's five and Final Fantasy VI's four were sourced on 2026-09-14, leaving 24
-   without a table (FF6's opera, g005, was researched and pays no prize) — the oldest research, written before
+   Final Fantasy XV's five, Final Fantasy VI's four and Final Fantasy VII Rebirth's four were
+   sourced on 2026-09-14, leaving 21 without a table (FF6's opera, g005, and Rebirth's Fort Condor,
+   g022, were researched and pay no item prize) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
 3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.

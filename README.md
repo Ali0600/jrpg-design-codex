@@ -14,7 +14,7 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 | | |
 |---|---|
 | **294 mechanics** | Each with how it works, its reward loop (`do X → get Y → feels good because Z`), and notes on adapting it |
-| **103 minigames** | 79 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
+| **103 minigames** | 82 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
 
