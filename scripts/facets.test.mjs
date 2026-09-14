@@ -316,9 +316,16 @@ test("the newest date wins whatever order the changelog entries come in", () => 
 });
 
 test("on the real roster, every game with a row in the newest entry is listed above every game without one", () => {
-  const newest = CHANGES[0];
+  // The newest entry that names a ROSTER game's row: an entry may name only minigame-only titles
+  // (2026-09-15 named just Final Fantasy XIV's rows), which the Games tab never lists.
+  const roster = new Set(BASE_GAMES.map(g => g.title));
   const titleOf = id => (BASE_MECHS.find(m => m.id === id) || {}).game ?? (MINIGAMES.find(m => m.id === id) || {}).g;
-  const touched = new Set([...expandIds(newest.added), ...expandIds(newest.updated)].map(titleOf));
+  const rosterRows = c => new Set([...expandIds(c.added), ...expandIds(c.updated)].map(titleOf).filter(t => roster.has(t)));
+  const at = CHANGES.findIndex(c => rosterRows(c).size > 0);
+  assert.ok(at >= 0, "some entry names a row of a roster game");
+  assert.ok(CHANGES.slice(0, at).every(c => !(c.games || []).some(t => roster.has(t))),
+    "no newer entry names a roster game itself, or that game would lead instead");
+  const newest = CHANGES[at], touched = rosterRows(newest);
   const dates = gameChangeDates(CHANGES, BASE_MECHS, MINIGAMES);
   const order = sortByLastChange([...BASE_GAMES], dates).map(g => g.title);
   const lead = order.filter(t => touched.has(t));
