@@ -807,8 +807,8 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    query grammar on the Mechanics and Minigames tabs, related games on the game page, then the
    two research directions below.
 2. **Backfill the reward tables** (Section F, under way). 45 minigame rows had no `rt`, all
-   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight were tabled and
-   sourced on 2026-09-14, leaving 37 — the oldest research, written before
+   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight and Final Fantasy X's
+   five were tabled and sourced on 2026-09-14, leaving 32 — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
 3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
