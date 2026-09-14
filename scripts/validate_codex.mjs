@@ -183,6 +183,32 @@ export function readRefHosts(script) {
   try { return new Function("return " + m[1])(); } catch { return null; }
 }
 
+/** The test files CI runs: the workflow's `node --test` line, or null when it has none. */
+export function suiteFiles(workflow) {
+  const line = (workflow ?? "").match(/^\s*run:\s*node --test ([^\n]+)$/m);
+  return line ? line[1].trim().split(/\s+/) : null;
+}
+
+/**
+ * The offline suite CI runs, counted from the files on the workflow's `node --test` line. A
+ * case is a line opening with `test(`: every test in the suite is declared that way, and the
+ * count equals the runner's own `# tests` line. A test generated in a loop would break that
+ * equality; the day one is written, count from the runner's TAP output instead
+ * (`node --test --test-reporter=tap`) and change this comment.
+ */
+function offlineSuite(workflow, sources) {
+  const files = suiteFiles(workflow);
+  if (!files) return { problems: ["the workflow has no `run: node --test …` line, so the offline suite cannot be counted"] };
+  const problems = [];
+  let cases = 0;
+  for (const f of files) {
+    const src = sources.get(f);
+    if (src == null) { problems.push(`${f} is on the workflow's node --test line but could not be read`); continue; }
+    cases += (src.match(/^\s*test\(/gm) || []).length;
+  }
+  return { files: files.length, cases, problems };
+}
+
 function checkSequence(rows, prefix, width, errors) {
   const seen = new Map();
   rows.forEach((row, i) => {
@@ -892,6 +918,10 @@ export function validate(html, docs = {}) {
     tags: BASE_MECHS.reduce((n, m) => n + (m.verbs ?? []).length, 0),
     lineages: (LINEAGES ?? []).length,
     lineageMechs: new Set((LINEAGES ?? []).flatMap(l => l.ids ?? [])).size,
+    mechRefs: BASE_MECHS.filter(m => (m.refs ?? []).length).length,
+    minigameRefs: MINIGAMES.filter(m => (m.refs ?? []).length).length,
+    shotGames: new Set((SHOTS ?? []).map(s => s.game)).size,
+    digestRows: BASE_GAMES.filter(g => g.digest != null).length,
   };
 
   if (docs.claude != null) {
@@ -926,6 +956,30 @@ export function validate(html, docs = {}) {
     if (dsab != null && dsab !== sabotageCount()) {
       errors.push(`CLAUDE.md says ${dsab} sabotages, the selftest suite has ${sabotageCount()}`);
     }
+    // The whole-array id ranges. Every copy, not the first: the doc repeats each range, and a
+    // stale later copy is exactly the drift a first-match check reads past.
+    for (const [rows, what, one, re] of [
+      [BASE_MECHS, "mechanics", "mechanic", /(?:`BASE_MECHS` array, |mechanics )M001-(M\d{3})\b/g],
+      [MINIGAMES, "minigames", "minigame", /(?:`MINIGAMES` array, |minigames )g001-(g\d{3})\b/g],
+    ]) {
+      const last = rows.at(-1)?.id;
+      const quoted = [...docs.claude.matchAll(re)].map(m => m[1]);
+      if (!quoted.length) errors.push(`CLAUDE.md: could not find the ${what} id range — update the validator or the doc`);
+      for (const q of quoted) if (q !== last) errors.push(`CLAUDE.md says the ${what} run to ${q}, the file's last ${one} is ${last}`);
+    }
+    const dshot = docs.claude.match(/(\d+) of (\d+) games have a screenshot/);
+    if (!dshot) errors.push("CLAUDE.md: could not find the `N of M games have a screenshot` line");
+    else if (Number(dshot[1]) !== stats.shotGames || Number(dshot[2]) !== stats.games) {
+      errors.push(`CLAUDE.md says ${dshot[1]} of ${dshot[2]} games have a screenshot, the gallery covers ${stats.shotGames} of ${stats.games}`);
+    }
+    const dref = docs.claude.match(/\*\*(\d+) of (\d+) mechanics and (\d+) of (\d+) minigames carry `refs`\*\*/);
+    if (!dref) errors.push("CLAUDE.md: could not find the `**N of M mechanics and N of M minigames carry `refs`**` line");
+    else if (Number(dref[1]) !== stats.mechRefs || Number(dref[2]) !== stats.mechanics || Number(dref[3]) !== stats.minigameRefs || Number(dref[4]) !== stats.minigames) {
+      errors.push(`CLAUDE.md says ${dref[1]} of ${dref[2]} mechanics and ${dref[3]} of ${dref[4]} minigames carry refs, the file has ${stats.mechRefs} of ${stats.mechanics} and ${stats.minigameRefs} of ${stats.minigames}`);
+    }
+    const ddig = docs.claude.match(/(\d+) carry `digest`/);
+    if (!ddig) errors.push("CLAUDE.md: could not find the `N carry `digest`` count");
+    else if (Number(ddig[1]) !== stats.digestRows) errors.push(`CLAUDE.md says ${ddig[1]} game rows carry digest, the file has ${stats.digestRows}`);
   }
   if (docs.readme != null) {
     const cell = (re, what) => {
@@ -941,6 +995,15 @@ export function validate(html, docs = {}) {
     const rsab = cell(/injects\s+(\d+)\s+sabotages/, "`injects N sabotages`");
     if (rsab != null && rsab !== sabotageCount()) {
       errors.push(`README.md says ${rsab} sabotages, the selftest suite has ${sabotageCount()}`);
+    }
+    if (docs.workflow != null) {
+      const suite = offlineSuite(docs.workflow, docs.testSources ?? new Map());
+      errors.push(...suite.problems.map(p => `offline suite: ${p}`));
+      // `\s+`: the sentence wraps, and the count can land at a line start.
+      const rsuite = cell(/(\d+)-case\s+offline\s+suite/, "`N-case offline suite`");
+      if (rsuite != null && !suite.problems.length && rsuite !== suite.cases) {
+        errors.push(`README.md says a ${rsuite}-case offline suite, the workflow's node --test line runs ${suite.cases} cases over ${suite.files} files`);
+      }
     }
     if (rm != null && rm !== stats.mechanics) errors.push(`README.md says ${rm} mechanics, file has ${stats.mechanics}`);
     if (rg != null && rg !== stats.minigames) errors.push(`README.md says ${rg} minigames, file has ${stats.minigames}`);
@@ -1318,6 +1381,27 @@ const DOC_SABOTAGES = [
     apply: d => ({ ...d, lineageLedger: replaceInDoc(d.lineageLedger, /^(- [^\n]+? · (?:how|loop|notes) · `)[^`]/m, "$1§", "a lineage-ledger quote that is not in its row") }) },
   { name: "CLAUDE.md lineage count drift", expect: /CLAUDE\.md says \d+ lineages covering \d+ mechanics/,
     apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+ lineages\*\*/, "**999 lineages**", "CLAUDE.md lineage count drift") }) },
+
+  // The quoted id ranges. The first mutant drifts a LATER copy of the mechanics range, which a
+  // first-match check would read past; the second drifts the first copy of the minigame range.
+  { name: "CLAUDE.md mechanics id range drift in a later copy", expect: /CLAUDE\.md says the mechanics run to M999/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /(mechanics )M001-M\d{3}/, "$1M001-M999", "CLAUDE.md mechanics id range drift in a later copy") }) },
+  { name: "CLAUDE.md minigame id range drift", expect: /CLAUDE\.md says the minigames run to g999/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /(`MINIGAMES` array, )g001-g\d{3}/, "$1g001-g999", "CLAUDE.md minigame id range drift") }) },
+  { name: "CLAUDE.md gallery coverage drift", expect: /CLAUDE\.md says 999 of \d+ games have a screenshot/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\d+( of \d+ games have a screenshot)/, "999$1", "CLAUDE.md gallery coverage drift") }) },
+  { name: "CLAUDE.md refs coverage drift", expect: /CLAUDE\.md says 999 of \d+ mechanics and \d+ of \d+ minigames carry refs/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*\d+( of \d+ mechanics and \d+ of \d+ minigames carry `refs`\*\*)/, "**999$1", "CLAUDE.md refs coverage drift") }) },
+
+  { name: "CLAUDE.md digest coverage drift", expect: /CLAUDE\.md says 999 game rows carry digest/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\d+( carry `digest`)/, "999$1", "CLAUDE.md digest coverage drift") }) },
+
+  // The offline-suite count: the README side, and the derivation side (a file dropped from the
+  // workflow's line must move the count, so the number cannot come from a hand-kept list).
+  { name: "README.md offline-suite count drift", expect: /README\.md says a 999-case offline suite/,
+    apply: d => ({ ...d, readme: replaceInDoc(d.readme, /\d+(-case\s+offline\s+suite)/, "999$1", "README.md offline-suite count drift") }) },
+  { name: "a test file dropped from the workflow's node --test line", expect: /README\.md says a \d+-case offline suite, the workflow's node --test line runs \d+ cases/,
+    apply: d => ({ ...d, workflow: replaceInDoc(d.workflow ?? "", / scripts\/dates\.test\.mjs/, "", "a test file dropped from the workflow's node --test line") }) },
 ];
 
 /**
@@ -1412,7 +1496,11 @@ function main() {
     coverFiles = new Set(readdirSync(join(ROOT, "covers")).filter(f => /\.(jpg|png|webp)$/.test(f)).map(f => "covers/" + f));
   } catch { /* no covers/ yet — rows naming a cover then fail closed */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), lineageLedger: read("docs/lineages.md"), shotFiles, digestFiles, coverFiles, unrosteredDigests: UNROSTERED_DIGESTS };
+  // The offline suite as CI runs it: the workflow's node --test line and each file it names.
+  const workflow = read(".github/workflows/validate.yml");
+  const testSources = new Map((suiteFiles(workflow) ?? []).map(f => [f, read(f)]));
+
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), lineageLedger: read("docs/lineages.md"), shotFiles, digestFiles, coverFiles, unrosteredDigests: UNROSTERED_DIGESTS, workflow, testSources };
 
   const { errors, stats } = validate(html, docs);
 

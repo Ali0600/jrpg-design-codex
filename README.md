@@ -190,7 +190,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 92 sabotages and fails the build unless every one is caught, and every
+  injects 99 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
   174-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
