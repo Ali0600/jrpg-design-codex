@@ -36,21 +36,23 @@ Calendar and time management.
 `__gf.triage()` on 2026-09-14: 11 guides listed (3 Full Game Guides, 8 In-Depth Guides, none under other
 headings). The brief's questions each had a short dedicated guide (fishing, teatime, greenhouse
 combinations), so those were read whole, and vreaper's chaptered walkthrough was grepped by chapter as
-the independent second reading.
+the independent second reading. On 2026-09-15 `__gf.pick()` returned no guide: all three Full Game
+Guides carry the HTML flair, so there is no plain-text walkthrough to read under the owner's rule. The
+flags column copies the listing on that day.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 77646 | Lost Item FAQ | Sonictrainer | In-Depth Guides | 176 | 8 | skipped — lost items returned for support, outside this pass's questions |
-| 77599 | Side Quest Guide | naiming | In-Depth Guides | 10 | 6 | skipped — the two quests used were read on the wiki |
-| 79956 | Optimal Fishing Guide | Cozy | In-Depth Guides | 5 | 6 | read |
-| 79487 | Gardening Guide | geoff_hom_gmail | In-Depth Guides | 36 | 5 | skipped — vreaper's gardening chapter and the combination guide answered first |
-| 79505 | Greenhouse Combination Guide | Reidog | In-Depth Guides | 4 | 4 | read |
-| 77587 | Guide and Walkthrough | vreaper | Full Game Guides | 645 | 3 | grep only |
-| 77641 | Teatime Guide | redbluezero | In-Depth Guides | 4 | 3 | read |
-| 77770 | Guide and Walkthrough | RagingTasmanian | Full Game Guides | 251 | 2 | skipped — a second walkthrough, not needed |
-| 77702 | Guide and Walkthrough | GrimGamingOnYT | Full Game Guides | 228 | 2 | skipped — a third walkthrough, not needed |
-| 77596 | Support Conversation Script | Misha-Heart | In-Depth Guides | 2929 | -1 | skipped — a script of support conversations |
-| 78021 | Byleth Support Conversations Script | Misha-Heart | In-Depth Guides | 955 | -1 | skipped — a script of support conversations |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 77646 | Lost Item FAQ | Sonictrainer | In-Depth Guides | 176 | 8 | skipped — lost items returned for support, outside this pass's questions | Highest Rated · HTML |
+| 77599 | Side Quest Guide | naiming | In-Depth Guides | 10 | 6 | skipped — the two quests used were read on the wiki | HTML |
+| 79956 | Optimal Fishing Guide | Cozy | In-Depth Guides | 5 | 6 | read | — |
+| 79487 | Gardening Guide | geoff_hom_gmail | In-Depth Guides | 36 | 5 | skipped — vreaper's gardening chapter and the combination guide answered first | Highest Rated · FAQ of the Month Winner: September 2021 · HTML |
+| 79505 | Greenhouse Combination Guide | Reidog | In-Depth Guides | 4 | 4 | read | Highest Rated · HTML |
+| 77587 | Guide and Walkthrough | vreaper | Full Game Guides | 645 | 3 | grep only | FAQ of the Month Winner: October 2019 · HTML |
+| 77641 | Teatime Guide | redbluezero | In-Depth Guides | 4 | 3 | read | HTML |
+| 77770 | Guide and Walkthrough | RagingTasmanian | Full Game Guides | 251 | 2 | skipped — a second walkthrough, not needed | HTML |
+| 77702 | Guide and Walkthrough | GrimGamingOnYT | Full Game Guides | 228 | 2 | skipped — a third walkthrough, not needed | HTML |
+| 77596 | Support Conversation Script | Misha-Heart | In-Depth Guides | 2929 | -1 | skipped — a script of support conversations | — |
+| 78021 | Byleth Support Conversations Script | Misha-Heart | In-Depth Guides | 955 | -1 | skipped — a script of support conversations | — |
 
 ## Mechanics candidates
 
@@ -145,3 +147,4 @@ row: g102
 ## Codex delta
 - (ids after the splice)
 - M241 (the monastery week) sharpened in place: Professor Level's ten ranks raising Activity Points from 1 to 10 and the greenhouse to five seeds, which activities cost nothing, and the loop where free activities grow the budget. It gained its first sources. The brief's merchant question came back THIN: no merchant unlock tied to rank turned up.
+- 2026-09-15: no plain-text Full Game Guide exists to read under the owner's rule (all three are HTML), so nothing changed beyond the Triage flags.

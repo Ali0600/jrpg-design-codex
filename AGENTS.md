@@ -139,6 +139,8 @@ backup; the HTML file is the source of truth and is more up to date.
   ranks open with the story and end on a 99,999-chip familiar. The walkthroughs disagree on two
   tier-one prices and on the chip price, and the wiki's casino text turned out to be one guide's, so
   the individual prize prices rest on a single reading and only the tickets' total is confirmed apart.
+  On 2026-09-15 the walkthrough GameFAQs recommends added the Solosseum (g104), whose six ranks each pay
+  an item and gold, up to a ticket for the familiar Mandragorer, confirmed by a second walkthrough's table.
   **Bravely Default** (M290, M224 sharpened): special moves grown in Norende, where one shop unlocks
   26 finishers over ten levels and four parts shops make the modifiers slotted into each (element,
   monster family, a 10–50% power boost, status, healing or extra turns), chained by firing the next
@@ -179,7 +181,7 @@ backup; the HTML file is the source of truth and is more up to date.
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
   its Wikidata id (`wd`). The same day's audit of unused research data offered three more
   options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
-- **102 minigames** (`MINIGAMES` array, g001-g103; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
+- **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
   sims; FF6's Colosseum, g081, was a copy of g006 and is retired), each with a highlighted Rewards field and a
@@ -236,7 +238,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M294, minigames g001-g103, skipping a retired id. Continue the
+  - IDs are sequential: mechanics M001-M294, minigames g001-g104, skipping a retired id. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -456,7 +458,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **41 of 294 mechanics and 59 of 102 minigames carry `refs`**, and every row without them
+  **41 of 294 mechanics and 60 of 103 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
   `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 23 carry `digest`)
