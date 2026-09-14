@@ -442,7 +442,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   machine-checkable form of "GameFAQs prose is never stored". `digest` is the
   `docs/research/<slug>.md` basename; the validator holds both directions equal (every
   claimed slug has a file, every digest file is claimed), so a research splice stamps it
-  and a zero-row digest is stamped by hand. `cover` is `covers/<slug>.<ext>` — the second
+  and a zero-row digest is stamped by hand. A minigame-only title has no row to carry
+  `digest`, so its digest is claimed by the validator's `UNROSTERED_DIGESTS` map instead
+  (title → slug): the title must be one of the 8 allowlisted unrostered titles and still own
+  a minigame row, and the slug must name a file. `cover` is `covers/<slug>.<ext>` — the second
   exception to single-file, next to `shots/` — and REQUIRES `wp`, the resolved Wikipedia
   article the image came from (also the page's Wikipedia link). The validator holds
   `covers/` and the rows' `cover` fields equal in both directions and the deploy copies
@@ -634,7 +637,8 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   unique; every `cat` in CATS; `want` and `status` enums; every mechanic `game` has a
   BASE_GAMES row; minigame `g` refs likewise EXCEPT the 8 unrostered FF titles
   allowlisted in the script (the FF minigame survey is broader than the mechanics
-  roster — a new orphan outside that list is treated as a typo); score ranges (the
+  roster — a new orphan outside that list is treated as a typo), their digests claimed
+  through `UNROSTERED_DIGESTS`; score ranges (the
   fetch_scores guard re-asserted at rest); `rt` rows non-empty; queued games have a
   `why` brief; SHOTS rows carry a known game, a type in SHOT_TYPES, a caption and a
   well-formed `src`, with **two-way set equality against the shots/ folder** (a row
@@ -672,7 +676,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **89** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **92** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -807,8 +811,8 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    query grammar on the Mechanics and Minigames tabs, related games on the game page, then the
    two research directions below.
 2. **Backfill the reward tables** (Section F, under way). 45 minigame rows had no `rt`, all
-   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight and Final Fantasy X's
-   five were tabled and sourced on 2026-09-14, leaving 32 — the oldest research, written before
+   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight, Final Fantasy X's five and
+   Final Fantasy XV's five were tabled and sourced on 2026-09-14, leaving 27 — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
 3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.

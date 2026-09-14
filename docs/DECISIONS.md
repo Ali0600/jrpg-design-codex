@@ -28,6 +28,27 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — Where a minigame-only title's research digest is claimed
+
+**Fork:** eight Final Fantasy titles own minigame rows but no roster row, so nothing can carry
+their `digest` field, and the validator refuses a digest file that no game row claims. The
+reward-table pass needs digests for them, starting with Final Fantasy XV.
+
+- **A — a policy map beside `KNOWN_UNROSTERED` in the validator** *(chosen, in the plan the
+  owner approved on 2026-09-14)*: `UNROSTERED_DIGESTS` maps a title to its slug. Each title must
+  be allowlisted and still own a minigame row, and each slug must name a file; three sabotages
+  hold those rules. The eight titles stay off the roster.
+- **B — roster the eight titles**: each would get a row and a `digest`, but the roster is the
+  mechanics roster, and a Researched game with no mechanics would be a false claim on the
+  Games tab and in every count.
+- **C — no digests for them**: the validator stays as it is, but their reward tables and any
+  "no defined payouts" findings would have no committed staging file and no pointers.
+
+**Status:** B `rejected — the roster means researched for mechanics`. C `rejected — the facts
+would have nowhere to live`. **Revisit hook:** if one of the titles is ever rostered, move its
+slug from the map to the row's `digest`; the validator refuses a slug claimed twice, so the
+move cannot be half done.
+
 ## 2026-09-14 — Where a game page's related games come from
 
 **Fork:** each game page should list the codex games most like it, so something has to say what
