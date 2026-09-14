@@ -27,6 +27,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.parse
 import urllib.request
 
@@ -55,12 +56,35 @@ def die(msg):
     sys.exit(f"fetch_ui_shots: {msg}")
 
 
+def retry_after_seconds(header):
+    """How long a 429 or 503 asks us to wait: the Retry-After seconds, capped at a minute, or
+    twenty seconds when the header is missing or is an HTTP date this script does not parse."""
+    try:
+        return max(1, min(60, int(header)))
+    except (TypeError, ValueError):
+        return 20
+
+
+def urlopen_patiently(req):
+    """urlopen that waits out a rate limit instead of dying on it. Wikipedia answers bursts with
+    429s, and a pass fetching dozens of images hits them; each wait is printed, never silent."""
+    for attempt in range(4):
+        try:
+            return urllib.request.urlopen(req, timeout=TIMEOUT)
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 503) or attempt == 3:
+                raise
+            wait = retry_after_seconds(e.headers.get("Retry-After"))
+            print(f"fetch_ui_shots: HTTP {e.code} from {urllib.parse.urlparse(req.full_url).hostname}, waiting {wait}s", file=sys.stderr, flush=True)
+            time.sleep(wait)
+
+
 def api_get(host, params):
     if not SHOT_HOST_RE.match(host):
         die(f"refusing host {host!r}: not on the screenshot host allowlist (SHOT_HOST_RE)")
     url = api_base(host) + "?" + urllib.parse.urlencode({**params, "format": "json"})
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+    with urlopen_patiently(req) as r:
         return json.load(r)
 
 
@@ -98,7 +122,7 @@ def download(url):
     if not ALLOWED_IMAGE_HOST_RE.search(host):
         die(f"refusing image host {host!r}: not a recognized wiki CDN")
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+    with urlopen_patiently(req) as r:
         blob = r.read(MAX_DOWNLOAD + 1)
     if len(blob) > MAX_DOWNLOAD:
         die(f"download exceeds {MAX_DOWNLOAD} bytes — not a screenshot")
@@ -203,6 +227,9 @@ def selftest():
     check("knows WebP under any name", magic_ext(b"RIFF\x00\x00\x00\x00WEBPVP8 ") == "webp")
     check("refuses an HTML error page", refused(lambda: magic_ext(b"<!doctype html><title>403</title>")))
     check("refuses a download host off the list", refused(lambda: download("https://example.com/shot.png")))
+    check("a 429's Retry-After is honoured", retry_after_seconds("7") == 7)
+    check("a Retry-After past a minute waits a minute, not longer", retry_after_seconds("600") == 60)
+    check("a missing or unreadable Retry-After waits twenty seconds", retry_after_seconds(None) == 20 and retry_after_seconds("soon") == 20)
     check("a ledger with no sections gains the line at its end",
           ledger_with("# S\n\n- a\n", "- b\n") == "# S\n\n- a\n- b\n")
     check("a ledger with a section gains the line before it, not under it",

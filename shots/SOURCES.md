@@ -27,6 +27,18 @@ Every gallery image, its source wiki page, and the original file it was derived 
 - `shots/xenogears/battle-command-ring.png` — [Xenogears](https://en.wikipedia.org/wiki/Xenogears) (File:Xenogearsbattlescene.jpg, en.wikipedia.org)
 - `shots/legend-of-mana/map-land-make.png` — [Legend of Mana](https://en.wikipedia.org/wiki/Legend_of_Mana) (File:Legend of Mana Land Make.png, en.wikipedia.org)
 - `shots/valkyrie-profile/map-world-period.png` — [Valkyrie Profile (video game)](https://en.wikipedia.org/wiki/Valkyrie_Profile_%28video_game%29) (File:Vpworldmap.JPG, en.wikipedia.org)
+- `shots/persona-5-royal/battle-command-wheel.png` — [Persona 5](https://en.wikipedia.org/wiki/Persona_5) (File:Persona 5 Palace Combat.jpg, en.wikipedia.org)
+- `shots/persona-5-royal/menus-calendar-classroom.png` — [Persona 5](https://en.wikipedia.org/wiki/Persona_5) (File:Persona 5 Classroom.jpg, en.wikipedia.org)
+- `shots/xenoblade-chronicles-3/battle-arts-palette.png` — [Xenoblade Chronicles 3](https://en.wikipedia.org/wiki/Xenoblade_Chronicles_3) (File:Xenoblade Chronicles 3 Combat.jpg, en.wikipedia.org)
+- `shots/dragon-quest-xi/battle-party-status.png` — [Dragon Quest XI](https://en.wikipedia.org/wiki/Dragon_Quest_XI) (File:DRAGONQUEST11.png, en.wikipedia.org)
+- `shots/elden-ring/battle-hud.png` — [Elden Ring](https://en.wikipedia.org/wiki/Elden_Ring) (File:Elden Ring gameplay.png, en.wikipedia.org)
+- `shots/vagrant-story/battle-risk.png` — [Vagrant Story](https://en.wikipedia.org/wiki/Vagrant_Story) (File:Vs-ashleyblade.jpg, en.wikipedia.org)
+- `shots/saga-frontier/battle-tech-list.png` — [SaGa Frontier](https://en.wikipedia.org/wiki/SaGa_Frontier) (File:Saga frontier 1 gameplay.jpg, en.wikipedia.org)
+- `shots/threads-of-fate/field-hp-mp.png` — [Threads of Fate](https://en.wikipedia.org/wiki/Threads_of_Fate) (File:Threads of Fate gameplay.jpg, en.wikipedia.org)
+- `shots/brave-fencer-musashi/field-living-clock.png` — [Brave Fencer Musashi](https://en.wikipedia.org/wiki/Brave_Fencer_Musashi) (File:Brave Fencer Musashi gameplay.jpg, en.wikipedia.org)
+- `shots/star-ocean-the-second-story/battle-real-time.png` — [Star Ocean: The Second Story](https://en.wikipedia.org/wiki/Star_Ocean%3A_The_Second_Story) (File:Star ocean second story combat gameplay.jpg, en.wikipedia.org)
+- `shots/terranigma/field-life-gems.png` — [Terranigma](https://en.wikipedia.org/wiki/Terranigma) (File:SNES Terranigma (Tenchi Sōzō).png, en.wikipedia.org)
+- `shots/suikoden-ii/field-portrait-dialogue.png` — [Suikoden II](https://en.wikipedia.org/wiki/Suikoden_II) (File:Suikoden2DialogueExample4.jpg, en.wikipedia.org)
 
 ## Games checked without a usable UI screenshot (as of 2026-08-29)
 
@@ -42,5 +54,7 @@ Since Fandom's image CDN began refusing scripts, the gallery takes its screensho
 game's Wikipedia article. Every image on these articles besides the lead image is box art, or a
 view with no interface on screen: Dragon Quest VII (a world-map view with no HUD) · Chained Echoes ·
 Yakuza 0 · Legend of Legaia · Alundra · Jade Cocoon · Radiata Stories · Suikoden V · Wild ARMs 3 ·
-Skies of Arcadia · Octopath Traveler II · Ys VIII (box art only). Never pad these with art — a shot
+Skies of Arcadia · Octopath Traveler II · Ys VIII (box art only) · The Legend of Zelda: Tears of the Kingdom
+(a promotional composite) · Parasite Eve (a cutscene) · The Witcher 3 (a render with no HUD) ·
+Grandia (cast art). Never pad these with art — a shot
 must show UI.
