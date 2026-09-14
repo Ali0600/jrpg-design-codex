@@ -14,7 +14,7 @@ import { diffChanges, readVersion } from "./check_changes.mjs";
  * below hardcodes M117's whole row literal twice, so a `verbs:[]` that appeared by default
  * would stop those two `.replace()` calls matching.
  */
-function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "", verbs = null } = {}) {
+function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "", verbs = null, retired = null } = {}) {
   const log = changes ?? [
     `{date:"2026-09-05", title:"Pilot", added:["M117-M118","g001"], updated:[]}`,
   ];
@@ -32,6 +32,7 @@ const MINIGAMES = [
 const CHANGES = [
 ${log.join(",\n")}
 ];
+${retired ? `const RETIRED = ${JSON.stringify(retired)};` : ""}
 function expandIds(list){
   const out = [];
   (list||[]).forEach(e=>{
@@ -161,6 +162,37 @@ test("a row logged in an old entry can be logged again in a new one", () => {
   const { problems, newlyLogged } = diffChanges(base, head);
   assert.deepEqual([...newlyLogged], ["M117"]);
   assert.deepEqual(problems, []);
+});
+
+// ---------------------------------------------------------------- a row that leaves the file
+
+const PILOT = `{date:"2026-09-05", title:"Pilot", added:["M117-M118","g001"], updated:[]}`;
+const dropM118 = html => {
+  const out = html.replace(/\n\{id:"M118"[^\n]*\n/, "\n");
+  assert.notEqual(out, html, "the fixture must actually lose M118");
+  return out;
+};
+
+test("a deleted row RETIRED does not name is caught, and named", () => {
+  const { problems, deleted } = diffChanges(page(), dropM118(page()));
+  assert.deepEqual(deleted, ["M118"]);
+  assert.ok(problems.some(p => /^M118 was deleted but RETIRED does not name it/.test(p)), problems.join("\n"));
+});
+
+test("a row retired into its successor and logged in a new entry is clean", () => {
+  const head = dropM118(page({ retired: { M118: "M117" }, changes: [
+    `{date:"2026-09-06", title:"Retired", added:[], updated:[], retired:["M118"]}`, PILOT] }));
+  assert.deepEqual(diffChanges(page(), head).problems, []);
+});
+
+test("a retirement no new entry logs is caught, even when an old entry already named it", () => {
+  const unlogged = dropM118(page({ retired: { M118: "M117" } }));
+  assert.ok(diffChanges(page(), unlogged).problems.some(p => /^M118 was retired but no NEW CHANGES entry lists it/.test(p)));
+  // The base already carried the entry, so it licenses nothing new: the same rule as `updated`.
+  const logged = [`{date:"2026-09-06", title:"Retired", added:[], updated:[], retired:["M118"]}`, PILOT];
+  const base = page({ changes: logged });
+  const head = dropM118(page({ retired: { M118: "M117" }, changes: logged }));
+  assert.ok(diffChanges(base, head).problems.some(p => /^M118 was retired but no NEW CHANGES entry/.test(p)));
 });
 
 test("a row added to an entry the base already had counts as newly logged", () => {

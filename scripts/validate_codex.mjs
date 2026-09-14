@@ -209,8 +209,11 @@ function offlineSuite(workflow, sources) {
   return { files: files.length, cases, problems };
 }
 
-function checkSequence(rows, prefix, width, errors) {
+// A retired id is a deliberate gap: the sequence skips it, and a row still carrying it is an error.
+function checkSequence(rows, prefix, width, errors, retired = new Set()) {
   const seen = new Map();
+  const idAt = n => prefix + String(n).padStart(width, "0");
+  let n = 0;
   rows.forEach((row, i) => {
     const id = row.id;
     if (typeof id !== "string" || !id.startsWith(prefix)) {
@@ -219,8 +222,10 @@ function checkSequence(rows, prefix, width, errors) {
     }
     if (seen.has(id)) errors.push(`${prefix}: duplicate id ${id} (rows ${seen.get(id)} and ${i})`);
     else seen.set(id, i);
+    if (retired.has(id)) errors.push(`${prefix}: retired id ${id} still has a row`);
 
-    const expected = prefix + String(i + 1).padStart(width, "0");
+    do n++; while (retired.has(idAt(n)));
+    const expected = idAt(n);
     if (id !== expected) {
       errors.push(`${prefix}: id sequence break at row ${i} — expected ${expected}, found ${id}`);
     }
@@ -539,6 +544,7 @@ export function validate(html, docs = {}) {
         " SHOT_TYPES: typeof SHOT_TYPES === 'undefined' ? null : SHOT_TYPES," +
         " CHANGES: typeof CHANGES === 'undefined' ? null : CHANGES," +
         " expandIds: typeof expandIds === 'undefined' ? null : expandIds," +
+        " RETIRED: typeof RETIRED === 'undefined' ? null : RETIRED," +
         " FACET_VOCAB: typeof FACET_VOCAB === 'undefined' ? null : FACET_VOCAB," +
         " FACET_TABLE: typeof FACET_TABLE === 'undefined' ? null : FACET_TABLE," +
         " FACET_KINDS: typeof FACET_KINDS === 'undefined' ? null : FACET_KINDS," +
@@ -552,7 +558,7 @@ export function validate(html, docs = {}) {
   }
 
   const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES,
-          CHANGES, expandIds, FACET_VOCAB, FACET_TABLE, FACET_KINDS, CATEGORY_FACETS, facetFns } = data;
+          CHANGES, expandIds, RETIRED, FACET_VOCAB, FACET_TABLE, FACET_KINDS, CATEGORY_FACETS, facetFns } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -637,8 +643,12 @@ export function validate(html, docs = {}) {
     for (const f of docs.coverFiles) if (!coverRefs.has(f)) errors.push(`covers folder: ${JSON.stringify(f)} is not referenced by any game row — delete it or set the row's cover`);
   }
 
+  // --- retired ids: rows that left the file, each mapped to the row that absorbed it
+  const retiredMap = RETIRED && typeof RETIRED === "object" ? RETIRED : {};
+  const retiredIds = new Set(Object.keys(retiredMap));
+
   // --- mechanics
-  checkSequence(BASE_MECHS, "M", 3, errors);
+  checkSequence(BASE_MECHS, "M", 3, errors, retiredIds);
   for (const m of BASE_MECHS) {
     const label = `mechanic ${m.id ?? "(no id)"}`;
     checkFields(m, label, ["id", "game", "name", "cat", "how", "loop"], errors);
@@ -654,7 +664,7 @@ export function validate(html, docs = {}) {
   }
 
   // --- minigames
-  checkSequence(MINIGAMES, "g", 3, errors);
+  checkSequence(MINIGAMES, "g", 3, errors, retiredIds);
   for (const mg of MINIGAMES) {
     const label = `minigame ${mg.id ?? "(no id)"}`;
     checkFields(mg, label, ["id", "g", "n", "p", "r", "l"], errors);
@@ -837,6 +847,12 @@ export function validate(html, docs = {}) {
   }
 
   const allIds = new Set([...BASE_MECHS.map(m => m.id), ...MINIGAMES.map(m => m.id)]);
+  for (const [old, into] of Object.entries(retiredMap)) {
+    const label = `RETIRED[${JSON.stringify(old)}]`;
+    if (!/^[Mg]\d{3}$/.test(old) || typeof into !== "string" || into[0] !== old[0]) {
+      errors.push(`${label}: must map an id to a successor of the same kind, got ${JSON.stringify(into)}`);
+    } else if (!allIds.has(into)) errors.push(`${label}: successor ${into} has no row`);
+  }
 
   // --- the changelog: what the app calls new. The page's OWN expandIds does the
   // parsing, so a range the UI would render is the range this validates — no second
@@ -853,6 +869,7 @@ export function validate(html, docs = {}) {
     } else {
       const ISO = /^\d{4}-\d{2}-\d{2}$/;
       const claimed = new Map();          // id -> the entry that first added it
+      const retiredLogged = new Set();    // retired ids some entry names in `retired`
       let prevDate = null;
       CHANGES.forEach((c, i) => {
         const label = `CHANGES[${i}] ${JSON.stringify(c?.title ?? "(untitled)")}`;
@@ -875,7 +892,7 @@ export function validate(html, docs = {}) {
         }
         // An entry that names nothing would still move the first-visit baseline (the app
         // treats the second-newest entry's date as "already seen"), hiding the real batch.
-        if (Array.isArray(c?.added) && Array.isArray(c?.updated) && !c.added.length && !c.updated.length && !(Array.isArray(c?.games) && c.games.length)) {
+        if (Array.isArray(c?.added) && Array.isArray(c?.updated) && !c.added.length && !c.updated.length && !(Array.isArray(c?.games) && c.games.length) && !(Array.isArray(c?.retired) && c.retired.length)) {
           errors.push(`${label}: names no row and no game — an empty entry silently moves the first-visit baseline`);
         }
         for (const field of ["added", "updated"]) {
@@ -884,11 +901,19 @@ export function validate(html, docs = {}) {
           try { ids = expandIds(c[field]); }
           catch (e) { errors.push(`${label}: ${field} — ${e.message}`); continue; }
           for (const id of ids) {
-            if (!allIds.has(id)) errors.push(`${label}: ${field} names ${id}, which is not a row in this file`);
+            // A retired id was added once, before it left; an `updated` naming it names no row.
+            if (!allIds.has(id) && !(field === "added" && retiredIds.has(id))) errors.push(`${label}: ${field} names ${id}, which is not a row in this file`);
             if (field === "added") {
               if (claimed.has(id)) errors.push(`${label}: ${id} was already added by ${JSON.stringify(claimed.get(id))}`);
               else claimed.set(id, c.title);
             }
+          }
+        }
+        if (c?.retired != null) {
+          if (!Array.isArray(c.retired)) errors.push(`${label}: \`retired\` must be an array of ids`);
+          else for (const id of c.retired) {
+            if (!retiredIds.has(id)) errors.push(`${label}: retired names ${JSON.stringify(id)}, which RETIRED does not map`);
+            else retiredLogged.add(id);
           }
         }
       });
@@ -896,6 +921,9 @@ export function validate(html, docs = {}) {
         if (!claimed.has(id)) {
           errors.push(`${id} appears in no CHANGES entry's \`added\` — it would show in the app with no date, and never as new`);
         }
+      }
+      for (const id of retiredIds) {
+        if (!retiredLogged.has(id)) errors.push(`${id} is retired but no CHANGES entry names it in \`retired\` — the owner would never see why the card went`);
       }
     }
   }
@@ -1187,7 +1215,9 @@ const SABOTAGES = [
   { name: "changelog games[] naming a non-roster game", expect: /games\[\] names no roster game ".* \(not on the roster\)"/,
     apply: s => replaceFirst(s, /games:\["([^"]+)"/, 'games:["$1 (not on the roster)"', "changelog games[] naming a non-roster game") },
   { name: "changelog entry that names nothing", expect: /names no row and no game/,
-    apply: s => replaceFirst(s, /added:\[\], updated:\["[^\]]+\]/, "added:[], updated:[]", "changelog entry that names nothing") },
+    // Drop a `retired` list too: an entry retiring a row names something, so the fixture must
+    // empty that as well rather than hope the first matching entry retires nothing.
+    apply: s => replaceFirst(s, /added:\[\], updated:\["[^\]]+\](, retired:\[[^\]]*\])?/, "added:[], updated:[]", "changelog entry that names nothing") },
   { name: "broken javascript", expect: /does not parse/,
     apply: s => replaceFirst(s, "const CATS", "const = ;\nconst CATS", "broken javascript") },
 
@@ -1299,6 +1329,16 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, '"Dragons":["Video games about dragons"]', '"Dragons":["Video games about dragons","Video games about ghosts"]', "a mapped category no game carries") },
   { name: "a category label that lists one game", expect: /CATEGORY_FACETS\.theme: "Castles" lists 1 game — a filter needs at least 2/,
     apply: s => replaceFirst(s, '"Video games set in castles"', '"Video games set in castle ruins"', "a category label that lists one game") },
+
+  // RETIRED. The map is one literal line in the data region, and one changelog entry retires g081.
+  { name: "a retired id that still has a row", expect: /retired id g082 still has a row/,
+    apply: s => replaceFirst(s, 'const RETIRED = {g081:"g006"};', 'const RETIRED = {g081:"g006", g082:"g006"};', "a retired id that still has a row") },
+  { name: "a gap in the ids that no RETIRED entry explains", expect: /expected g081, found g082/,
+    apply: s => replaceFirst(s, 'const RETIRED = {g081:"g006"};', 'const RETIRED = {};', "a gap in the ids that no RETIRED entry explains") },
+  { name: "a retired id mapped to a row that does not exist", expect: /successor g999 has no row/,
+    apply: s => replaceFirst(s, 'const RETIRED = {g081:"g006"};', 'const RETIRED = {g081:"g999"};', "a retired id mapped to a row that does not exist") },
+  { name: "a retired id no changelog entry names", expect: /g081 is retired but no CHANGES entry names it/,
+    apply: s => replaceFirst(s, 'retired:["g081"]', 'retired:[]', "a retired id no changelog entry names") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */

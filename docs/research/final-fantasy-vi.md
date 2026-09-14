@@ -224,4 +224,4 @@ pointers: [wiki:finalfantasy.fandom.com/Auction House (Final Fantasy VI)] [web:w
 
 ## Codex delta
 - g005–g008 (all four Final Fantasy VI minigames) sourced in place on 2026-09-14; the opera (g005) pays no prize and has no table.
-- g081 is the same coliseum, from the popular-classics batch; it keeps its general table and was not re-researched here.
+- g081 was the same coliseum, from the popular-classics batch. On 2026-09-15 it was retired into g006, which took its lesson (preparation is the whole play); the id is never reused.
