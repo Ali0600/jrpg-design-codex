@@ -17,6 +17,7 @@ named items and thresholds. No new rows are added; g009–g016 are edited in pla
 | 45511 | Gold Saucer FAQ (grep only) | AbsoluteSteve | — | — | In-Depth Guides | 97 | https://gamefaqs.gamespot.com/ps/197341-final-fantasy-vii/faqs/45511 |
 | 19004 | Fort Condor FAQ | Master_Epyon | 3.0 | 03/02/2012 | In-Depth Guides | 19 | https://gamefaqs.gamespot.com/ps/197341-final-fantasy-vii/faqs/19004 |
 | 42714 | Item/Materia Locations FAQ (grep only) | Xenomic | 3 | 11/19/2008 | In-Depth Guides | 499 | https://gamefaqs.gamespot.com/ps/197341-final-fantasy-vii/faqs/42714 |
+| 2376 | Guide and Walkthrough | Kao_Megura | 2.2 | 05/16/2004 | Full Game Guides | 892 | https://gamefaqs.gamespot.com/ps/197341-final-fantasy-vii/faqs/2376 |
 
 Coverage 45511: single page, 97,026 chars, 1,867 lines, 44 sections — no whole section read; four greps
 (prize names across the Gold Saucer, 12 hits; Fort Condor and prize words, 22; snowboard prizes, 5;
@@ -35,6 +36,16 @@ the piano, Final Heaven and Elemental, 35; Tifa's piano, 5; the six Sources, 60)
 the Megalixir entry (620–631) and the Power Source entry (2226–2257). Unread: nearly all of it; it is a
 lookup table.
 
+Coverage 2376: **read on 2026-09-15 as `pick()`'s choice** (Most Recommended, plain text) — single page,
+895,053 chars, 18,517 lines, 313 sections. `lines()` windows, each running 200 lines from its start: 3390
+(the Gold Saucer's first visit, the Wonder Square and the Corel Prison chocobo race), 3600 (the Gold Saucer
+revisited: the GP seller, the G-Bike, basketball, the Speed Square and the Battle Square's rules), 4340
+(Tifa's piano at Nibelheim) and 8150 (the Final Heaven tune and chocobo racing's classes and prizes). Greps:
+the Battle Square (128 hits), chocobo racing (13), Fort Condor (40), snowboarding (12), the G-Bike and
+submarine (42), the Wonder Square and GP (56), the piano (19) and the flyers (20). Largest unread: two enemy
+skill and monster chapters (49,207 and 29,932 chars), Inside Shinra HQ (27,949) and a 21,004-char section
+the probe heads "Please take note". Fort Condor, snowboarding, the submarine and the flyers were not read.
+
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 85 guides listed (13 Full Game Guides, 60 In-Depth Guides, 12 under other
@@ -43,81 +54,86 @@ read). The probe's cap cut its scored list at 79, so the full list was read once
 and scores appear where the scored list reached them. The questions were prize tables, so the Gold
 Saucer and Fort Condor FAQs were used, with Xenomic's locations list for the piano and flyer items.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 45703 | Guide and Walkthrough | AbsoluteSteve | Full Game Guides | 1947 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 2376 | Guide and Walkthrough | Kao_Megura | Full Game Guides | 892 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 24773 | Guide and Walkthrough | SineNomine | Full Game Guides | 1069 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 33519 | Guide and Walkthrough | A_I_e_x | Full Game Guides | 415 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 71240 | Guide and Walkthrough | bover_87 | Full Game Guides | 780 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 16888 | Guide and Walkthrough | Arctic | Full Game Guides | 491 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 16929 | Guide and Walkthrough | Dark_Angel_13 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 2373 | Guide and Walkthrough | DJellybean | Full Game Guides | 432 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 28304 | Guide and Walkthrough | BTB | Full Game Guides | 1295 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 23418 | Guide and Walkthrough | DjSiXpAcK14 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 2374 | Guide and Walkthrough | Exdeath | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 26682 | Guide and Walkthrough | spmkillie | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 3895 | Walkthrough | SIwata | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 60479 | 7777 FAQ | baxterjn | In-Depth Guides | 178 | 4 | skipped — Xenomic's locations list covered the items needed |
-| 38201 | Aeris Disc 2-3 Guide | niai_mitch | In-Depth Guides | 23 | 4 | skipped — outside this pass's questions |
-| 2381 | Battle Arena FAQ | Crescent_Lake | In-Depth Guides | 19 | 6 | skipped — the Gold Saucer FAQ's Battle Square chapter covered the prizes |
-| 22395 | Battle Mechanics FAQ | Terence | In-Depth Guides | 126 | 5 | skipped — battle and stat mechanics |
-| 19813 | Boss Guide | Blackestmage | In-Depth Guides | — | — | skipped — enemy data |
-| 7530 | Character Setup Guide | Atom_Edge | In-Depth Guides | 131 | 4 | skipped — battle and stat mechanics |
-| 58077 | Chocobo Breeding Guide | gmo7897 | In-Depth Guides | 213 | 4 | skipped — breeding, not race prizes |
-| 2384 | Chocobo Raising Guide | _Ninja_ | In-Depth Guides | 22 | 4 | skipped — breeding, not race prizes |
-| 39181 | Command-Only Challenge FAQ | Acid_Angel_13 | In-Depth Guides | 79 | 5 | skipped — a challenge run, not a reward list |
-| 3898 | Debug Room Guide | Kao_Megura | In-Depth Guides | 43 | 4 | skipped — debug, hacking or version notes |
-| 3897 | Debug Room Guide | ADean | In-Depth Guides | 104 | 4 | skipped — debug, hacking or version notes |
-| 3899 | Debug Room Guide | scrwdrvr | In-Depth Guides | 73 | 4 | skipped — debug, hacking or version notes |
-| 25620 | Don Corneo Mechanics Guide | Fantasy_Gamer | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 31903 | Enemy Mechanics FAQ | Terence | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 44722 | Enemy-Skill Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 44478 | Enemy-Skill Challenge FAQ | OvenMan | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 24334 | Enemy-Skill FAQ | SineNomine | In-Depth Guides | — | — | skipped — enemy data |
-| 77403 | Enemy/Encounter FAQ | DynamixDJ | In-Depth Guides | — | — | skipped — enemy data |
-| 19004 | Fort Condor FAQ | Master_Epyon | In-Depth Guides | — | — | read |
-| 45711 | Glitch FAQ | Xenomic | In-Depth Guides | — | — | skipped — debug, hacking or version notes |
-| 2385 | Gold Saucer Date Guide | Terence | In-Depth Guides | — | — | skipped — the date scene, not a reward list |
-| 45511 | Gold Saucer FAQ | AbsoluteSteve | In-Depth Guides | — | — | grep only |
-| 13970 | Hacking Guide | Supernova_232 | In-Depth Guides | — | — | skipped — debug, hacking or version notes |
-| 41337 | IENANENPANLBCMO Challenge FAQ | Paltheos | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 29598 | Initial Equip Challenge FAQ | Roughdawg4 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 30319 | International Ver. Hidden Items FAQ | ScreamWU | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed |
-| 42714 | Item/Materia Locations FAQ | Xenomic | In-Depth Guides | — | — | grep only |
-| 16441 | Limit Break Mechanics Guide | gideond | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 39733 | LLNIIENACMO Challenge FAQ | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 41824 | LLNMIENA FAQ | GarlandG | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 30367 | Low Level Challenge FAQ | KADFC | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 20938 | Low Level Challenge FAQ | Edman | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 32536 | Low Level Challenge FAQ | GarlandG | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 39240 | Low Level Challenge FAQ | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 41476 | Magic-Only Challenge FAQ | Acid_Angel_13 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 2388 | Materia Setups and Combos | SBishop | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 46172 | Materia-Only Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 2389 | Materia/Weapon Guide | Skultera | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed |
-| 27656 | Miss-able Items FAQ | mira_wn | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed |
-| 8668 | Monster/Item/Weapon Lists | DC | In-Depth Guides | — | — | skipped — enemy data |
-| 2390 | Monster/Treasure Chart | SAxeswinger | In-Depth Guides | — | — | skipped — enemy data |
-| 22255 | Music Guide | Thorf | In-Depth Guides | — | — | skipped — outside this pass's questions |
-| 36618 | No Materia/No Items FAQ/Walkthrough | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 19397 | No-Materia Guide | _Maxx_Power_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 36775 | Party Mechanics Guide | Terence | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 30493 | Perfect Game FAQ | JungleJim | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed |
-| 16725 | Plot Analysis | falsehead | In-Depth Guides | — | — | skipped — outside this pass's questions |
-| 3890 | Release Changes FAQ | Kao_Megura | In-Depth Guides | — | — | skipped — debug, hacking or version notes |
-| 45998 | SCIENMNANE Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 45847 | SCNIIENANE Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 29479 | Single Character Challenge Guide | Pyroe | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 24208 | Solo Character Initial Equipment No Materia Challenge Guide | Fantasy_Gamer | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 41694 | Solo Lowest Level Character Challenge | lolo26 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 31141 | Speed Run FAQ/Walkthrough | GarlandG | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first |
-| 80478 | Speed Square Guide | rironside | In-Depth Guides | — | — | skipped — the shooting ride, not among these rows |
-| 25962 | Stat Maxing Guide | mike_tru | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 31493 | Training/Random Encounter FAQ | MGSB | In-Depth Guides | — | — | skipped — battle and stat mechanics |
-| 72649 | Trophy Guide | KeyBlade999 | In-Depth Guides | — | — | skipped — outside this pass's questions |
-| 42137 | Ultimania Omega Translations | Ryu_Kaze | In-Depth Guides | — | — | skipped — outside this pass's questions |
-| 2392 | Weapon Guide | JHaglund | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed |
+`__gf.pick()` on 2026-09-15 named Kao_Megura's 2376, the first listed of three plain-text Full Game Guides
+flagged Most Recommended (bover_87's 71240 is flagged too, but HTML), and it is now read. AbsoluteSteve's
+45703, listed first, carries only Highest Rated. The flags column comes from that day's listing, which still
+lists every guide in the table.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 45703 | Guide and Walkthrough | AbsoluteSteve | Full Game Guides | 1947 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | Highest Rated |
+| 2376 | Guide and Walkthrough | Kao_Megura | Full Game Guides | 892 | 3 | read | Most Recommended |
+| 24773 | Guide and Walkthrough | SineNomine | Full Game Guides | 1069 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | Most Recommended |
+| 33519 | Guide and Walkthrough | A_I_e_x | Full Game Guides | 415 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | Most Recommended |
+| 71240 | Guide and Walkthrough | bover_87 | Full Game Guides | 780 | 3 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | Most Recommended · HTML |
+| 16888 | Guide and Walkthrough | Arctic | Full Game Guides | 491 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 16929 | Guide and Walkthrough | Dark_Angel_13 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 2373 | Guide and Walkthrough | DJellybean | Full Game Guides | 432 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 28304 | Guide and Walkthrough | BTB | Full Game Guides | 1295 | 2 | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 23418 | Guide and Walkthrough | DjSiXpAcK14 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 2374 | Guide and Walkthrough | Exdeath | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 26682 | Guide and Walkthrough | spmkillie | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 3895 | Walkthrough | SIwata | Full Game Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 60479 | 7777 FAQ | baxterjn | In-Depth Guides | 178 | 4 | skipped — Xenomic's locations list covered the items needed | — |
+| 38201 | Aeris Disc 2-3 Guide | niai_mitch | In-Depth Guides | 23 | 4 | skipped — outside this pass's questions | — |
+| 2381 | Battle Arena FAQ | Crescent_Lake | In-Depth Guides | 19 | 6 | skipped — the Gold Saucer FAQ's Battle Square chapter covered the prizes | — |
+| 22395 | Battle Mechanics FAQ | Terence | In-Depth Guides | 126 | 5 | skipped — battle and stat mechanics | Highest Rated |
+| 19813 | Boss Guide | Blackestmage | In-Depth Guides | — | — | skipped — enemy data | — |
+| 7530 | Character Setup Guide | Atom_Edge | In-Depth Guides | 131 | 4 | skipped — battle and stat mechanics | — |
+| 58077 | Chocobo Breeding Guide | gmo7897 | In-Depth Guides | 213 | 4 | skipped — breeding, not race prizes | — |
+| 2384 | Chocobo Raising Guide | _Ninja_ | In-Depth Guides | 22 | 4 | skipped — breeding, not race prizes | — |
+| 39181 | Command-Only Challenge FAQ | Acid_Angel_13 | In-Depth Guides | 79 | 5 | skipped — a challenge run, not a reward list | Highest Rated |
+| 3898 | Debug Room Guide | Kao_Megura | In-Depth Guides | 43 | 4 | skipped — debug, hacking or version notes | — |
+| 3897 | Debug Room Guide | ADean | In-Depth Guides | 104 | 4 | skipped — debug, hacking or version notes | — |
+| 3899 | Debug Room Guide | scrwdrvr | In-Depth Guides | 73 | 4 | skipped — debug, hacking or version notes | — |
+| 25620 | Don Corneo Mechanics Guide | Fantasy_Gamer | In-Depth Guides | — | — | skipped — battle and stat mechanics | — |
+| 31903 | Enemy Mechanics FAQ | Terence | In-Depth Guides | — | — | skipped — battle and stat mechanics | — |
+| 44722 | Enemy-Skill Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 44478 | Enemy-Skill Challenge FAQ | OvenMan | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 24334 | Enemy-Skill FAQ | SineNomine | In-Depth Guides | — | — | skipped — enemy data | — |
+| 77403 | Enemy/Encounter FAQ | DynamixDJ | In-Depth Guides | — | — | skipped — enemy data | Highest Rated |
+| 19004 | Fort Condor FAQ | Master_Epyon | In-Depth Guides | — | — | read | — |
+| 45711 | Glitch FAQ | Xenomic | In-Depth Guides | — | — | skipped — debug, hacking or version notes | — |
+| 2385 | Gold Saucer Date Guide | Terence | In-Depth Guides | — | — | skipped — the date scene, not a reward list | Highest Rated |
+| 45511 | Gold Saucer FAQ | AbsoluteSteve | In-Depth Guides | — | — | grep only | — |
+| 13970 | Hacking Guide | Supernova_232 | In-Depth Guides | — | — | skipped — debug, hacking or version notes | — |
+| 41337 | IENANENPANLBCMO Challenge FAQ | Paltheos | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 29598 | Initial Equip Challenge FAQ | Roughdawg4 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 30319 | International Ver. Hidden Items FAQ | ScreamWU | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed | — |
+| 42714 | Item/Materia Locations FAQ | Xenomic | In-Depth Guides | — | — | grep only | — |
+| 16441 | Limit Break Mechanics Guide | gideond | In-Depth Guides | — | — | skipped — battle and stat mechanics | Most Recommended |
+| 39733 | LLNIIENACMO Challenge FAQ | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 41824 | LLNMIENA FAQ | GarlandG | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 30367 | Low Level Challenge FAQ | KADFC | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 20938 | Low Level Challenge FAQ | Edman | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 32536 | Low Level Challenge FAQ | GarlandG | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 39240 | Low Level Challenge FAQ | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 41476 | Magic-Only Challenge FAQ | Acid_Angel_13 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 2388 | Materia Setups and Combos | SBishop | In-Depth Guides | — | — | skipped — battle and stat mechanics | — |
+| 46172 | Materia-Only Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 2389 | Materia/Weapon Guide | Skultera | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed | — |
+| 27656 | Miss-able Items FAQ | mira_wn | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed | Highest Rated |
+| 8668 | Monster/Item/Weapon Lists | DC | In-Depth Guides | — | — | skipped — enemy data | — |
+| 2390 | Monster/Treasure Chart | SAxeswinger | In-Depth Guides | — | — | skipped — enemy data | — |
+| 22255 | Music Guide | Thorf | In-Depth Guides | — | — | skipped — outside this pass's questions | — |
+| 36618 | No Materia/No Items FAQ/Walkthrough | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 19397 | No-Materia Guide | _Maxx_Power_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 36775 | Party Mechanics Guide | Terence | In-Depth Guides | — | — | skipped — battle and stat mechanics | Highest Rated |
+| 30493 | Perfect Game FAQ | JungleJim | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed | — |
+| 16725 | Plot Analysis | falsehead | In-Depth Guides | — | — | skipped — outside this pass's questions | Highest Rated |
+| 3890 | Release Changes FAQ | Kao_Megura | In-Depth Guides | — | — | skipped — debug, hacking or version notes | Highest Rated |
+| 45998 | SCIENMNANE Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 45847 | SCNIIENANE Challenge FAQ | Xenomic | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 29479 | Single Character Challenge Guide | Pyroe | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 24208 | Solo Character Initial Equipment No Materia Challenge Guide | Fantasy_Gamer | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 41694 | Solo Lowest Level Character Challenge | lolo26 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | Highest Rated |
+| 31141 | Speed Run FAQ/Walkthrough | GarlandG | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated Gold Saucer and Fort Condor FAQs answered first | — |
+| 80478 | Speed Square Guide | rironside | In-Depth Guides | — | — | skipped — the shooting ride, not among these rows | — |
+| 25962 | Stat Maxing Guide | mike_tru | In-Depth Guides | — | — | skipped — battle and stat mechanics | — |
+| 31493 | Training/Random Encounter FAQ | MGSB | In-Depth Guides | — | — | skipped — battle and stat mechanics | Highest Rated |
+| 72649 | Trophy Guide | KeyBlade999 | In-Depth Guides | — | — | skipped — outside this pass's questions | Highest Rated · HTML |
+| 42137 | Ultimania Omega Translations | Ryu_Kaze | In-Depth Guides | — | — | skipped — outside this pass's questions | — |
+| 2392 | Weapon Guide | JHaglund | In-Depth Guides | — | — | skipped — Xenomic's locations list covered the items needed | — |
 
 ## Mechanics candidates
 
@@ -144,8 +160,8 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:
 |---|---|---|
 | C class | consumables worth 5 to 30 GP, from a Potion to an Ether | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve] |
 | B class | consumables up to a Turbo Ether (150 GP) and an Elixir (200 GP) | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve] |
-| A class | adds Counter Attack, Sneak Attack and Enemy Away materia (300 GP each) and a Cat's Bell (500 GP) | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve] |
-| S class | adds a Megalixir and a Precious Watch (300 GP), a Chocobracelet (400 GP), Magic Counter and Sprint Shoes (500 GP) | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve] |
+| A class | adds Counter Attack, Sneak Attack and Enemy Away materia (300 GP each), a Cat's Bell and Sprint Shoes (500 GP each) | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2] |
+| S class | adds a Megalixir and a Precious Watch (300 GP), a Chocobracelet (400 GP) and Magic Counter (500 GP) | [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve] [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2] |
 
 ### g011 Fort Condor
 pointers: [gf:19004 §When do all the battles take place, Master_Epyon v3.0] [gf:45511 §{M3} Fort Condor, AbsoluteSteve] [wiki:finalfantasy.fandom.com/Condor War]
@@ -177,8 +193,8 @@ pointers: [wiki:finalfantasy.fandom.com/Submarine Game] [wiki:finalfantasy.fando
 
 | at | get | src |
 |---|---|---|
-| G-Bike arcade, a score short of 10,000 | 2 GP | [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve] |
-| G-Bike arcade, 10,000 points or more | 10 GP, and a Speed Source the first time | [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve] |
+| G-Bike arcade, 5,000 points or more but short of 10,000 | 2 GP | [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2] |
+| G-Bike arcade, 10,000 points or more | 10 GP, and a Speed Source the first time | [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve] [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2] |
 | Submarine game, its five prizes (each once) | 20 GP each, with Ink, a T/S Bomb, a Dragon Fang, Dragon Scales and a Cauldron in turn | [wiki:finalfantasy.fandom.com/Submarine Game] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve] |
 
 ### g014 Wonder Square
@@ -214,24 +230,31 @@ pointers: [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 �
 
 ### Hidden
 - The piano pays 1 gil on the first visit with the party, from Tifa's savings, when played three times [wiki:finalfantasy.fandom.com/Nibelheim (Final Fantasy VII field)]
+- The walkthrough gives the same 1 gil for three plays of the tune on that visit, with the button input for it, and has the same tune, played later with Tifa in the party, turn up the Final Heaven manual in her sheet music [gf:2376 §(R) Nibelheim and Vincent, Kao_Megura v2.2] [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2]
 - Fort Condor's commander CMD. Grand Horn drops a Vagyrisk Claw in battles 1 to 3, and any battle where he is fought pays no prize [gf:45511 §{M3} Fort Condor, AbsoluteSteve]
 
 ### Upgrades
 - In chocobo racing each race offers one of three prizes, weighted 7, 5 and 3 tiles out of 15 [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)]
 - Winning 10 S-class races in a row makes Esther hand over Sprint Shoes, a Precious Watch, a Cat's Bell, a Chocobracelet and Counter Attack materia, once [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve]
 - After a full Battle Square run, a woman by the exit gives Sprint Shoes, once [gf:45511 §{M1.3} Battle Square, AbsoluteSteve]
+- A Battle Square run costs 10 GP for one character and eight battles in a row, each followed by a roulette handicap that lasts the rest of the run (unequipped gear, a sealed materia type or all materia, halved HP or MP, a level loss, a status, or Lucky 7 for none); BP is paid only for all eight, cannot be carried out of the room, and is lost to a death or a flight, and the fights pay no EXP, AP or gil and teach no Enemy Skills [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2]
+- In chocobo racing a win pays a ticket to trade for an item or GP, three first places promote a chocobo a class from C up to S, and ten S-class wins with the same chocobo pay Sprint Shoes, a Precious Watch, a Cat's Bell, a Chocobracelet and Counter Attack materia [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2]
 
 ### Shops & exchange
 - Letting the fort handle a battle costs its keeper 3,000 gil and pays nothing [gf:19004 §When do all the battles take place, Master_Epyon v3.0]
+- The walkthrough's Wonder Square exchange matches g014: Potion 1 GP, Ether 20, X-Potion 80, Turbo Ether 100, Gold Ticket 300 and a Carob Nut at 500 [gf:2376 §(N) Corel Prison, Kao_Megura v2.2]
+- GP comes other ways too: a man who only sometimes stands at the entrance sells 1 GP for 100 gil, up to 100 at a time; the G-Bike costs 200 gil a play; and Mog House pays 30 GP for the first win only [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2] [gf:2376 §(N) Corel Prison, Kao_Megura v2.2]
+- The Speed Square's shooting ride costs 10 GP and gives Aeris's Umbrella at 5,000 points, then only novelty prizes [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2]
 - Battles 14 to 18 happen while the party is captive, and count as won when the fort has been given at least 15,000 gil [gf:45511 §{M3} Fort Condor, AbsoluteSteve] [gf:19004 §When do all the battles take place, Master_Epyon v3.0]
 
 ## Unverified or contradicted
 - **How many flyers there are.** The wiki counts six; Xenomic's Power Source entry says seven [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 §C) Other Items, Xenomic v3]
 - **What the flyers pay.** The wiki lists all six Sources and a Megalixir; Xenomic names only the Megalixir and a Power Source [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 §A) Perishable Items, Xenomic v3] [gf:42714 §C) Other Items, Xenomic v3]
 - **When the submarine prizes come.** The wiki gives them for the first to fifth wins at any level; the Gold Saucer FAQ ties each to one level, from the Undersea Mako Reactor battle to Level 4 [wiki:finalfantasy.fandom.com/Submarine Game] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve]
-- **The G-Bike's lowest paying score.** The wiki pays 2 GP only above 5,000 points; the Gold Saucer FAQ gives 2 GP for anything under 10,000 [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve]
+- **The G-Bike's lowest paying score.** The wiki pays 2 GP only above 5,000 points; the Gold Saucer FAQ gives 2 GP for anything under 10,000 [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve]. The walkthrough read on 2026-09-15 sides with the wiki, paying 2 GP from 5,000 points, so g013 now reads 5,000 to 9,999; the wiki says above 5,000 and the walkthrough 5,000 or above [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2]
+- **Basketball's payout.** The walkthrough pays 1 GP for each successful shot until a miss; g014's 300 GP at 44 hits comes from the wiki and the Gold Saucer FAQ, and the walkthrough does not say whether the per-shot pay grows [gf:2376 §(O) Gold Saucer / The Sleeping Man, Kao_Megura v2.2] [wiki:finalfantasy.fandom.com/Wonder Square (Final Fantasy VII)]
 - **Fort Condor's numbering.** Both FAQs number the prizes by battle, and the wiki by battle level; Xenomic ties the Megalixir to the fourth battle, which agrees with the FAQs [wiki:finalfantasy.fandom.com/Condor War] [gf:19004 §When do all the battles take place, Master_Epyon v3.0] [gf:45511 §{M3} Fort Condor, AbsoluteSteve] [gf:42714 §A) Perishable Items, Xenomic v3]
-- **Chocobo racing's A and B lists.** The wiki puts Sprint Shoes in the A-class list and Ice Crystal only in A and S; the Gold Saucer FAQ omits Sprint Shoes from A and lists Ice Crystal in B [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve]
+- **Chocobo racing's A and B lists.** The wiki puts Sprint Shoes in the A-class list and Ice Crystal only in A and S; the Gold Saucer FAQ omits Sprint Shoes from A and lists Ice Crystal in B [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve]. The walkthrough read on 2026-09-15 sides with the wiki on both, so g010 now lists Sprint Shoes at A. It also lists Enemy Away at B, which the wiki allows only once the Gold Saucer reopens, and it lists no Potion and puts Ether at A and B only, where the wiki and the Gold Saucer FAQ both start C with a Potion and an Ether; C stays as it was [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2]
 - **The final Fort Condor battle.** Master_Epyon says losing to CMD. Grand Horn there shuts the fort for good; the Gold Saucer FAQ says beating him still gives the Phoenix and Huge Materia [gf:19004 §When do all the battles take place, Master_Epyon v3.0] [gf:45511 §{M3} Fort Condor, AbsoluteSteve]
 
 ## Codex rows
@@ -243,3 +266,4 @@ pointers: [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 �
 
 ## Codex delta
 - g009–g016 (all eight Final Fantasy VII minigames) tabled and sourced in place on 2026-09-14.
+- 2026-09-15: the Most Recommended walkthrough, 2376, read under the owner's rule. g009, g010, g013, g014 and g015 cite it. **g013 sharpened**: the G-Bike's 2 GP starts at 5,000 points, where the wiki and the walkthrough agree against the Gold Saucer FAQ. **g010 sharpened**: Sprint Shoes move from S class to A, where the wiki and the walkthrough agree. All five are in the 2026-09-15 entry's `updated`.
