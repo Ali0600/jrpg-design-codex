@@ -28,6 +28,27 @@ Achievement/Trophy Speedrun guide, a map, a Game Script and a Portuguese transla
 walkthrough was read for its systems sections and its contents list, and the wiki carried the
 cross-checks. A thin GameFAQs result for a 2015 open-world game, recorded rather than padded.
 
+## Triage
+
+`__gf.triage()` and `__gf.pick()` on 2026-09-15: 10 guides listed (6 Full Game Guides, 2 In-Depth
+Guides, and a Portuguese walkthrough and a map under other headings, none read). The scores below were
+computed once with the probe's own `core.triage` over the whole listing. **`pick()` returns nothing,
+because all six Full Game Guides are HTML**, so the owner's rule reads no walkthrough for this game.
+sokkus's formatted 71896, of which the 2026-09-06 pass opened two of nineteen pages, keeps its `read`
+decision. That pass counted four full walkthroughs; the listing now shows six, two of them sokkus's
+(73519 and 74361) listed after the map. Its decisions come from its Sources table and summary above.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 71896 | Guide and Walkthrough | sokkus | Full Game Guides | 939 | 3 | read | Highest Rated · FAQ of the Month Winner: February 2016 · HTML |
+| 71914 | Walkthrough | Nocturnia77 | Full Game Guides | 774 | 3 | skipped — HTML, a second full walkthrough | Highest Rated · HTML |
+| 73519 | Guide and Walkthrough | sokkus | Full Game Guides | 423 | 3 | skipped — HTML, another of sokkus's walkthroughs | Highest Rated · FAQ of the Month Winner: July 2016 · HTML |
+| 74361 | Guide and Walkthrough | sokkus | Full Game Guides | 190 | 3 | skipped — HTML, another of sokkus's walkthroughs | Highest Rated · FAQ of the Month Winner: January 2017 · HTML |
+| 73988 | Achievement/Trophy Speedrun Guide | optimusmart | In-Depth Guides | 161 | 3 | skipped — HTML, a trophy speedrun | Highest Rated · HTML |
+| 71878 | Guide and Walkthrough | Suikosun | Full Game Guides | 138 | 2 | skipped — HTML, another walkthrough | HTML |
+| 74378 | Spoiler-Free Walkthrough | Rockstardreams | Full Game Guides | 34 | 2 | skipped — HTML, another walkthrough | HTML |
+| 73353 | Game Script | Shotgunnova | In-Depth Guides | 1535 | -1 | skipped — a script | — |
+
 ## Mechanics candidates
 
 ### Scavenger Hunts: the found item is what creates the quest
@@ -120,3 +141,4 @@ Nothing read this pass — the guide's shop and merchant material sits in the 17
 
 ## Codex delta
 - (ids after the splice)
+- 2026-09-15: the Triage record added. `pick()` returns nothing because every Full Game Guide is HTML, so the owner's rule reads no walkthrough here, and no row was edited.
