@@ -191,7 +191,7 @@ line per chain.
 
 ### M224 — Norende Village rebuild
 - The place that becomes yours · how · `Tiz's hometown is destroyed in the opening and he is put in charge of rebuilding it`
-- The shop that has upgrades too · how · `raise shops, each of which has multiple levels`
+- The shop that has upgrades too · how · `raise eleven shops of eleven levels each`
 
 ### M225 — Archetype lineages (classes that rank up separately from you)
 - Abilities that outlive the class · how · `hitting Rank 20 permanently raises one of the wearer's stats and unlocks the stronger form`

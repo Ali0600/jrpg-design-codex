@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **289 mechanics** (`BASE_MECHS` array, M001-M289) across **72 researched games**: FF7 Rebirth,
+- **290 mechanics** (`BASE_MECHS` array, M001-M290) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -139,6 +139,13 @@ backup; the HTML file is the source of truth and is more up to date.
   ranks open with the story and end on a 99,999-chip familiar. The walkthroughs disagree on two
   tier-one prices and on the chip price, and the wiki's casino text turned out to be one guide's, so
   the individual prize prices rest on a single reading and only the tickets' total is confirmed apart.
+  **Bravely Default** (M290, M224 sharpened): special moves grown in Norende, where one shop unlocks
+  26 finishers over ten levels and four parts shops make the modifiers slotted into each (element,
+  monster family, a 10–50% power boost, status, healing or extra turns), chained by firing the next
+  before the music ends; and the Norende rebuild made concrete, six blocked areas and eleven shops of
+  eleven levels whose times divide by the villagers assigned and climb to 99 hours, with the Golden
+  and Growth Eggs at the Accessory Shop's ninth and tenth levels. Three readings of the shop tables
+  disagree on three cells, and all three readings are kept.
   Plus the **game pages** (2026-09-07): every roster row carries its box art (Wikipedia,
   `covers/`), a Wikipedia link, and its GameFAQs page — platform, genre, developer,
   publisher, release, franchise, the user rating / difficulty / length, and the five games
@@ -208,7 +215,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M289, minigames g001-g098. Continue the
+  - IDs are sequential: mechanics M001-M290, minigames g001-g098. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -242,7 +249,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 289 rows are tagged**
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 290 rows are tagged**
   (105 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
@@ -289,7 +296,9 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   it in the data region and turns `"M266-M275"` into ids — the validator calls the PAGE's
   copy, so the ranges the UI renders are the ranges it checks.
   **Edited an existing row in place? Add its id to the newest entry's `updated` list** —
-  `scripts/check_changes.mjs` fails CI otherwise. The splicer logs `added` for you.
+  `scripts/check_changes.mjs` fails CI otherwise. If the edit removed a span that `docs/verbs.md` or
+  `docs/lineages.md` quotes, re-quote the row there too (the validator names the line; M224's
+  Bravely Default rewrite hit this). The splicer logs `added` for you.
   The ONE exception is `verbs`, carved out in that script's `ANALYSIS_KEYS`: a tag derived
   from a row's own text is analysis OF the row, not content of it, and logging a whole
   tagging pass would collapse every row it touched onto one date, permanently. Change any
