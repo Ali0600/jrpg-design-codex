@@ -406,3 +406,18 @@ tickets' 75,000-chip total and which prize ranks open when, and the digest recor
 **Takeaway:** before counting a second source, compare a sentence of the prose around the fact. If
 the wording matches, treat the two as one source, look for a third that words it differently, and
 write down which parts of the claim that third source actually covers.
+
+## A summary of a research session is recall, not a source
+When a long session's context is compacted, its facts carry forward as a paraphrase, and anything
+written from that paraphrase inherits its gaps without showing where they are.
+
+**Why it came up:** Final Fantasy X's reward digest was written straight after a compaction. Checked
+against the session's raw tool results before the commit, most of it held: every guide's size,
+date and version, and all 114 triage ids. But three pointer section names had been made up, one
+claim (a sigil game called "the hardest of the three") appeared in no guide, two table rows cited a
+source that said something narrower, and a title the probe had cut at 40 characters had been
+quietly completed.
+
+**Takeaway:** after a compaction, take every pointer, section name and number from the recorded tool
+output, never from the summary. Copy a section name from the probe's own `sec` or `head` field,
+narrow a row to what its sources actually say, and drop a claim no passage carries.
