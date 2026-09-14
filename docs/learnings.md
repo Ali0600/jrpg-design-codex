@@ -392,3 +392,17 @@ dates were still strictly decreasing, and two other scripts defaulted their `--t
 clock, and the tool that writes one takes a `--today` flag so a run can be pinned. Test the
 conversion in a child process with `TZ` set to a zone where the two readings differ, and scan for
 the pattern so the next script cannot copy it.
+
+## Two sources that agree because one copied the other are one source
+A wiki and a guide can agree on a number only because one copied the other, and then the agreement
+proves only that the number was written down once.
+
+**Why it came up:** Ni no Kuni's Crypt Casino prize prices matched between the Ni no Kuni wiki and
+noz3r0's walkthrough, which looked like two confirmations of all sixteen prices. The wiki's
+introduction to the casino turned out to be noz3r0's paragraph almost word for word, so the
+individual prices rest on one reading. A third guide, independent of both, confirmed only the four
+tickets' 75,000-chip total and which prize ranks open when, and the digest records exactly that.
+
+**Takeaway:** before counting a second source, compare a sentence of the prose around the fact. If
+the wording matches, treat the two as one source, look for a third that words it differently, and
+write down which parts of the claim that third source actually covers.
