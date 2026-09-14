@@ -13,7 +13,7 @@ Codex: `Xenogears` (1998, PlayStation) · GameFAQs: `/ps/199365-xenogears` confi
 | 4414 | Deathblow/Ability FAQ | Ranma | 1.2 | 01/13/1999 | In-Depth Guides | 14 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/4414 |
 | 46377 | Deathblow Learning Guide | fidormula | 3rd ed. | 04/10/2008 | In-Depth Guides | 27 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/46377 |
 | 58934 | Battle Mechanics FAQ | ForteGSOmega | 0.8 | 02/02/2010 | In-Depth Guides | 78 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/58934 |
-| 50268 | Guide and Walkthrough (grep only) | Shotgunnova | — | — | Full Game Guides | 614 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268 |
+| 50268 | Guide and Walkthrough | Shotgunnova | — | — | Full Game Guides | 614 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/50268 |
 | 4408 | Battling FAQ (versus mode) | Dan_GC | 1.2 | 04/16/1999 | In-Depth Guides | 53 | https://gamefaqs.gamespot.com/ps/199365-xenogears/faqs/4408 |
 
 Coverage 4414: single page, 14,553 chars, 40 sections — 3 read at 100% (Introduction, the
@@ -30,11 +30,15 @@ Coverage 58934: single page, 77,952 chars, 166 sections — 3 read at 100% (Gear
 Gear Commands, Hyper Mode Mechanics) plus the Charger table; grep: fuel. Unread: the
 per-character sections and the status/element chapters, ~160 sections.
 
-Coverage 50268: **grep only, by design** — 588,346 chars, 114 sections, 0 sections read.
-Nine greps (hyper mode, fuel, engine, battling, Kislev Battling, prize, fuel chart, the
-sidequest anchor, and `BOSS: .*WIN:`) plus one 40-line `lines()` read at the arena. 75
-sections over 800 chars unread, the largest 93K. A 614KB walkthrough is a lookup table, not
-a document to read.
+Coverage 50268: **read on 2026-09-15 as `pick()`'s choice** (Most Recommended, plain text) — single
+page, 588,346 chars, 9,768 lines, 114 sections. This pass: `lines()` windows 486–567 (the Combo command,
+Attack Levels, DeathBlowers and Infinity Level Mode), 606–617 (Lahan's one-time items) and 2512–2559 (the
+second Kislev Battling visit); greps threshold (129 hits), rewards (99), hidden (65), upgrades (328),
+economy (427), Deathblow (162), Gear parts and fuel (222), Battling or Kislev (80), RPS (10) and Charger
+(29). The 2026-09-06 pass had run nine greps (hyper mode, fuel, engine, battling, Kislev Battling,
+prize, fuel chart, the sidequest anchor, and `BOSS: .*WIN:`) and one 40-line `lines()` read at the
+arena. Largest unread: a 92,978-char walkthrough section, a 70,251-char one, the 40,705-char dungeon
+maps and the Equipment List (32,532).
 
 Coverage 4408: single page, 53,970 chars, 67 sections — 2 read (the contents/copyright
 block, the mode-settings block); greps: money, unlock, matches, rank, prize, fuel. **Result:
@@ -45,6 +49,61 @@ Triage (2026-09-06, `__gf.triage()` on 50 guides): the strongest In-Depth list o
 rollout — two independent Deathblow guides, a Battle Mechanics FAQ, two Battling guides, a
 Character FAQ and a 159KB Debug Room guide, all above seven full walkthroughs. The headline
 mechanic's cross-check is therefore internal to GameFAQs.
+
+## Triage
+
+`__gf.triage()` and `__gf.pick()` on 2026-09-15: 50 guides listed (16 Full Game Guides, 27 In-Depth
+Guides, 7 under other headings: three foreign-language guides and four maps, none read). `triage()` scores
+only the rows under its size cap, so every score below was computed once with the probe's own
+`core.triage` over the whole listing. `pick()` named Shotgunnova's walkthrough, 50268 (Most Recommended,
+plain text), which moved from grep only to read under the owner's rule. The 2026-09-06 pass predates
+this record, so its decisions come from its Sources table and summary above.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 35016 | No Upgrade Challenge Guide | XenoManx | In-Depth Guides | 98 | 8 | skipped — a challenge run, not the game's own rules | Highest Rated |
+| 7043 | Story/Side Quest FAQ | Atom_Edge | In-Depth Guides | 85 | 7 | skipped — story and side quests, outside this pass's questions | — |
+| 9827 | Item FAQ | Lightopia | In-Depth Guides | 63 | 7 | skipped — an item list | — |
+| 41681 | Shop FAQ | Dinob0t | In-Depth Guides | 61 | 7 | skipped — shop stock, outside this pass's questions | — |
+| 4417 | Item FAQ | SLiebhard | In-Depth Guides | 17 | 6 | skipped — a second item list | — |
+| 4414 | Deathblow/Ability FAQ | Ranma | In-Depth Guides | 14 | 6 | read | — |
+| 79808 | Missable Item Guide | Bakuto | In-Depth Guides | 12 | 6 | skipped — missable items | HTML |
+| 58933 | Monster List | ForteGSOmega | In-Depth Guides | 96 | 5 | skipped — a bestiary | — |
+| 23765 | Monster List | Son_Kain | In-Depth Guides | 84 | 5 | skipped — a second bestiary | — |
+| 4415 | Debug Room Guide | ADean | In-Depth Guides | 159 | 4 | skipped — the debug room, not the game as shipped to players | — |
+| 58934 | Battle Mechanics FAQ | ForteGSOmega | In-Depth Guides | 78 | 4 | read | — |
+| 4408 | Battling FAQ | Dan_GC | In-Depth Guides | 53 | 4 | read | — |
+| 4412 | Character FAQ | skuldnoshinpu | In-Depth Guides | 40 | 4 | skipped — characters | — |
+| 6600 | Speed Guide | JRKerr | In-Depth Guides | 36 | 4 | skipped — a speed run | — |
+| 46377 | Deathblow Learning Guide | fidormula | In-Depth Guides | 27 | 4 | read | — |
+| 4413 | Characters Guide | AKishan | In-Depth Guides | 26 | 4 | skipped — characters | — |
+| 50268 | Guide and Walkthrough | Shotgunnova | Full Game Guides | 614 | 3 | read | Most Recommended |
+| 29850 | Battling Special Mode 2 Guide | Duke_Darkwood | In-Depth Guides | 13 | 3 | skipped — the versus mode, not the story arena | — |
+| 4402 | Plot Walkthrough | JChang | In-Depth Guides | 11 | 3 | skipped — the plot | — |
+| 4416 | Final Dungeon Guide | Kinweng | In-Depth Guides | 7 | 3 | skipped — one dungeon | — |
+| 4395 | Guide and Walkthrough | Weltall_Zero | Full Game Guides | 458 | 2 | skipped — a second walkthrough | — |
+| 27616 | Guide and Walkthrough | Masamune167 | Full Game Guides | 372 | 2 | skipped — another walkthrough | — |
+| 4399 | Guide and Walkthrough | Layzie_Liu | Full Game Guides | 305 | 2 | skipped — another walkthrough | — |
+| 4396 | Guide and Walkthrough | Jarek | Full Game Guides | 279 | 2 | skipped — another walkthrough | — |
+| 4400 | Guide and Walkthrough | SLee | Full Game Guides | 260 | 2 | skipped — another walkthrough | — |
+| 4398 | Guide and Walkthrough | MKnight | Full Game Guides | 245 | 2 | skipped — another walkthrough | — |
+| 19675 | Guide and Walkthrough | Ziggyshack | Full Game Guides | 210 | 2 | skipped — another walkthrough | — |
+| 20243 | Guide and Walkthrough | GheddonLN | Full Game Guides | 210 | 2 | skipped — another walkthrough | — |
+| 4391 | Guide and Walkthrough | Weltall_Zero | Full Game Guides | 178 | 2 | skipped — another walkthrough | — |
+| 4406 | Walkthrough (Part 3 of 3) | YoungMan1979 | Full Game Guides | 120 | 2 | skipped — part of another walkthrough | — |
+| 4404 | Walkthrough (Part 1 of 3) | YoungMan1979 | Full Game Guides | 118 | 2 | skipped — part of another walkthrough | — |
+| 4405 | Walkthrough (Part 2 of 3) | YoungMan1979 | Full Game Guides | 102 | 2 | skipped — part of another walkthrough | — |
+| 4393 | Guide and Walkthrough (Part 1 of 2) | GCaparas | Full Game Guides | 96 | 2 | skipped — part of another walkthrough | — |
+| 4392 | Guide and Walkthrough | DJohnson | Full Game Guides | 91 | 2 | skipped — another walkthrough | — |
+| 4394 | Guide and Walkthrough (Part 2 of 2) | GCaparas | Full Game Guides | 80 | 2 | skipped — part of another walkthrough | — |
+| 4411 | Boss/Deathblow Guide | Kildread | In-Depth Guides | 185 | 1 | skipped — boss strategy; two Deathblow guides answered first | — |
+| 4409 | Boss Guide | Ranma | In-Depth Guides | 63 | 1 | skipped — boss strategy | — |
+| 4410 | Boss Guide | MBeddingfield | In-Depth Guides | 24 | 1 | skipped — boss strategy | — |
+| 29716 | Perfect Works Translation Guide | int | In-Depth Guides | 333 | 0 | skipped — a translation of the art book | Most Recommended |
+| 10004 | Game Script (Disc 1) | Sheamon | In-Depth Guides | 627 | -1 | skipped — a game script | — |
+| 10029 | Game Script (Disc 2) | Sheamon | In-Depth Guides | 199 | -1 | skipped — a game script | — |
+| 15622 | Perfect Works FAQ/Translation | Sheamon | In-Depth Guides | 181 | -1 | skipped — a translation of the art book | — |
+| 4403 | Translation Guide | Cyath | In-Depth Guides | 181 | -1 | skipped — a translation guide | — |
 
 ## Mechanics candidates
 
@@ -67,6 +126,7 @@ row: M276
 - Two gates sit on top: some Deathblows need 7 AP per turn to be learned at all (available after the Generator Battles in Shevat), and some, though 100% learned, stay unusable until a level — Fei's Kokei waits for Level 70 [gf:4414 §Character DeathBlows, Ranma v1.2]
 - Fei's six elemental Deathblows each cost 7 AP and carry Wind, Earth, Fire, Water, Light or Darkness [gf:4414 §Fei Fong Wong, Ranma v1.2]
 - Chu-Chu and Maria have no Deathblows at all [gf:46377 §Basics, fidormula 3rd ed.]
+- Learned Deathblows can be chained with the Combo command, which spends the AP saved across turns, up to 28: enough for Raijin seven times in a row. Every character has seven Deathblows usable there, leaving out the 7-AP elementals and Fei's extra two [gf:50268 §TH' BASICS, Shotgunnova]
 
 ### Gears: a machine whose stats are parts, and whose fuel is a turn you choose not to attack
 cat: Progression & Upgrades
@@ -87,6 +147,8 @@ row: M277
 - The Charger accessories multiply that refill enormously — at Attack Level 0 it is 30 without one, 50 with an A Charger, 100 with S, 200 with X and 500 with Z; each Attack Level adds a further 20 [gf:58934 §Gear Commands, ForteGSOmega v0.8]
 - The Gear screen shows FL as current and maximum fuel capacity, and the status ailments mirror the on-foot ones — Poison on foot is Fuel Leak in a Gear [gf:50268 §TH' BASICS, Shotgunnova]
 - DeathBlower accessories grant an extra Gear Deathblow at Attack Level 1 that costs less fuel than normal [gf:50268 §FAQ, Shotgunnova]
+- A Gear builds Attack Levels instead of AP, one for each attack that does not spend a Deathblow, from 0 to 3, and each level makes that level's Gear Deathblow usable; a Gear has two per level, and it reaches level 2 only once its pilot can use a third Deathblow on foot, level 3 once a fifth [gf:50268 §TH' BASICS, Shotgunnova]
+- DeathBlower1, 2 and 3 each add one extra, cheaper Deathblow at their own Attack Level, on the X button [gf:50268 §TH' BASICS, Shotgunnova]
 
 ### Hyper Mode: the odds of your best state rise as your health falls
 cat: Combat
@@ -103,6 +165,7 @@ row: M278
 - Entry requires Attack Level 3 followed by an action that does not reduce it — a plain attack, Item, Ether, Booster, Charge or even a failed Escape [gf:58934 §Hyper Mode Mechanics, ForteGSOmega v0.8]
 - Two hard-coded exceptions: swordless Heimdal can never enter it (0%), and Xenogears is always at 99% [gf:58934 §Hyper Mode Mechanics, ForteGSOmega v0.8]
 - The walkthrough confirms the player-facing side: build to Attack Level 3 and read the Hyper Mode percentage shown on the right of the battle screen; it also notes Ether attacks work as the AL-preserving action [gf:50268 §FAQ, Shotgunnova]
+- Weltall-2's System Id ability puts it into the mode at once, and the later Xenogears mech keeps a permanent 99% chance; in the mode fuel charges at ten times the normal rate, Chargers included, so a Gear with a Z Charger can refill 5,000 fuel in one turn [gf:50268 §TH' BASICS, Shotgunnova] [gf:58934 §Hyper Mode Mechanics, ForteGSOmega v0.8]
 
 ## Minigame candidates
 
@@ -126,6 +189,10 @@ row: g096
 | Losing | Unlimited retries; the story fights against Ganador and Stier carry no purse | [gf:50268 §Kislev Battling, Shotgunnova] |
 
 ## Exploration & upgrade facts
+
+### Hidden
+- Lahan holds two one-time items that can only be taken before Fei leaves the village: a Mermaid Tear for telling the sulky man in the bar "Drinking won't help matters", and an RPS Badge for beating a husband at rock-paper-scissors five times in a row [gf:50268 §WALKTHROUGH (CHAPTERS), Shotgunnova]
+- Collecting all three badges (the RPS Badge, the H&S Badge and the Tag Badge) lets the party trade them to the old Chu-Chu for a Charger A and a Power Ring S [gf:50268 §WALKTHROUGH (CHAPTERS), Shotgunnova]
 
 ### Upgrades
 - Gear parts are sold at the arena itself — Hammer's stock is available between Battling matches [gf:50268 §Kislev Battling, Shotgunnova]
@@ -154,3 +221,4 @@ Nothing further read this pass; the walkthrough's shop appendix was not opened.
 
 ## Codex delta
 - (ids after the splice)
+- 2026-09-15: the Most Recommended walkthrough, 50268, read under the owner's rule; its Coverage line says what was read. It adds the Combo command's AP cap, how Gear Attack Levels open Deathblows, the mode's special cases and a badge trade. No row was edited.

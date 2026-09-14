@@ -156,6 +156,13 @@ test("a digest started on or after 2026-09-15 needs the flags column; an older o
   assert.deepEqual(lint({ started: "2026-09-15", triage: [...FLAG_HEAD, ...read] }), []);
 });
 
+test("a digest from before the Triage record is held to the walkthrough rule once it adds a flags column", () => {
+  const graze = lint({ started: "2026-09-05", triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | grep only | Most Recommended |")] });
+  assert.ok(hit(graze, /22222 is the Full Game Guide to read/), graze.join("\n"));
+  assert.deepEqual(lint({ started: "2026-09-05", triage: [...FLAG_HEAD, ...flagRows("| 22222 | Walkthrough | Bo | Full Game Guides | 400 | 4 | read | Most Recommended |")] }), []);
+  assert.deepEqual(lint({ started: "2026-09-05", coverage: [], triage: null }), [], "without a Triage table it is held to nothing new");
+});
+
 test("the committed digests and the template lint clean", () => {
   const { files, problems } = lintDir(join(ROOT, "docs", "research"));
   assert.ok(files.includes("_template.md") && files.length >= 8, files.join(", "));

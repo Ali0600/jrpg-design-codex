@@ -13,7 +13,7 @@ digest started 2026-09-05
 |---|---|---|---|---|---|---|---|
 | 38095 | Power-Up/Item FAQ | SIMSteven | 1.0 | 07/26/2005 | In-Depth Guides | 29 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/38095 |
 | 8585 | Secrets Guide | d0wner | 1.1 | 02/11/2001 | Codes and Secrets | 30 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/8585 |
-| 8509 | Guide and Walkthrough (grep only) | krystalklyr | 1.3 | 06/25/2002 | Full Game Guides | 380 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/8509 |
+| 8509 | Guide and Walkthrough | krystalklyr | 1.3 | 06/25/2002 | Full Game Guides | 380 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/8509 |
 | wiki | Threads of Fate · Rue · Arc Edge · Dual Rings | — | — | — | threadsoffate.fandom.com | — | https://threadsoffate.fandom.com/wiki/Threads_of_Fate |
 
 Triage (2026-09-05, `__gf.triage()` on 10 guides): Power-Up/Item FAQ 10 · Secrets Guide 6 ·
@@ -22,6 +22,35 @@ grep only · Game Script and Translation Guide skipped. The wiki has 28 pages, n
 characters — usable for the two existing rows, not for items. The Secrets Guide boxes its
 headings as `//-=-=\\ … \\-=-=//`, which the probe did not read as sections until this
 pilot taught it to (fixture added); `grep` and `lines()` carried the reading meanwhile.
+
+Coverage 8509: **read on 2026-09-15 as `pick()`'s choice** (the largest plain-text Full Game Guide; the
+listing flags none) — single page, 379,580 chars, 9,728 lines, 341 sections. `lines()` windows: 483–498
+(Transform), 536–551 (Game Over), 560–607 (Increasing Parameters, its meal table and a reader's tip),
+862–871 (Carona's tavern), 1152–1183 (Hobbs's and Tonio's shops) and 4144–4169 (Arena I). Greps:
+threshold (131 hits), rewards (47), hidden (83), upgrades (118), economy (444), coin (210), Legendary or
+wine (54) and minigame (27). The 2026-09-05 pass had cited its magic primer, Town of Carona, Mel's
+Atelier and Arena I. Largest unread: 2. Mid-level Elevation (16,261 chars), the Cursed Crossways
+chapters (9,610 and 6,908), the Magic List (6,590) and the Ghost Temple (6,074).
+
+## Triage
+
+`__gf.triage()` and `__gf.pick()` on 2026-09-15: 10 guides listed (3 Full Game Guides, 5 In-Depth
+Guides, 2 under other headings: d0wner's Secrets Guide under Codes and Secrets, read on 2026-09-05, and
+a demo walkthrough, not read). The listing carries no flags at all, so `pick()` falls back to the largest
+plain-text Full Game Guide, krystalklyr's 8509, which moved from grep only to read under the owner's
+rule. The 2026-09-05 pass predates this record, so its decisions are taken from its Sources table and
+summary above.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 38095 | Power-Up/Item FAQ | SIMSteven | In-Depth Guides | 29 | 10 | read | — |
+| 5153 | Rue Walkthrough | JTKauffman | In-Depth Guides | 190 | 4 | skipped — Rue's campaign walkthrough; the item FAQ and the secrets guide answered first | — |
+| 5152 | Mint Mini-FAQ/Walkthrough | Sim_Yee_Chiang | In-Depth Guides | 27 | 4 | skipped — Mint's campaign notes; the secrets guide covered her spell effects | — |
+| 8509 | Guide and Walkthrough | krystalklyr | Full Game Guides | 380 | 2 | read | — |
+| 52233 | Guide and Walkthrough | Shotgunnova | Full Game Guides | 138 | 2 | skipped — a second walkthrough | — |
+| 19341 | Guide and Walkthrough | Sky_Render | Full Game Guides | 132 | 2 | skipped — a third walkthrough | — |
+| 52232 | Game Script | Shotgunnova | In-Depth Guides | 387 | -1 | skipped — a game script | — |
+| 5151 | Translation Guide | JTKauffman | In-Depth Guides | 17 | -2 | skipped — a translation guide | — |
 
 ## Mechanics candidates
 
@@ -33,7 +62,7 @@ notes: Three currencies collapsed into one drop with no conversion menu — the 
 pointers: [gf:38095 §Coins, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1] [gf:38095 §Stones, SIMSteven v1.0] [gf:8585 §Rue's Sidequests, d0wner v1.1]
 row: M262
 - Sell values: Bronze Coin 50 G, Silver 500 G, Gold 2,500 G, Platinum 15,000 G; with the Rare Wine discount an upgrade is 5,000 G, so two Gold Coins or one Platinum buy upgrades outright [gf:38095 §Coins, SIMSteven v1.0]
-- Continuing with a better coin restarts with more MP; a Platinum Coin used to continue also adds a permanent +1 to base attack and defense [gf:8585 §Useless/Useful Items, d0wner v1.1]
+- Continuing with a better coin restarts with more MP; a Platinum Coin used to continue also adds a permanent +1 to base attack and defense [gf:8585 §Useless/Useful Items, d0wner v1.1]; the walkthrough gives the steps: a Bronze Coin restores full HP and a quarter of MP, Silver half, Gold all, Platinum all plus +1 base Strength and Defense [gf:8509 §Game Over, krystalklyr v1.3]
 - Roughly three Platinum Coins exist per playthrough; in the field one gives two stat raises, sold it funds three [gf:38095 §Coins, SIMSteven v1.0]
 - Coins sit at shiny ground spots around Carona that change with story progress, in chests (three Gold Coins in one Tower of Maya room), and as minigame prizes [gf:38095 §Coins, SIMSteven v1.0]
 - Coins can be bought at the church by praying and then donating: 1,000 G → 10 Bronze, 5,000 G → 5 Silver, 10,000 G → 2 Gold, 30,000 G → 1 Platinum [gf:8585 §Useless/Useful Items, d0wner v1.1]
@@ -48,7 +77,7 @@ verbs: Traded
 pointers: [gf:38095 §Legendary Items, SIMSteven v1.0] [gf:8585 §Legendary Stuff, d0wner v1.1]
 row: M263
 - Legendary Sword: Underground Ruins, on the ledge across the platform room after the boulder; Legendary Shield: Raging Mountain, third pillar after the Belle & Duke fight; Legendary Helmet: Tower of Maya, across the moving-platform room by the door [gf:38095 §Legendary Items, SIMSteven v1.0] [gf:8585 §Legendary Stuff, d0wner v1.1]
-- Meal table: Minced Fire Blob = 50 Fire Blob coins → Max HP +10; Mushroom Soup = 60 Fungie coins → Max MP +10; Pollywog Souffle = 50 Pollywog coins → Strength +2; Goudon Liver Soup = 30 Goudon coins → Defense +2 [gf:38095 §Legendary Items, SIMSteven v1.0] [gf:8585 §Legendary Stuff, d0wner v1.1]
+- Meal table: Minced Fire Blob = 50 Fire Blob coins → Max HP +10; Mushroom Soup = 60 Fungie coins → Max MP +10; Pollywog Souffle = 50 Pollywog coins → Strength +2; Goudon Liver Soup = 30 Goudon coins → Defense +2 [gf:38095 §Legendary Items, SIMSteven v1.0] [gf:8585 §Legendary Stuff, d0wner v1.1] [gf:8509 §Increasing Parameters, krystalklyr v1.3]
 - Fungies for the soup come from one of the games at Mel's Atelier (the "big balls" one) [gf:8585 §Legendary Stuff, d0wner v1.1]
 - The set breaks after ten meals of any mix and Jergen gives a Platinum Coin — 13 to 23 stat points in total depending on the mix [gf:38095 §Legendary Items, SIMSteven v1.0]
 
@@ -88,7 +117,7 @@ row: g090
 
 | at | get | src |
 |---|---|---|
-| each win, on a 100 G stake | 1,000 G (ten to one) | [gf:38095 §Rod, SIMSteven v1.0] [gf:8585 §Rod the Blade Star, d0wner v1.1] |
+| each win, on a 100 G stake | 1,000 G (ten to one) | [gf:38095 §Rod, SIMSteven v1.0] [gf:8585 §Rod the Blade Star, d0wner v1.1] [gf:8509 §Town of Carona, krystalklyr v1.3] |
 | 5 wins vs Silver Breeze | Gold Coin | [gf:38095 §Rod, SIMSteven v1.0] |
 | 5 wins vs Golden Gale | Gold Coin | [gf:38095 §Rod, SIMSteven v1.0] |
 | 5 wins vs Black Tornado | Platinum Coin | [gf:38095 §Rod, SIMSteven v1.0] [gf:8585 §Rod the Blade Star, d0wner v1.1] |
@@ -129,9 +158,12 @@ row: g092
 - Brooch (Mint only): a Gamul lever puzzle — at the pair of adjacent levers hit only the left one so they face each other; Annette gives a drink discount for it (Milk 10 G, Rootbeer 30 G, Tropical Delight 50 G), or Marcum pays 4,000 / 6,000 G [gf:38095 §Unique Items, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1]
 - Star Stone (Rue only): Bubba coin from Raging Mountain to smash the cliff rock in Carona Forest, Stinger coin to fit the hole behind it, then about 20 Little Bats — a chest drops a Star Stone [gf:38095 §Stones, SIMSteven v1.0] [gf:8585 §Rue's Sidequests, d0wner v1.1]
 - Moon Stone (Rue only): become a Mandola, use Bloom to lure the Ootang and shoot it for its coin; as an Ootang climb the ruins' tree to a trampoline branch and a chest [gf:38095 §Stones, SIMSteven v1.0] [gf:8585 §Rue's Sidequests, d0wner v1.1]
+- Going back to town after a defeat keeps the stats and monster coins held at the moment of death, but the items picked up in that area are lost [gf:8509 §Game Over, krystalklyr v1.3]
 
 ### Upgrades
-- Tonio's shop sells bracers (Strength) and belts (Defense) in tiers unlocked by story milestones: Bronze +4 (1,000 G), Silver +8 (3,000 G, or 2,500 G if the Bronze is owned), Gold +12 (3,500 G), Platinum +16 (3,500 G), Mythril +20 (5,500 G), Brave Bracer / Black Belt +24 (6,500 G) [gf:38095 §Tonio's Armor, SIMSteven v1.0]
+- Tonio's shop sells bracers (Strength) and belts (Defense) in tiers unlocked by story milestones: Bronze +4 (1,000 G), Silver +8 (3,000 G, or 2,500 G if the Bronze is owned), Gold +12 (3,500 G), Platinum +16 (3,500 G), Mythril +20 (5,500 G), Brave Bracer / Black Belt +24 (6,500 G) [gf:38095 §Tonio's Armor, SIMSteven v1.0]; the walkthrough's first stock agrees on the Bronze and Silver pairs at 1,000 and 3,000 G [gf:8509 §Town of Carona, krystalklyr v1.3]
+- There are no levels and no experience: max HP rises with the damage taken (the amount, not the number of hits) and max MP with casting, while Strength and Defense come from Hobbs's shop and Tonio's bonus items, and Jergen's meals raise all four [gf:8509 §Increasing Parameters, krystalklyr v1.3]
+- A reader's tip in the walkthrough: losing to Rod raises max HP by about 2 a bout while it is low, for his 100 G stake, against 5,000 G for +10 at Hobbs's shop; being beaten up by Arena I's Behemoths is its other suggestion [gf:8509 §Increasing Parameters, krystalklyr v1.3] [gf:8509 §Arena I, krystalklyr v1.3]
 - The wiki agrees bracers raise the weapons' attack power for both heroes [wiki:threadsoffate.fandom.com/Arc Edge] [wiki:threadsoffate.fandom.com/Dual Rings]
 - Stones sell for: Night Stone 500 G, Moon Stone 1,000 G, Dream Stone 2,000 G, Star Stone 3,000 G [gf:8585 §Useless/Useful Items, d0wner v1.1] [gf:38095 §Stones, SIMSteven v1.0]
 - Monster-coin farming in Valen's Fortress is the fastest money: the guide's own run of ~999 coins each of four late monsters sold for ~760,000 G, about 152 upgrades [gf:38095 §Monster Hunting, SIMSteven v1.0]
@@ -140,6 +172,7 @@ row: g092
 - Hobbs's shop sells the permanent stat items (base Strength, base Defense, max HP, max MP, +10 each) at 30,000 G until the Rare Wine is given away, then 5,000 G [gf:38095 §Rare Wine, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1] [gf:8509 §Town of Carona, krystalklyr v1.3]
 - Marcum the trader buys the Mysterious Statue or the Brooch: 4,000 G, or 6,000 G after refusing his first offer [gf:38095 §Unique Items, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1]
 - The church sells continues: donate 1,000 / 5,000 / 10,000 / 30,000 G for 10 Bronze / 5 Silver / 2 Gold / 1 Platinum Coin [gf:8585 §Useless/Useful Items, d0wner v1.1]
+- Carona's tavern sells Milk for 50 G (10% MP), Rootbeer for 120 G (25%) and Tropical Delight for 220 G (50%), the prices the Brooch cuts to 10, 30 and 50 G [gf:8509 §Town of Carona, krystalklyr v1.3] [gf:38095 §Unique Items, SIMSteven v1.0]
 
 ## Unverified or contradicted
 - Tonio's Armor table lists the Gold, Platinum, Mythril and Brave BRACERS as "Defense +"; the section's own opening and the wiki say bracers raise attack — read as a copy error [gf:38095 §Tonio's Armor, SIMSteven v1.0]
@@ -147,6 +180,8 @@ row: g092
 - The barman is "Jergen" in one guide and "Jargen"/"Jargon" in the other; the codex uses Jergen [gf:38095 §Legendary Items, SIMSteven v1.0] [gf:8585 §Legendary Stuff, d0wner v1.1]
 - Rod's per-win growth (+4 STR/DEF, +40 HP) and the music changes at 999/244/220 and 999/444/420 are one author's own observations [gf:38095 §Rod, SIMSteven v1.0]
 - The Valen's Fortress arena timer PERCENTAGES have one source; the walkthrough confirms a tiered Gold / Silver / Bronze Coin at each arena exit but not the cut-offs [gf:38095 §Coins, SIMSteven v1.0] [gf:8509 §Arena I, krystalklyr v1.3]
+- **What Hobbs's stat items add.** The walkthrough gives +1 base Strength and +1 base Defense but +10 max HP and MP, while this digest's shop line, citing the item FAQ and the secrets guide, says +10 for each [gf:8509 §Town of Carona, krystalklyr v1.3] [gf:38095 §Rare Wine, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1]
+- **Whether a sold coin still transforms Rue.** The item FAQ and the secrets guide key each form to its coin, while the walkthrough says a monster once killed stays a form Rue can take even with its coins sold, up to four forms held at a time [gf:8509 §Transform, krystalklyr v1.3] [gf:38095 §Stones, SIMSteven v1.0] [gf:8585 §Rue's Sidequests, d0wner v1.1]
 
 ## Codex rows
 
@@ -166,3 +201,4 @@ row: g092
 
 ## Codex delta
 - 2026-09-05: M262–M265 and g090–g092 added; M117 and M118 given `refs` and a sharper note. Threads of Fate goes from 2 mechanics / 0 minigames to 6 / 3.
+- 2026-09-15: the largest plain-text walkthrough, 8509, read under the owner's rule (the listing flags no guide); its Coverage line says what was read. It confirms three facts as a third author, adds how parameters grow without levels, and disagrees on two points recorded above. No row was edited.
