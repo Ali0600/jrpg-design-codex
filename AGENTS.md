@@ -811,11 +811,10 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    order, are planned in `~/.claude/plans/when-creating-plans-i-bright-possum.md`: the
    query grammar on the Mechanics and Minigames tabs, related games on the game page, then the
    two research directions below.
-2. **Backfill the reward tables** (Section F, under way). 45 minigame rows had no `rt`, all
-   in the Final Fantasy block (measured 2026-09-10); Final Fantasy VII (1997)'s eight, Final Fantasy X's five,
-   Final Fantasy XV's five, Final Fantasy VI's four, Final Fantasy VII Rebirth's four, Final Fantasy VIII's three, Final Fantasy VII Remake's three, Final Fantasy X-2's three, Final Fantasy XIV's three and
-   Final Fantasy IV's two were sourced on 2026-09-14, leaving 7 without a table (FF6's opera, g005, and Rebirth's Fort Condor,
-   g022, were researched and pay no item prize) — the oldest research, written before
+2. **Backfill the reward tables** (Section F, done 2026-09-14). 45 minigame rows had no `rt`, all in the
+   Final Fantasy block (measured 2026-09-10). All 45 now carry `refs` and a digest, and all but three carry
+   tables: FF6's opera (g005), Rebirth's Fort Condor (g022) and FF9's post-credits blackjack (g036) pay no item
+   prize, which their digests record. The 45 were the oldest research, written before
    the "name the actual items and thresholds" rule existed.
 3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.

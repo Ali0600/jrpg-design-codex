@@ -202,7 +202,12 @@ test("a game key answers through the row's game, and a row whose game is off the
   const g001 = MINIGAMES.find(m => m.id === "g001");
   assert.equal(gameRow(g001.g), null, "g001's game is not on the roster");
   assert.ok(!rowMatches(g001, g001.g, 'series:"Final Fantasy"', MG_QUERY_KEYS));
-  assert.ok(rowMatches(g001, g001.g, "table:no id:g001", MG_QUERY_KEYS), "its own keys still answer");
+  // Its own keys still answer. Each fixture sets the table state it asks about, so the rule does not
+  // depend on whether g001 happens to carry a reward table today (it gained one on 2026-09-14).
+  const bare = { ...g001, rt: undefined }, tabled = { ...g001, rt: [{ at: "a finish", get: "a prize" }] };
+  assert.ok(rowMatches(bare, bare.g, "table:no id:g001", MG_QUERY_KEYS), "its own keys still answer: no table");
+  assert.ok(!rowMatches(bare, bare.g, "table:yes id:g001", MG_QUERY_KEYS), "a row with no table is not tabled");
+  assert.ok(rowMatches(tabled, tabled.g, "table:yes id:g001", MG_QUERY_KEYS), "its own keys still answer: a table");
 });
 
 test("a row's own keys: category and verb by prefix, game by whole words, id exactly, want and table", () => {

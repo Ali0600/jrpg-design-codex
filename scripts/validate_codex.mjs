@@ -42,9 +42,12 @@ const KNOWN_UNROSTERED = new Set([
  * docs/research, so add an entry in the same change as its digest.
  */
 const UNROSTERED_DIGESTS = {
+  "Final Fantasy I": "final-fantasy-i",
   "Final Fantasy IV": "final-fantasy-iv",
+  "Final Fantasy V": "final-fantasy-v",
   "Final Fantasy VII Remake": "final-fantasy-vii-remake",
   "Final Fantasy X-2": "final-fantasy-x-2",
+  "Final Fantasy XIII-2": "final-fantasy-xiii-2",
   "Final Fantasy XIV": "final-fantasy-xiv",
   "Final Fantasy XV": "final-fantasy-xv",
 };
