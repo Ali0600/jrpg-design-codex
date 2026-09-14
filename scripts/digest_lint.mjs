@@ -150,6 +150,11 @@ export function lintDigest(md, name = "digest") {
     if (/^```/.test(line)) { fence = !fence; return; }
     if (fence) return;
     if (WEB_GAMEFAQS.test(line)) out.push(`${n}: GameFAQs is cited as [gf:<id> §<section>, <author> v<ver>], never as a web pointer`);
+    // A guide's chapter codes are often bracketed ("[PM12] Second Playthrough"), and a pointer ends at
+    // its first "]", so such a section silently truncates the pointer while still matching the grammar.
+    for (const m of line.matchAll(/\[gf:\d+ §([^\]\n]{1,40})/g)) {
+      if (m[1].includes("[")) out.push(`${n}: a gf pointer's section ${JSON.stringify(m[1])} contains "[" — the pointer ends at the first "]", so write the section without brackets`);
+    }
     if (/^## /.test(line)) { flush(); h2 = line; return; }
     if (!FACT_H2.test(h2)) return;
     if (/^### /.test(line)) {

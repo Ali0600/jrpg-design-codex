@@ -13,6 +13,7 @@ Codex: `Xenoblade Chronicles` (2010, Wii) · GameFAQs: `/wii/960564-xenoblade-ch
 | 62859 | Achievement/Collectopaedia List | Split_Infinity | — | 10/11/2011 | In-Depth Guides | 24 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/62859 |
 | 65405 | Gem Guide | zerokid | 1.33 | 03/12/2013 | In-Depth Guides | 78 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/65405 |
 | 64875 | NPC Trading Database | zerokid | 1.12 | 09/24/2013 | In-Depth Guides | 119 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/64875 |
+| 66050 | Guide and Walkthrough | Andrew_Testa | 1.5 | 03/28/2014 | Full Game Guides | 1187 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/66050 |
 
 Coverage 62859: single page, 24,467 chars, 495 lines, 10 sections — the Collectopaedia section read
 in full (8,406 chars, every area page with its row and page rewards); one grep (reward and complete,
@@ -27,6 +28,17 @@ Coverage 64875: single page, 119,204 chars, 2,845 lines, 294 sections — no who
 grep (affinity, overtrade, trade value and rare, 265 hits) and a `lines()` read of the Basics chapter
 (affinity sectors, value, overtrade). Unread: the townsperson-by-townsperson database itself.
 
+Coverage 66050: **read on 2026-09-15 as `pick()`'s choice** (Most Recommended, plain text) — single
+page, 1,189,034 chars, 26,695 lines, 771 sections. The probe's headings here are mostly boxed boss
+banners, and one of them spans 452,082 chars, so no whole section was read; instead four `lines()`
+windows: 232–263 (Things To Do In Town), 6760–6775 (the quest The Gem Man's Invention), 17630–17665
+(the key to the 8. NPC Trading List) and 25056–25091 (a rank table from the arts appendix, Final
+Cross). Greps: threshold (248 hits), rewards (452), hidden (73), upgrades (497), economy (888), Colony
+6 (95), Unique Monster (2), Collectopaedia (0: the walkthrough never names the book), overtrade or
+trade value (248), the development tracks or Reconstruction (26), art book or level cap (8). Largest
+unread: the 452,082-char walkthrough body, the 58,750-char arts appendix, the 41,793-char trading
+list block and a 21,593-char boss chapter.
+
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 25 guides listed (5 Full Game Guides, 19 In-Depth Guides, 1 under
@@ -34,34 +46,36 @@ other headings: a Spanish walkthrough under Foreign Language Guides, not read). 
 at 20 of 25 by the 12 KB cap, so the full list below was taken once from the page's guide list (id,
 title, author, heading and size only), and the scores of the five cut rows are computed from the
 probe's rules. The decisions are the plan made before any guide was opened; a plan that changes is
-recorded here.
+recorded here. On 2026-09-15 `__gf.pick()` named Andrew_Testa's walkthrough, 66050 (Most Recommended,
+plain text), so it moved from skipped to read under the owner's rule; the flags column copies the
+listing on that day, when ShulkLink0624's FAQ and the collectable checklist carried the HTML flair.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 62859 | Achievement/Collectopaedia List | Split_Infinity | In-Depth Guides | 24 | 8 | read |
-| 65405 | Gem Guide | zerokid | In-Depth Guides | 78 | 5 | read |
-| 64875 | NPC Trading Database | zerokid | In-Depth Guides | 119 | 4 | read |
-| 65254 | Weapon/Armor FAQ | zerokid | In-Depth Guides | 111 | 10 | skipped — equipment stats, not a lead question |
-| 70515 | Sidequest Guide | amarise | In-Depth Guides | 336 | 8 | skipped — a per-quest walkthrough; the lead questions sit in narrower guides |
-| 66310 | Skill Guide | zerokid | In-Depth Guides | 68 | 7 | skipped — character skill trees |
-| 63103 | Collectable Gift FAQ | Daemonhart | In-Depth Guides | 66 | 7 | skipped — which gift each character prefers |
-| 74586 | Collectable/Material Checklist | TheRewster | In-Depth Guides | 38 | 7 | skipped — a checklist of the collectables the Collectopaedia list already covers |
-| 62860 | Map/Unique Monster Data | Split_Infinity | In-Depth Guides | 66 | 6 | skipped — unique monster data, the subject of M222 |
-| 62871 | Extra Skill Tree Guide | yavian2001 | In-Depth Guides | 5 | 6 | skipped — a 5 KB note on skill trees |
-| 65244 | Arts Guide | zerokid | In-Depth Guides | 210 | 5 | skipped — combat arts |
-| 69620 | Unique Monster Advanced Manual Guide | amarise | In-Depth Guides | 40 | 5 | skipped — unique monster drops, the subject of M222 |
-| 73533 | NPC Affinity Link Guide | Stargleam | In-Depth Guides | 225 | 4 | skipped — held in reserve as a cross-check for affinity-gated trades |
-| 71514 | Achievement Guide | VyseToPhoenix | In-Depth Guides | 16 | 3 | skipped — achievements, which the Collectopaedia list also covers |
-| 64390 | Heart-to-Heart Location Guide | HamsterCheeks | In-Depth Guides | 13 | 3 | skipped — where character scenes happen |
-| 62870 | Colony 6 Immigrant Guide | yavian2001 | In-Depth Guides | 6 | 3 | skipped — a 6 KB list on the subject of M221 |
-| 62899 | Lockout/Point of No Return Guide | Oyajuu | In-Depth Guides | 6 | 3 | skipped — a 6 KB list of missables |
-| 70300 | Game Script | TheRewster | In-Depth Guides | 524 | -1 | skipped — a game script |
-| 65146 | Heart-to-Heart Script | Mirinee | In-Depth Guides | 271 | -1 | skipped — a script |
-| 62867 | Guide and Walkthrough | Split_Infinity | Full Game Guides | 357 | 3 | skipped — a walkthrough; the lead questions are answered by in-depth guides and the wiki |
-| 66050 | Guide and Walkthrough | Andrew_Testa | Full Game Guides | 1187 | 3 | skipped — a walkthrough |
-| 76615 | FAQ | ShulkLink0624 | Full Game Guides | 578 | 3 | skipped — a walkthrough |
-| 64155 | Guide and Walkthrough | MidnightTear | Full Game Guides | 316 | 2 | skipped — a walkthrough |
-| 64027 | FAQ | TLeHn | Full Game Guides | 32 | 2 | skipped — a 32 KB walkthrough |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 62859 | Achievement/Collectopaedia List | Split_Infinity | In-Depth Guides | 24 | 8 | read | Highest Rated |
+| 65405 | Gem Guide | zerokid | In-Depth Guides | 78 | 5 | read | Highest Rated |
+| 64875 | NPC Trading Database | zerokid | In-Depth Guides | 119 | 4 | read | — |
+| 65254 | Weapon/Armor FAQ | zerokid | In-Depth Guides | 111 | 10 | skipped — equipment stats, not a lead question | — |
+| 70515 | Sidequest Guide | amarise | In-Depth Guides | 336 | 8 | skipped — a per-quest walkthrough; the lead questions sit in narrower guides | Most Recommended |
+| 66310 | Skill Guide | zerokid | In-Depth Guides | 68 | 7 | skipped — character skill trees | — |
+| 63103 | Collectable Gift FAQ | Daemonhart | In-Depth Guides | 66 | 7 | skipped — which gift each character prefers | — |
+| 74586 | Collectable/Material Checklist | TheRewster | In-Depth Guides | 38 | 7 | skipped — a checklist of the collectables the Collectopaedia list already covers | HTML |
+| 62860 | Map/Unique Monster Data | Split_Infinity | In-Depth Guides | 66 | 6 | skipped — unique monster data, the subject of M222 | Highest Rated |
+| 62871 | Extra Skill Tree Guide | yavian2001 | In-Depth Guides | 5 | 6 | skipped — a 5 KB note on skill trees | — |
+| 65244 | Arts Guide | zerokid | In-Depth Guides | 210 | 5 | skipped — combat arts | Highest Rated |
+| 69620 | Unique Monster Advanced Manual Guide | amarise | In-Depth Guides | 40 | 5 | skipped — unique monster drops, the subject of M222 | — |
+| 73533 | NPC Affinity Link Guide | Stargleam | In-Depth Guides | 225 | 4 | skipped — held in reserve as a cross-check for affinity-gated trades | — |
+| 71514 | Achievement Guide | VyseToPhoenix | In-Depth Guides | 16 | 3 | skipped — achievements, which the Collectopaedia list also covers | — |
+| 64390 | Heart-to-Heart Location Guide | HamsterCheeks | In-Depth Guides | 13 | 3 | skipped — where character scenes happen | — |
+| 62870 | Colony 6 Immigrant Guide | yavian2001 | In-Depth Guides | 6 | 3 | skipped — a 6 KB list on the subject of M221 | — |
+| 62899 | Lockout/Point of No Return Guide | Oyajuu | In-Depth Guides | 6 | 3 | skipped — a 6 KB list of missables | — |
+| 70300 | Game Script | TheRewster | In-Depth Guides | 524 | -1 | skipped — a game script | — |
+| 65146 | Heart-to-Heart Script | Mirinee | In-Depth Guides | 271 | -1 | skipped — a script | — |
+| 62867 | Guide and Walkthrough | Split_Infinity | Full Game Guides | 357 | 3 | skipped — a walkthrough; the lead questions are answered by in-depth guides and the wiki | Highest Rated |
+| 66050 | Guide and Walkthrough | Andrew_Testa | Full Game Guides | 1187 | 3 | read | Most Recommended |
+| 76615 | FAQ | ShulkLink0624 | Full Game Guides | 578 | 3 | skipped — a walkthrough | FAQ of the Month Winner: November 2018 · HTML |
+| 64155 | Guide and Walkthrough | MidnightTear | Full Game Guides | 316 | 2 | skipped — a walkthrough | — |
+| 64027 | FAQ | TLeHn | Full Game Guides | 32 | 2 | skipped — a 32 KB walkthrough | — |
 
 ## Mechanics candidates
 
@@ -119,13 +133,20 @@ defined payouts turned up in them; the triage list has no minigame guide.
 - The last page, Other, can only be filled by trading with seven named characters; its rows pay AP Up V, EXP Up V and Critical Up V, and the page Aggro Down V [gf:62859 §Collectopaedia, Split_Infinity] [wiki:xenoblade.fandom.com/Other Collection]
 - The wiki's trade table prices those seven items from 16,200 G to 56,250 G, the Love Source from Jer'ell in Colony 6 the dearest [wiki:xenoblade.fandom.com/Other Collection]
 - Achievements follow the book: one for recording a first item, one for completing a page, one for completing every page [gf:62859 §Records, Split_Infinity]
+- Some townspeople stand in town only at certain hours, so switching the clock to night from the menu turns up quests the daytime town does not show [gf:66050 §Things To Do In Town, Andrew_Testa v1.5]
 
 ### Upgrades
+- Townspeople's small quests pay money, experience or an item, and each also raises affinity with the town as a whole; some skill trees stay locked until a town's affinity is high enough, and even talking to its people raises it, most of them twice [gf:66050 §Things To Do In Town, Andrew_Testa v1.5]
+- Shops are the main source of equipment, and they also sell art books, each raising one art's level cap [gf:66050 §Things To Do In Town, Andrew_Testa v1.5]
+- An art's ranks are bought with AP: Final Cross climbs from 300% damage and a 180-second cooldown at rank I to 408% and 115.2 seconds at rank X, for 520 AP at rank II up to 24,960 AP at rank X [gf:66050 §Final Cross, Andrew_Testa v1.5]
+- The Gem Man's quest in Colony 9 pays 1,000 experience and the Mobile Furnace, which lets gems be crafted anywhere, once the party brings the Ultra Small Reactor that restoring Colony 6 provides [gf:66050 §Quest: The Gem Man's Invention, Andrew_Testa v1.5]
 
 ### Shops & exchange
+- The walkthrough's trading list gives each trader's place and hour, each item's gem slots and the affinity stars that unlock it, the overtrade item with the gold value that earns it, and whether the trader moves or can join Colony 6; among Colony 9's first entries the overtrade values run from 70 G for Andreas's Filthy Wing to 16,560 G for Desiree's Snowy Striker [gf:66050 §8. NPC Trading List, Andrew_Testa v1.5]
 
 ## Unverified or contradicted
 - **The affinity the Other page's trades need.** The Collectopaedia list gives 4 stars for Sonia's Minute Mantis, 3 for Lupa's Love Beetle and 5 for the other five; the wiki's trade table gives 3 stars for six of them and 5 only for Jer'ell's Love Source. The two also place Rakzet differently, Machina Village in the list and the Fallen Arm on the wiki [gf:62859 §Collectopaedia, Split_Infinity] [wiki:xenoblade.fandom.com/Other Collection]
+- **The walkthrough's trading list is not a second source for trading.** Its key credits zerokid with compiling the data, and zerokid wrote the NPC Trading Database this digest already cites, so the walkthrough's trade figures repeat one reading rather than confirm it [gf:66050 §8. NPC Trading List, Andrew_Testa v1.5] [gf:64875 §Basics, zerokid v1.12]
 
 ## Codex rows
 
@@ -141,3 +162,4 @@ defined payouts turned up in them; the triage list has no minigame guide.
 - M286 (the Collectopaedia), M287 (gem crafting) and M288 (trading), spliced 2026-09-14 into that day's wave 3 changelog entry, retitled to name all three games.
 - M221 (Colony 6) and M222 (Unique Monsters) were not edited.
 - No minigame recorded.
+- 2026-09-15: the Most Recommended walkthrough, 66050, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.
