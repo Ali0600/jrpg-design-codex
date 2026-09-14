@@ -129,6 +129,12 @@ export function bookkeepingProblems(md) {
       if (picked) out.push(...picked);
       else if (tri.rows.length && since(PICK_FROM)) out.push(`${tri.line}: digest started ${started || "<no date>"} needs a flags column in its ## Triage table, saying which Full Game Guide is Most Recommended and which are HTML`);
     }
+  } else {
+    // A digest from before the Triage record is held to nothing above, but once it adds a Triage
+    // table with a flags column it has opted in to the walkthrough rule like any newer digest.
+    const tri = section(L, "Triage");
+    const picked = tri && pickProblems(tri);
+    if (picked) out.push(...picked);
   }
   return out;
 }

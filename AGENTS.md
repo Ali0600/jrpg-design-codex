@@ -507,7 +507,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   lines and Triage record, each rule applied from the digest's own start date
   (`scripts/digest_lint.test.mjs`). From 2026-09-15 that includes a `flags` column in the Triage
   table and a `read` decision on the Full Game Guide the probe's own `core.pick` chooses from it,
-  which the linter imports rather than restating. It runs in CI since 2026-09-14; before that the docs said it did
+  which the linter imports rather than restating. A digest from before the Triage record that adds
+  a flags column is held to the same pick. It runs in CI since 2026-09-14; before that the docs said it did
   and no step ran it. `__gf.visited()` reports what a session actually READ
   of a guide — the probe indexes every line, but only what returns through a tool result
   reaches the agent, so each digest carries a Coverage line naming the biggest sections

@@ -86,7 +86,8 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    so in the summary line (`pick()` reads the uncapped listing). The linter holds the table to the
    Sources table both ways (a guide read or grepped has a Sources row, and every GameFAQs source is
    in the table), and from 2026-09-15 it requires the flags column and runs the probe's own `pick()`
-   over it, so the guide it names must say `read`; a digest that used no GameFAQs guide writes a
+   over it, so the guide it names must say `read` (an older digest that adds the column is held to
+   the pick too); a digest that used no GameFAQs guide writes a
    line starting "No GameFAQs guide used" instead.
 3. **Read one guide.** Check `__gf.meta().pages` FIRST: a formatted guide is split across
    pages (The Witcher 3's walkthrough is 19 of them) and every other number describes only
