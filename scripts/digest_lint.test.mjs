@@ -112,6 +112,12 @@ test("a page that is neither a guide nor a wiki is cited with a web pointer, and
   assert.deepEqual(lint({ body }), []);
 });
 
+test("a bracket inside a GameFAQs pointer's section is refused, since the pointer would end at the first ]", () => {
+  const p = lint({ body: [...BODY, "- A chapter-coded fact [gf:11111 §[0501] Items, Ann v1.0]", ""] });
+  assert.ok(hit(p, /section "\[0501" contains "\["/), p.join("\n"));
+  assert.deepEqual(lint({ body: [...BODY, "- A chapter-coded fact [gf:11111 §Items (0501), Ann v1.0]", ""] }), []);
+});
+
 test("GameFAQs is never cited through a web pointer", () => {
   const p = lint({ body: [...BODY, "- A guide fact [web:gamefaqs.gamespot.com/ps/1-lantern-vale/faqs/11111]", ""] });
   assert.ok(hit(p, /GameFAQs.*\[gf:/), p.join("\n"));

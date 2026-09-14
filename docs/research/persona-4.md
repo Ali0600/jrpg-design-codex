@@ -12,7 +12,7 @@ Codex: `Persona 4` (2008, PlayStation 2) · GameFAQs: `/ps2/945498-shin-megami-t
 |---|---|---|---|---|---|---|---|
 | 56627 | Quest FAQ | ssk9716757 | 1.01 | 12/04/2017 | In-Depth Guides | 26 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/56627 |
 | 55038 | Max Social Link Guide | penguin_knight | 1.5 | 02/03/2009 | In-Depth Guides | 89 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/55038 |
-| 53550 | Guide and Walkthrough (grep only) | Zoel | 0.65 | 05/08/2013 | Full Game Guides | 815 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/53550 |
+| 53550 | Guide and Walkthrough | Zoel | 0.65 | 05/08/2013 | Full Game Guides | 815 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/53550 |
 | 60532 | Guide and Walkthrough (grep only, cross-check) | neoXsaga | 2.2 | 06/03/2017 | Full Game Guides | 618 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/60532 |
 | 65252 | Walkthrough (grep only, item names) | KADFC | 0.86 | 11/16/2012 | Full Game Guides | 530 | https://gamefaqs.gamespot.com/ps2/945498-shin-megami-tensei-persona-4/faqs/65252 |
 
@@ -37,11 +37,16 @@ Coverage 65252: grep only — 536,349 chars, 6,889 lines, 277 sections, 0 sectio
 the disputed prize names (13 hits), used only to settle their spellings. Everything else unread,
 including its 17,021-char New Game Plus guide.
 
-Coverage 53550: **grep only, by design** — 815,065 chars, 19,793 lines, 2,543 sections, 0 sections
-read. Four greps (Daidara, 236 hits; old man and the fish names, 90; Shuffle Time, 3; fog and
-forecast, 8) plus `lines()` reads at the smithy's entry in the town guide, the opening of the
-weapon chapter, and the whole fishing chapter with its monthly Fish Exchange table. No section
-reaches 8,000 chars; the other 2,540 went unread.
+Coverage 53550: **read on 2026-09-15 as `pick()`'s choice** (Most Recommended, plain text) —
+815,065 chars, 19,793 lines, 2,543 sections, one page. This pass: 4 sections read whole (Shopping
+District, North; Battle Related; [PM12] Second Playthrough; Books from Quests and Events) and
+`lines()` 952–1001, the first six Arcana Chance cards; greps threshold (7 hits), rewards (85), hidden
+(129), upgrades (654), economy (570), Shuffle Time or Arcana Chance (9), and second playthrough or
+carry over (7). The 2026-09-14 pass had grepped Daidara (236), the old man and the fish names (90),
+Shuffle Time (3) and fog and forecast (8), and read the smithy's town-guide entry, the weapon
+chapter's opening and the fishing chapter with its Fish Exchange table through `lines()`. Largest
+unread: Name Found Effect (5,136 chars) and [PM10] March 2012 (3,582), then the day-by-day chapters
+and the Persona and enemy tables beyond the grep hits.
 
 ## Triage
 
@@ -49,20 +54,22 @@ reaches 8,000 chars; the other 2,540 went unread.
 other headings: a Fusion Chart under Maps and Charts, not read). The decisions are the plan made
 before any guide was opened; a plan that changes is recorded here. Two walkthroughs moved from
 skipped to grep only: neoXsaga's, to cross-check the old man's prize table from a second author,
-and KADFC's, to settle the item names those two disagreed on.
+and KADFC's, to settle the item names those two disagreed on. On 2026-09-15 `__gf.pick()` named Zoel's
+walkthrough, 53550 (Most Recommended, plain text, no guide on the listing is HTML), so it moved from
+grep only to read under the owner's rule; the flags column copies the listing on that day.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 55038 | Max Social Link Guide | penguin_knight | In-Depth Guides | 89 | 5 | read |
-| 56627 | Quest FAQ | ssk9716757 | In-Depth Guides | 26 | 4 | read |
-| 60201 | Song Lyrics FAQ | piecemealcranky | In-Depth Guides | 25 | 4 | skipped — song lyrics: no mechanics, and lyrics are never quoted |
-| 53550 | Guide and Walkthrough | Zoel | Full Game Guides | 815 | 3 | grep only |
-| 70246 | Quiz Answer List | firefox8259 | In-Depth Guides | 2 | 3 | skipped — a 2 KB list of classroom answers |
-| 60532 | Guide and Walkthrough | neoXsaga | Full Game Guides | 618 | 2 | grep only |
-| 65252 | Walkthrough | KADFC | Full Game Guides | 530 | 2 | grep only |
-| 55517 | Guide and Walkthrough | PeTeRL90 | Full Game Guides | 408 | 2 | skipped — a fourth walkthrough |
-| 55505 | Boss Guide | Jeddi_kun | In-Depth Guides | 78 | 1 | skipped — boss strategy, no pillar material |
-| 81155 | Japanese Game Script (Japanese) | BrideInMyDreams | In-Depth Guides | 1872 | -1 | skipped — a game script |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 55038 | Max Social Link Guide | penguin_knight | In-Depth Guides | 89 | 5 | read | Most Recommended |
+| 56627 | Quest FAQ | ssk9716757 | In-Depth Guides | 26 | 4 | read | — |
+| 60201 | Song Lyrics FAQ | piecemealcranky | In-Depth Guides | 25 | 4 | skipped — song lyrics: no mechanics, and lyrics are never quoted | — |
+| 53550 | Guide and Walkthrough | Zoel | Full Game Guides | 815 | 3 | read | Most Recommended |
+| 70246 | Quiz Answer List | firefox8259 | In-Depth Guides | 2 | 3 | skipped — a 2 KB list of classroom answers | — |
+| 60532 | Guide and Walkthrough | neoXsaga | Full Game Guides | 618 | 2 | grep only | — |
+| 65252 | Walkthrough | KADFC | Full Game Guides | 530 | 2 | grep only | — |
+| 55517 | Guide and Walkthrough | PeTeRL90 | Full Game Guides | 408 | 2 | skipped — a fourth walkthrough | — |
+| 55505 | Boss Guide | Jeddi_kun | In-Depth Guides | 78 | 1 | skipped — boss strategy, no pillar material | — |
+| 81155 | Japanese Game Script (Japanese) | BrideInMyDreams | In-Depth Guides | 1872 | -1 | skipped — a game script | — |
 
 ## Mechanics candidates
 
@@ -143,6 +150,10 @@ row: g097
 - The navigator's link upgrades exploration itself: at rank 3 she learns Treasure Radar, which reveals the location of every treasure chest, at rank 6 Enemy Radar, and at rank 10 a scan for enemy weaknesses [gf:55038 §Basic of the social links, penguin_knight v1.5]
 - The river Guardian bites only on rainy days or in December, and only on the better fishing set the old man gives for a Huge Fish [gf:56627 §Quests, ssk9716757 v1.01]
 - Fishing opens on May 1 through the old man at Samegawa, who starts the player with ten bait; Diligence sets how many casts a session allows, up to five, the fish on offer change with the month and the weather, and big fish are likelier in the rain [wiki:megamitensei.fandom.com/Fishing]
+- A second playthrough adds three things: the Reaper, who can be waiting inside any treasure chest and drops the strongest equipment in the game; Izanagi Okami, the final battle's Persona, fusable once the true ending has been seen and the hero reaches level 91; and a secret boss, reached after seeing the true ending, maxing the Empress link and collecting the Blue Invitation from the Velvet Room in December, on the last floor of Heaven [gf:53550 §Second Playthrough (PM12), Zoel v0.65]
+- The shrine where the fox takes requests also has a bug-catching minigame, playable once the hero has a bug net [gf:53550 §Shopping District, North, Zoel v0.65]
+- The mailbox in the northern shopping district takes 3 Prize Stickers from the TV shopping network in exchange for a prize [gf:53550 §Shopping District, North, Zoel v0.65]
+- A top mark in class makes Nanako and Dojima give the hero a prize [gf:53550 §KNOWLEDGE, Zoel v0.65]
 
 ### Upgrades
 - The weather drives fusion as well as the deadline: a Persona fused on a rainy day randomly gains an extra skill, and the walkthrough's Persona tables list date-specific ones such as Debilitate for a Yoshitsune fused on December 24 [gf:53550 §Section 9, Zoel v0.65]
@@ -151,11 +162,19 @@ row: g097
 - Request rewards climb with the calendar, from 4,000 yen early to 15,000, 30,000, 40,000 and 45,000 yen later, alongside Chest Keys, Beads, stat-raising Souls and books [gf:56627 §Quests, ssk9716757 v1.01]
 - Many requests name the exact Shadow and floor that drops the item wanted, such as a Suspicious Pole from Trance Twins on floors 3–5 of Yukiko's Castle and an Everlasting Lamp from Amenti Ravens on floors 3–4 of Void Quest [gf:56627 §Quests, ssk9716757 v1.01]
 - Some requests are riddles, and answering correctly pays out: 3 Chest Keys for one, a Snuff Soul and a Chewing Soul for later ones [gf:56627 §Quests, ssk9716757 v1.01]
+- A second playthrough keeps the play time, yen, the Persona Compendium, the number of Persona slots, the key items from maxed Social Link events and the status parameters; character levels, the Personas held, equipment, items and shadow analysis data start over [gf:53550 §Second Playthrough (PM12), Zoel v0.65]
+- Status parameters rank up at set point totals: Knowledge at 30, 80, 150 and 240 points; Courage and Understanding at 16, 40, 80 and 140 [gf:53550 §KNOWLEDGE, Zoel v0.65] [gf:53550 §COURAGE, Zoel v0.65] [gf:53550 §UNDERSTANDING, Zoel v0.65]
+- Knowledge rises 3 points at a time: studying at the desk at night or at the library after school, certain lessons and right answers in class, Aiya's 3,000 yen special ramen, and reading the bug encyclopedia and the number series; Naoto's Social Link cannot start before Knowledge is maxed [gf:53550 §KNOWLEDGE, Zoel v0.65]
+- Defeating a dungeon's bonus boss raises Courage [gf:53550 §COURAGE, Zoel v0.65]
+- Ten books are rewards rather than purchases, each raising two status parameters: The Gentle Way, The Punk Way, Guide to Pests, Riddlemania and Who Am I? for finishing quests 8, 14, 22, 27 and 34; The O-Cha Way, Witch Detective and Fun with Numbers from Sport Club events; The Divine Way from a summer event; and The Ramen Way from Aiya's owner [gf:53550 §Books from Quests and Events, Zoel v0.65]
+- After a battle, Shuffle Time offers three kinds of card, Persona, Blank and Nothing, and taking Nothing leaves the battle with no card reward [gf:53550 §Battle Related, Zoel v0.65]
+- Arcana Chance can follow Shuffle Time at random, and is optional; each arcana's card has a good and a bad face, such as Empress restoring all HP or dropping every member to 1 HP, Magician strengthening or weakening a Persona's skill (Mazio to Ziodyne and back), Priestess analysing every enemy except bosses or disabling analysis, and Hermit's bad face hiding the map [gf:53550 §Arcana Chance Cards (PGS4), Zoel v0.65] [gf:53550 §Battle Related, Zoel v0.65]
 
 ### Shops & exchange
 - On set days the TV shopping channel sells fish, so a player who cannot land a Huge Fish can buy one instead [gf:55038 §Schedule, penguin_knight v1.5]
 - Daidara Metalworks sells equipment and buys the materials Shadows drop; selling the required amount of a given material unlocks new equipment for sale, and talking to Daidara hints at what one piece needs [wiki:megamitensei.fandom.com/Daidara Metalworks]
 - A request can route through the smithy: Hard Boots are made from 10 Thick Hides given to Daidara, and the hides drop from Dancing Hands on floors 5–8 of the Steamy Bathhouse [gf:56627 §Quests, ssk9716757 v1.01]
+- Aiya's ramen raises Courage for 800 yen, and on rainy days its 3,000 yen special raises three random status parameters [gf:53550 §Shopping District, North, Zoel v0.65]
 
 ## Unverified or contradicted
 - **When the big fish start biting.** The walkthrough's fish list says the Huge Fish and the Guardian appear from November, yet its own exchange table asks for a Huge Fish in June and July and a Guardian in September (two later guides settle the Guardian: that prize is for a second playthrough); the wiki gives the Huge Fish from August, and the Social Link guide suggests buying a Huge Fish from the TV shopping channel for a player who cannot catch one. The codex row names no start month [gf:53550 §Fishing, Zoel v0.65] [wiki:megamitensei.fandom.com/Fishing] [gf:55038 §Schedule, penguin_knight v1.5]
@@ -163,6 +182,7 @@ row: g097
 - Which stat the fox's final rank needs in the original game: the Social Link/Fox page's Persona 4 tab says max Understanding, while the Fox page says maxed Expression, which the Social Link page gives as Golden's requirement. Both readings kept [wiki:megamitensei.fandom.com/Social Link/Fox] [wiki:megamitensei.fandom.com/Fox]
 - **Item names differ between guides.** Zoel's exchange table says Musashi Bamboo Sword, Uzume Clothes, Stylish Underwear, Chain Bead and Blessed Hand; neoXsaga and KADFC both say Musashi Shinai, Uzume Robe and Haikara Shirt, neoXsaga says Bead Chain and Blessed Hands, and the wiki has pages under those names. The codex uses the corroborated set [gf:53550 §Fish Exchange, Zoel v0.65] [gf:60532 §Walkthrough, neoXsaga v2.2] [gf:65252 §Walkthrough, KADFC v0.86] [wiki:megamitensei.fandom.com/Musashi Shinai]
 - May's Falcon Eye costs 3 Amber Seema in Zoel's table and 1 in neoXsaga's; the codex row gives both [gf:53550 §Fish Exchange, Zoel v0.65] [gf:60532 §Walkthrough, neoXsaga v2.2]
+- **Aiya's special ramen.** The walkthrough's Knowledge list credits the 3,000 yen special with +3 Knowledge, while its town guide says the rainy-day special raises three random status parameters. Both readings kept [gf:53550 §KNOWLEDGE, Zoel v0.65] [gf:53550 §Shopping District, North, Zoel v0.65]
 - August's two prizes, Cutie Action for 6 Red Goldfish and Red Battle Clothes for 2 Huge Fish, appear only in Zoel's table, and the wiki has no page for either [gf:53550 §Fish Exchange, Zoel v0.65] [wiki:megamitensei.fandom.com/Fishing]
 
 ## Codex rows
@@ -178,3 +198,4 @@ row: g097
 ## Codex delta
 - M282 (the smithy), M283 (the fox) and g097 (fishing, 18 table rows), spliced 2026-09-14 and logged in their own changelog entry.
 - M188 (the weather deadline) and M189 (Shuffle Time) were not re-sourced this pass: the walkthroughs touch both, but not every claim in those rows.
+- 2026-09-15: the Most Recommended walkthrough, 53550, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.

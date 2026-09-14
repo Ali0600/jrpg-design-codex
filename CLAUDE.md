@@ -500,7 +500,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
 - `scripts/gf_probe.js` is the GameFAQs in-page probe (see the Research playbook, step
   2b, and `docs/research/README.md`); `scripts/digest_lint.mjs` enforces the pointer
   grammar on `docs/research/*.md` (`gf:` for a GameFAQs guide, `wiki:` for a MediaWiki page,
-  `web:` for any other site, never GameFAQs) and the bookkeeping between a digest's Sources table, Coverage
+  `web:` for any other site, never GameFAQs; a guide's section is written without square brackets,
+  `§Second Playthrough (PM12)`, because a pointer ends at its first `]`) and the bookkeeping between a digest's Sources table, Coverage
   lines and Triage record, each rule applied from the digest's own start date
   (`scripts/digest_lint.test.mjs`). From 2026-09-15 that includes a `flags` column in the Triage
   table and a `read` decision on the Full Game Guide the probe's own `core.pick` chooses from it,

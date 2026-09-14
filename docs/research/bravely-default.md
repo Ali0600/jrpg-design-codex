@@ -11,19 +11,24 @@ row's harvested `gf.u`, the original Flying Fairy release of October 11, 2012) �
 | id | title | author | version | updated | category | KB | url |
 |---|---|---|---|---|---|---|---|
 | 68747 | Norende Village Restoration Lists | silktail | — | — | In-Depth Guides | 17 | https://gamefaqs.gamespot.com/3ds/643004-bravely-default-flying-fairy/faqs/68747 |
-| 68625 | Guide and Walkthrough (grep only) | vinheim | — | — | Full Game Guides | 1062 | https://gamefaqs.gamespot.com/3ds/643004-bravely-default-flying-fairy/faqs/68625 |
+| 68625 | Guide and Walkthrough | vinheim | — | — | Full Game Guides | 1062 | https://gamefaqs.gamespot.com/3ds/643004-bravely-default-flying-fairy/faqs/68625 |
 | 68918 | Guide and Walkthrough (grep only) | KeyBlade999 | 1.90 | 09/18/2015 | Full Game Guides | 680 | https://gamefaqs.gamespot.com/3ds/643004-bravely-default-flying-fairy/faqs/68918 |
 
 Coverage 68747: single page, 12,965 chars, 250 lines, 26 sections — every line from Getting Started to
 the end (lines 27–250) read with `lines()`, which covers the rules, the reclaim tree and all eleven
 shop tables; no greps. Unread: the table of contents only.
 
-Coverage 68625: single page, 986,145 chars, 14,824 lines, 56 sections — no whole section read; six
-greps (special moves and parts, 36 hits; the eggs, a weapon, a crag and villagers, 20; combat
-bonuses, 3; Norende, 35; activation and song, 2; the Norende chapter's shops, 13) and `lines()` reads
-of the Chain Special Moves tutorial (0540) and the Norende chapter (0701) from its rules to the
-Compound Shop. Unread: the rest of that chapter (the River, Cape and Valley parts shops) and the
-largest sections (186,724, 132,942 and 70,027 chars).
+Coverage 68625: **read on 2026-09-15 as `pick()`'s choice** (Most Recommended, plain text) — single
+page, 986,145 chars, 14,824 lines, 56 sections. This pass: 3 sections read whole (Save on the World
+Map, 0501; View Genome Abilities, 0548; A Path for Ringabel) and `lines()` 455–489, the Norende Ravine
+exit where Bravely Second is explained; greps threshold (12 hits), rewards (134), hidden (106),
+upgrades (435), economy (192), BP or Bravely Second (144), hidden passages (15) and Treasure Key (2).
+The 2026-09-14 pass had run six greps (special moves and parts, 36 hits; the eggs, a weapon, a crag
+and villagers, 20; combat bonuses, 3; Norende, 35; activation and song, 2; the Norende chapter's
+shops, 13) and read the Chain Special Moves tutorial (0540) and the Norende chapter (0701) from its
+rules to the Compound Shop through `lines()`. Largest unread: a 186,724-char appendix section, A New
+Scenario? (132,942), Check This World's Shops (70,027), a 53,686-char dungeon chapter, Find the
+Treasure Key? (47,112) and a 42,314-char Norende section.
 
 Coverage 68918: page 1 of 18, 47,598 chars, 41 sections — one grep (parts shops, the eggs, a weapon
 and the villager rule), 0 hits. Pages 2–18 not opened.
@@ -35,18 +40,22 @@ headings: four Maps and Charts and one Demo Guide, none read). The lead question
 level-by-level stock, so the Norende list was read first and two walkthroughs were grepped for a
 second and third reading of it. KeyBlade999's walkthrough turned out to be 18 pages, and its first
 page had no Norende text, so vinheim's Norende chapter was used instead. Zoel's opened on a short
-introduction page whose chapters continue elsewhere, so it was not searched further.
+introduction page whose chapters continue elsewhere, so it was not searched further. On 2026-09-15
+`__gf.pick()` named vinheim's walkthrough, 68625 (Most Recommended, plain text), so it moved from grep
+only to read under the owner's rule. The flags column copies the listing on that day, and it explains
+both earlier dead ends: KeyBlade999's and Zoel's guides carry the HTML flair, formatted guides split
+over pages.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 68686 | Salve-Maker Compounding List | silktail | In-Depth Guides | 21 | 5 | skipped — item compounding recipes, outside this pass's questions |
-| 80129 | Event Viewer/Notes Guide | Xerox1919 | In-Depth Guides | 67 | 4 | skipped — a list of story events |
-| 68625 | Guide and Walkthrough | vinheim | Full Game Guides | 1062 | 3 | grep only |
-| 68918 | Guide and Walkthrough | KeyBlade999 | Full Game Guides | 680 | 3 | grep only |
-| 68747 | Norende Village Restoration Lists | silktail | In-Depth Guides | 17 | 3 | read |
-| 68431 | Guide and Walkthrough | Sailor_Nemesis | Full Game Guides | 1152 | 2 | skipped — a third 1 MB walkthrough, after vinheim's Norende chapter answered |
-| 68353 | Guide and Walkthrough | Zoel | Full Game Guides | 417 | 2 | skipped — a chaptered guide whose first page is only an introduction |
-| 68738 | Walkthrough | vhayste | Full Game Guides | 145 | 2 | skipped — a shorter walkthrough, not needed after two readings |
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 68686 | Salve-Maker Compounding List | silktail | In-Depth Guides | 21 | 5 | skipped — item compounding recipes, outside this pass's questions | Highest Rated · HTML |
+| 80129 | Event Viewer/Notes Guide | Xerox1919 | In-Depth Guides | 67 | 4 | skipped — a list of story events | HTML |
+| 68625 | Guide and Walkthrough | vinheim | Full Game Guides | 1062 | 3 | read | Most Recommended · FAQ of the Month Winner: March 2014 |
+| 68918 | Guide and Walkthrough | KeyBlade999 | Full Game Guides | 680 | 3 | grep only | Highest Rated · HTML |
+| 68747 | Norende Village Restoration Lists | silktail | In-Depth Guides | 17 | 3 | read | HTML |
+| 68431 | Guide and Walkthrough | Sailor_Nemesis | Full Game Guides | 1152 | 2 | skipped — a third 1 MB walkthrough, after vinheim's Norende chapter answered | — |
+| 68353 | Guide and Walkthrough | Zoel | Full Game Guides | 417 | 2 | skipped — a chaptered guide whose first page is only an introduction | HTML |
+| 68738 | Walkthrough | vhayste | Full Game Guides | 145 | 2 | skipped — a shorter walkthrough, not needed after two readings | — |
 
 ## Mechanics candidates
 
@@ -72,6 +81,9 @@ recorded below; the listing has no minigame guide.
 ### Hidden
 - Nemesis monsters arrive in the village from other players by StreetPass and from data updates; they do not block building and can be fought or passed on [gf:68747 §Nemesis in your village, silktail] [wiki:bravelydefault.fandom.com/Norende Village]
 - Up to seven Nemeses can wait in Norende at once, after which the oldest unprotected one is removed [wiki:bravelydefault.fandom.com/Norende Village]
+- The opening's short tutorial quests include Hunt for Hidden Items!, and a later one, Sniff Out Hidden Passages, points at the dungeons' hidden passages, which hold chests such as Iron Knuckles at a dead end, a Peace Ring behind a wall on a second floor, a Courage Ring off a corner and an Elixir under a staircase [gf:68625 §Save on the World Map (0501), vinheim] [gf:68625 §Set Job Commands (0507), vinheim] [gf:68625 §The Thief and Merchant (0601), vinheim] [gf:68625 §The Valkyrie (0606), vinheim] [gf:68625 §The Pirate (0607), vinheim]
+- The encounter rate can be changed, and random battles switched off, from Tactics → Config → Difficulty, a setting the game does not explain at that point [gf:68625 §Fighting with Courage, vinheim]
+- A Chapter 6 path for Ringabel starts from a note at Yulyana Wood Needleworks after talking with Sage Yulyana, climbs the Council of Six, whose 48th floor hides the Chaos Blade in a blue chest, and ends in a fight with Alternis Dim worth 999 JP and a Dark Shield [gf:68625 §A Path for Ringabel, vinheim]
 
 ### Upgrades
 - Six blocked areas open the village: Tangled Woods (2 hours) opens the Special Move Shop, Blackwater Fen and the Downstream Area; the Ancient Boulder (10 hours) opens the Weapons Shop, the Hill Parts Shop, the Collapsed Bridge and the Rigid Crag; Blackwater Fen (30 hours) opens the Accessory and River Parts shops; the Collapsed Bridge (50 hours) the Combat Item and Cape Parts shops; the Downstream Area (70 hours) the Compound Shop; and the Rigid Crag (99 hours) the Valley Parts Shop. The Trader and the Armor Shop are open from the start [gf:68747 §Reclaiming Areas, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
@@ -87,6 +99,9 @@ recorded below; the listing has no minigame guide.
 - Accessory Shop: Venture Badge, Smiley Badge, Gale Hairpin, Normalizer, Red Muleta, Reflect Ring, Alarm Earrings, Taunt Bangle, then the Golden Egg at level 9 (68 hours) and the Growth Egg at level 10 (80 hours), then Melodist's Shirt [gf:68747 §Accessory Shop, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
 - The Golden Egg doubles the money a battle pays and gives no experience or job points; the Growth Egg doubles experience and job points and gives no money [gf:68747 §Accessory Shop, silktail] [wiki:bravelydefault.fandom.com/Bravely Default accessories] [gf:68625 §Norende (0701), vinheim]
 - Each shop's eleventh level is bonus equipment: outfits (Knight's Tunic, Onion Shirt, Melodist's Shirt, Edea's Garb, Plain Tunic) and weapons (Falcon Knife, Magic Knife, Labrys, Silver Glaive, Fox Tail, Donnerschlag) [gf:68747 §Notes for the bonus equipment, silktail] [wiki:bravelydefault.fandom.com/Norende Village]
+- Bravely Second spends SP rather than BP; the party first hears of it from the Adventurer in Norende Ravine, who hands over the Strange Hourglass [gf:68625 §Agnès and Airy, vinheim]
+- A character can Brave as far as −4 BP: the walkthrough's first fights are won by Braving fully against one enemy, or Defaulting once or twice before Braving against two [gf:68625 §Agnès and Airy, vinheim]
+- Genomes are abilities absorbed from particular enemies: one chapter's table lists 13, from Curse (a Magician in Underflow) to Hellfire (Cerberus in Vampire Castle); White Wind is learned by charming an Aero Lantern at low health so that it casts the spell on the party, and Wing Scale needs a Peace Ring so the party is not confused while absorbing it [gf:68625 §View Genome Abilities (0548), vinheim]
 
 ### Shops & exchange
 - Norende's stock is bought from the Adventurer, the merchant at save points [gf:68747 §Getting Started, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
@@ -115,3 +130,4 @@ recorded below; the listing has no minigame guide.
 ## Codex delta
 - (ids after the splice)
 - M224 (the Norende rebuild) sharpened in place from this digest's Upgrades and Shops facts: the six blocked areas, eleven shops of eleven levels, time divided by villagers, the eggs, and the bonus equipment at each shop's last level. It gained its first sources. The brief's third question, hidden items with stated stats, was not pursued.
+- 2026-09-15: the Most Recommended walkthrough, 68625, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.
