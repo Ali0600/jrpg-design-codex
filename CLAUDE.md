@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **293 mechanics** (`BASE_MECHS` array, M001-M293) across **72 researched games**: FF7 Rebirth,
+- **294 mechanics** (`BASE_MECHS` array, M001-M294) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -162,6 +162,11 @@ backup; the HTML file is the source of truth and is more up to date.
   every activity including the free ones; the greenhouse (M293), whose permanent stat booster is
   rolled at planting; fishing (g101), with its shadows and professor experience per fish tabled; and
   tea time (g102), which pays support and +1 Charm to both for a Great or Perfect finish.
+  **Yakuza: Like a Dragon** (M294, g103): Part-Time Hero, a city quest board whose support and rescue
+  quests pay points toward four rank-ups, each collected as gear (at 15, 70, 150 and 300 points), while
+  challenge quests pay personality stats; and Can Quest (g103), whose Eco Points buy 100,000-point
+  manuals and boosters at Kan-san's shop. The business payouts and Sujimon came back THIN. Wave 5 is
+  complete, and with it the rollout: all 15 games.
   Plus the **game pages** (2026-09-07): every roster row carries its box art (Wikipedia,
   `covers/`), a Wikipedia link, and its GameFAQs page — platform, genre, developer,
   publisher, release, franchise, the user rating / difficulty / length, and the five games
@@ -174,7 +179,7 @@ backup; the HTML file is the source of truth and is more up to date.
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
   its Wikidata id (`wd`). The same day's audit of unused research data offered three more
   options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
-- **102 minigames** (`MINIGAMES` array, g001-g102): the Final Fantasy series (g001-g054)
+- **103 minigames** (`MINIGAMES` array, g001-g103): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080-g083: Chrono Trigger's Millennial Fair, FF6's Colosseum, Yakuza 0's two business
   sims), each with a highlighted Rewards field and a
@@ -231,7 +236,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
   - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
-  - IDs are sequential: mechanics M001-M293, minigames g001-g102. Continue the
+  - IDs are sequential: mechanics M001-M294, minigames g001-g103. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -265,7 +270,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 293 rows are tagged**
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 294 rows are tagged**
   (105 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
@@ -804,7 +809,7 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
 2. **Backfill the reward tables.** 45 of 96 minigame rows carry no `rt`, and all 45 sit
    in the Final Fantasy block (measured 2026-09-10) — the oldest research, written before
    the "name the actual items and thresholds" rule existed.
-3. **Finish the GameFAQs rollout**, waves 3–5 (9 games), per
+3. **The GameFAQs rollout is finished**: waves 3–5 (9 games) landed on 2026-09-14, per
    `~/.claude/plans/look-into-the-ps2-steady-cook.md`.
 
 Standing, not yet scheduled:

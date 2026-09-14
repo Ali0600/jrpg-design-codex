@@ -414,3 +414,6 @@ category and for every row the digest tagged.
 
 ### M288 — Trade stock that opens with a region's affinity, and a bonus for overpaying
 - Traded · loop · `trade a found item worth more than you need`
+
+### M294 — Part-Time Hero (a city quest board whose ranks pay gear)
+- none · requests are posted on a board and at kiosks and pay on completion; nothing is hidden, guarded or gated
