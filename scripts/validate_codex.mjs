@@ -36,6 +36,16 @@ const KNOWN_UNROSTERED = new Set([
 ]);
 
 /**
+ * The research digests of the titles above. A digest file is claimed by a game row's `digest`
+ * or by this map — a minigame-only title has no row to carry the field. Every title here must
+ * be in KNOWN_UNROSTERED and still own a minigame row, and every slug must name a file in
+ * docs/research, so add an entry in the same change as its digest.
+ */
+const UNROSTERED_DIGESTS = {
+  "Final Fantasy XV": "final-fantasy-xv",
+};
+
+/**
  * The categories a discovery verb can describe. Every mechanic in them needs a docs/verbs.md
  * entry — tags, or a reasoned `none` — so "reviewed" is a checkable claim rather than a
  * sweep someone once did. A policy list like KNOWN_UNROSTERED, checked against CATS so a
@@ -567,13 +577,26 @@ export function validate(html, docs = {}) {
       else digestRefs.set(g.digest, g.title);
     }
   }
+  // A minigame-only title claims its digest through UNROSTERED_DIGESTS. `docs` may carry the map
+  // so the selftest can stage a bad one; the real run passes the constant.
+  const unrosteredDigests = docs.unrosteredDigests ?? UNROSTERED_DIGESTS;
+  const minigameTitles = new Set(MINIGAMES.map(m => m.g));
+  for (const [t, slug] of Object.entries(unrosteredDigests)) {
+    const label = `UNROSTERED_DIGESTS[${JSON.stringify(t)}]`;
+    if (!KNOWN_UNROSTERED.has(t)) errors.push(`${label}: not a known unrostered title — a game on the roster claims its digest with \`digest\``);
+    else if (!minigameTitles.has(t)) errors.push(`${label}: the title has no minigame rows, so the digest describes nothing in the codex`);
+    if (typeof slug !== "string" || !/^[a-z0-9-]+$/.test(slug)) errors.push(`${label}: must be a docs/research slug, got ${JSON.stringify(slug)}`);
+    else if (digestRefs.has(slug)) errors.push(`${label}: digest ${JSON.stringify(slug)} is also claimed by ${JSON.stringify(digestRefs.get(slug))}`);
+    else digestRefs.set(slug, t);
+  }
+
   // Two-way set equality against the real folders, the same posture as SHOTS below: a row
   // naming a file that is not there is a broken link, and a file no row names is an orphan
   // nobody will ever audit. Fail closed when the folder cannot be listed.
   if (docs.digestFiles == null && digestRefs.size) errors.push("game rows claim digests but docs/research could not be listed");
   if (docs.digestFiles != null) {
     for (const [slug, t] of digestRefs) if (!docs.digestFiles.has(slug)) errors.push(`game ${JSON.stringify(t)}: digest ${JSON.stringify(slug)} has no docs/research/${slug}.md`);
-    for (const f of docs.digestFiles) if (!digestRefs.has(f)) errors.push(`docs/research/${f}.md is not claimed by any game row's \`digest\` — stamp it (game_rows.mjs --set digest=${f})`);
+    for (const f of docs.digestFiles) if (!digestRefs.has(f)) errors.push(`docs/research/${f}.md is not claimed by any game row's \`digest\` or by UNROSTERED_DIGESTS — stamp it (game_rows.mjs --set digest=${f})`);
   }
   if (docs.coverFiles == null && coverRefs.size) errors.push("game rows carry covers but the covers/ folder could not be listed — every cover would 404");
   if (docs.coverFiles != null) {
@@ -1080,6 +1103,15 @@ const SABOTAGES = [
   // point at has no provenance.
   { name: "cover without its Wikipedia article", expect: /has a cover but no wp/,
     apply: s => replaceFirst(s, /(cover:"covers\/[^"]+")(,\nwp:"[^"]*")/, "$1", "cover without its Wikipedia article") },
+  // UNROSTERED_DIGESTS names a title that owns minigame rows; renaming every one of its rows to
+  // another unrostered title leaves the orphan check quiet and the digest describing nothing.
+  { name: "unrostered digest for a title with no minigame rows", expect: /UNROSTERED_DIGESTS\["Final Fantasy XV"\]: the title has no minigame rows/,
+    apply: s => {
+      const needle = 'g:"Final Fantasy XV",', n = s.split(needle).length - 1;
+      if (n < 1) throw new Error('sabotage "unrostered digest, no rows": no Final Fantasy XV rows to rename');
+      for (let i = 0; i < n; i++) s = replaceFirst(s, needle, 'g:"Final Fantasy XIV",', "unrostered digest, no rows");
+      return s;
+    } },
   { name: "digest naming no docs/research file", expect: /digest "parasite-eve-x" has no docs\/research/,
     apply: s => replaceFirst(s, 'digest:"parasite-eve"', 'digest:"parasite-eve-x"', "digest naming no docs/research file") },
   { name: "changelog games[] naming a non-roster game", expect: /games\[\] names no roster game ".* \(not on the roster\)"/,
@@ -1239,6 +1271,11 @@ const DOC_SABOTAGES = [
       return { ...d, digestFiles: new Set([...d.digestFiles, "ghost"]) };
     } },
 
+  { name: "unrostered digest for a rostered title", expect: /UNROSTERED_DIGESTS\["Final Fantasy X"\]: not a known unrostered title/,
+    apply: d => ({ ...d, unrosteredDigests: { ...(d.unrosteredDigests ?? {}), "Final Fantasy X": "final-fantasy-x" } }) },
+  { name: "unrostered digest naming no docs/research file", expect: /digest "final-fantasy-xv-x" has no docs\/research/,
+    apply: d => ({ ...d, unrosteredDigests: { ...(d.unrosteredDigests ?? {}), "Final Fantasy XV": "final-fantasy-xv-x" } }) },
+
   // This suite's own size, quoted in two docs. Adding a sabotage and forgetting the docs is
   // the drift these catch -- starting with the drift caused by adding these two.
   { name: "CLAUDE.md sabotage-count drift", expect: /CLAUDE\.md says \d+ sabotages/,
@@ -1368,7 +1405,7 @@ function main() {
     coverFiles = new Set(readdirSync(join(ROOT, "covers")).filter(f => /\.(jpg|png|webp)$/.test(f)).map(f => "covers/" + f));
   } catch { /* no covers/ yet — rows naming a cover then fail closed */ }
 
-  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), lineageLedger: read("docs/lineages.md"), shotFiles, digestFiles, coverFiles };
+  const docs = { claude: read("CLAUDE.md"), agents: read("AGENTS.md"), readme: read("README.md"), verbLedger: read("docs/verbs.md"), lineageLedger: read("docs/lineages.md"), shotFiles, digestFiles, coverFiles, unrosteredDigests: UNROSTERED_DIGESTS };
 
   const { errors, stats } = validate(html, docs);
 
