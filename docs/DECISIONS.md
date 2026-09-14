@@ -28,6 +28,40 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — How a duplicate row leaves under a never-renumber rule
+
+**Fork:** g006 and g081 are both Final Fantasy VI's Dragon's Neck Coliseum. g006 carries the
+sourced reward table; g081, the July copy, has no sources and a four-row table of bullet points.
+Ids are the join key for the owner's saved favourites and pinned videos, so a row cannot simply
+vanish or be reused.
+
+- **A: retire g081 into g006** *(chosen by the owner, AskUserQuestion 2026-09-14; not yet built)*.
+  g081's lesson folds into g006, a `RETIRED` map names g081 → g006 so the gap is deliberate and
+  the id never returns, a load-time migration moves a favourite or pinned video to g006, and the
+  validator and `check_changes.mjs` learn that a row may leave only through the map.
+- **B: keep both cards**: give g081 g006's sources and retitle it to the AI-controlled-bout angle.
+  Two cards for one minigame stay on the game page.
+- **C: repurpose g081** as a different Final Fantasy VI minigame.
+
+**Status:** B `rejected — one minigame, one card`. C `rejected — a favourite saved on g081 would
+silently point at another minigame`. **Revisit hook:** none; the `RETIRED` map is the pattern for
+any later duplicate.
+
+## 2026-09-14 — The order of the sources pass
+
+**Fork:** 253 mechanics and 44 minigames, every row written before the GameFAQs pilot, carry no
+`refs`. They are to be checked against two sources each, one digest per game.
+
+- **A: by research batch** *(chosen by the owner, AskUserQuestion 2026-09-14)*, in the order the
+  rows were written, from the original nine games to the queue-clearing batch. Each batch shares
+  wikis and an era of guides, so one host's quirks are learned once.
+- **B: shortlist first**: games with want:Yes rows first, so provenance lands where the design
+  leans, but the host changes on nearly every PR.
+- **C: shortlist only**: source the 113 Yes mechanics and stop.
+
+**Status:** B `rejected — the owner preferred the batch order`. C `rejected — it would leave about
+140 rows unsourced`. **Revisit hook:** none; the pass runs to the end.
+
 ## 2026-09-14 — Where the UI Gallery's screenshots come from, now that Fandom blocks scripts
 
 **Fork:** `scripts/fetch_ui_shots.py` took every gallery image from a game's Fandom wiki. On
