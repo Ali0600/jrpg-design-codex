@@ -44,6 +44,7 @@ const KNOWN_UNROSTERED = new Set([
 const UNROSTERED_DIGESTS = {
   "Final Fantasy VII Remake": "final-fantasy-vii-remake",
   "Final Fantasy X-2": "final-fantasy-x-2",
+  "Final Fantasy XIV": "final-fantasy-xiv",
   "Final Fantasy XV": "final-fantasy-xv",
 };
 
