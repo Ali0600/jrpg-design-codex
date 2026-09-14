@@ -15,7 +15,7 @@ export function splitFaq(text, marker) {
   return [text.slice(0, at), text.slice(at)];
 }
 
-function guideLi({ title, href, author, meta, rec = false, flags = "", date = "" }) {
+function guideLi({ title, href, author, meta, rec = false, flags = "", date = "", flair = [] }) {
   const metaChildren = date
     ? [meta.replace(/\d{4}$/, ""), el("span", { cls: "guide_date", title: date }, [meta.slice(-4)])]
     : [meta];
@@ -27,6 +27,8 @@ function guideLi({ title, href, author, meta, rec = false, flags = "", date = ""
       ]),
       el("div", { cls: "meta float_r" + (rec ? " rec" : "") }, metaChildren),
       ...(flags ? [el("div", { cls: "meta float_l bold ital" }, [flags])] : []),
+      // The row's badges, measured 2026-09-14: a platform, and `HTML` on a formatted guide.
+      ...flair.map(f => el("span", { cls: "flair" }, [f])),
     ]),
   ]);
 }
@@ -64,6 +66,13 @@ export function listingPage() {
     ]),
     el("h2", {}, ["Want to Write Your Own Guide?"]),
   ])]);
+  return document({ title: "Lantern Vale FAQs, Walkthroughs, and Guides for PlayStation - GameFAQs",
+                    root, path: "/ps/1-lantern-vale/faqs" });
+}
+
+/** A listing built from `[heading, [guide, …]]` pairs, for the pick tests. */
+export function customListingPage(pods) {
+  const root = el("html", {}, [el("body", {}, pods.map(([heading, guides]) => pod(heading, guides.map(g => guideLi(g)))))]);
   return document({ title: "Lantern Vale FAQs, Walkthroughs, and Guides for PlayStation - GameFAQs",
                     root, path: "/ps/1-lantern-vale/faqs" });
 }

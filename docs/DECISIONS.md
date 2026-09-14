@@ -28,6 +28,27 @@ rejected options still offer.
 
 ---
 
+## 2026-09-14 — Which GameFAQs walkthrough a research pass reads
+
+**Fork:** the runbook kept every Full Game Guide for `grep` only, so 25 of the 27 digests that used
+GameFAQs never read a walkthrough. The owner asked for the guide GameFAQs flags *Most Recommended*
+under Full Game Guides, and never its HTML version. A listing marks a formatted, paginated guide with
+an `HTML` flair (5 of The Witcher 3's 6 guides), and not every listing flags a Most Recommended one
+(The Witcher 3 flags only Highest Rated guides).
+
+- **A: the Most Recommended plain-text guide, with two fallbacks** *(chosen by the owner,
+  AskUserQuestion 2026-09-14)*. When the star is HTML or absent, the largest plain-text Highest
+  Rated guide, then the largest plain-text one. The probe's `core.pick` decides, and the linter runs
+  it over each digest's Triage table.
+- **B: read the HTML guide anyway.** One reading per game, but a formatted guide is split across
+  pages, and The Witcher 3's 19-page one had two pages read.
+- **C: read no Full Game Guide when the star is HTML or absent.** The rule stays literal, and the
+  item lists inside those walkthroughs go unread.
+
+**Status:** B `rejected — a paginated guide is read two pages deep`. C `rejected — the walkthrough
+is where the item lists are`. **Revisit hook:** `core.pick` in `scripts/gf_probe.js` is the one copy
+of the rule, and `scripts/digest_lint.mjs` imports it.
+
 ## 2026-09-14 — What a game's "last update" means, for the Games tab's default sort
 
 **Fork:** the owner asked for the page to open on the Games tab, sorted by last update. The
