@@ -317,7 +317,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   it in the data region and turns `"M266-M275"` into ids — the validator calls the PAGE's
   copy, so the ranges the UI renders are the ranges it checks.
   **Edited an existing row in place? Add its id to the newest entry's `updated` list** —
-  `scripts/check_changes.mjs` fails CI otherwise. If the edit removed a span that `docs/verbs.md` or
+  `scripts/check_changes.mjs` fails CI otherwise. A row the newest entry ALREADY names in
+  `updated` cannot be edited again under that entry: the owner's read marker is a date, so a
+  same-day re-edit would stay hidden from an owner who marked today seen. That edit waits for
+  the next local day and a new entry. If the edit removed a span that `docs/verbs.md` or
   `docs/lineages.md` quotes, re-quote the row there too (the validator names the line; M224's
   Bravely Default rewrite hit this). The splicer logs `added` for you.
   The ONE exception is `verbs`, carved out in that script's `ANALYSIS_KEYS`: a tag derived
@@ -509,8 +512,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   been silently read as nothing.
 - `scripts/check_changes.mjs` is the differential gate: it evaluates the codex at the PR's
   base revision and in the working copy, compares each M/g row as a PARSED object with
-  sorted keys, and requires every row whose content changed to appear in an `updated` list
-  the base did not already have. `ANALYSIS_KEYS` names the keys that are analysis OF a row
+  sorted keys, and requires every row whose content changed to appear in an entry's `updated`
+  list where the base's copy of that entry (matched by date) did not already name it, so a row
+  logged once can be logged again in a later entry. Until 2026-09-14 it compared the union of
+  every list instead, which trapped the 85 rows logged at least once. `ANALYSIS_KEYS` names the keys that are analysis OF a row
   rather than content of it — `verbs` today — and skips them, so a tagging pass is not a
   rewrite. Parse, never text-diff — appending a row rewrites the
   previous last row by one comma, so a textual diff would demand an `updated` entry for

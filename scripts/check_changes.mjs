@@ -9,8 +9,8 @@
  * NEW row cannot go unmarked. The other half is invisible to it: editing M117's notes in
  * place changes nothing it can measure, and the row keeps whatever date it was added on —
  * so the owner's "what's new" review silently misses the edit. This compares the working
- * copy against a base revision and requires each changed row to appear in an `updated`
- * list that the base did not already have.
+ * copy against a base revision and requires each changed row to appear in an entry's
+ * `updated` list where the base's copy of that entry did not already name it.
  *
  * Rows are compared as PARSED OBJECTS with sorted keys, never as text. Appending a row to
  * an array rewrites the previous last row by one character — the comma after its closing
@@ -60,16 +60,20 @@ export function readVersion(html, which) {
     Object.keys(row).sort().filter(k => !ANALYSIS_KEYS.has(k)).map(k => [k, row[k]])));
   for (const r of [...data.BASE_MECHS, ...data.MINIGAMES]) rows.set(r.id, canon(r));
 
-  const updated = new Set();
+  // Each entry's `updated` ids, keyed by its date: the validator holds dates unique and
+  // strictly decreasing, so the date names the entry.
+  const updated = new Set(), updatedByDate = new Map();
   if (data.CHANGES && data.expandIds) {
     for (const c of data.CHANGES) {
+      const ids = updatedByDate.get(c.date) ?? new Set();
+      updatedByDate.set(c.date, ids);
       // A malformed range is the validator's error to report, not this one's.
-      try { data.expandIds(c.updated).forEach(id => updated.add(id)); } catch { /* ignore */ }
+      try { data.expandIds(c.updated).forEach(id => { updated.add(id); ids.add(id); }); } catch { /* ignore */ }
     }
   } else if (which === "head") {
     throw new Error("the working copy has no CHANGES / expandIds — the changelog is gone");
   }
-  return { rows, updated };
+  return { rows, updated, updatedByDate };
 }
 
 /**
@@ -79,7 +83,16 @@ export function readVersion(html, which) {
 export function diffChanges(baseHtml, headHtml) {
   const base = readVersion(baseHtml, "base");
   const head = readVersion(headHtml, "head");
-  const newlyLogged = new Set([...head.updated].filter(id => !base.updated.has(id)));
+  // Newly logged means named in an entry's `updated` list that the base's copy of that entry
+  // did not name. A row logged in an old entry can be logged again in a new one. A re-edit
+  // filed under an entry that already named the row cannot, because the owner may already
+  // have marked that date seen. Comparing the union of every list instead refused the first
+  // case too, so a row sharpened once could never be sharpened again.
+  const newlyLogged = new Set();
+  for (const [date, ids] of head.updatedByDate) {
+    const had = base.updatedByDate.get(date) ?? new Set();
+    for (const id of ids) if (!had.has(id)) newlyLogged.add(id);
+  }
 
   const changed = [];
   for (const [id, text] of head.rows) {
