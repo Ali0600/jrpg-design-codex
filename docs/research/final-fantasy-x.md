@@ -20,6 +20,7 @@ g037–g041 are edited in place.
 | 15350 | Overdrive FAQ (grep only) | PFriedman | 4.0 | 08/30/2002 | In-Depth Guides | 30 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/15350 |
 | 13350 | Overdrive FAQ (grep only) | muni_shinobu | 1.01 | 07/31/2001 | In-Depth Guides | 5 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/13350 |
 | 19103 | Blitzball FAQ (grep only) | AlaskaFox | 1.2 | 09/04/2003 | In-Depth Guides | 294 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/19103 |
+| 18197 | Guide and Walkthrough | Split_Infinity | 1.8 | 10/17/2010 | Full Game Guides | 1867 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/18197 |
 
 Coverage 15124: single page, 38,519 chars, 607 lines, 23 sections — one grep (the prizes, 10 hits) and a
 `lines()` read of the prize table (86–111). Unread: the monster data (10,229 chars) and the shop list
@@ -44,6 +45,14 @@ Coverage 19103: single page, 293,715 chars, 6,884 lines, 295 sections — one gr
 reels, 39 hits). Unread: nearly all of its 295 sections, the player and technique
 chapters included.
 
+Coverage 18197: **read on 2026-09-15 as `pick()`'s choice** (the first of four plain-text Most Recommended
+walkthroughs) — single page, 1,875,152 chars, 37,383 lines, 2,553 sections. `lines()` windows, each running 200
+lines from its start: 8850 (the key items, the seven sigils among them), 9915 (Wakka's reels), 24140 (the celestial
+weapons' sigils) and 24420 (the chocobo trainer's four courses). Greps: Wakka's reels and the Jupiter Sigil (55 hits),
+lightning dodging and the Venus Sigil (23), the chocobo courses and the Sun Sigil (13), the butterfly game and the
+Saturn Sigil (69), and Remiem Temple (71). Largest unread: About Shops (43,406 chars), Rikku's Mix overdrive (36,468),
+Blitzball Techniques (25,505) and About Armor Abilities (24,520); the Remiem Temple section was not reached.
+
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 126 guides listed (23 Full Game Guides, 91 In-Depth Guides, 12 under other
@@ -51,122 +60,126 @@ headings: 7 Foreign Language Guides, 4 Patch Codes and 1 Codes and Secrets list,
 scored list was cut by its cap (`dropped: 6`), so KB and score appear only for the 18 guides it returned;
 the full list was read once from the page. Each minigame has a dedicated guide, and those were used with the wiki.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 69037 | FFX FAQ/Walkthrough | KeyBlade999 | Full Game Guides | 883 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 18197 | Guide and Walkthrough | Split_Infinity | Full Game Guides | 1867 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 23329 | Guide and Walkthrough | SinirothX | Full Game Guides | 2906 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 53892 | Guide and Walkthrough | SayainPrince | Full Game Guides | 1375 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 35007 | Guide and Walkthrough | A_I_e_x | Full Game Guides | 310 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 69231 | FFX FAQ/Walkthrough | beefybuffalo | Full Game Guides | 316 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 79145 | Final Fantasy X Remaster Walkthrough | bover_87 | Full Game Guides | 917 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 17195 | FAQ/Walkthrough (International) | Mogg | Full Game Guides | 306 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 82607 | FFX + PBirdman Mod Guide | cR0Ck | Full Game Guides | 351 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 69223 | FFX FAQ/Walkthrough | Mesden1 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15266 | Guide and Walkthrough | Sephiroth101 | Full Game Guides | 549 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 27058 | Guide and Walkthrough | Karpah | Full Game Guides | 610 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 16218 | Guide and Walkthrough | DJellybean | Full Game Guides | 656 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 25271 | Guide and Walkthrough | Blackestmage | Full Game Guides | 326 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 24979 | Guide and Walkthrough | PsychoPenguin | Full Game Guides | 720 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15598 | Guide and Walkthrough | vhx | Full Game Guides | 329 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 19209 | Guide and Walkthrough (European) | thumbhole | Full Game Guides | 260 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15587 | Guide and Walkthrough (Part 1 of 2) | _ATadeo_ | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15537 | Guide and Walkthrough (Part 1 of 2) | StoneKotr | Full Game Guides | 443 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 16181 | Guide and Walkthrough (Part 2 of 2) | _ATadeo_ | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15764 | Guide and Walkthrough (Part 2 of 2) | StoneKotr | Full Game Guides | 422 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 15599 | Spoiler-Free Walkthrough | SCHALAAY | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 13601 | Walkthrough | muni_shinobu | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 13519 | Ability Translations | Traskrod | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 69156 | Aeon Ability List | tempest_storm34 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15597 | Aeon FAQ | PFriedman | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 21367 | Aeon Stats FAQ | JungleJim | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13348 | Aeons Translation | RinoaMao | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 38776 | Affection Guide | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15267 | Affection Levels FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13151 | Al Bhed Book Locations FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14645 | Al Bhed Language Guide | enigmaopoeia | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 21772 | Al Bhed Script/Translation | Xythar | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 20050 | All-Thieves Guide | MMalone | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 18531 | Another Story FAQ | MouseNightshirt | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 18187 | AP Combo FAQ | Squall6Cloud | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15401 | AP Gaining FAQ | Gamepro2817 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13619 | AP Trick FAQ | CronoRye | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 49356 | Auron-Only Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 19256 | Battle Quote List | Kalm_Traveller | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 15074 | Blitzball Database | Eclesis | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes |
-| 19103 | Blitzball FAQ | AlaskaFox | In-Depth Guides | — | — | grep only |
-| 13152 | Blitzball FAQ | JIrwin | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes |
-| 15630 | Blitzball Techniques FAQ | Ceebs | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes |
-| 14084 | Blue Magic List | LMagnuz | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15427 | Boss Guide | Haunter12O | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 16895 | Boss Guide | Gestahl | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15213 | Bribe FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 17515 | Cactaur Sidequest Guide | Denouement | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first |
-| 15212 | Chocobo Racing Guide | Kotetsu | In-Depth Guides | — | — | read |
-| 13349 | Compound Translation | RinoaMao | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 16257 | Dark Aeon FAQ (FFX Int.) | Huang_SJ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13452 | Ending Song Theme Translation | aspen_552001 | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 24166 | Enemy Database | SinirothX | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14633 | Equipment Remodeling Guide | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 16153 | Equipment Selling Guide | _Rising2Fenix_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14151 | Famitsu's Tips and Hints | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 41079 | FFX International Changes | _Mace_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 43142 | Game Script | Shotgunnova | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 13753 | Inorigo Training Rooms Walkthrough | muni_shinobu | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 44589 | Item Database | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15716 | Item List | AZn2th3N | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13574 | Item Usage List | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 32203 | Kimahri-Only Challenge FAQ | TheaN | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 32298 | Low-Level Dark Aeon FAQ | HayanNinja | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 31790 | Lulu-Only Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 31447 | Magus Sisters FAQ | jobber2022497 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13113 | Manual Translation (Japanese) | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 48190 | Missable Item FAQ | _Mace_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14551 | Mix List | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15349 | Mix List | RDean | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 38761 | Monster Ability Guide | ragnarokesper | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15294 | Monster Arena FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14377 | Monster Encyclopedia | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13375 | Monster FAQ | theDevil | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 35097 | No Grid/Summon/Customize/Overdrive FAQ | DarkLocke | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 16203 | No Sphere Grid Challenge FAQ | _Dustman_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 31567 | No Sphere Grid Initial Equipment FAQ | KADFC | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 18786 | No Sphere Grid Monster Arena FAQ | Hyprophant | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 18577 | No Sphere Grid Monster Taming FAQ | Hyprophant | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 47096 | No Sphere Grid/Summon/Item Challenge FAQ | HayanNinja | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 19222 | No Summon/S.Grid/Customization Challenge | Gestahl | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 29961 | No Summon/Sphere Grid/Overdrive Challeng… | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 41101 | NSGNSNCNONENNENBB Challenge Guide | zzanmato | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 26160 | NSNSGNC Monster Taming FAQ | Roland780 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 15722 | Original Soundtrack FAQ | Iluna | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 13971 | Other World Lyrics | Yuna_Rafaela | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 13350 | Overdrive FAQ | muni_shinobu | In-Depth Guides | — | — | grep only |
-| 15350 | Overdrive FAQ | PFriedman | In-Depth Guides | — | — | grep only |
-| 37002 | Penance FAQ | BeeTheGoddess | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 46699 | Rikku-Only + Challenge FAQ | SoulSpark | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 44475 | Rikku-Only Challenge FAQ | Commander_Greil | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 18751 | Secrets/Sidequests FAQ | ACA | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first |
-| 44986 | Shop List | ZealotBoy | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 17803 | Sidequests FAQ | Morelock | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first |
-| 37019 | Speed Run FAQ/Walkthrough | KADFC | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first |
-| 14783 | Sphere Grid FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 46942 | Stat Maxing Guide | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 31381 | Stat Mechanics FAQ | SinirothX | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13351 | Steal FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 15211 | Steal FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 13815 | Story Translation | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 15210 | Sutekidane Lyrics | TWinfield | In-Depth Guides | — | — | skipped — translations, lyrics or scripts |
-| 15124 | Thunder Plains FAQ | xoNiOnx | In-Depth Guides | — | — | grep only |
-| 36670 | Tidus No-Customize Challenge FAQ | Blitz_Ace470 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 25393 | Tidus-Only Challenge FAQ | cool_like_me | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 13492 | Training Facility FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 37533 | Ultimate Equipment Guide | TheaN | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 14321 | Ultimate Weapons Guide | Ceebs | In-Depth Guides | — | — | grep only |
-| 13352 | Wairo (Bribe) FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 61878 | Wakka-Only Challenge FAQ | Glacoras | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
-| 18486 | Yojimbo FAQ | Azure_Edge | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 24392 | Yojimbo FAQ | jobber2022497 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes |
-| 44960 | Yuna-Only No-Summons Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list |
+`__gf.pick()` on 2026-09-15 named Split_Infinity's 18197, the first listed of four plain-text Full Game Guides flagged
+Most Recommended, and it is now read. KeyBlade999's 69037, listed first, is Highest Rated but HTML. The flags column
+comes from that day's listing, which still lists every guide in the table.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 69037 | FFX FAQ/Walkthrough | KeyBlade999 | Full Game Guides | 883 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | Highest Rated · FAQ of the Month Winner: April 2014 · HTML |
+| 18197 | Guide and Walkthrough | Split_Infinity | Full Game Guides | 1867 | 3 | read | Most Recommended |
+| 23329 | Guide and Walkthrough | SinirothX | Full Game Guides | 2906 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | Most Recommended |
+| 53892 | Guide and Walkthrough | SayainPrince | Full Game Guides | 1375 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | Most Recommended |
+| 35007 | Guide and Walkthrough | A_I_e_x | Full Game Guides | 310 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | Most Recommended |
+| 69231 | FFX FAQ/Walkthrough | beefybuffalo | Full Game Guides | 316 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | FAQ of the Month Winner: May 2014 |
+| 79145 | Final Fantasy X Remaster Walkthrough | bover_87 | Full Game Guides | 917 | 3 | skipped — a walkthrough; the dedicated minigame guides answered first | FAQ of the Month Winner: March 2021 · HTML |
+| 17195 | FAQ/Walkthrough (International) | Mogg | Full Game Guides | 306 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 82607 | FFX + PBirdman Mod Guide | cR0Ck | Full Game Guides | 351 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | HTML |
+| 69223 | FFX FAQ/Walkthrough | Mesden1 | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15266 | Guide and Walkthrough | Sephiroth101 | Full Game Guides | 549 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 27058 | Guide and Walkthrough | Karpah | Full Game Guides | 610 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 16218 | Guide and Walkthrough | DJellybean | Full Game Guides | 656 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 25271 | Guide and Walkthrough | Blackestmage | Full Game Guides | 326 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 24979 | Guide and Walkthrough | PsychoPenguin | Full Game Guides | 720 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15598 | Guide and Walkthrough | vhx | Full Game Guides | 329 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 19209 | Guide and Walkthrough (European) | thumbhole | Full Game Guides | 260 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15587 | Guide and Walkthrough (Part 1 of 2) | _ATadeo_ | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15537 | Guide and Walkthrough (Part 1 of 2) | StoneKotr | Full Game Guides | 443 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 16181 | Guide and Walkthrough (Part 2 of 2) | _ATadeo_ | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15764 | Guide and Walkthrough (Part 2 of 2) | StoneKotr | Full Game Guides | 422 | 2 | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 15599 | Spoiler-Free Walkthrough | SCHALAAY | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 13601 | Walkthrough | muni_shinobu | Full Game Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 13519 | Ability Translations | Traskrod | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 69156 | Aeon Ability List | tempest_storm34 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Highest Rated · HTML |
+| 15597 | Aeon FAQ | PFriedman | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 21367 | Aeon Stats FAQ | JungleJim | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13348 | Aeons Translation | RinoaMao | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 38776 | Affection Guide | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 15267 | Affection Levels FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13151 | Al Bhed Book Locations FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended · FAQ of the Month Winner: August 2001 |
+| 14645 | Al Bhed Language Guide | enigmaopoeia | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 21772 | Al Bhed Script/Translation | Xythar | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 20050 | All-Thieves Guide | MMalone | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 18531 | Another Story FAQ | MouseNightshirt | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 18187 | AP Combo FAQ | Squall6Cloud | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 15401 | AP Gaining FAQ | Gamepro2817 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13619 | AP Trick FAQ | CronoRye | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended |
+| 49356 | Auron-Only Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 19256 | Battle Quote List | Kalm_Traveller | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | Highest Rated |
+| 15074 | Blitzball Database | Eclesis | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes | — |
+| 19103 | Blitzball FAQ | AlaskaFox | In-Depth Guides | — | — | grep only | Most Recommended |
+| 13152 | Blitzball FAQ | JIrwin | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes | — |
+| 15630 | Blitzball Techniques FAQ | Ceebs | In-Depth Guides | — | — | skipped — AlaskaFox's Blitzball FAQ and the Overdrive FAQs covered the prizes | — |
+| 14084 | Blue Magic List | LMagnuz | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 15427 | Boss Guide | Haunter12O | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 16895 | Boss Guide | Gestahl | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 15213 | Bribe FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended |
+| 17515 | Cactaur Sidequest Guide | Denouement | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first | — |
+| 15212 | Chocobo Racing Guide | Kotetsu | In-Depth Guides | — | — | read | — |
+| 13349 | Compound Translation | RinoaMao | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 16257 | Dark Aeon FAQ (FFX Int.) | Huang_SJ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13452 | Ending Song Theme Translation | aspen_552001 | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 24166 | Enemy Database | SinirothX | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 14633 | Equipment Remodeling Guide | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 16153 | Equipment Selling Guide | _Rising2Fenix_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 14151 | Famitsu's Tips and Hints | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 41079 | FFX International Changes | _Mace_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 43142 | Game Script | Shotgunnova | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 13753 | Inorigo Training Rooms Walkthrough | muni_shinobu | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 44589 | Item Database | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Highest Rated |
+| 15716 | Item List | AZn2th3N | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13574 | Item Usage List | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 32203 | Kimahri-Only Challenge FAQ | TheaN | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 32298 | Low-Level Dark Aeon FAQ | HayanNinja | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 31790 | Lulu-Only Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 31447 | Magus Sisters FAQ | jobber2022497 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13113 | Manual Translation (Japanese) | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 48190 | Missable Item FAQ | _Mace_ | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 14551 | Mix List | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Highest Rated |
+| 15349 | Mix List | RDean | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 38761 | Monster Ability Guide | ragnarokesper | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Highest Rated |
+| 15294 | Monster Arena FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended |
+| 14377 | Monster Encyclopedia | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13375 | Monster FAQ | theDevil | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 35097 | No Grid/Summon/Customize/Overdrive FAQ | DarkLocke | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 16203 | No Sphere Grid Challenge FAQ | _Dustman_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 31567 | No Sphere Grid Initial Equipment FAQ | KADFC | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 18786 | No Sphere Grid Monster Arena FAQ | Hyprophant | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 18577 | No Sphere Grid Monster Taming FAQ | Hyprophant | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 47096 | No Sphere Grid/Summon/Item Challenge FAQ | HayanNinja | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 19222 | No Summon/S.Grid/Customization Challenge | Gestahl | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 29961 | No Summon/Sphere Grid/Overdrive Challeng… | Thundaka | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 41101 | NSGNSNCNONENNENBB Challenge Guide | zzanmato | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 26160 | NSNSGNC Monster Taming FAQ | Roland780 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 15722 | Original Soundtrack FAQ | Iluna | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 13971 | Other World Lyrics | Yuna_Rafaela | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 13350 | Overdrive FAQ | muni_shinobu | In-Depth Guides | — | — | grep only | — |
+| 15350 | Overdrive FAQ | PFriedman | In-Depth Guides | — | — | grep only | — |
+| 37002 | Penance FAQ | BeeTheGoddess | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 46699 | Rikku-Only + Challenge FAQ | SoulSpark | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 44475 | Rikku-Only Challenge FAQ | Commander_Greil | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 18751 | Secrets/Sidequests FAQ | ACA | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first | Most Recommended |
+| 44986 | Shop List | ZealotBoy | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 17803 | Sidequests FAQ | Morelock | In-Depth Guides | — | — | skipped — the dedicated minigame guides answered first | — |
+| 37019 | Speed Run FAQ/Walkthrough | KADFC | In-Depth Guides | — | — | skipped — a walkthrough; the dedicated minigame guides answered first | — |
+| 14783 | Sphere Grid FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 46942 | Stat Maxing Guide | KADFC | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended |
+| 31381 | Stat Mechanics FAQ | SinirothX | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13351 | Steal FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 15211 | Steal FAQ | Ceebs | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 13815 | Story Translation | HJerng | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 15210 | Sutekidane Lyrics | TWinfield | In-Depth Guides | — | — | skipped — translations, lyrics or scripts | — |
+| 15124 | Thunder Plains FAQ | xoNiOnx | In-Depth Guides | — | — | grep only | — |
+| 36670 | Tidus No-Customize Challenge FAQ | Blitz_Ace470 | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | Highest Rated |
+| 25393 | Tidus-Only Challenge FAQ | cool_like_me | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 13492 | Training Facility FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 37533 | Ultimate Equipment Guide | TheaN | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | Most Recommended |
+| 14321 | Ultimate Weapons Guide | Ceebs | In-Depth Guides | — | — | grep only | Most Recommended |
+| 13352 | Wairo (Bribe) FAQ | muni_shinobu | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 61878 | Wakka-Only Challenge FAQ | Glacoras | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
+| 18486 | Yojimbo FAQ | Azure_Edge | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 24392 | Yojimbo FAQ | jobber2022497 | In-Depth Guides | — | — | skipped — outside these five minigames' prizes | — |
+| 44960 | Yuna-Only No-Summons Challenge FAQ | _Mace_ | In-Depth Guides | — | — | skipped — a challenge run, not a reward list | — |
 
 ## Mechanics candidates
 
@@ -239,6 +252,7 @@ pointers: [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:15212 §3. Remiem Tem
 
 ### Hidden
 - The Venus Sigil is collected from the chest in front of Rin's travel agency after the 200th dodge [gf:14321 §V. Ultimate Weapons, Ceebs]
+- The walkthrough gives the same chest, and adds that saving, sheltering under a lightning tower, leaving the screen or being struck resets the count to 0 [gf:18197 §Key Items - Item Overview, Split_Infinity v1.8] [gf:18197 §Step 3 - Sample Power-Up Process, Split_Infinity v1.8]
 - Butterfly Hunt's earlier versions pay an MP Sphere and an Ether before the Spherimorph battle, and 2 Megalixirs and 2 Elixirs after it [wiki:finalfantasy.fandom.com/Butterfly Hunt]
 - Dodging or being struck by 30 bolts in total pays an Ether, and 80 an Elixir [wiki:finalfantasy.fandom.com/Thunder Plains (Final Fantasy X)]
 
@@ -246,13 +260,18 @@ pointers: [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:15212 §3. Remiem Tem
 - Ceebs judges the butterfly game for the Saturn Sigil so hard that a custom weapon would be less frustrating [gf:14321 §V. Ultimate Weapons, Ceebs]
 - The Jupiter Sigil's league draw can take anywhere from 50 wins to over 250, by Ceebs's estimate [gf:14321 §V. Ultimate Weapons, Ceebs]
 - The Catcher Chocobo's first win also pays a Lv. 3 Key Sphere [wiki:finalfantasy.fandom.com/Chocobo racing (Final Fantasy X)]
+- The walkthrough's chocobo trainer matches g039's prizes and gives each course's time limit: Wobbly Chocobo 12.8 seconds (an Elixir, then an X-Potion for each new best or tie), Dodger Chocobo 16.8 (a Lv. 1 Key Sphere, then Mega-Potions), Hyper Dodger Chocobo 18.5 (a Lv. 2 Key Sphere, then Ethers) and Catcher Chocobo 45.0 (a Lv. 3 Key Sphere, then Turbo Ethers), with each balloon taking 3 seconds off and each bird adding 3 [gf:18197 §III - Chocobo Trainer, Split_Infinity v1.8]
+- A time better than 0.0.0 on the Catcher course pays the Sun Sigil as well as the Lv. 3 Key Sphere, by the author's own run, and exactly 0.0.0 does not [gf:18197 §III - Chocobo Trainer, Split_Infinity v1.8] [gf:18197 §Step 3 - Sample Power-Up Process, Split_Infinity v1.8]
+- The Saturn Sigil needs both butterfly games in Macalania Woods completed after the airship is permanent, and the Jupiter Sigil can appear as a league prize once Wakka has all his Overdrives and has fought 450 battles [gf:18197 §Key Items - Item Overview, Split_Infinity v1.8]
 
 ### Shops & exchange
 - A new league or tournament sets its prizes when they are first viewed, so saving before looking and reloading after an unwanted draw gives different prizes [gf:19103 §Reset Trick, AlaskaFox v1.2]
 - Wakka's reels as a group are Blitzball prizes [gf:13350 §3) Status Reel - status attack slots are, muni_shinobu v1.01] [wiki:finalfantasy.fandom.com/Wakka (Final Fantasy X party member)]
+- The walkthrough ties the reels to battles as well: Attack Reels can be a tournament prize, Status Reels a league prize once Wakka has been in at least 250 battles against fiends, and Aurochs Reels a tournament prize after 450 [gf:18197 §4 - Wakka's Overdrive - Slots, Split_Infinity v1.8]
 
 ## Unverified or contradicted
-- **What unlocks each reel.** PFriedman ties the Status Reels to Wakka's taking part in 250 battles and the Aurochs Reels to 450; the wiki gives only the alternating order [gf:15350 §(3) Character Overdrives, PFriedman v4.0] [wiki:finalfantasy.fandom.com/Wakka (Final Fantasy X party member)]
+- **What unlocks each reel.** PFriedman ties the Status Reels to Wakka's taking part in 250 battles and the Aurochs Reels to 450; the wiki gives only the alternating order [gf:15350 §(3) Character Overdrives, PFriedman v4.0] [wiki:finalfantasy.fandom.com/Wakka (Final Fantasy X party member)]. Split_Infinity's walkthrough, read on 2026-09-15, gives the same 250 and 450, so the counts now have two authors [gf:18197 §4 - Wakka's Overdrive - Slots, Split_Infinity v1.8]
+- **What the Catcher Chocobo's Turbo Ether takes.** Kotetsu and Ceebs pay it for a time of exactly 0:00.0; the walkthrough pays it for each later race that ties or beats the player's own record, and ties no prize to 0:00.0 but the missed Sun Sigil [gf:15212 §Q. I can't find the chocobo rider!, Kotetsu v1.0] [gf:14321 §VI. Frequently Asked Questions, Ceebs] [gf:18197 §III - Chocobo Trainer, Split_Infinity v1.8]
 - **Saturn or Jupiter.** The wiki says the butterfly game's final prize is the Saturn or the Jupiter Sigil depending on the game version; Ceebs names only the Saturn Sigil [wiki:finalfantasy.fandom.com/Butterfly Hunt] [gf:14321 §V. Ultimate Weapons, Ceebs]
 - **When the Remiem prizes repeat.** Kotetsu says every prize but the Potion comes once; the wiki says a repeated chest count pays only a Potion; Ceebs believes they are one-time without being certain [gf:15212 §3. Remiem Temple Race, Kotetsu v1.0] [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:14321 §III. Cloudy Mirror / Celestial Mirror, Ceebs]
 
@@ -265,3 +284,4 @@ pointers: [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:15212 §3. Remiem Tem
 
 ## Codex delta
 - g037–g041 (all five Final Fantasy X minigames) tabled and sourced in place on 2026-09-14.
+- 2026-09-15: the Most Recommended walkthrough, 18197, read under the owner's rule. It agrees with g037's reels and Jupiter Sigil, g038's Venus Sigil, g039's four courses and Sun Sigil, and g040's Saturn Sigil, and those four rows cite it, logged in the 2026-09-15 entry. Its Remiem Temple section (g041) was not reached.

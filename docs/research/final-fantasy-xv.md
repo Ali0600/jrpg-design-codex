@@ -35,26 +35,29 @@ Unread: pages 2 and 3, and the recipe tables on page 1 outside the grep's rows (
 `__gf.triage()` on 2026-09-14: 18 guides listed (5 Full Game Guides, 13 In-Depth Guides, none under other
 headings).
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 74206 | Guide and Walkthrough | GfaqCodebreak | Full Game Guides | 517 | 3 | skipped — a chaptered walkthrough; a grep of its index page found none of the prizes, and the two wikis answered first |
-| 78252 | Guide and Walkthrough | Lost_Nemo10 | Full Game Guides | 1308 | 2 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first |
-| 74368 | Achievement Guide | Bombdirt | In-Depth Guides | 18 | 3 | skipped — a trophy list |
-| 75280 | Arena Farming Guide | Niali | In-Depth Guides | 14 | 6 | skipped — the Totomostro Guide and both wikis already covered the prize counter |
-| 74377 | Carnival Guide | elduende05 | In-Depth Guides | 39 | 5 | skipped — judged by its title to cover the Moogle Chocobo Carnival, not the five minigames |
-| 74358 | Collectible Guide | elduende05 | In-Depth Guides | 14 | 7 | skipped — collectibles; a grep found no race medals |
-| 74356 | Cooking Guide | elduende05 | In-Depth Guides | 40 | 5 | grep only |
-| 74659 | Elemancy Guide | elduende05 | In-Depth Guides | 31 | 5 | skipped — elemancy crafting |
-| 74354 | Enemy Guide | elduende05 | In-Depth Guides | 52 | 5 | skipped — enemy data |
-| 74355 | Fishing Guide | elduende05 | In-Depth Guides | 35 | 7 | grep only |
-| 74473 | Pitioss Ruins Guide | elduende05 | In-Depth Guides | 61 | 4 | skipped — a dungeon guide |
-| 74346 | Recipe/Fish List | Ziggyzoozoo | In-Depth Guides | 48 | 4 | skipped — the Cooking and Fishing Guides and both wikis answered first |
-| 74367 | Shop Guide | elduende05 | In-Depth Guides | 61 | 7 | skipped — a shop list; a grep of the first of its six pages found no minigame prize |
-| 74357 | Totomostro Guide | elduende05 | In-Depth Guides | 18 | 3 | grep only |
-| 78363 | Guide and Walkthrough | bover_87 | Full Game Guides | 1272 | 3 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first |
-| 78246 | Guide and Walkthrough | Lost_Nemo10 | Full Game Guides | 1317 | 3 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first |
-| 76547 | Japanese/English Game Script | yu_eriyama | In-Depth Guides | 412 | -1 | skipped — a game script |
-| 77190 | Guide and Walkthrough | Die | Full Game Guides | 961 | 2 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first |
+`__gf.pick()` on 2026-09-15 returns nothing: **all five Full Game Guides are HTML**, so the owner's rule reads no
+walkthrough for this game. The flags column comes from that day's listing, which still lists every guide in the table.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 74206 | Guide and Walkthrough | GfaqCodebreak | Full Game Guides | 517 | 3 | skipped — a chaptered walkthrough; a grep of its index page found none of the prizes, and the two wikis answered first | FAQ of the Month Winner: January 2017 · HTML |
+| 78252 | Guide and Walkthrough | Lost_Nemo10 | Full Game Guides | 1308 | 2 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first | HTML |
+| 74368 | Achievement Guide | Bombdirt | In-Depth Guides | 18 | 3 | skipped — a trophy list | — |
+| 75280 | Arena Farming Guide | Niali | In-Depth Guides | 14 | 6 | skipped — the Totomostro Guide and both wikis already covered the prize counter | HTML |
+| 74377 | Carnival Guide | elduende05 | In-Depth Guides | 39 | 5 | skipped — judged by its title to cover the Moogle Chocobo Carnival, not the five minigames | Highest Rated · HTML |
+| 74358 | Collectible Guide | elduende05 | In-Depth Guides | 14 | 7 | skipped — collectibles; a grep found no race medals | Highest Rated · HTML |
+| 74356 | Cooking Guide | elduende05 | In-Depth Guides | 40 | 5 | grep only | Highest Rated · HTML |
+| 74659 | Elemancy Guide | elduende05 | In-Depth Guides | 31 | 5 | skipped — elemancy crafting | Highest Rated · HTML |
+| 74354 | Enemy Guide | elduende05 | In-Depth Guides | 52 | 5 | skipped — enemy data | HTML |
+| 74355 | Fishing Guide | elduende05 | In-Depth Guides | 35 | 7 | grep only | HTML |
+| 74473 | Pitioss Ruins Guide | elduende05 | In-Depth Guides | 61 | 4 | skipped — a dungeon guide | HTML |
+| 74346 | Recipe/Fish List | Ziggyzoozoo | In-Depth Guides | 48 | 4 | skipped — the Cooking and Fishing Guides and both wikis answered first | — |
+| 74367 | Shop Guide | elduende05 | In-Depth Guides | 61 | 7 | skipped — a shop list; a grep of the first of its six pages found no minigame prize | HTML |
+| 74357 | Totomostro Guide | elduende05 | In-Depth Guides | 18 | 3 | grep only | HTML |
+| 78363 | Guide and Walkthrough | bover_87 | Full Game Guides | 1272 | 3 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first | FAQ of the Month Winner: May 2020 · HTML |
+| 78246 | Guide and Walkthrough | Lost_Nemo10 | Full Game Guides | 1317 | 3 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first | FAQ of the Month Winner: March 2020 · HTML |
+| 76547 | Japanese/English Game Script | yu_eriyama | In-Depth Guides | 412 | -1 | skipped — a game script | HTML |
+| 77190 | Guide and Walkthrough | Die | Full Game Guides | 961 | 2 | skipped — a walkthrough; the In-Depth guides and the two wikis answered first | HTML |
 
 ## Mechanics candidates
 
@@ -184,3 +187,4 @@ pointers: [wiki:finalfantasyxv.fandom.com/Cooking] [gf:74356 §Page 1, elduende0
 
 ## Codex delta
 - g050–g054 (all five Final Fantasy XV minigames) tabled and sourced in place on 2026-09-14.
+- 2026-09-15: the flags column added. `pick()` returns nothing because every Full Game Guide is HTML, so no walkthrough is read and no row was edited.
