@@ -32,6 +32,29 @@ rejected options still offer.
 
 ---
 
+## 2026-09-15 — Where a mechanic's Yes / Maybe / No lives
+
+**Fork:** the owner asked for a way to reset "In my game?", having noticed Yes and Maybe marks they never
+made. Measured the same day: 179 of the 294 mechanics carried a decision written into `BASE_MECHS` itself
+(132 Yes, 47 Maybe), and six a 5-star rating. Early research sessions had set them, and the page showed them
+through the same buttons as the owner's own clicks. `allMechs()` merges the owner's saved choices over the
+data, so clearing saved choices alone would have left all 179.
+
+- **A: the data ships no decision or rating, gated, plus a Reset decisions button** *(chosen by the owner,
+  AskUserQuestion 2026-09-15)*. Every browser starts undecided, the validator refuses a `want` or `rating`
+  in the data, and the button clears the owner's own saved ones later.
+- **B: the button only.** No data change, but it has to be pressed once per origin (the live site and a
+  local copy keep separate storage), and every new browser inherits decisions the owner never made.
+
+The same question asked what the button clears besides the decisions: **star ratings** *(chosen)*. Board
+placements and pillar ticks were not chosen, since they only come back if that mechanic is marked Yes again.
+Notes edits were not chosen either: they are the owner's writing, not a decision.
+
+**Status:** A `built — 2026-09-15`. B `rejected — pressed per origin, and a new browser still starts with
+decisions the owner never made`. Clearing placements and pillar ticks `rejected by the owner — they return
+only with a new Yes`. Clearing notes `rejected by the owner — notes are the owner's writing`.
+**Revisit hook:** `resetDecisions` in the data region is the one list of what a reset clears.
+
 ## 2026-09-15 — How the Browse panel keeps to one screen
 
 **Fork:** the Games tab's Browse panel listed every value of every kind: 289 chips in nine groups, plus 96

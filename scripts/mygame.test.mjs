@@ -15,8 +15,8 @@ import { extractScript, extractData } from "./validate_codex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
-const { PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired } =
-  new Function(extractData(extractScript(HTML)) + "; return {PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired};")();
+const { PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired, resetDecisions } =
+  new Function(extractData(extractScript(HTML)) + "; return {PILLARS, pillarCoverage, BOARD_CREDITS, FACET_KINDS, creditTally, migrateRetired, resetDecisions: typeof resetDecisions === 'undefined' ? undefined : resetDecisions};")();
 
 // ---------------------------------------------------------------- pillar coverage
 
@@ -156,4 +156,43 @@ test("the page's normalizeStore runs the migration on every load and import", ()
   const body = HTML.match(/\nfunction normalizeStore\(s\)\{([\s\S]*?)\n\}/);
   assert.ok(body, "normalizeStore found");
   assert.match(body[1], /\n  migrateRetired\(s, RETIRED\);\n  return s;$/, "the migration runs after every default, just before the return");
+});
+
+// ---------------------------------------------------------------- Reset decisions
+
+const PIN_C = "https://www.youtube.com/watch?v=ccccccccccc";
+const seeded = () => ({
+  overrides: { M001: { want: "Yes", rating: 4, notes: "mine" }, M002: { want: "" }, M003: { rating: 2 }, g020: { yt: PIN_C } },
+  customMechs: [{ id: "C1", game: "Mine", name: "Custom", want: "Maybe", rating: 3 }],
+  customGames: [{ title: "Mine" }],
+  gameStatus: { Mine: "Researching" },
+  minigameFavs: { g020: true },
+  myGame: { assign: { M001: "combat" }, notes: { combat: "n" }, pillars: { M001: [1] } },
+  seen: "2026-09-14",
+});
+
+test("Reset decisions clears every decision and star rating, and counts what it cleared", () => {
+  assert.equal(typeof resetDecisions, "function", "the page defines resetDecisions in its data region");
+  const s = seeded();
+  assert.deepEqual(resetDecisions(s), { decisions: 2, ratings: 3 }, "an override of \"\" is removed but was never a decision");
+  assert.deepEqual(s.overrides, { M001: { notes: "mine" }, g020: { yt: PIN_C } }, "an override left empty goes; notes and a pinned video stay");
+  assert.deepEqual(s.customMechs, [{ id: "C1", game: "Mine", name: "Custom", want: "", rating: 0 }]);
+});
+
+test("Reset decisions keeps the board, the pillar ticks, favourites and everything else", () => {
+  assert.equal(typeof resetDecisions, "function");
+  const s = seeded(), before = seeded();
+  resetDecisions(s);
+  for (const k of ["myGame", "minigameFavs", "customGames", "gameStatus", "seen"]) assert.deepEqual(s[k], before[k], k);
+});
+
+test("a second reset clears nothing, and a blank store is fine", () => {
+  assert.equal(typeof resetDecisions, "function");
+  const s = seeded();
+  resetDecisions(s);
+  const once = JSON.parse(JSON.stringify(s));
+  assert.deepEqual(resetDecisions(s), { decisions: 0, ratings: 0 });
+  assert.deepEqual(s, once);
+  assert.deepEqual(resetDecisions(blank()), { decisions: 0, ratings: 0 });
+  assert.deepEqual(resetDecisions({}), { decisions: 0, ratings: 0 });
 });

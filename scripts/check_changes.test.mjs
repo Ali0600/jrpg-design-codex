@@ -14,14 +14,14 @@ import { diffChanges, readVersion } from "./check_changes.mjs";
  * below hardcodes M117's whole row literal twice, so a `verbs:[]` that appeared by default
  * would stop those two `.replace()` calls matching.
  */
-function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "", verbs = null, retired = null } = {}) {
+function page({ m117 = "the original note", changes = null, tail = "}", extraRow = "", verbs = null, retired = null, want = "", rating = 0 } = {}) {
   const log = changes ?? [
     `{date:"2026-09-05", title:"Pilot", added:["M117-M118","g001"], updated:[]}`,
   ];
   return `<!doctype html><html><body><script>
 const CATS = {"Combat":"#a00"};
 const BASE_MECHS = [
-{id:"M117",game:"Lantern Vale",name:"First",cat:"Combat",how:"h",loop:"l",rating:0,want:"",notes:${JSON.stringify(m117)}${verbs ? `,verbs:${JSON.stringify(verbs)}` : ""}},
+{id:"M117",game:"Lantern Vale",name:"First",cat:"Combat",how:"h",loop:"l",rating:${rating},want:${JSON.stringify(want)},notes:${JSON.stringify(m117)}${verbs ? `,verbs:${JSON.stringify(verbs)}` : ""}},
 {id:"M118",game:"Lantern Vale",name:"Second",cat:"Combat",how:"h",loop:"l",rating:0,want:""${extraRow ? "}," + extraRow : tail === "}" ? "}" : "},"}
 ];
 const BASE_GAMES = [{title:"Lantern Vale",year:1999,dev:"d",status:"Researched"}];
@@ -124,6 +124,26 @@ test("adding a verb tag is not a rewrite", () => {
 test("a verbs change alongside a notes change still fires", () => {
   const { problems, changed } = diffChanges(
     page(), page({ m117: "a sharper note", verbs: ["Guarded"] }));
+  assert.deepEqual(changed, ["M117"], "the notes edit is still content");
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^M117 was rewritten but is not in any NEW CHANGES entry/);
+});
+
+/*
+ * A mechanic's `want` and `rating` are the owner's decision, which the data may only ever clear
+ * (the validator holds both empty), so clearing them is not a rewrite either: logging every row
+ * a clearing pass touches would bury the genuinely new rows under a wall of UPDATED pills.
+ */
+test("clearing a decision and a rating is not a rewrite", () => {
+  const base = page({ want: "Yes", rating: 5 });
+  const head = page();
+  assert.notEqual(head, base, "the fixture must actually differ textually");
+  assert.deepEqual(diffChanges(base, head).changed, []);
+  assert.deepEqual(diffChanges(base, head).problems, []);
+});
+
+test("a decision change alongside a notes change still fires", () => {
+  const { problems, changed } = diffChanges(page({ want: "Maybe", rating: 3 }), page({ m117: "a sharper note" }));
   assert.deepEqual(changed, ["M117"], "the notes edit is still content");
   assert.equal(problems.length, 1);
   assert.match(problems[0], /^M117 was rewritten but is not in any NEW CHANGES entry/);

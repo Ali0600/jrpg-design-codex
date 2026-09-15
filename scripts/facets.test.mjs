@@ -222,9 +222,15 @@ test("a row's own keys: category and verb by prefix, game by whole words, id exa
   assert.deepEqual(titles('game:"Final Fantasy X"'), ["Final Fantasy X"], "X is not XII");
   assert.deepEqual(titles("game:persona"), ["Persona 4", "Persona 5 Royal"]);
   assert.deepEqual(mechsFor("id:m001").map(m => m.id), ["M001"]);
-  assert.equal(mechsFor("want:yes").length, BASE_MECHS.filter(m => m.want === "Yes").length);
-  assert.equal(mechsFor("want:undecided").length, BASE_MECHS.filter(m => !m.want).length);
-  assert.ok(mechsFor("want:undecided").length > 0);
+  // The data ships no decisions (the validator holds want at ""), so the want words are pinned on
+  // synthetic rows, and the real rows answer only "undecided".
+  const decided = [["M901", "Yes"], ["M902", "Maybe"], ["M903", "No"], ["M904", ""]].map(([id, want]) => ({ id, game: "Final Fantasy X", want }));
+  const wanted = q => decided.filter(m => rowMatches(m, m.game, q, MECH_QUERY_KEYS)).map(m => m.id);
+  assert.deepEqual(wanted("want:yes"), ["M901"]);
+  assert.deepEqual(wanted("want:maybe"), ["M902"]);
+  assert.deepEqual(wanted("want:no"), ["M903"]);
+  assert.deepEqual(wanted("want:undecided"), ["M904"]);
+  assert.equal(mechsFor("want:undecided").length, BASE_MECHS.length, "every shipped mechanic is undecided");
   assert.equal(minisFor("table:no").length, MINIGAMES.filter(m => !m.rt).length);
   assert.equal(minisFor("table:yes").length + minisFor("table:no").length, MINIGAMES.length);
   assert.deepEqual(parseQuery("table:yes", MECH_QUERY_KEYS), { text: "table:yes", facets: [] }, "table is a minigame key; on Mechanics it is plain text");

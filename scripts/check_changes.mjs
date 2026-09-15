@@ -21,6 +21,10 @@
  * `ANALYSIS_KEYS` below carves out the same trap from the other side: a key that is
  * analysis OF a row rather than content of it is not a rewrite, because demanding a log
  * entry for a whole tagging pass would wreck the very ordering the log exists to produce.
+ *
+ * `OWNER_KEYS` does the same for a mechanic's `want` and `rating`: they are the owner's decision,
+ * which the data may only ever clear (the validator holds both empty), and logging a clearing pass
+ * would bury the genuinely new rows under a wall of UPDATED pills.
  */
 
 import { readFileSync } from "node:fs";
@@ -46,6 +50,7 @@ const CODEX = "JRPG_Design_Codex.html";
  * in the same edit and the row is caught exactly as before.
  */
 const ANALYSIS_KEYS = new Set(["verbs"]);
+const OWNER_KEYS = new Set(["want", "rating"]);
 
 /** The rows and changelog of one version of the page. */
 export function readVersion(html, which) {
@@ -58,7 +63,7 @@ export function readVersion(html, which) {
   )();
   const rows = new Map();
   const canon = row => JSON.stringify(Object.fromEntries(
-    Object.keys(row).sort().filter(k => !ANALYSIS_KEYS.has(k)).map(k => [k, row[k]])));
+    Object.keys(row).sort().filter(k => !ANALYSIS_KEYS.has(k) && !OWNER_KEYS.has(k)).map(k => [k, row[k]])));
   for (const r of [...data.BASE_MECHS, ...data.MINIGAMES]) rows.set(r.id, canon(r));
 
   // Each entry's `updated` ids, keyed by its date: the validator holds dates unique and
