@@ -28,6 +28,30 @@ rejected options still offer.
 
 ---
 
+## 2026-09-15 — How the Mechanics and Minigames tabs list rows
+
+**Fork:** both tabs rendered one flat run of cards (294 mechanics, 103 minigames), with a row's game a
+small link in its head. The owner asked for the games to be listed instead, each game's rows under it,
+with a way to expand them all.
+
+- **A: grouped by game, games newest first, opened by any filter** *(chosen by the owner,
+  AskUserQuestion 2026-09-15)*. Each game is a collapsible group; the default order leads with the game
+  whose rows changed most recently, as the Games tab does, and *research order* and *A–Z* stay in the
+  sort menu. A search or a filter opens every game that still matches, so a filtered list reads like
+  the flat one did, under headings.
+- **B: the flat list kept behind a "group by game" toggle.** The old view one click away, at the cost
+  of two views of one list to keep in step.
+- **C: games in research order by default.** The order the codex was written in, but the newest
+  research would sit wherever its game first appeared.
+- **D: rows inside a game newest first as well.** The freshest row on top, but a reversed id order
+  inside one game reads as random.
+
+**Status:** A `built — 2026-09-15`. B `rejected — the owner chose one view; a search already opens every
+matching game`. C `rejected — the owner chose newest first, matching the Games tab; still one click away
+in the sort menu`. D `rejected — the NEW / UPDATED pills already mark the fresh rows inside a game`.
+**Revisit hook:** `groupRows` in the data region returns the groups, so a flat view is a single group
+rendered without its header, and another game order is one more `mode` there.
+
 ## 2026-09-14 — Which GameFAQs walkthrough a research pass reads
 
 **Fork:** the runbook kept every Full Game Guide for `grep` only, so 25 of the 27 digests that used

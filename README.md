@@ -24,7 +24,9 @@ none, because it reads as verified.
 
 ### Features
 
-- **Filter and search** mechanics by game, category, and your own rating
+- **Games, then their rows** — the Mechanics and Minigames tabs list each game as a collapsible
+  group, newest changes first. Filter and search by game, category and your own rating, and a
+  search opens every game that still matches
 - **Reward tables** shown inside minigame cards, and searchable
 - **Reception scores** as colour-banded chips, sortable five ways. One sort is the
   *users-vs-critics gap*, which works as a cult-classic finder (Legend of Dragoon +13,
@@ -194,7 +196,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 103 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  199-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  205-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if

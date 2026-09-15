@@ -255,6 +255,21 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   of its rows, and `sortByLastChange` breaks a tie on that date by the newest ROW change, then the
   title: the cover and infobox harvest entries name every game, so the date alone ties most of the
   roster (`scripts/facets.test.mjs`; the fork is in `docs/DECISIONS.md`).
+- **Grouped tabs** (added 2026-09-15, at the owner's request): the Mechanics and Minigames tabs list
+  games, each a collapsible `<details class="game-group">` over its cards, headed by the cover, the
+  title linked to its page, a row count, a *N Yes* (mechanics) or *★ N saved* (minigames) badge and
+  a pill for fresh rows. `groupRows(list, titleOf, mode, dateOf)` in the data region, after
+  `sortByLastChange`, orders the games: `new`, the default, by the newest change on any of their rows
+  (a stable sort, so games tied on one date keep first-row order); `default` by first row, which is
+  research order; `name` A–Z. Rows keep id order under their game (A–Z under `name`), because a
+  reversed id order inside one game reads as random. `rowDate` beside `sortRows` is the one
+  definition of a row's date both tabs pass in. A search or any filter opens every game that still
+  matches; otherwise a game is closed unless opened by hand (`openGames` / `openMgGames`, in memory
+  and never in `store`, so the restore contract is untouched). The hand toggle is recorded on the
+  summary's `click`, not `toggle`, because a group the render creates open fires `toggle` too.
+  `gameGroupEl` builds the header for both tabs and each card is still the one card renderer,
+  appended inside it, so `gotoCard`'s `.card[data-id]` selector finds exactly one
+  (`scripts/facets.test.mjs`; the fork is in `docs/DECISIONS.md`).
 - **My Game tab** — the codex's output surface. Every effective `want:"Yes"` mechanic
   (plus `Maybe` behind a toggle) is placed into one of six system buckets defined by
   the `BUCKETS` const (discovery / combat / progress / venues / world / parked), each
@@ -448,7 +463,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `#mgqActive` through `renderQueryChips`, which the Games tab shares. Those two tabs keep no
   address state; the hash stays the Games tab's contract.
 - **`gotoCard(id)`** is the single jump implementation — clears that tab's filters, opens
-  the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
+  the row's game group and the card, switches tab, scrolls it to centre and outlines it. The changelog chips AND
   the lineage chain both call it; two jump paths drifted apart the moment a filter was
   added. It scrolls with `behavior:"instant"` deliberately: the sheet sets
   `scroll-behavior:smooth`, and a 35,000px animated scroll reads as a broken page.

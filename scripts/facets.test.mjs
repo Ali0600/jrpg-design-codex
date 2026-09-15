@@ -16,10 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
 const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
   "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "exactTitlesOf", "relatedGames", "relatedScore",
-  "CHANGES", "expandIds", "gameChangeDates", "sortByLastChange"];
+  "CHANGES", "expandIds", "gameChangeDates", "sortByLastChange", "groupRows"];
 const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
   MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, exactTitlesOf, relatedGames, relatedScore,
-  CHANGES, expandIds, gameChangeDates, sortByLastChange } =
+  CHANGES, expandIds, gameChangeDates, sortByLastChange, groupRows } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -347,4 +347,61 @@ test("the page opens on the Games tab, sorted by last update, with What's new ab
   assert.deepEqual(chosen, ["updated"]);
   const view = HTML.indexOf('id="view-games"'), next = HTML.indexOf("<section", view + 1), wn = HTML.indexOf('id="whatsNew"');
   assert.ok(view > 0 && wn > view && wn < next, "What's new sits inside the Games view");
+});
+
+/* The Mechanics and Minigames tabs list rows under their game, through groupRows. */
+const GROUP_FIXTURE = [
+  { id: "A1", t: "Alpha", d: "2026-09-01" },
+  { id: "Z1", t: "Zed", d: "2026-09-14" },
+  { id: "A2", t: "Alpha", d: "2026-09-10" },
+  { id: "M1", t: "Mid", d: "2026-09-14" },
+];
+const groupShape = groups => groups.map(g => [g.title, g.rows.map(r => r.id)]);
+
+test("groupRows keeps games in first-appearance order by default, and rows in the order they arrived", () => {
+  assert.deepEqual(groupShape(groupRows(GROUP_FIXTURE, r => r.t, "default", r => r.d)),
+    [["Alpha", ["A1", "A2"]], ["Zed", ["Z1"]], ["Mid", ["M1"]]]);
+});
+
+test("groupRows under newest first leads with the newest row's game, and a tie keeps first-row order", () => {
+  const groups = groupRows(GROUP_FIXTURE, r => r.t, "new", r => r.d);
+  assert.deepEqual(groupShape(groups), [["Zed", ["Z1"]], ["Mid", ["M1"]], ["Alpha", ["A1", "A2"]]]);
+  assert.equal(groups[2].newest, "2026-09-10", "a game's date is its newest row, not its first");
+});
+
+test("groupRows under A–Z orders games by title", () => {
+  assert.deepEqual(groupRows(GROUP_FIXTURE, r => r.t, "name", r => r.d).map(g => g.title), ["Alpha", "Mid", "Zed"]);
+});
+
+test("a game with no dated row has an empty date and sinks under newest first", () => {
+  const groups = groupRows([{ id: "U1", t: "Undated" }, ...GROUP_FIXTURE], r => r.t, "new", r => r.d);
+  assert.equal(groups.at(-1).title, "Undated");
+  assert.equal(groups.at(-1).newest, "");
+  assert.ok(groupRows(GROUP_FIXTURE, r => r.t, "new").every(g => g.newest === ""), "no dateOf, no dates");
+});
+
+test("grouping the real rows loses, duplicates and reorders nothing, and files each row under its own game", () => {
+  for (const [rows, titleOf, what] of [[BASE_MECHS, m => m.game, "mechanics"], [MINIGAMES, m => m.g, "minigames"]]) {
+    const groups = groupRows(rows, titleOf, "default");
+    assert.equal(groups.length, new Set(rows.map(titleOf)).size, `one group per game (${what})`);
+    assert.equal(groups.reduce((n, g) => n + g.rows.length, 0), rows.length, `every ${what} row is in exactly one group`);
+    for (const g of groups) assert.deepEqual(g.rows, rows.filter(r => titleOf(r) === g.title), `${g.title}'s ${what}, in array order`);
+  }
+  const scattered = groupRows(BASE_MECHS, m => m.game, "default").filter(g => {
+    const at = g.rows.map(r => BASE_MECHS.indexOf(r));
+    return at.at(-1) - at[0] + 1 > at.length;
+  });
+  assert.ok(scattered.length > 0, "some game's mechanics are scattered through the array, so the grouping is exercised");
+});
+
+test("the Mechanics and Minigames tabs sort newest changes first, and Minigames can expand every game", () => {
+  for (const id of ["mSort", "mgSort"]) {
+    const sel = HTML.match(new RegExp(`<select id="${id}"[^>]*>([\\s\\S]*?)</select>`));
+    assert.ok(sel, `#${id} exists`);
+    const opts = [...sel[1].matchAll(/<option value="([^"]+)"([^>]*)>/g)];
+    assert.equal(opts[0][1], "new", `#${id} lists newest first at the top`);
+    assert.deepEqual(opts.filter(m => /\bselected\b/.test(m[2])).map(m => m[1]), ["new"], `#${id} defaults to newest first`);
+  }
+  const view = HTML.indexOf('id="view-minigames"'), next = HTML.indexOf("<section", view + 1), btn = HTML.indexOf('id="mgExpand"');
+  assert.ok(view > 0 && btn > view && btn < next, "the Minigames tab has its own Expand all");
 });
