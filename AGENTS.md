@@ -776,7 +776,11 @@ a game (or to work the queue):
    **The Full Game Guide `pick()` names is always read** (owner, 2026-09-14): the one flagged Most
    Recommended, unless its listing row carries the `HTML` flair (a formatted, paginated guide); then
    the largest plain-text Highest Rated one; then the largest plain-text one. The flag is the flair's
-   TEXT, because GameFAQs styles every flaired guide with the same `rec` class. Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
+   TEXT, because GameFAQs styles every flaired guide with the same `rec` class. The 25 older digests
+   were brought under the rule on 2026-09-15: 18 read their pick, and 7 have none because every one of the
+   game's own Full Game Guides is HTML (NieR: Automata, CrossCode, Fire Emblem: Three Houses, Yakuza: Like a
+   Dragon, The Witcher 3, Final Fantasy XV and Final Fantasy XIV; Yakuza's page also files two plain-text
+   Super Hang-On guides, which `pick()` named and the digest left out). Facts land in `docs/research/<slug>.md` AS THEY ARE FOUND,
    every one with a `[gf:<id> §<section>, <author> v<ver>]` pointer; that digest is the
    committed staging file. Never `get_page_text` on gamefaqs (14KB of consent text),
    never curl it or reuse its cookie, never store guide text. Stop on

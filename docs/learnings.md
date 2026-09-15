@@ -448,3 +448,18 @@ Highest Rated walkthrough as the recommended one.
 
 **Takeaway:** read the label the user sees, and keep the class for styling. Before building on a
 class, list which elements carry it on a real page.
+
+## A rule that breaks ties by position needs the position kept in every copy it runs over
+When "the first flagged item wins", re-sorting the list changes the answer without changing any
+item.
+
+**Why it came up:** Suikoden V's listing flags two walkthroughs *Most Recommended*, Golden Sun's
+three and Final Fantasy VI's seven. The probe's `pick()` takes the first one GameFAQs lists. The
+digest linter runs the same pick over each digest's Triage table, and those tables are sorted by
+score, where the flagged walkthroughs tie. Sorted that way, Golden Sun's table put Telago's 39216
+above ElectroSpecter's 31453, so the linter would have demanded a different guide from the one
+actually read. The tables keep listing order among the tied rows, and swapping Suikoden V's two
+tied rows in memory made the linter name the other guide (2026-09-15).
+
+**Takeaway:** when a selection rule is "first match", write down which order counts, and keep that
+order in every sorted copy the rule is run over, or break the tie on a key the copies share.

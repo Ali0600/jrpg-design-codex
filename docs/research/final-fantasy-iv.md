@@ -16,6 +16,7 @@ payouts belong to the DS remake: Whyt exists only there, and the original releas
 |---|---|---|---|---|---|---|---|
 | 51208 | Minigame Guide (grep only) | MostSeriousness | — | — | In-Depth Guides | 14 | https://gamefaqs.gamespot.com/ds/939425-final-fantasy-iv/faqs/51208 |
 | 53737 | Augment FAQ (grep only) | mystery500 | 2.11 | 05/23/2009 | In-Depth Guides | 31 | https://gamefaqs.gamespot.com/ds/939425-final-fantasy-iv/faqs/53737 |
+| 12766 | Guide and Walkthrough | DJellybean | — | — | Full Game Guides | 349 | https://gamefaqs.gamespot.com/ds/939425-final-fantasy-iv/faqs/12766 |
 
 Coverage 51208: single page, 14,302 chars, 361 lines, 47 sections — two greps, the prize tiers (16 hits) and each
 minigame's perfect-score prize (6 hits). Unread: three Strategies and Hints sections (937, 926 and 803 chars).
@@ -23,107 +24,117 @@ minigame's perfect-score prize (6 hits). Unread: three Strategies and Hints sect
 Coverage 53737: single page, 30,530 chars, 1,229 lines, 64 sections — one grep for Reach and the developer room (10 hits).
 Unread: Basic info (2,437 chars), the rest of the Reach section (1,230) and Inherited Augments (1,210).
 
+Coverage 12766: **read on 2026-09-15 as `pick()`'s choice** (the first of five plain-text Most Recommended walkthroughs on
+the DS page) — single page, 349,034 chars, 8,406 lines, 262 sections; the page shows no version or date. Its opening lines
+and one grep (the developer room, Whyt, augments and the release names, 13 hits) show a walkthrough of the Super Nintendo
+release, then sold as Final Fantasy II; no hit concerns the DS remake, Whyt, augments or a developer room. Largest unread:
+the Mombomb fight (9,993 chars), a section headed Darts (8,874), the EvilWall fight (8,748) and the armour lists (8,600).
+
 ## Triage
 
 The Final Fantasy IV Mobile page's listing on 2026-09-14 gathers every release's guides: 108 listed (40 Full Game Guides,
 53 In-Depth Guides, 15 under other headings: 6 Foreign Language Guides and 9 Patch Codes, none read). The list was read
 once from the page without `__gf.triage()`, so no KB or score was taken.
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 12766 | Guide and Walkthrough | DJellybean | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 40844 | Guide and Walkthrough | Action | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 13374 | Guide and Walkthrough | AKishan | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 12622 | Guide and Walkthrough | SBAllen | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 18479 | Guide and Walkthrough | Dev | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 12838 | Guide and Walkthrough | Haunter12O | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 40605 | Guide and Walkthrough | Relle | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 40599 | Guide and Walkthrough | Cyril | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 47083 | Guide and Walkthrough | Super_Slash | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 42983 | Guide and Walkthrough | SaltCod | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 13050 | Guide and Walkthrough | PsychoPenguin | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 42123 | Guide and Walkthrough | spudnickator | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 41132 | Guide and Walkthrough | Courante | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 54995 | Guide and Walkthrough | Xenomic | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 63342 | Guide and Walkthrough | KeyBlade999 | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 14250 | Guide and Walkthrough | JWitham | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 40476 | Guide and Walkthrough | JWitham | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 14683 | Guide and Walkthrough | Adrenaline_SL | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 78175 | Guide and Walkthrough | 3vrB257A5gq3fg | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 15217 | Guide and Walkthrough | Boko | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 5505 | Guide and Walkthrough (Japanese) | Cidolfas | Full Game Guides | — | — | skipped — Japanese-language |
-| 10730 | Guide and Walkthrough (Japanese) | MMoogle | Full Game Guides | — | — | skipped — Japanese-language |
-| 53397 | Walkthrough | Seltox | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 5506 | Guide and Walkthrough (Japanese) | zero0723 | Full Game Guides | — | — | skipped — Japanese-language |
-| 53021 | Magic Guide | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 54945 | Algorithm FAQ | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 40507 | Bestiary | Lord_Albel | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 47085 | Boss Guide | Super_Slash | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 36887 | Boss/Enemy FAQ | Gbness | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 40483 | Cave of Trials Guide | Lord_Albel | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 11843 | Dropped Items FAQ (Japanese) | Paulygon | In-Depth Guides | — | — | skipped — Japanese-language |
-| 80466 | Enemy List | 3vrB257A5gq3fg | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 36120 | Game Lists | Dev | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 40689 | Game Script | SineNomine | In-Depth Guides | — | — | skipped — a game script |
-| 79748 | Item/Equipment Guide | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 78144 | Low Level Walkthrough | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 41670 | Lunar Ruins Walkthrough | RedSwordMage | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 4492 | Magic FAQ (Japanese) | BobtheAlmighty | In-Depth Guides | — | — | skipped — Japanese-language |
-| 41264 | Magic Guide | Kevman1430 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 49382 | Max Stats FAQ | Cleteromagos | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 11495 | Maximum Statistics Guide (Japanese) | CronoLV99 | In-Depth Guides | — | — | skipped — Japanese-language |
-| 53579 | Monster Location Guide | bond617 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 18371 | Plot Analysis | cvxfreak | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 18325 | Rare Item FAQ | Some_Other_Guy | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 34504 | Save State Hacking Guide | Tsukasa999 | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 12759 | Shop List | Dev | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 4493 | Shopping Guide (Japanese) | zero0723 | In-Depth Guides | — | — | skipped — Japanese-language |
-| 28533 | Solo Cecil Guide | Storm_Hunter | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 13900 | Speed Walkthrough | White_Mage | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 16512 | Town Shops Translations | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide |
-| 4489 | Translation Guide | NMallory | In-Depth Guides | — | — | skipped — a translation guide |
-| 16391 | Translation Guide | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide |
-| 5507 | USA/Japan Changes FAQ (Japanese) | Ian_Kelley | In-Depth Guides | — | — | skipped — Japanese-language |
-| 4494 | Weapon List (Japanese) | zero0723 | In-Depth Guides | — | — | skipped — Japanese-language |
-| 16446 | Weapon/Armor/Item/Magic/Monster Translations | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide |
-| 43063 | Weapons/Armor Guide | Necrolesian | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 21617 | Guide and Walkthrough | brian_sulpher | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 39377 | Guide and Walkthrough | Dev | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 4488 | Guide and Walkthrough | DJellybean | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 5497 | Guide and Walkthrough | Wizard201 | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 23597 | Guide and Walkthrough | Son_Kain | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 78179 | Guide and Walkthrough | 3vrB257A5gq3fg | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 4490 | Walkthrough | Caldor | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 5494 | FAQ | BSiron | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 5495 | FAQ | ALederman | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 78143 | Low Level Walkthrough | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 74811 | Bestiary | Eevee-Trainer | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 11842 | Dropped Items FAQ | Paulygon | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 80486 | Enemy List | 3vrB257A5gq3fg | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 40606 | Game Script | SineNomine | In-Depth Guides | — | — | skipped — a game script |
-| 14167 | Inn/Shop FAQ | Mike8787 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 78160 | Minimum Steps Challenge | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 12621 | Save State Hacking Guide | PKT_Paladin | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 51274 | Guide and Walkthrough | SBAllen | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 54117 | Guide and Walkthrough | Action | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 54874 | Guide and Walkthrough | Super_Slash | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 53626 | Guide and Walkthrough | Obashii | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 53607 | Walkthrough | femiwhat | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 80281 | Walkthrough | _Young-Gamer_ | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
-| 53737 | Augment FAQ | mystery500 | In-Depth Guides | — | — | grep only |
-| 54747 | Bestiary FAQ | Action | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 51200 | Boss Guide | Mykas0 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 55594 | Equipment Guide | obishawn | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 53978 | Game Script | MostSeriousness | In-Depth Guides | — | — | skipped — a game script |
-| 51208 | Minigame Guide | MostSeriousness | In-Depth Guides | — | — | grep only |
-| 54822 | Minimum Level Challenge Guide | themoogleking | In-Depth Guides | — | — | skipped — a challenge run or save hacking |
-| 77571 | Missable Guide | ImHunter | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 55599 | Namingway Guide | obishawn | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 54559 | New Game+ Guide | wrp103 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 54048 | Rare Item FAQ | Action | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 54941 | Stat Maxing Guide | LunarianFuSoYa | In-Depth Guides | — | — | skipped — outside these two minigames' rewards |
-| 51480 | Translation Guide | alexrulz69 | In-Depth Guides | — | — | skipped — a translation guide |
-| 79579 | Guide and Walkthrough | mynockx | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first |
+`__gf.pick()` on 2026-09-15 ran on the DS page's listing, which carries the same 93 Full Game and In-Depth guides as the
+table, and named DJellybean's 12766, the first listed of five plain-text walkthroughs flagged Most Recommended; it is now
+read. The flags column comes from that listing.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 12766 | Guide and Walkthrough | DJellybean | Full Game Guides | — | — | read | Most Recommended |
+| 40844 | Guide and Walkthrough | Action | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Most Recommended |
+| 13374 | Guide and Walkthrough | AKishan | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Most Recommended |
+| 12622 | Guide and Walkthrough | SBAllen | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 18479 | Guide and Walkthrough | Dev | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 12838 | Guide and Walkthrough | Haunter12O | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 40605 | Guide and Walkthrough | Relle | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 40599 | Guide and Walkthrough | Cyril | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 47083 | Guide and Walkthrough | Super_Slash | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 42983 | Guide and Walkthrough | SaltCod | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 13050 | Guide and Walkthrough | PsychoPenguin | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 42123 | Guide and Walkthrough | spudnickator | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 41132 | Guide and Walkthrough | Courante | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 54995 | Guide and Walkthrough | Xenomic | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 63342 | Guide and Walkthrough | KeyBlade999 | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 14250 | Guide and Walkthrough | JWitham | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 40476 | Guide and Walkthrough | JWitham | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 14683 | Guide and Walkthrough | Adrenaline_SL | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 78175 | Guide and Walkthrough | 3vrB257A5gq3fg | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 15217 | Guide and Walkthrough | Boko | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 5505 | Guide and Walkthrough (Japanese) | Cidolfas | Full Game Guides | — | — | skipped — Japanese-language | — |
+| 10730 | Guide and Walkthrough (Japanese) | MMoogle | Full Game Guides | — | — | skipped — Japanese-language | — |
+| 53397 | Walkthrough | Seltox | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 5506 | Guide and Walkthrough (Japanese) | zero0723 | Full Game Guides | — | — | skipped — Japanese-language | — |
+| 53021 | Magic Guide | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 54945 | Algorithm FAQ | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 40507 | Bestiary | Lord_Albel | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 47085 | Boss Guide | Super_Slash | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 36887 | Boss/Enemy FAQ | Gbness | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 40483 | Cave of Trials Guide | Lord_Albel | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | Highest Rated |
+| 11843 | Dropped Items FAQ (Japanese) | Paulygon | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 80466 | Enemy List | 3vrB257A5gq3fg | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 36120 | Game Lists | Dev | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 40689 | Game Script | SineNomine | In-Depth Guides | — | — | skipped — a game script | Highest Rated |
+| 79748 | Item/Equipment Guide | Deathlike2 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 78144 | Low Level Walkthrough | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 41670 | Lunar Ruins Walkthrough | RedSwordMage | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 4492 | Magic FAQ (Japanese) | BobtheAlmighty | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 41264 | Magic Guide | Kevman1430 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 49382 | Max Stats FAQ | Cleteromagos | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 11495 | Maximum Statistics Guide (Japanese) | CronoLV99 | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 53579 | Monster Location Guide | bond617 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 18371 | Plot Analysis | cvxfreak | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 18325 | Rare Item FAQ | Some_Other_Guy | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 34504 | Save State Hacking Guide | Tsukasa999 | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 12759 | Shop List | Dev | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 4493 | Shopping Guide (Japanese) | zero0723 | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 28533 | Solo Cecil Guide | Storm_Hunter | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 13900 | Speed Walkthrough | White_Mage | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 16512 | Town Shops Translations | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide | — |
+| 4489 | Translation Guide | NMallory | In-Depth Guides | — | — | skipped — a translation guide | — |
+| 16391 | Translation Guide | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide | — |
+| 5507 | USA/Japan Changes FAQ (Japanese) | Ian_Kelley | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 4494 | Weapon List (Japanese) | zero0723 | In-Depth Guides | — | — | skipped — Japanese-language | — |
+| 16446 | Weapon/Armor/Item/Magic/Monster Translations | Red_Scarlet | In-Depth Guides | — | — | skipped — a translation guide | — |
+| 43063 | Weapons/Armor Guide | Necrolesian | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 21617 | Guide and Walkthrough | brian_sulpher | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Most Recommended |
+| 39377 | Guide and Walkthrough | Dev | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 4488 | Guide and Walkthrough | DJellybean | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 5497 | Guide and Walkthrough | Wizard201 | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 23597 | Guide and Walkthrough | Son_Kain | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 78179 | Guide and Walkthrough | 3vrB257A5gq3fg | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 4490 | Walkthrough | Caldor | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 5494 | FAQ | BSiron | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 5495 | FAQ | ALederman | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 78143 | Low Level Walkthrough | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 74811 | Bestiary | Eevee-Trainer | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | HTML |
+| 11842 | Dropped Items FAQ | Paulygon | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 80486 | Enemy List | 3vrB257A5gq3fg | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 40606 | Game Script | SineNomine | In-Depth Guides | — | — | skipped — a game script | Highest Rated |
+| 14167 | Inn/Shop FAQ | Mike8787 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 78160 | Minimum Steps Challenge | GirkDently | In-Depth Guides | — | — | skipped — a challenge run or save hacking | HTML |
+| 12621 | Save State Hacking Guide | PKT_Paladin | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 51274 | Guide and Walkthrough | SBAllen | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Highest Rated · HTML |
+| 54117 | Guide and Walkthrough | Action | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Most Recommended · FAQ of the Month Winner: September 2008 |
+| 54874 | Guide and Walkthrough | Super_Slash | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 53626 | Guide and Walkthrough | Obashii | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 53607 | Walkthrough | femiwhat | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 80281 | Walkthrough | _Young-Gamer_ | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | — |
+| 53737 | Augment FAQ | mystery500 | In-Depth Guides | — | — | grep only | — |
+| 54747 | Bestiary FAQ | Action | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 51200 | Boss Guide | Mykas0 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 55594 | Equipment Guide | obishawn | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 53978 | Game Script | MostSeriousness | In-Depth Guides | — | — | skipped — a game script | — |
+| 51208 | Minigame Guide | MostSeriousness | In-Depth Guides | — | — | grep only | — |
+| 54822 | Minimum Level Challenge Guide | themoogleking | In-Depth Guides | — | — | skipped — a challenge run or save hacking | — |
+| 77571 | Missable Guide | ImHunter | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 55599 | Namingway Guide | obishawn | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 54559 | New Game+ Guide | wrp103 | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 54048 | Rare Item FAQ | Action | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 54941 | Stat Maxing Guide | LunarianFuSoYa | In-Depth Guides | — | — | skipped — outside these two minigames' rewards | — |
+| 51480 | Translation Guide | alexrulz69 | In-Depth Guides | — | — | skipped — a translation guide | — |
+| 79579 | Guide and Walkthrough | mynockx | Full Game Guides | — | — | skipped — a walkthrough; the two dedicated DS guides and the wiki answered first | Highest Rated · HTML |
 
 ## Mechanics candidates
 
@@ -164,6 +175,7 @@ pointers: [wiki:finalfantasy.fandom.com/Whyt] [gf:51208 §II. Introduction, Most
 
 ## Unverified or contradicted
 - **What the developer battles demand.** The wiki says each developer must be fought but need not be beaten, and random encounters do not count; mystery500 says each room's random battle must be won, and that a Ninja Sutra can stand in for the magazine to skip the battles [wiki:finalfantasy.fandom.com/Developer's Office (Final Fantasy IV 3D)] [gf:53737 §3.29 --- Reach, mystery500 v2.11]
+- **The pick is not a DS guide.** GameFAQs files DJellybean's 12766 on the DS page, but its text walks through the Super Nintendo release, so it can speak to neither DS-only row, Whyt's training (g003) or the DS Developer's Office reward (g002), and neither gains a source from it [gf:12766 §Introudction, DJellybean]
 
 ## Codex rows
 
@@ -174,3 +186,4 @@ pointers: [wiki:finalfantasy.fandom.com/Whyt] [gf:51208 §II. Introduction, Most
 
 ## Codex delta
 - g002–g003 (both Final Fantasy IV minigames) tabled and sourced in place on 2026-09-14.
+- 2026-09-15: the Most Recommended walkthrough on the DS page, 12766, read under the owner's rule. It walks through the Super Nintendo release, so it has nothing on either DS-only row, and no row was edited.
