@@ -140,6 +140,17 @@
   .card-body{display:none; border-top:1px solid var(--line-soft); padding:18px 20px 20px;}
   .card.open .card-body{display:block;}
 
+  /* ---------- game groups on the Mechanics and Minigames tabs ---------- */
+  .game-group{margin-bottom:12px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); overflow:hidden;}
+  .gg-head{display:flex; align-items:center; gap:12px; padding:9px 14px; cursor:pointer; list-style:none; user-select:none;}
+  .gg-head::-webkit-details-marker{display:none;}
+  .gg-head:hover{background:rgba(255,255,255,.025);}
+  .gg-title{flex:1; min-width:0; font-size:15.5px; font-weight:600; color:#eef3ff;}
+  .gg-count{font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint);}
+  .game-group[open] > .gg-head .chev{transform:rotate(90deg);}
+  .gg-body{padding:2px 12px; border-top:1px solid var(--line-soft);}
+  .gg-body .card{margin:12px 0;}
+
   .field{margin-bottom:15px;}
   .flabel{
     font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
@@ -467,7 +478,7 @@
   .form label{display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:4px;}
   .form input, .form select, .form textarea{width:100%;}
   .form .actions{margin-top:14px; display:flex; gap:10px;}
-  @media (max-width:640px){ .form .grid{grid-template-columns:1fr;} .card-head{flex-wrap:wrap;} }
+  @media (max-width:640px){ .form .grid{grid-template-columns:1fr;} .card-head{flex-wrap:wrap;} .gg-head{flex-wrap:wrap; row-gap:6px;} .gg-title{flex:1 1 calc(100% - 100px);} .gg-count, .gg-head .badge{order:2;} }
 
   .empty{
     text-align:center; color:var(--ink-faint); padding:50px 20px;
@@ -513,8 +524,8 @@
           <option value="__undecided">Undecided</option>
         </select>
         <select id="mSort" aria-label="Sort mechanics">
-          <option value="default">Sort: by ID</option>
-          <option value="new">Sort: newest changes first</option>
+          <option value="new" selected>Sort: newest changes first</option>
+          <option value="default">Sort: research order</option>
           <option value="name">Sort: A–Z</option>
         </select>
         <label class="chip" style="cursor:pointer"><input type="checkbox" id="fNew" style="accent-color:#4ec9b0"> New or updated only</label>
@@ -564,12 +575,13 @@
         <input type="search" id="mgq" placeholder="Search minigames… or table:no platform:PlayStation">
         <select id="mgGame"><option value="">All games</option></select>
         <select id="mgSort" aria-label="Sort minigames">
-          <option value="default">Sort: by ID</option>
-          <option value="new">Sort: newest changes first</option>
+          <option value="new" selected>Sort: newest changes first</option>
+          <option value="default">Sort: research order</option>
           <option value="name">Sort: A–Z</option>
         </select>
         <label class="chip" style="cursor:pointer"><input type="checkbox" id="mgFav" style="accent-color:#f2cb4e"> Saved ideas only</label>
         <label class="chip" style="cursor:pointer"><input type="checkbox" id="mgNew" style="accent-color:#4ec9b0"> New or updated only</label>
+        <button class="btn" id="mgExpand">Expand all</button>
       </div>
     </div>
     <div class="gq-active" id="mgqActive"></div>
@@ -666,7 +678,7 @@
   <!-- ================= GUIDE ================= -->
   <section class="view guide" id="view-guide">
     <h2>Reading the codex</h2>
-    <p>Every mechanic is one card. The colored orb is its category — hover the legend below. Click a card to open it. The green <b>Reward Loop</b> panel is the heart of each entry: what the player does, what they get, and why it feels good. That's the part to study for your exploration-reward design.</p>
+    <p>The <b>Mechanics</b> and <b>Minigames</b> tabs list games first, the most recently updated on top; click a game to show its cards, or <b>Expand all</b> to open everything. A search or a filter opens every game that still matches. Every mechanic is one card. The colored orb is its category — hover the legend below. Click a card to open it. The green <b>Reward Loop</b> panel is the heart of each entry: what the player does, what they get, and why it feels good. That's the part to study for your exploration-reward design.</p>
     <div class="legend" id="legend"></div>
 
     <h2>The research pipeline</h2>
@@ -3767,6 +3779,28 @@ function sortByLastChange(games, dates){
     a.title.localeCompare(b.title));
 }
 
+/* The Mechanics and Minigames tabs list rows under their game. Rows keep the order they
+   arrive in (id order, or A–Z when the tab sorts by name): under "newest first" a reversed
+   id order inside one game reads as random, and the pills already mark the fresh rows.
+   Games follow `mode`. "new" leads with the game whose newest row is newest, and the sort
+   is stable, so games tied on one date keep the order of their first rows (a splice dates
+   every row it adds the same). "name" is A–Z by title; anything else is first appearance. */
+function groupRows(list, titleOf, mode, dateOf){
+  const byTitle = new Map();
+  (list || []).forEach(r=>{
+    const t = titleOf(r);
+    if(!byTitle.has(t)) byTitle.set(t, {title:t, rows:[], newest:""});
+    const g = byTitle.get(t);
+    g.rows.push(r);
+    const d = (dateOf && dateOf(r)) || "";
+    if(d > g.newest) g.newest = d;
+  });
+  const groups = [...byTitle.values()];
+  if(mode === "name") return groups.sort((a,b)=> String(a.title).localeCompare(String(b.title)));
+  if(mode === "new") return groups.sort((a,b)=> b.newest.localeCompare(a.newest));
+  return groups;
+}
+
 /* ============================= FACETS ============================= */
 /* Everything a game row names — platform, genre, developer, publisher, series, year —
    is a filter. Sources spell one thing several ways (GameFAQs "SquareSoft", the row's
@@ -4303,15 +4337,19 @@ function freshBadge(id){
    view, and mark it. One implementation, used by the changelog chips AND by the
    lineage chain — two jump paths would drift the moment a filter is added. */
 function gotoCard(id){
-  const mech = allMechs().some(m=>m.id===id);
+  const row = allMechs().find(m=>m.id===id), mech = !!row;
+  // Clearing the filters closes every game nobody opened by hand, so the row's game opens first.
   if(mech){
     fCat = ""; fVerb = "";
     $("#q").value = ""; $("#fGame").value = ""; $("#fWant").value = "";
-    $("#fNew").checked = false; $("#mSort").value = "default";
+    $("#fNew").checked = false; $("#mSort").value = "new";
+    openGames.add(row.game);
     buildFilters(); buildVerbChips(); openSet.add(id); renderCards();
   }else{
+    const mg = MINIGAMES.find(m=>m.id===id);
+    if(mg) openMgGames.add(mg.g);
     $("#mgq").value = ""; $("#mgGame").value = "";
-    $("#mgFav").checked = false; $("#mgNew").checked = false; $("#mgSort").value = "default";
+    $("#mgFav").checked = false; $("#mgNew").checked = false; $("#mgSort").value = "new";
     buildMgFilters(); renderMinigames();
   }
   document.querySelector(`.tab[data-view="${mech ? "mechanics" : "minigames"}"]`).click();
@@ -4476,21 +4514,38 @@ function buildFilters(){
 }
 ["q","fGame","fWant","fNew","mSort"].forEach(id=> $("#"+id).addEventListener("input", renderCards));
 
-/* Shared by both tabs so the two sorts cannot disagree about what "newest" means.
-   Ties inside one changelog entry fall back to id, descending — the last row
-   spliced is the one most recently written, so it leads. */
+/* Shared by both tabs so the two cannot disagree about what "newest" means: a row's date is
+   the newest changelog entry naming it, and groupRows() orders the games by it. */
+function rowDate(r){ return (changeInfo(r.id)||{}).date || ""; }
+/* Rows inside a game stay in id order unless the tab sorts A–Z. */
 function sortRows(list, mode, nameOf){
   if(mode === "name") return list.sort((a,b)=> nameOf(a).localeCompare(nameOf(b)));
-  if(mode === "new") return list.sort((a,b)=>{
-    const ad = (changeInfo(a.id)||{}).date || "", bd = (changeInfo(b.id)||{}).date || "";
-    if(ad !== bd) return bd.localeCompare(ad);
-    return b.id.localeCompare(a.id);
-  });
   return list;
+}
+/* One game's collapsible header over its cards, shared by both tabs. The hand toggle is
+   recorded on `click`, not `toggle`: a <details> the render creates open also fires `toggle`,
+   which would file every game a filter opened as opened by hand. A click on the title link
+   follows the link and leaves the group as it was. */
+function gameGroupEl(group, open, opened, noun, extra){
+  const t = group.title, g = gameByTitle(t);
+  const fresh = group.rows.filter(r=> isFresh(r.id));
+  const nNew = fresh.filter(r=> (changeInfo(r.id)||{}).kind === "new").length;
+  const pill = !fresh.length ? "" :
+    `<span class="badge ${nNew ? "isnew" : "isupd"}">${fresh.length} ${nNew === fresh.length ? "new" : nNew ? "new or updated" : "updated"}</span>`;
+  const det = document.createElement("details");
+  det.className = "game-group"; det.dataset.game = t; det.open = open;
+  det.innerHTML = `<summary class="gg-head">${coverHTML(g || {title:t}, "g-cover mini")}` +
+    `<span class="gg-title">${g ? `<a class="g-link" href="#game=${encodeURIComponent(t)}" title="Open the game's page">${esc(t)}</a>` : esc(t)}</span>` +
+    `<span class="gg-count">${group.rows.length} ${noun}${group.rows.length===1?"":"s"}</span>${extra||""}${pill}<span class="chev">▶</span></summary><div class="gg-body"></div>`;
+  det.querySelector("summary").addEventListener("click", e=>{
+    if(e.target.closest("a")) return;
+    if(det.open) opened.delete(t); else opened.add(t);
+  });
+  return det;
 }
 
 /* ============================= MECHANIC CARDS ============================= */
-const openSet = new Set();
+const openSet = new Set(), openGames = new Set();
 function renderCards(){
   const rawQ = $("#q").value.trim(), pq = parseQuery(rawQ, MECH_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#fGame").value, w = $("#fWant").value;
@@ -4513,10 +4568,19 @@ function renderCards(){
     return true;
   });
   sortRows(list, sortBy, m=>m.name);
-  $("#countNote").textContent = list.length + " mechanic" + (list.length===1?"":"s") + " shown" +
+  const groups = groupRows(list, m=>m.game, sortBy, rowDate);
+  $("#countNote").textContent = list.length + " mechanic" + (list.length===1?"":"s") + " in " + groups.length + " game" + (groups.length===1?"":"s") + " shown" +
     (newOnly ? " · new or updated since " + (seenDate() || "the start") : "");
   const box = $("#cards"); box.innerHTML = "";
   if(!list.length){ box.innerHTML = '<div class="empty">Nothing matches these filters. Clear them, or log a new mechanic.</div>'; return; }
+  // Any filter or search opens every game that still matches; otherwise only the ones opened by hand.
+  const filtering = !!(rawQ || g || w || newOnly || fCat || fVerb), bodyOf = new Map();
+  groups.forEach(gr=>{
+    const yes = gr.rows.filter(m=> m.want === "Yes").length;
+    const el = gameGroupEl(gr, filtering || openGames.has(gr.title), openGames, "mechanic", yes ? `<span class="badge Yes">${yes} Yes</span>` : "");
+    bodyOf.set(gr.title, el.querySelector(".gg-body"));
+    box.appendChild(el);
+  });
   list.forEach(m=>{
     const color = CATS[m.cat] || "#9aa8c8";
     const card = document.createElement("article");
@@ -4559,7 +4623,7 @@ function renderCards(){
       if(ta.hidden){ ta.hidden=false; ta.focus(); e.target.textContent="Save notes"; }
       else{ updateMech(m.id, {notes: ta.value}); }
     });
-    box.appendChild(card);
+    bodyOf.get(m.game).appendChild(card);
   });
   renderStats();
 }
@@ -4576,7 +4640,10 @@ function updateMech(id, patch){
 let expanded = false;
 $("#btnExpand").addEventListener("click", ()=>{
   expanded = !expanded;
-  allMechs().forEach(m=> expanded ? openSet.add(m.id) : openSet.delete(m.id));
+  allMechs().forEach(m=>{
+    if(expanded){ openSet.add(m.id); openGames.add(m.game); }
+    else{ openSet.delete(m.id); openGames.delete(m.game); }
+  });
   $("#btnExpand").textContent = expanded ? "Collapse all" : "Expand all";
   renderCards();
 });
@@ -5233,6 +5300,8 @@ function cleanYt(url){
   if(host === "youtu.be" ? !u.pathname.slice(1) : !u.searchParams.get("v")) return null;
   return u.href;
 }
+const openMgGames = new Set();
+let mgExpanded = false;
 function renderMinigames(){
   const rawQ = $("#mgq").value.trim(), pq = parseQuery(rawQ, MG_QUERY_KEYS), q = pq.text.toLowerCase();
   const g = $("#mgGame").value, favOnly = $("#mgFav").checked;
@@ -5252,10 +5321,18 @@ function renderMinigames(){
     return true;
   });
   sortRows(list, sortBy, m=>m.n);
-  $("#mgCount").textContent = list.length + " minigame" + (list.length===1?"":"s") + " shown" +
+  const groups = groupRows(list, m=>m.g, sortBy, rowDate);
+  $("#mgCount").textContent = list.length + " minigame" + (list.length===1?"":"s") + " in " + groups.length + " game" + (groups.length===1?"":"s") + " shown" +
     (newOnly ? " · new or updated since " + (seenDate() || "the start") : "");
   const box = $("#mgCards"); box.innerHTML = "";
   if(!list.length){ box.innerHTML = '<div class="empty">Nothing matches. Clear the filters to see the full arcade.</div>'; return; }
+  const filtering = !!(rawQ || g || favOnly || newOnly), bodyOf = new Map();
+  groups.forEach(gr=>{
+    const saved = gr.rows.filter(m=> store.minigameFavs[m.id]).length;
+    const el = gameGroupEl(gr, filtering || openMgGames.has(gr.title), openMgGames, "minigame", saved ? `<span class="badge Maybe">★ ${saved} saved</span>` : "");
+    bodyOf.set(gr.title, el.querySelector(".gg-body"));
+    box.appendChild(el);
+  });
   list.forEach(m=>{
     const fav = !!store.minigameFavs[m.id];
     const pinned = !!(store.overrides[m.id]||{}).yt;
@@ -5291,10 +5368,16 @@ function renderMinigames(){
       if(!url) delete store.overrides[m.id].yt;
       persist(); renderMinigames();
     });
-    box.appendChild(card);
+    bodyOf.get(m.g).appendChild(card);
   });
 }
 ["mgq","mgGame","mgFav","mgNew","mgSort"].forEach(id=> $("#"+id).addEventListener("input", renderMinigames));
+$("#mgExpand").addEventListener("click", ()=>{
+  mgExpanded = !mgExpanded;
+  MINIGAMES.forEach(m=> mgExpanded ? openMgGames.add(m.g) : openMgGames.delete(m.g));
+  $("#mgExpand").textContent = mgExpanded ? "Collapse all" : "Expand all";
+  renderMinigames();
+});
 
 /* ============================= MY GAME ============================= */
 /* The shortlist, organised into the systems of the game being designed. Buckets
