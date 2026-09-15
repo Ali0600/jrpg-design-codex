@@ -57,7 +57,9 @@
     backdrop-filter:blur(6px);
     border-bottom:1px solid var(--line-soft);
   }
-  .tabs{display:flex; gap:2px; padding-top:6px;}
+  /* The tabs wrap rather than scroll: every tab, and so the selected one, stays on screen, including
+     when code switches tabs. Where they fit (a viewport of roughly 774px or more) wrapping changes nothing. */
+  .tabs{display:flex; flex-wrap:wrap; gap:2px; padding-top:6px;}
   .tab{
     appearance:none; background:none; border:none; cursor:pointer;
     color:var(--ink-dim); font:inherit; font-size:13.5px; letter-spacing:.05em;
@@ -65,6 +67,8 @@
   }
   .tab:hover{color:var(--ink);}
   .tab[aria-selected="true"]{color:#fff; border-bottom-color:var(--green);}
+  /* Tighter tabs keep the sticky bar to one row on a 768px tablet and two on a phone. */
+  @media (max-width:780px){ .tab{padding:9px 8px 10px;} }
   .tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
     outline:2px solid var(--cyan); outline-offset:2px; border-radius:4px;
   }
@@ -86,6 +90,8 @@
     color:var(--ink); font:inherit; padding:8px 11px;
   }
   input[type=search]{flex:1; min-width:200px;}
+  /* A select is as wide as its longest option, and a game title outgrows a phone's filter row. */
+  select{max-width:100%;}
   .chip{
     display:inline-flex; align-items:center; gap:7px;
     background:#0e1526; border:1px solid var(--line); border-radius:999px;
