@@ -60,10 +60,10 @@ function digestMd(block, { rowLines = true } = {}) {
 
 const GOOD_BLOCK = [
   `{id:"M+1",game:"Lantern Vale",name:"Cores",cat:"Combat",how:"How it works.",`,
-  ` loop:"Find a core -> slot it -> your class changes.",want:"Yes",notes:"n",`,
+  ` loop:"Find a core -> slot it -> your class changes.",want:"",notes:"n",`,
   ` refs:[{u:"${GF}",t:"Power-Up FAQ by cinder (GameFAQs)"}]},`,
   `{id:"M+2",game:"Lantern Vale",name:"Lanterns",cat:"Progression & Upgrades",how:"How.",`,
-  ` loop:"Light a lantern -> the door opens.",want:"Maybe",verbs:["Guarded"]},`,
+  ` loop:"Light a lantern -> the door opens.",verbs:["Guarded"]},`,
   `{id:"g+1",g:"Lantern Vale",n:"Harbor arena",p:"p",r:"r",l:"l",`,
   ` rt:[{at:"30 wins",get:"Sun Sigil"}],refs:[{u:"${GF}",t:"Power-Up FAQ by cinder"}]}`,
 ].join("\n");
@@ -85,7 +85,7 @@ test("`->` becomes `→`, and the defaults the file expects are filled in", () =
   assert.match(m.loop, /Find a core → slot it → your class changes\./);
   assert.doesNotMatch(m.loop, /->/);
   assert.equal(assignments[1].row.rating, 0, "rating defaults to 0");
-  assert.equal(assignments[1].row.want, "Maybe");
+  assert.equal(assignments[1].row.want, "", "want defaults to empty: a decision is the owner's");
 });
 
 test("both array endings are appended to, and the result still evaluates", () => {
@@ -143,8 +143,10 @@ test("every refusal fires, and none of them is the parser being lenient", () => 
       /cat "Nope" is not a CATS key/],
     ["unrostered game", `{id:"M+1",game:"Atlantis",name:"n",cat:"Combat",how:"h",loop:"l"}`,
       /game "Atlantis" has no BASE_GAMES row/],
-    ["bad want", `{id:"M+1",game:"Lantern Vale",name:"n",cat:"Combat",how:"h",loop:"l",want:"Sure"}`,
-      /want "Sure" is not Yes\/Maybe\/No/],
+    ["a decision in the data", `{id:"M+1",game:"Lantern Vale",name:"n",cat:"Combat",how:"h",loop:"l",want:"Yes"}`,
+      /want "Yes" is the owner's call; leave it ""/],
+    ["a rating in the data", `{id:"M+1",game:"Lantern Vale",name:"n",cat:"Combat",how:"h",loop:"l",rating:3}`,
+      /rating 3 is the owner's call; leave it 0/],
     ["missing field", `{id:"M+1",game:"Lantern Vale",name:"n",cat:"Combat",how:"h"}`,
       /field `loop` is missing or empty/],
     ["ref host not allowed", `{id:"M+1",game:"Lantern Vale",name:"n",cat:"Combat",how:"h",loop:"l",refs:[{u:"https://evil.example.com/x",t:"t"}]}`,

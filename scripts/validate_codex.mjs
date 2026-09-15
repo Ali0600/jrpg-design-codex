@@ -60,7 +60,6 @@ const UNROSTERED_DIGESTS = {
  */
 const DISCOVERY_CATS = new Set(["Exploration & Rewards", "Traversal", "Side Content & Minigames"]);
 
-const WANT = new Set(["Yes", "Maybe", "No", ""]);
 const STATUS = new Set(["Researched", "Researching", "To Research"]);
 
 /**
@@ -653,10 +652,10 @@ export function validate(html, docs = {}) {
     const label = `mechanic ${m.id ?? "(no id)"}`;
     checkFields(m, label, ["id", "game", "name", "cat", "how", "loop"], errors);
     if (!cats.has(m.cat)) errors.push(`${label}: category ${JSON.stringify(m.cat)} is not a key of CATS`);
-    if (!WANT.has(m.want ?? "")) errors.push(`${label}: want ${JSON.stringify(m.want)} not one of Yes | Maybe | No | ""`);
-    if (m.rating != null && !(Number.isInteger(m.rating) && m.rating >= 0 && m.rating <= 5)) {
-      errors.push(`${label}: rating must be 0-5, got ${m.rating}`);
-    }
+    // A decision and a rating are the owner's, kept in their browser. The data ships none, so a value
+    // here is one somebody else made for them: 179 seeded decisions were cleared on 2026-09-15.
+    if ((m.want ?? "") !== "") errors.push(`${label}: want ${JSON.stringify(m.want)} is in the data; a decision is the owner's, kept in their browser`);
+    if ((m.rating ?? 0) !== 0) errors.push(`${label}: rating ${JSON.stringify(m.rating)} is in the data; a rating is the owner's, kept in their browser`);
     // A mechanic pointing at a game with no roster row is unreachable from the Games tab.
     if (isText(m.game) && !titles.has(m.game)) {
       errors.push(`${label}: unknown game ${JSON.stringify(m.game)} — no BASE_GAMES row`);
@@ -940,7 +939,6 @@ export function validate(html, docs = {}) {
     minigames: MINIGAMES.length,
     researched: BASE_GAMES.filter(g => g.status === "Researched").length,
     queued: BASE_GAMES.filter(g => g.status !== "Researched").length,
-    want: BASE_MECHS.filter(m => m.want === "Yes").length,
     rewardTables: MINIGAMES.filter(m => m.rt).length,
     tagged: BASE_MECHS.filter(m => (m.verbs ?? []).length).length,
     tags: BASE_MECHS.reduce((n, m) => n + (m.verbs ?? []).length, 0),
@@ -1134,8 +1132,10 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, 'id:"g003"', 'id:"g002"', "duplicate minigame id") },
   { name: "unknown category", expect: /is not a key of CATS/,
     apply: s => replaceFirst(s, 'cat:"Exploration & Rewards"', 'cat:"Nonsense"', "unknown category") },
-  { name: "invalid want value", expect: /want "Perhaps"/,
-    apply: s => replaceFirst(s, 'want:"Yes"', 'want:"Perhaps"', "invalid want value") },
+  { name: "a decision in the data", expect: /want "Yes" is in the data/,
+    apply: s => replaceFirst(s, 'rating:0,want:""', 'rating:0,want:"Yes"', "a decision in the data") },
+  { name: "a rating in the data", expect: /rating 5 is in the data/,
+    apply: s => replaceFirst(s, 'rating:0,want:""', 'rating:5,want:""', "a rating in the data") },
   { name: "orphaned mechanic game ref", expect: /unknown game/,
     apply: s => replaceFirst(s, 'title:"Chrono Trigger"', 'title:"Chrono Triggerr"', "orphaned mechanic game ref") },
   { name: "unrostered minigame game ref", expect: /not a known unrostered FF title/,
@@ -1548,7 +1548,7 @@ function main() {
     console.log(
       `codex: ${stats.mechanics} mechanics · ${stats.minigames} minigames ` +
       `(${stats.rewardTables} with reward tables) · ${stats.games} games ` +
-      `(${stats.researched} researched, ${stats.queued} queued; ${stats.gf} with GameFAQs details, ${stats.covers} with covers) · ${stats.want} marked want:Yes`
+      `(${stats.researched} researched, ${stats.queued} queued; ${stats.gf} with GameFAQs details, ${stats.covers} with covers)`
     );
   }
 

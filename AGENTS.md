@@ -208,7 +208,7 @@ backup; the HTML file is the source of truth and is more up to date.
 
 ## Game design briefs (the codex's output, not just its input)
 - `GAME_PROMPT.md` — v1 build brief for **Waystone**, a Three.js exploration RPG derived
-  from the owner's want:"Yes" clusters. Kept for reference.
+  from the `want:"Yes"` rows early sessions had seeded into the data (cleared 2026-09-15). Kept for reference.
 - `GAME_PROMPT_V2.md` — **the current one.** Supersedes v1 on three axes: (1) discovery is
   a 15-verb **taxonomy** with a "no region repeats its neighbour's mix" rule, not a single
   riddle gimmick; (2) combat is two-sided timing with DEFENSE as the skill expression
@@ -227,17 +227,22 @@ backup; the HTML file is the source of truth and is more up to date.
 - Wants every minigame to reward the player "properly" — concrete, progression-relevant
   rewards, not trinkets.
 - Prefers wiki-style sources (Fandom, Game8, etc.) for game research.
-- Key flagged mechanics (marked want:"Yes" in the data): FF9's Chocobo Hot & Cold,
-  Chained Echoes' Reward Board, Legend of Mana's Land Make, DQ7 shard hunting,
-  XC3 exploration EXP, Sea of Stars' relics/Mirth, TotK shrines, Johnny's Treasure
-  Trove, Gwent, and the FF7R materia/weapon/chocobo-gear systems.
+- Mechanics early sessions judged to fit those loves (FF9's Chocobo Hot & Cold, Chained Echoes'
+  Reward Board, Legend of Mana's Land Make, DQ7 shard hunting, XC3 exploration EXP, Sea of Stars'
+  relics/Mirth, TotK shrines, Johnny's Treasure Trove, Gwent, the FF7R materia/weapon/chocobo-gear
+  systems) were written into the data as `want:"Yes"`, 132 Yes and 47 Maybe in all. On 2026-09-15 the
+  owner said those decisions were never theirs, so the data now ships none: a Yes, Maybe or No is only
+  ever the owner's own click, saved in their browser. Never read a decision as their taste unless they
+  made it.
 
 ## Architecture of JRPG_Design_Codex.html
 Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
 - Data lives in four JS const arrays near the top of the <script>:
   `CATS` (category -> color), `BASE_MECHS`, `BASE_GAMES`, `MINIGAMES`, `PILLARS`.
 - Mechanic row shape: `{id:"M001", game, name, cat, how, loop, rating, want, notes}`
-  - `cat` must be a key of CATS; `want` is "Yes" | "Maybe" | "No" | "".
+  - `cat` must be a key of CATS. Every base row ships `want:""` and `rating:0`, and the validator
+    refuses anything else: a decision ("Yes" | "Maybe" | "No") and a rating are the owner's, saved in
+    their browser.
   - IDs are sequential: mechanics M001-M294, minigames g001-g104, skipping a retired id. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
@@ -247,6 +252,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
 - User state (ratings, want decisions, notes, custom entries, saved minigame ideas)
   persists in `localStorage` under key `jrpg_codex_v1`, merged over the base arrays at
   runtime via `store.overrides`. Export/Import backup buttons serialize this to JSON.
+  **Reset decisions** (Mechanics toolbar, since 2026-09-15) clears every saved want and rating after a
+  confirm that names the counts, through `resetDecisions(saved)` in the data region
+  (`scripts/mygame.test.mjs`). Notes, pinned videos, the board, pillar ticks and favourites stay, and the
+  button offers **Undo reset** until the next decision change, an import or a reload.
   IMPORTANT: base-array edits are safe; renaming/removing IDs breaks user overrides.
 - Tabs: Games / Mechanics / Minigames / **My Game** / UI Gallery / Design Pillars / How to Use.
   The page opens on **Games** (since 2026-09-14, at the owner's request), with the What's new strip at
@@ -354,10 +363,12 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the next local day and a new entry. If the edit removed a span that `docs/verbs.md` or
   `docs/lineages.md` quotes, re-quote the row there too (the validator names the line; M224's
   Bravely Default rewrite hit this). The splicer logs `added` for you.
-  The ONE exception is `verbs`, carved out in that script's `ANALYSIS_KEYS`: a tag derived
+  One exception is `verbs`, carved out in that script's `ANALYSIS_KEYS`: a tag derived
   from a row's own text is analysis OF the row, not content of it, and logging a whole
   tagging pass would collapse every row it touched onto one date, permanently. Change any
-  other field in the same edit and the row is caught exactly as before.
+  other field in the same edit and the row is caught exactly as before. The other is a mechanic's
+  `want` and `rating` (`OWNER_KEYS`): the owner's decision, which the data may only clear, since the
+  validator holds both empty (2026-09-15).
   Everything else derives from this one list: `changeInfo(id)` maps each id to the NEWEST
   entry naming it, `store.seen` (an ISO date, backfilled by `normalizeStore`) is the
   owner's read marker, and from those come the NEW/UPDATED pills, the "What's new" strip,
@@ -565,7 +576,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   logged once can be logged again in a later entry. Until 2026-09-14 it compared the union of
   every list instead, which trapped the 85 rows logged at least once. `ANALYSIS_KEYS` names the keys that are analysis OF a row
   rather than content of it — `verbs` today — and skips them, so a tagging pass is not a
-  rewrite. Parse, never text-diff — appending a row rewrites the
+  rewrite; `OWNER_KEYS` (`want`, `rating`) is skipped the same way. Parse, never text-diff — appending a row rewrites the
   previous last row by one comma, so a textual diff would demand an `updated` entry for
   M243, M261, M265 … on every splice and the gate would be trained away in two PRs.
 - `scripts/splice_rows.mjs` writes a digest's `## Codex rows` block into the arrays:
@@ -690,7 +701,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
 - **A push to `main` deploys the site.** Codex/app/workflow changes therefore go
   branch -> PR -> merge on green. Docs-only edits may still land directly on main.
 - `node scripts/validate_codex.mjs` checks: script parses; M/g IDs sequential and
-  unique; every `cat` in CATS; `want` and `status` enums; every mechanic `game` has a
+  unique; every `cat` in CATS; the `status` enum; no decision or rating in the data (every mechanic ships `want:""` and `rating:0`); every mechanic `game` has a
   BASE_GAMES row; minigame `g` refs likewise EXCEPT the 8 unrostered FF titles
   allowlisted in the script (the FF minigame survey is broader than the mechanics
   roster — a new orphan outside that list is treated as a typo), their digests claimed
@@ -734,7 +745,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **103** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **104** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match

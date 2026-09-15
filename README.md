@@ -81,7 +81,8 @@ none, because it reads as verified.
   digest under [`docs/research/`](docs/research/). Since 2026-09-15 a GameFAQs pass reads
   the walkthrough GameFAQs marks *Most Recommended*, in its plain-text version
 - **Your own layer** — ratings, want/skip decisions, notes, pinned videos and custom
-  entries save to `localStorage`. JSON export/import backs them up
+  entries save to `localStorage`. JSON export/import backs them up. The codex ships with nothing
+  decided or rated, and **Reset decisions** clears every Yes / Maybe / No and star rating after asking
 
 > Browser storage is **per origin**. So edits made on the hosted site and edits made in
 > the local file are separate. Use **Export backup** / **Import backup** to move between
@@ -195,9 +196,9 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 103 sabotages and fails the build unless every one is caught, and every
+  injects 104 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  209-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  214-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if

@@ -463,3 +463,19 @@ tied rows in memory made the linter name the other guide (2026-09-15).
 
 **Takeaway:** when a selection rule is "first match", write down which order counts, and keep that
 order in every sorted copy the rule is run over, or break the tie on a key the copies share.
+
+## A default written into shipped data reads as the user's own choice
+A field that means "the user decided this" has no room for a guess. Once a guess ships in it, the
+interface shows it exactly like a real decision, and everything downstream counts it as one.
+
+**Why it came up:** early research sessions wrote `want:"Yes"` or `"Maybe"` into 179 of the 294
+mechanics, and a 5-star rating into six, as stand-ins for the owner's taste. The page merges the
+owner's saved choices over the data, so those marks lit the same Yes and Maybe buttons as a real click,
+filled the My Game board and the "In my game" tally, and a memory file later cited them as about a
+hundred confirmed picks. On 2026-09-15 the owner said they had made none of them. A reset of saved
+choices alone would have changed nothing, because the marks were never saved choices: they were data.
+The data now ships `want:""` and `rating:0` on every row, and the validator refuses anything else.
+
+**Takeaway:** ship user-decision fields empty and gate that they stay empty; put an inference in a
+field named for what it is, and never quote a stored choice back as someone's preference without
+knowing who wrote it.

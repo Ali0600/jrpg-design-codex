@@ -28,7 +28,6 @@ import { localToday } from "./dates.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CODEX = join(ROOT, "JRPG_Design_Codex.html");
 
-const WANT = new Set(["Yes", "Maybe", "No", ""]);
 const MECH_FIELDS = ["game", "name", "cat", "how", "loop"];
 const MINI_FIELDS = ["g", "n", "p", "r", "l"];
 
@@ -171,7 +170,9 @@ export function planSplice(html, md) {
     if (kind === "M") {
       if (row.cat != null && !codex.cats.has(row.cat)) problems.push(`${label}: cat ${JSON.stringify(row.cat)} is not a CATS key`);
       if (row.game != null && !codex.titles.has(row.game)) problems.push(`${label}: game ${JSON.stringify(row.game)} has no BASE_GAMES row`);
-      if (row.want != null && !WANT.has(row.want)) problems.push(`${label}: want ${JSON.stringify(row.want)} is not Yes/Maybe/No/""`);
+      // A decision and a rating are the owner's, kept in their browser; the validator refuses them in the data.
+      if (row.want != null && row.want !== "") problems.push(`${label}: want ${JSON.stringify(row.want)} is the owner's call; leave it ""`);
+      if (row.rating != null && row.rating !== 0) problems.push(`${label}: rating ${JSON.stringify(row.rating)} is the owner's call; leave it 0`);
       if (row.rating == null) row.rating = 0;
       if (row.want == null) row.want = "";
     } else {
