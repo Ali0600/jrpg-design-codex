@@ -25,8 +25,32 @@ rejected options still offer.
   revisit hook: `route()` reads exactly two hash shapes (`#game=` and `#games=`). A third, say
   `#mechanics=<query>`, needs its own branch there, a writer in each tab's search listener, and a
   rule for what a tab click does to a hash that belongs to another tab.
+- **A pop-up Browse panel** (from the Browse-panel fork, 2026-09-15) — revisit hook: `renderBrowse`
+  writes into `#gameBrowseBody`, so moving that body into a `<dialog>` opened from the Browse summary is
+  one element plus an open and close pair (Escape, a click outside, focus back to the opener). Worth it
+  if the panel gets used mostly on a phone, where the games list moving down costs the most.
 
 ---
+
+## 2026-09-15 — How the Browse panel keeps to one screen
+
+**Fork:** the Games tab's Browse panel listed every value of every kind: 289 chips in nine groups, plus 96
+credit chips in eight more. Measured at 1024×768 on 2026-09-15, it was 2,178px tall open (3,129px with its
+Credits open), and because it sits above the games it pushed the first game card 3,271px down, more than
+four screens. The owner: "It's too much. I have to scroll too much down to view."
+
+- **A: each kind's ten most common values, the rest behind a "+N more" chip** *(chosen by the owner,
+  AskUserQuestion 2026-09-15)*. The panel reads at a glance and the long tail is one click away, in place.
+  A value the list is filtered on stays shown even when it ranks past ten.
+- **B: one kind at a time.** A row of kind buttons, and only the chosen kind's values. Every value of that
+  kind is visible, but any filter is two clicks away and there is no overview of the other kinds.
+- **C: a pop-up dialog.** The games never move down, which matters most on a phone, at the cost of the most
+  code: the dialog, Escape, a click outside, and focus.
+
+**Status:** A `built — 2026-09-15`. B `rejected — two clicks to reach any filter, and no overview of the
+other kinds`. C `deferred — worth trying` (in the Backlog above).
+**Revisit hook:** `BROWSE_CAP` and `browseSlice` in the data region decide how much shows, and
+`renderBrowse` is the only writer of the panel's body.
 
 ## 2026-09-15 — How the Mechanics and Minigames tabs list rows
 

@@ -109,6 +109,7 @@
   #gameBrowse{margin:0 0 14px;}
   .browse-group{margin-top:12px;}
   .browse-chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:5px;}
+  .chip.more{font-family:inherit; color:var(--ink-faint); border-style:dashed;}
   .orb{
     width:11px; height:11px; border-radius:50%; flex:none;
     background:radial-gradient(circle at 34% 30%, #fff9 0%, var(--c) 45%, color-mix(in srgb, var(--c) 55%, #000) 100%);
@@ -690,7 +691,7 @@
     <h2>The research pipeline</h2>
     <p>The <b>Games</b> tab opens first. The <b>What's new</b> strip at its top lists the latest research, and the games below it sort by their last update, newest first: the newest changelog entry that names the game or one of its mechanics or minigames, a date each card shows. Each card also shows how many mechanics and minigames the game has contributed so far, so coverage gaps are visible at a glance. The tab is a research queue as well as a list: <i>Sort: research pipeline</i> puts <i>Researching</i> first, then <i>To Research</i>, then the finished shelf.</p>
     <p><b>Every game has a page.</b> Click a game's name anywhere — its card, a mechanic, a minigame — to open it: the cover, what its GameFAQs page says (platform, genre, developer, publisher, release, franchise, and how GameFAQs readers rate it, its difficulty and its length), every mechanic and minigame it contributed, its screenshots, its sources, the lineages it sits in, the codex games most related to it (a shared series, studio, director, composer or other credit, each shown as a link), and the games GameFAQs readers pair it with — those already in the codex link across, the rest can be queued for research with one click. The address carries the page (<code>#game=…</code>), so the browser's Back button returns to the list and a link can be shared. The list itself can be searched by title, developer, genre, franchise or platform, and sorted by the GameFAQs rating beside the Metacritic sorts.</p>
-    <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared. The <b>Mechanics</b> and <b>Minigames</b> searches take the same words, answered through each row's game (<code>platform:SNES</code> on Mechanics lists every mechanic from a SNES game), plus words about the row itself: <code>cat:</code>, <code>verb:</code>, <code>want:</code> (yes, maybe, no or undecided), <code>game:</code> and <code>id:</code> for mechanics, and <code>table:yes</code> or <code>table:no</code> (whether a minigame has a reward table), <code>game:</code> and <code>id:</code> for minigames. Those two searches are not kept in the address.</p>
+    <p><b>Everything on a game is a filter.</b> Click a platform, a genre, a developer, a publisher, a series, a theme, a feature, an award, a year or a name in its credits on a game's page to list every game that shares it (the platforms, credits, themes and awards come from the game's Wikipedia article as well as its GameFAQs page); click one on a card in the list to narrow the list you already have. The search box takes the same filters as words — <code>platform:PC genre:"Action RPG"</code>, alongside ordinary text — and shows each one as a chip you can remove. <b>Browse</b>, under the search box, lists every value with the number of games carrying it: the ten most common of each kind at a glance, and the rest behind a <i>more</i> chip. Sources spell one thing several ways, so each value is shown in one spelling: GameFAQs' <i>Role-Playing</i> is <b>RPG</b>, and SquareSoft, Squaresoft and Square are all <b>Square</b>. The address carries the filters, so Back returns to the page you came from and a filtered list can be shared. The <b>Mechanics</b> and <b>Minigames</b> searches take the same words, answered through each row's game (<code>platform:SNES</code> on Mechanics lists every mechanic from a SNES game), plus words about the row itself: <code>cat:</code>, <code>verb:</code>, <code>want:</code> (yes, maybe, no or undecided), <code>game:</code> and <code>id:</code> for mechanics, and <code>table:yes</code> or <code>table:no</code> (whether a minigame has a reward table), <code>game:</code> and <code>id:</code> for minigames. Those two searches are not kept in the address.</p>
     <ol>
       <li><b>Queue it.</b> Add the game with status <i>To Research</i>, and write the "why" as a <b>research brief</b>: the specific question this game should answer (the queued cards marked BRIEF show the shape).</li>
       <li><b>Research it.</b> Set it to <i>Researching</i>, then play it or work through deep dives and wikis with the codex open. Log mechanics with <b>+ Add mechanic</b> as you notice them.</li>
@@ -3807,6 +3808,18 @@ function groupRows(list, titleOf, mode, dateOf){
   return groups;
 }
 
+/* The Browse panel shows each kind's BROWSE_CAP most common values, and a "+N more" chip unfolds the
+   rest. A value the list is filtered on stays shown wherever it ranks, in its own position: a chip the
+   owner just clicked must not vanish from the panel it was clicked in. `list` is [value, count] pairs
+   in display order. */
+const BROWSE_CAP = 10;
+function browseSlice(list, cap, isOn){
+  const all = Array.isArray(list) ? list : [];
+  const on = typeof isOn === "function" ? isOn : ()=> false;
+  const shown = all.filter((p, i)=> i < cap || on(p[0]));
+  return {shown, hidden: all.length - shown.length};
+}
+
 /* ============================= FACETS ============================= */
 /* Everything a game row names — platform, genre, developer, publisher, series, year —
    is a filter. Sources spell one thing several ways (GameFAQs "SquareSoft", the row's
@@ -4893,6 +4906,8 @@ function renderGameFacets(all, q){
   if($("#gameBrowse").open) renderBrowse();
 }
 let browseState = null;
+/* The Browse groups the owner unfolded past BROWSE_CAP. In memory like openGames, never in the store. */
+const openBrowseGroups = new Set();
 function renderBrowse(){
   if(!browseState) return;
   const {counts, facets} = browseState;
@@ -4901,8 +4916,13 @@ function renderBrowse(){
   const group = (k, label, {keep, sort, min = 1} = {}) => {
     const list = [...counts[k].values()].filter(([v, c])=> c >= min && (!keep || keep(v))).sort(sort || byCount);
     if(!list.length) return "";
-    return `<div class="browse-group"><div class="gp-k">${label}</div><div class="browse-chips">${list.map(([v, c])=>
-      `<a class="chip${on(k, v) ? " on" : ""}" href="${esc(gamesHash(facetToken(k, v)))}" title="List every game whose ${esc(FACET_LABELS[k].toLowerCase())} is ${esc(v)}">${esc(v)} <span class="fn">${c}</span></a>`).join("")}</div></div>`;
+    const unfolded = openBrowseGroups.has(k);
+    const {shown, hidden} = unfolded ? {shown: list, hidden: 0} : browseSlice(list, BROWSE_CAP, v=> on(k, v));
+    const more = unfolded && list.length > BROWSE_CAP
+      ? `<button class="chip more" data-fold="${esc(k)}" title="Show the ${BROWSE_CAP} most common again">fewer</button>`
+      : hidden ? `<button class="chip more" data-unfold="${esc(k)}" title="Show all ${list.length}">+${hidden} more</button>` : "";
+    return `<div class="browse-group" data-k="${esc(k)}"><div class="gp-k">${label}</div><div class="browse-chips">${shown.map(([v, c])=>
+      `<a class="chip${on(k, v) ? " on" : ""}" href="${esc(gamesHash(facetToken(k, v)))}" title="List every game whose ${esc(FACET_LABELS[k].toLowerCase())} is ${esc(v)}">${esc(v)} <span class="fn">${c}</span></a>`).join("")}${more}</div></div>`;
   };
   const creditsOpen = !!document.querySelector("#gameBrowseBody .browse-credits[open]");
   $("#gameBrowseBody").innerHTML =
@@ -5046,6 +5066,19 @@ function renderGamePage(title){
 }
 $("#gameSort").addEventListener("change", renderGames);
 $("#gameBrowse").addEventListener("toggle", ()=>{ if($("#gameBrowse").open) renderBrowse(); });
+// "+N more" and "fewer" re-render the body in place. The panel's own <details> is never re-created, so
+// it stays open; folding a long group scrolls its heading back into view if it went above the nav.
+$("#gameBrowseBody").addEventListener("click", e=>{
+  const b = e.target.closest("[data-unfold],[data-fold]");
+  if(!b) return;
+  e.preventDefault();
+  const k = b.dataset.unfold || b.dataset.fold;
+  if(b.dataset.unfold) openBrowseGroups.add(k); else openBrowseGroups.delete(k);
+  renderBrowse();
+  const g = $("#gameBrowseBody").querySelector(`.browse-group[data-k="${CSS.escape(k)}"]`);
+  const top = g ? g.getBoundingClientRect().top : 0;
+  if(g && top < 70) window.scrollBy({top: top - 70, behavior: "instant"});
+});
 $("#gq").addEventListener("input", ()=>{
   history.replaceState(null, "", location.pathname + location.search + gamesHash($("#gq").value.trim()));
   renderGames();

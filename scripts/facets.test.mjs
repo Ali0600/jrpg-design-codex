@@ -16,10 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = readFileSync(join(ROOT, "JRPG_Design_Codex.html"), "utf8");
 const NAMES = ["BASE_GAMES", "BASE_MECHS", "MINIGAMES", "facetLookup", "canonFacet", "facetsOf", "parseGameQuery", "parseQuery", "withFacet", "withoutFacet", "buildGameQuery", "matchesFacets",
   "MECH_QUERY_KEYS", "MG_QUERY_KEYS", "matchesRowQuery", "exactTitlesOf", "relatedGames", "relatedScore",
-  "CHANGES", "expandIds", "gameChangeDates", "sortByLastChange", "groupRows"];
+  "CHANGES", "expandIds", "gameChangeDates", "sortByLastChange", "groupRows", "BROWSE_CAP", "browseSlice"];
 const { BASE_GAMES, BASE_MECHS, MINIGAMES, facetLookup, canonFacet, facetsOf, parseGameQuery, parseQuery, withFacet, withoutFacet, buildGameQuery, matchesFacets,
   MECH_QUERY_KEYS, MG_QUERY_KEYS, matchesRowQuery, exactTitlesOf, relatedGames, relatedScore,
-  CHANGES, expandIds, gameChangeDates, sortByLastChange, groupRows } =
+  CHANGES, expandIds, gameChangeDates, sortByLastChange, groupRows, BROWSE_CAP, browseSlice } =
   new Function(extractData(extractScript(HTML)) + `; return {${NAMES.join(", ")}};`)();
 
 const game = title => {
@@ -404,4 +404,34 @@ test("the Mechanics and Minigames tabs sort newest changes first, and Minigames 
   }
   const view = HTML.indexOf('id="view-minigames"'), next = HTML.indexOf("<section", view + 1), btn = HTML.indexOf('id="mgExpand"');
   assert.ok(view > 0 && btn > view && btn < next, "the Minigames tab has its own Expand all");
+});
+
+/* The Browse panel shows BROWSE_CAP values per kind, with the active one always among them. */
+const BROWSE_PAIRS = Array.from({ length: 12 }, (_, i) => [`v${i + 1}`, 12 - i]);
+const valuesOf = pairs => pairs.map(p => p[0]);
+
+test("browseSlice shows the first values in order up to the cap and counts the rest", () => {
+  const { shown, hidden } = browseSlice(BROWSE_PAIRS, 10, () => false);
+  assert.deepEqual(valuesOf(shown), valuesOf(BROWSE_PAIRS.slice(0, 10)));
+  assert.equal(hidden, 2);
+  assert.equal(browseSlice(BROWSE_PAIRS, 10).hidden, 2, "no isOn means nothing is active");
+});
+
+test("a value the list is filtered on stays shown past the cap, in its own position", () => {
+  const past = browseSlice(BROWSE_PAIRS, 10, v => v === "v12");
+  assert.deepEqual(valuesOf(past.shown), [...valuesOf(BROWSE_PAIRS.slice(0, 10)), "v12"]);
+  assert.equal(past.hidden, 1);
+  const inside = browseSlice(BROWSE_PAIRS, 10, v => v === "v3");
+  assert.equal(inside.shown.length, 10, "an active value inside the cap adds nothing");
+  assert.equal(inside.hidden, 2);
+});
+
+test("a group at or under the cap, or empty, comes back whole", () => {
+  assert.deepEqual(browseSlice(BROWSE_PAIRS.slice(0, 9), 10, () => false), { shown: BROWSE_PAIRS.slice(0, 9), hidden: 0 });
+  assert.equal(browseSlice(BROWSE_PAIRS.slice(0, 10), 10, () => false).hidden, 0);
+  assert.deepEqual(browseSlice([], 10, () => false), { shown: [], hidden: 0 });
+});
+
+test("the Browse cap is a whole number of at least ten", () => {
+  assert.ok(Number.isInteger(BROWSE_CAP) && BROWSE_CAP >= 10, `BROWSE_CAP is ${BROWSE_CAP}`);
 });
