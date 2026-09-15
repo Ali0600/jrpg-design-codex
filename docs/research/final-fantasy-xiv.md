@@ -22,13 +22,17 @@ so the rows' `refs` carry only the Final Fantasy Wiki and this digest carries bo
 
 `__gf.triage()` on 2026-09-14: 5 guides listed (1 Full Game Guides, 4 In-Depth Guides, none under other headings).
 
-| id | title | author | category | KB | score | decision |
-|---|---|---|---|---|---|---|
-| 71019 | Strategy Guide | SunsThirdStone | Full Game Guides | 99 | 2 | skipped — a general strategy guide; the two wikis agreed on all three minigames |
-| 68746 | Chocobo Guide | Beaurian | In-Depth Guides | 12 | 3 | skipped — the two wikis already agreed on the racing ranks |
-| 68530 | Crafting Guide | Dagon_Cain | In-Depth Guides | 186 | 8 | skipped — crafting, not these minigames |
-| 75473 | Music FAQ | Nanani | In-Depth Guides | 332 | 4 | skipped — a music FAQ |
-| 77656 | Stat Guide | metroidcomposite | In-Depth Guides | 115 | 4 | skipped — character stats |
+`__gf.pick()` on 2026-09-15 returns nothing: **the one Full Game Guide, SunsThirdStone's 71019, is HTML**, so the owner's
+rule reads no walkthrough for this game. The flags column comes from that day's listing, which still lists every guide in
+the table.
+
+| id | title | author | category | KB | score | decision | flags |
+|---|---|---|---|---|---|---|---|
+| 71019 | Strategy Guide | SunsThirdStone | Full Game Guides | 99 | 2 | skipped — a general strategy guide; the two wikis agreed on all three minigames | HTML |
+| 68746 | Chocobo Guide | Beaurian | In-Depth Guides | 12 | 3 | skipped — the two wikis already agreed on the racing ranks | HTML |
+| 68530 | Crafting Guide | Dagon_Cain | In-Depth Guides | 186 | 8 | skipped — crafting, not these minigames | Highest Rated · HTML |
+| 75473 | Music FAQ | Nanani | In-Depth Guides | 332 | 4 | skipped — a music FAQ | — |
+| 77656 | Stat Guide | metroidcomposite | In-Depth Guides | 115 | 4 | skipped — character stats | HTML |
 
 ## Mechanics candidates
 
@@ -96,3 +100,4 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo Racing (Final Fantasy XIV)] [wik
 
 ## Codex delta
 - g047–g049 (all three Final Fantasy XIV minigames) tabled and sourced in place on 2026-09-14.
+- 2026-09-15: the flags column added. `pick()` returns nothing because the one Full Game Guide is HTML, so no walkthrough is read and no row was edited.

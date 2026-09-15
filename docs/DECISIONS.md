@@ -45,9 +45,11 @@ an `HTML` flair (5 of The Witcher 3's 6 guides), and not every listing flags a M
 - **C: read no Full Game Guide when the star is HTML or absent.** The rule stays literal, and the
   item lists inside those walkthroughs go unread.
 
-**Status:** B `rejected — a paginated guide is read two pages deep`. C `rejected — the walkthrough
-is where the item lists are`. **Revisit hook:** `core.pick` in `scripts/gf_probe.js` is the one copy
-of the rule, and `scripts/digest_lint.mjs` imports it.
+**Status:** A `built — the rule and its linter landed on 2026-09-15, and all 25 older digests were
+brought under it the same day (18 read a pick; 7 listings have only HTML walkthroughs)`. B `rejected — a
+paginated guide is read two pages deep`. C `rejected — the walkthrough is where the item lists are`.
+**Revisit hook:** `core.pick` in `scripts/gf_probe.js` is the one copy of the rule, and
+`scripts/digest_lint.mjs` imports it.
 
 ## 2026-09-14 — What a game's "last update" means, for the Games tab's default sort
 

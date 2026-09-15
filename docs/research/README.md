@@ -75,6 +75,11 @@ fingerprint, `get_page_text` / `read_page` on a GameFAQs page (the consent dialo
    A listing can also file guides for other games (Yakuza: Like a Dragon's carries Super Hang-On and
    Virtua Fighter guides), which `pick()` cannot tell apart, so read a pick's opening lines before
    trusting it, and leave another game's guide out of the Triage table with a word in its summary.
+   A game's own page can file another release too (Final Fantasy IV's DS page picks a Super Nintendo
+   walkthrough): that pick is still read, and the digest says which rows it could not speak to.
+   A listing can flag several Full Game Guides *Most Recommended* (Final Fantasy VI flags seven), and
+   `pick()` takes the first listed. The linter runs the same pick over the Triage table's own order,
+   so a table sorted by score keeps listing order among the guides that tie, or it names a different one.
    `why` says what scored: In-Depth item/secret/minigame guides high, scripts and
    translations out, `toc first` on anything over 200KB.
    **Record the whole listing in the digest's `## Triage` table before reading anything**: every
