@@ -59,8 +59,9 @@ none, because it reads as verified.
   composer and the engine, come from its Wikipedia infobox. Its themes (time travel, airships),
   features (female protagonist, multiple endings) and awards come from the article's categories.
   The search takes the same filters as words (`theme:"time travel" platform:PC`) and a Browse
-  panel counts every value. Each value has one spelling, so GameFAQs' "Role-Playing" reads RPG
-  and SquareSoft, Squaresoft and Square are one studio. The Mechanics and Minigames searches take
+  panel counts every value, ten per kind at a glance and the rest a click away. Each value has
+  one spelling, so GameFAQs' "Role-Playing" reads RPG and SquareSoft, Squaresoft and Square are
+  one studio. The Mechanics and Minigames searches take
   the same words, answered through each row's game, plus `cat:`, `verb:`, `want:` and `table:no`
 - **Covers** — a box-art thumbnail beside every game. Each comes from Wikipedia at
   thumbnail size, with its source recorded and a Wikipedia link on the page
@@ -196,7 +197,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 103 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  205-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  209-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if

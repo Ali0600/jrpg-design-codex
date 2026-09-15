@@ -427,7 +427,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   from (`from`: "gf", "wp" or "row"): a card's one-line summary reads only the non-"wp" ones,
   and the page lists everything. `facetsOf` keeps one value per normalised spelling and Browse
   counts the same way, so a chip's number is always the number of games its link lists. Browse
-  is built only while it is open, and its credit groups show names on two or more games.
+  is built only while it is open, and its credit groups show names on two or more games. Each group
+  shows its `BROWSE_CAP` (10) most common values plus any value the list is filtered on, and a
+  `+N more` chip unfolds that one group in place (`browseSlice` in the data region; `openBrowseGroups`
+  in memory, never in `store`; the fork is in `docs/DECISIONS.md`).
   **`FACET_VOCAB`** folds spellings to one canonical name per table (`platform`, `genre`,
   `company` for developer and publisher, `series`): GameFAQs' "Role-Playing" is **RPG**,
   "Japanese-Style" **JRPG**, "Super Nintendo" **SNES**, and SquareSoft, Squaresoft and Square are
