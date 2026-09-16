@@ -31,7 +31,7 @@ line per chain.
 - Named monsters as landmarks · how · `Rare fiends roam each region as miniboss versions of the enemies around them`
 
 ### M020 — Mogstools / Moogle Emporium
-- The shop that has upgrades too · how · `Each clear raises your Emporium level, unlocking new stock`
+- The shop that has upgrades too · how · `each clear raises your Emporium level, unlocking new stock`
 
 ### M028 — Paintings → vista treasure
 - The world is the answer key · loop · `the WORLD is the answer key`

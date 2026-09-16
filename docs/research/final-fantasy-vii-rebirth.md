@@ -22,6 +22,8 @@ guide and Game8, with the wiki where it has the fact.
 | wiki | Final Fantasy VII Rebirth battle system | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Final_Fantasy_VII_Rebirth_battle_system |
 | wiki | Stagger (VII Rebirth); World Intel | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Stagger_(VII_Rebirth) |
 | web | Battle System, Pressure and Stagger, Synergy Skills, Synergy Abilities, World Intel, Protorelic Locations, Gilgamesh | Game8 | — | — | game8.co | — | https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System |
+| wiki | Moogle Intel; Chocobo Intel; Item Transmuter; Queen's Blood; Final Fantasy VII Rebirth | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Item_Transmuter |
+| web | Moogle Mischief, Chocobos, Crafting Recipes, What to Spend GP On, Romance, Chocobo Racing, Enemy Skill Materia, Combat Simulator, Limit Breaks, Johnny's Treasure Trove | Game8 | — | — | game8.co | — | https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/Combat-Simulator |
 
 Coverage 81141: a chaptered guide. The index page (6,171 chars; one grep, 6 hits) and four chapters: 3D Brawler
 (16,568 chars, 259 lines; one grep, 36 hits, then lines 126–259 read), Piano Recital (9,243 chars, 153 lines; one grep,
@@ -40,6 +42,11 @@ Coverage on 2026-09-16 for the combat and World Intel rows: no new GameFAQs page
 and content, not the battle system, so those twelve rows rest on the wiki — which does have `Final Fantasy VII Rebirth
 battle system`, `Stagger (VII Rebirth)` and `World Intel`, where it has no Rebirth pages at all for materia or weapons —
 and on Game8's battle, pressure and stagger, synergy skill, synergy ability, world intel, protorelic and Gilgamesh pages.
+
+Coverage 81141 on 2026-09-16 for the last thirteen rows: two more chapters. Johnny's Treasure Trove (4,279 chars, 113
+lines, 3 sections; one grep, then its 2,841-char section read) and Chocobo Gear (5,733 chars, 205 lines, 15 sections;
+one grep). Unread: the gear-set sections past Shinra Avian, each 300–430 chars. The author's collectible list stops at
+item 22 of 88; the chapter says it will be completed after the postgame.
 
 ## Triage
 
@@ -188,6 +195,99 @@ row: M019
 - Collecting the protorelics of all six regions makes a new Phenomenon Intel appear, leading to Gilgamesh Island [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
 - That fight also asks for every summon materia from the combat simulator, and for the summon bosses to be beaten again on the island [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
 
+### M020 Mogstools / Moogle Emporium
+pointers: [wiki:finalfantasy.fandom.com/Moogle Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Minigames-Moogle-Mischief] [gf:81141 §Way of the Fist, Uta v0.8.6]
+row: M020
+- Moogle Intel, also called Moogle Mischief, is a herding minigame: chase the mooglets back into the mogstool; one per region, two in Corel, and clearing it unlocks that region's moogle emporium [wiki:finalfantasy.fandom.com/Moogle Intel]
+- Clears pay Moogle Medals, the emporiums' currency, and the stock includes folio expansion items [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Minigames-Moogle-Mischief]
+- Each clear adds more items to the shop [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Uta lists manuscripts sold there by merchant rank: Way of the Fist Vol. I for 6 Moogle Medals at rank 1, Vol. IV for 6 at rank 5 [gf:81141 §Way of the Fist, Uta v0.8.6]
+
+### M021 Chocobo Intel (regional mounts with unique traversal)
+pointers: [wiki:finalfantasy.fandom.com/Chocobo Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Chocobos]
+row: M021
+- One Chocobo Intel per region: a stealth minigame in which Cloud sneaks past a group of chocobos to wrangle that region's own [wiki:finalfantasy.fandom.com/Chocobo Intel]
+- Each region's chocobo moves differently: mountain chocobos scale cliffs, jungle chocobos slide off branches and bounce off giant mushrooms, ocean chocobos jet high above water and hover down from drops, and some glide from marked spots [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Chocobos]
+
+### M022 Region-locked Data Points → Materia development
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel] [wiki:finalfantasy.fandom.com/World Intel]
+row: M022
+- Completing any type of World Intel pays regional Data Points, spent with Chadley to develop new materia [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Data Points are region-locked: those from the Grasslands do not carry to Junon, and each region has its own set of materia to develop [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- The wiki describes the same exchange: a region's completed objectives are traded with Chadley for materia [wiki:finalfantasy.fandom.com/World Intel]
+
+### M023 Item Transmuter (portable crafting)
+pointers: [wiki:finalfantasy.fandom.com/Item Transmuter] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materials-Crafting-Recipes-List]
+row: M023
+- The Item Transmuter crafts items, armour and accessories from combined materials, opened from the menu once Broden gives it to the party in Kalm in Chapter 2 [wiki:finalfantasy.fandom.com/Item Transmuter]
+- Recipes come two ways: transmuter XP, earned by crafting an item for the first time, and transmuter chips from Excavation Intel [wiki:finalfantasy.fandom.com/Item Transmuter]
+- Game8 advises crafting everything once to raise the crafting level quickly, since each level opens more to craft [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materials-Crafting-Recipes-List]
+
+### M024 Queen's Blood (collectible card game)
+pointers: [wiki:finalfantasy.fandom.com/Queen's Blood] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/447403] [gf:81141 §Queen's Blood Opponents, Uta v0.8.6]
+row: M024
+- The storyline: the Shadowblood Queen's spirit lives in a card that drains its holder, and Balmon's ghost sends Cloud after it and after the Emerald Witch's card [wiki:finalfantasy.fandom.com/Queen's Blood]
+- Costa del Sol has 3 easy puzzles, 5 advanced puzzles and 9 collection challenges, each paying the card it showcases [wiki:finalfantasy.fandom.com/Queen's Blood]
+- Wins against the ranked players across the world pay cards, and the rank ladder runs to the Shadowblood Queen herself (see g020) [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/447403] [gf:81141 §Queen's Blood Opponents, Uta v0.8.6]
+
+### M025 Gold Saucer & minigame economy (GP)
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/What-to-Spend-GP-On] [gf:81141 §Barret's Folio, Uta v0.8.6] [gf:81141 §Yuffie's Folio, Uta v0.8.6]
+row: M025
+- GP is earned from the Gold Saucer's minigames and spent at its exchanges, among other things on rare crafting materials [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/What-to-Spend-GP-On]
+- Manuscripts are sold there too, 100 GP each: Barret's Vol. III at the Speed Square exchange, Yuffie's Vol. II at Ghost Square [gf:81141 §Barret's Folio, Uta v0.8.6] [gf:81141 §Yuffie's Folio, Uta v0.8.6]
+- Other minigames pay manuscripts as prizes: Yuffie's Vol. III from the Musclehead Colosseum, Tifa's Vol. III from the Beast Battleground [gf:81141 §Yuffie's Folio, Uta v0.8.6] [gf:81141 §Way of the Fist, Uta v0.8.6]
+
+### M026 Bond / relationship system
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Romance] [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+row: M026
+- Dialogue choices at story beats, side quests, and Synergy Skills used with a character raise Cloud's relationship level with them [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Romance]
+- The Chapter 8 Gold Saucer date is with whoever has the highest relationship level at that point, so later choices can change the Chapter 12 partner [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Romance]
+- After the credits, the Extra Settings let a player pick the Gold Saucer companion for Chapters 8 and 12 directly [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+
+### M027 Chapter Select / Hard Mode NG+
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth] [gf:81141 §Weapon Level, Uta v0.8.6] [wiki:finalfantasy.fandom.com/Folio]
+row: M027
+- Clearing the game unlocks Chapter Select, keeping character progress, equipment, materia and items, and adds a permanent bonus to all AP gain [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+- Hard Mode fights every enemy at a much higher level, gives some bosses new abilities and patterns, and forbids consumable items [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+- About twenty manuscripts come only from Hard Mode and the legendary combat-simulator challenges, and weapon level 9 needs them [gf:81141 §Weapon Level, Uta v0.8.6] [wiki:finalfantasy.fandom.com/Folio]
+
+### M032 Chocobo Racing + Chocobo Gear
+pointers: [gf:81141 §Chocobo Gear, Uta v0.8.6] [gf:81141 §Shinra Avian Gear, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Minigames-Chocobo-Racing]
+row: M032
+- Most chocobo gear is bought with Golden Plumes at tack shops, and outside races it is purely cosmetic; some pieces come only from quests or races [gf:81141 §Chocobo Gear, Uta v0.8.6]
+- The Shinra Avian set costs 2 Golden Plumes a piece [gf:81141 §Shinra Avian Gear, Uta v0.8.6]
+- In races, certain gear carries a special skill, such as Recovery Dash; each chocobo has an innate one, such as Piko's Speed Burst, and the Mecha-Chocobo, the fastest, cannot wear gear at all [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Minigames-Chocobo-Racing]
+
+### M033 Enemy Skill Materia (blue magic)
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materia-Enemy-Skill] [gf:81141 §Command Materia, Uta v0.8.6] [wiki:finalfantasy.fandom.com/World Intel]
+row: M033
+- The materia comes from Biological Intel: Know Thine Enemy, a combat-simulator battle unlocked from the start [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materia-Enemy-Skill]
+- The later Biological Intel battles each need the previous region's classified foe beaten, enemies Assessed in a region and a star level on the materia: Blinded by Light asks for 10 of 10 in Junon at ★★, Breath of Life for 25 in Corel at ★★ [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materia-Enemy-Skill]
+- It teaches enemy techniques as abilities, Sonic Boom by default, and its level 2, at 50 AP, raises max HP by 5% [gf:81141 §Command Materia, Uta v0.8.6]
+- The classified foes' combat-simulator battles are where new Enemy Skill moves are learned [wiki:finalfantasy.fandom.com/World Intel]
+
+### M034 Chadley Combat Simulator (VR arena)
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Combat-Simulator] [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth] [gf:81141 §Weapon Level, Uta v0.8.6]
+row: M034
+- Simulator battles pay materia, accessories and manuscripts [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Combat-Simulator]
+- Brutal and Legendary add 15 more challenges, all automatically on Hard mode, some with further conditions such as assessing every enemy in a region [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Combat-Simulator]
+- Hard Mode forbids consumable items [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+- The legendary challenges share the post-Normal manuscripts with Hard Mode, which weapon level 9 needs [gf:81141 §Weapon Level, Uta v0.8.6]
+
+### M035 Limit Break level system
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Limit-Breaks] [wiki:finalfantasy.fandom.com/Folio]
+row: M035
+- The limit gauge, under the MP bar, fills from getting hit and from staggering enemies [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Limit-Breaks]
+- The limit breaks on offer depend on the character's Limit Level; Synergy Abilities such as Maelstrom Strike and Partners in Pain, and accessories such as the Expeditionary Medal, raise it [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Limit-Breaks]
+- Every character starts with two limit breaks, and the third is a folio core bought with SP [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Limit-Breaks] [wiki:finalfantasy.fandom.com/Folio]
+
+### M036 Johnny's Treasure Trove (collection display)
+pointers: [gf:81141 §Johnny's Treasure Trove, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Johnnys-Treasure-Trove]
+row: M036
+- The Saga of the Seaside Inn, offered in Chapter 7 and finishable from Chapter 9, gives Johnny a space for every collectible gathered; all 88 open a special chest [gf:81141 §Johnny's Treasure Trove, Uta v0.8.6]
+- Most come from high scores in minigames or perfect play in limited story segments [gf:81141 §Johnny's Treasure Trove, Uta v0.8.6]
+- They show in the renovated inn as plaques, trophies, figurines and models; the chest holds the One-Winged Angel sheet music, and donating everything earns the 7-Star Hotel gold trophy [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Johnnys-Treasure-Trove]
+
 ### M007 Party Level / Party EXP
 pointers: [wiki:finalfantasy.fandom.com/Folio] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees]
 row: M007
@@ -272,6 +372,13 @@ pointers: [gf:81141 §3D Brawler, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-
 - **The cores' colours.** The wiki calls synergy cores red and ability cores purple; Game8 calls the synergy icon orange [wiki:finalfantasy.fandom.com/Folio] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees]
 - **A four-stage protorelic chain, and a secret summon.** M019 claimed both. Game8's protorelic pages show a chain taken in order without naming a fixed length — Corel's third asks for the previous two — and the payoff is the Gilgamesh boss on Gilgamesh Island, not a summon; the row was corrected to what the sources say [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel-Protorelics] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
 - **A materials cache from a lifespring.** M014 claimed one. The wiki and Game8 give a lifespring Region Intel lore and, once a region's set is complete, its Excavation and Classified Intel; no source pays materials, and the clause was dropped [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- **Water-walking chocobos.** M021 listed water-walking; Game8 describes ocean chocobos jetting up above water and hovering down from drops, and the row now says so [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Chocobos]
+- **Queen's Blood cards from shops.** M024 said cards come from shops; this pass found cards won from players and from Costa del Sol's challenges, and dropped the shops [wiki:finalfantasy.fandom.com/Queen's Blood]
+- **Hidden affinity.** M026 called the relationship value hidden; Game8 has a section on checking relationship levels, and the word was dropped [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Romance]
+- **Golden Plume sources and race grades.** M032 said plumes come from repairing chocobo stops and wrangling, and that wins unlock higher grades; neither source says so, and both clauses were dropped [gf:81141 §Chocobo Gear, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Minigames-Chocobo-Racing]
+- **One Enemy Skill materia, seven skills, no MP cost.** M033 claimed all three; none was found and all were dropped [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Materia-Enemy-Skill] [gf:81141 §Command Materia, Uta v0.8.6]
+- **When Brutal and Legendary unlock.** The wiki has them unlocking once the main scenario is finished; Game8 says after beating Gilgamesh. M034 names neither. Its "full-party gauntlets and solo trials" and "each final Legendary Bout pays the last manuscript" were not found, and were dropped [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Combat-Simulator]
+- **Level 3 limit breaks gated at party level 9.** M035 claimed it; Game8 has the level 3 limit as a folio core bought with SP and names no party level, so the clause was dropped [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Limit-Breaks]
 - **Who else can play the piano.** Uta says Tifa, Aerith and Yuffie once all six songs are done; Game8 names Yuffie and Aerith [gf:81141 §Standard Songs, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/443879]
 
 ## Codex rows
@@ -283,6 +390,8 @@ pointers: [gf:81141 §3D Brawler, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-
 // had claims corrected against the sources. Logged in the 2026-09-16 entry as updated.
 // 2026-09-16: M008–M019 as well — the four combat rows and the eight World Intel rows, all sourced, with M009,
 // M011, M012, M014 and M019 sharpened or corrected. Logged in the same entry.
+// 2026-09-16: M020–M027 and M032–M036, the last thirteen, sourced too, with claims dropped from M021, M024, M026,
+// M032, M033, M034 and M035. Every Rebirth row now carries refs. Logged in the same entry.
 ```
 
 ## Codex delta
@@ -293,3 +402,5 @@ pointers: [gf:81141 §3D Brawler, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-
   rows. M009 gained the 160%% stagger figure, M012 the region-locked Data Points, M011 the backline; M014 lost a materials
   cache no source gives, and M019's four-stage chain and secret summon were corrected to the Gilgamesh Island boss.
   Rebirth's last 13 rows (M020–M027, M032–M036) wait for the third PR.
+- 2026-09-16: M020–M027 and M032–M036 sourced, completing Rebirth: all 32 mechanics rows and all 4 minigame rows carry refs.
+  Unsupported claims came out of seven rows (see Unverified); M036 gained the One-Winged Angel sheet and the 7-Star Hotel trophy.
