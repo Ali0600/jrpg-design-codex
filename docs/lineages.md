@@ -54,7 +54,7 @@ line per chain.
 ### M069 — Depths + Lightroots (mirrored map knowledge)
 - A second map · how · `A vast dark underworld mirrors the surface`
 
-### M078 — Unique monster hunts + guild payoff
+### M078 — Unique monster hunts (board tasks and guild hints)
 - Named monsters as landmarks · how · `Named unique monsters hide across every region`
 
 ### M080 — Timed hits + Live Mana
