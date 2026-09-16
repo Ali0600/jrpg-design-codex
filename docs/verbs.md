@@ -65,13 +65,13 @@ category and for every row the digest tagged.
 - Vista sketch · how · `it depicts a real location somewhere in the world. Travel there, identify the painted vantage point`
 
 ### M029 — Unmarked world density (every landmark pays off)
-- none · the brief names this the root of Visible but unreachable, but the row says every landmark you can see pays off, never that reaching one is the puzzle
+- none · the brief names this the root of Visible but unreachable, but the row describes what dungeons hold, never that reaching one is the puzzle
 
 ### M030 — Golden Seeds & Sacred Tears
 - none · visible landmarks the player simply walks to; nothing guards, gates or hides them
 
 ### M031 — Illusory walls & secret-behind-secret
-- Latent geometry · how · `Some walls are fake and hide rooms, sometimes chaining multiple layers deep`
+- Latent geometry · how · `Some walls are fake and hide rooms or paths, sometimes one behind another`
 
 ### M034 — Chadley Combat Simulator (VR arena)
 - Challenge gauntlet · how · `then endgame Brutal Challenges and Legendary Bouts`
