@@ -124,8 +124,7 @@ category and for every row the digest tagged.
 - Traded · how · `whose seeds are traded to Hestu for weapon/bow/shield inventory slots`
 
 ### M068 — Caves + Bubbulfrogs (layered cave economy)
-- Traded · how · `its gems trade with a traveling merchant for exclusive outfits and items`
-- The wanderer · how · `its gems trade with a traveling merchant for exclusive outfits and items`
+- Traded · how · `Koltin trades the gems for enemy masks and the Mystic Set`
 
 ### M069 — Depths + Lightroots (mirrored map knowledge)
 - A second layer · how · `A vast dark underworld mirrors the surface`
