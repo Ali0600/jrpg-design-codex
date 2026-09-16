@@ -21,6 +21,7 @@ g037–g041 are edited in place.
 | 13350 | Overdrive FAQ (grep only) | muni_shinobu | 1.01 | 07/31/2001 | In-Depth Guides | 5 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/13350 |
 | 19103 | Blitzball FAQ (grep only) | AlaskaFox | 1.2 | 09/04/2003 | In-Depth Guides | 294 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/19103 |
 | 18197 | Guide and Walkthrough | Split_Infinity | 1.8 | 10/17/2010 | Full Game Guides | 1867 | https://gamefaqs.gamespot.com/ps2/197344-final-fantasy-x/faqs/18197 |
+| wiki | Sphere Grid; Celestial Weapons; Al Bhed Primer; Blitzball (minigame); Monster Arena; Aeon (Final Fantasy X); Overdrive Mode | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Sphere_Grid |
 
 Coverage 15124: single page, 38,519 chars, 607 lines, 23 sections — one grep (the prizes, 10 hits) and a
 `lines()` read of the prize table (86–111). Unread: the monster data (10,229 chars) and the shop list
@@ -52,6 +53,11 @@ weapons' sigils) and 24420 (the chocobo trainer's four courses). Greps: Wakka's 
 lightning dodging and the Venus Sigil (23), the chocobo courses and the Sun Sigil (13), the butterfly game and the
 Saturn Sigil (69), and Remiem Temple (71). Largest unread: About Shops (43,406 chars), Rikku's Mix overdrive (36,468),
 Blitzball Techniques (25,505) and About Armor Abilities (24,520); the Remiem Temple section was not reached.
+
+Coverage 18197 on 2026-09-16, for the seven mechanics rows: greps for the Sphere Grid (56 hits), the primers (31), the
+Monster Arena (180), Overdrive modes (485), aeons (332), the Celestial keys (264) and Tech Copy (62), then `lines()` windows
+over 07.) What's Sphere Grid? (1094–1294), 17.) About Overdrive Modes (10701–10900), 34.) About Monster Arena (25898–26098)
+and 31.) About Blitzball (16353–16553). The largest parts of the guide stay unread, as before.
 
 ## Triage
 
@@ -183,7 +189,59 @@ comes from that day's listing, which still lists every guide in the table.
 
 ## Mechanics candidates
 
-None. This pass edits existing minigame rows only.
+The seven mechanics rows, sourced on 2026-09-16. No new rows: M037–M043 are edited in place.
+
+### M037 Sphere Grid
+pointers: [wiki:finalfantasy.fandom.com/Sphere Grid] [gf:18197 §07.) WHAT'S SPHERE GRID? ---> A836, Split_Infinity v1.8]
+row: M037
+- Battles pay AP, and enough AP pays a Sphere Level; past 101 Sphere Levels every further one costs 22,000 AP [wiki:finalfantasy.fandom.com/Sphere Grid]
+- A Sphere Level moves a character one new node forward, or up to four already-activated nodes back [gf:18197 §07.) WHAT'S SPHERE GRID? ---> A836, Split_Infinity v1.8]
+- Power spheres activate strength, defence and HP nodes, Mana spheres magic, magic defence and MP, Speed spheres agility, accuracy and evasion, Ability spheres skill, special and magic nodes; Lv.1 to Lv.4 Key Spheres remove the matching locks [wiki:finalfantasy.fandom.com/Sphere Grid] [gf:18197 §07.) WHAT'S SPHERE GRID? ---> A836, Split_Infinity v1.8]
+- The grid is divided into seven sections, one per character; the sections merge, so Key Spheres let a character take another's path, and Kimahri's central section connects to everyone's but Auron's [wiki:finalfantasy.fandom.com/Sphere Grid]
+- Return, Friend, Teleport and Warp spheres move a character across the board, and Clear Spheres, sold by the Monster Arena's owner once five of every fiend are caught, wipe stat nodes to be refilled [wiki:finalfantasy.fandom.com/Sphere Grid]
+
+### M038 Celestial Weapons + world challenges
+pointers: [wiki:finalfantasy.fandom.com/Celestial Weapons] [gf:14321 §V. Ultimate Weapons, Ceebs] [gf:18197 §KEY ITEMS - ITEM OVERVIEW, Split_Infinity v1.8]
+row: M038
+- A Celestial Weapon needs its crest and its sigil to unlock its auto-abilities; without them it has three empty slots and No AP in the first, and it cannot be customised [wiki:finalfantasy.fandom.com/Celestial Weapons]
+- The walkthrough's key items list the tokens: a Sun Crest after defeating Yunalesca, the Sun Sigil for a chocobo race time better than 0:00.0, and the Celestial Mirror, powered up at Macalania Woods, needed for the weapons at all [gf:18197 §KEY ITEMS - ITEM OVERVIEW, Split_Infinity v1.8]
+- The other keys come from 200 consecutive lightning dodges (Venus Sigil), the butterfly hunt (Saturn Sigil) and a blitzball league prize (Jupiter Sigil); see g037, g038 and g040 [gf:14321 §V. Ultimate Weapons, Ceebs]
+
+### M039 Al Bhed Primers (language collectible)
+pointers: [wiki:finalfantasy.fandom.com/Al Bhed Primer] [gf:18197 §KEY ITEMS - ITEM OVERVIEW, Split_Infinity v1.8]
+row: M039
+- Each Al Bhed Primer translates one letter of the enciphered Al Bhed language [wiki:finalfantasy.fandom.com/Al Bhed Primer]
+- The walkthrough lists them as key items, Al Bhed Primer I onward, with where each is found [gf:18197 §KEY ITEMS - ITEM OVERVIEW, Split_Infinity v1.8]
+- Speaking to Rin aboard the Fahrenheit with every primer collected pays 99 Underdog's Secrets [wiki:finalfantasy.fandom.com/Al Bhed Primer]
+
+### M040 Blitzball (full sub-game with its own RPG)
+pointers: [wiki:finalfantasy.fandom.com/Blitzball (minigame)] [gf:18197 §11) BLITZBALL TECHNIQUES, Split_Infinity v1.8] [gf:14321 §V. Ultimate Weapons, Ceebs]
+row: M040
+- Games are League, Tournament or Exhibition; prizes range from Megalixirs and Dark Matter to Wakka's Overdrives, whose reels alternate between tournament and league prizes [wiki:finalfantasy.fandom.com/Blitzball (minigame)]
+- Players gain experience from their actions and techniques, and most techniques are learned through Tech Copy [wiki:finalfantasy.fandom.com/Blitzball (minigame)]
+- The walkthrough's technique list gives the method: mark an opposing player who carries the technique before halftime, then copy it [gf:18197 §11) BLITZBALL TECHNIQUES, Split_Infinity v1.8]
+- Once all four of Wakka's reels are won, the Jupiter Sigil can come up as a random league grand prize [gf:14321 §V. Ultimate Weapons, Ceebs]
+
+### M041 Monster Arena (capture economy)
+pointers: [wiki:finalfantasy.fandom.com/Monster Arena] [gf:18197 §34.) ABOUT MONSTER ARENA, Split_Infinity v1.8]
+row: M041
+- The arena, in the Calm Lands, stores fiends caught with weapons carrying the Capture ability, sold only there; the monster directory has 13 areas [wiki:finalfantasy.fandom.com/Monster Arena]
+- A fiend is captured only if it is killed with a Capture weapon, and up to ten of each can be captured [gf:18197 §34.) ABOUT MONSTER ARENA, Split_Infinity v1.8]
+- Caught fiends can be fought for a fee; capturing every fiend of an area or of a genus breeds original creations, whose first fight is free, and the owner rewards each with special, often rare, items, among them the Nirvana, the Blossom Crown and the Mars Sigil [wiki:finalfantasy.fandom.com/Monster Arena]
+
+### M042 Aeons (summons that grow with you)
+pointers: [wiki:finalfantasy.fandom.com/Aeon (Final Fantasy X)] [gf:18197 §3K - TRIANGLE BUTTON MENU - HELP HEADING, Split_Infinity v1.8]
+row: M042
+- New aeons come with the story, from the Cloister of Trials at each temple; Anima, Yojimbo and the Magus Sisters are optional [wiki:finalfantasy.fandom.com/Aeon (Final Fantasy X)]
+- Aeons' stats rise naturally with Yuna's and with the number of battles the team fights, and spheres and the Aeon's Soul, from Belgemine, raise them further [wiki:finalfantasy.fandom.com/Aeon (Final Fantasy X)]
+- The walkthrough's menu guide covers the Attributes command, which raises an aeon's stats by spending items, and teaching abilities the same way; each aeon's screen shows its own special attack and Overdrive [gf:18197 §3K - TRIANGLE BUTTON MENU - HELP HEADING, Split_Infinity v1.8]
+
+### M043 Overdrive Modes (customizable trigger)
+pointers: [wiki:finalfantasy.fandom.com/Overdrive Mode] [gf:18197 §17.) ABOUT OVERDRIVE MODES, Split_Infinity v1.8]
+row: M043
+- Each character learns each non-Stoic mode individually, by meeting its condition a number of times that varies by character; one mode is set at a time, and switching does not reset the gauge [wiki:finalfantasy.fandom.com/Overdrive Mode]
+- The modes and conditions: Stoic when taking damage (available from the start), Warrior when damaging an enemy, Comrade when an ally takes damage, Healer when healing, Tactician on inflicting a status, Dancer on evading a physical attack, Victor when the party wins, Ally on getting a turn, among others [gf:18197 §17.) ABOUT OVERDRIVE MODES, Split_Infinity v1.8]
+- The counts differ per character: Healer takes 80 heals for Tidus, 60 for Yuna and 100 for Wakka; Warrior 150, 200 and 160; and no mode can be learned in the Monster Arena [gf:18197 §17.) ABOUT OVERDRIVE MODES, Split_Infinity v1.8]
 
 ## Minigame candidates
 
@@ -270,6 +328,9 @@ pointers: [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:15212 §3. Remiem Tem
 - The walkthrough ties the reels to battles as well: Attack Reels can be a tournament prize, Status Reels a league prize once Wakka has been in at least 250 battles against fiends, and Aurochs Reels a tournament prize after 450 [gf:18197 §4 - Wakka's Overdrive - Slots, Split_Infinity v1.8]
 
 ## Unverified or contradicted
+- **Blitzball scouting.** The wiki has players scouted from other teams and from free agents met in the field, with a scout level that rises; the walkthrough's greps found no second source, so M040 no longer claims it [wiki:finalfantasy.fandom.com/Blitzball (minigame)]
+- **An "Evader" Overdrive mode.** M043 named one; the walkthrough's list calls the evasion mode Dancer, charged by evading a physical attack, and the row now says so [gf:18197 §17.) ABOUT OVERDRIVE MODES, Split_Infinity v1.8]
+- **Spheres dropped by enemies.** M037 said enemies drop the typed spheres; the pages read describe what each sphere activates, not where they come from, and the clause was dropped [wiki:finalfantasy.fandom.com/Sphere Grid] [gf:18197 §07.) WHAT'S SPHERE GRID? ---> A836, Split_Infinity v1.8]
 - **What unlocks each reel.** PFriedman ties the Status Reels to Wakka's taking part in 250 battles and the Aurochs Reels to 450; the wiki gives only the alternating order [gf:15350 §(3) Character Overdrives, PFriedman v4.0] [wiki:finalfantasy.fandom.com/Wakka (Final Fantasy X party member)]. Split_Infinity's walkthrough, read on 2026-09-15, gives the same 250 and 450, so the counts now have two authors [gf:18197 §4 - Wakka's Overdrive - Slots, Split_Infinity v1.8]
 - **What the Catcher Chocobo's Turbo Ether takes.** Kotetsu and Ceebs pay it for a time of exactly 0:00.0; the walkthrough pays it for each later race that ties or beats the player's own record, and ties no prize to 0:00.0 but the missed Sun Sigil [gf:15212 §Q. I can't find the chocobo rider!, Kotetsu v1.0] [gf:14321 §VI. Frequently Asked Questions, Ceebs] [gf:18197 §III - Chocobo Trainer, Split_Infinity v1.8]
 - **Saturn or Jupiter.** The wiki says the butterfly game's final prize is the Saturn or the Jupiter Sigil depending on the game version; Ceebs names only the Saturn Sigil [wiki:finalfantasy.fandom.com/Butterfly Hunt] [gf:14321 §V. Ultimate Weapons, Ceebs]
@@ -285,3 +346,4 @@ pointers: [wiki:finalfantasy.fandom.com/Remiem Temple] [gf:15212 §3. Remiem Tem
 ## Codex delta
 - g037–g041 (all five Final Fantasy X minigames) tabled and sourced in place on 2026-09-14.
 - 2026-09-15: the Most Recommended walkthrough, 18197, read under the owner's rule. It agrees with g037's reels and Jupiter Sigil, g038's Venus Sigil, g039's four courses and Sun Sigil, and g040's Saturn Sigil, and those four rows cite it, logged in the 2026-09-15 entry. Its Remiem Temple section (g041) was not reached.
+- 2026-09-16: the seven mechanics rows, M037–M043, sourced from the walkthrough and the Final Fantasy Wiki. M039 was extended; the other six were rewritten, with M043's Evader mode corrected to Dancer and M040's scouting claim cut for want of a second source.

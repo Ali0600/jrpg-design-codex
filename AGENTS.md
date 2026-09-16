@@ -487,7 +487,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **77 of 294 mechanics and 60 of 103 minigames carry `refs`**, and every row without them
+  **84 of 294 mechanics and 60 of 103 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
   `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 24 carry `digest`)
