@@ -1170,13 +1170,16 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, /type:"Battle"/, 'type:"BoxArt"', "shot with a type outside SHOT_TYPES") },
   { name: "shot with an empty caption", expect: /caption is required/,
     apply: s => replaceFirst(s, /cap:"[^"]+"/, 'cap:""', "shot with an empty caption") },
-  // Both CONSTRUCT a refs field on M001 rather than editing one that may not exist. It
-  // lands as the row's last key; if M001 ever gains a real refs (nested braces), this
-  // pattern stops at the inner `}` and the sabotage fails LOUDLY as a parse error.
+  // Both mutate the FIRST ref in the file rather than constructing one on a row that has none.
+  // They used to build a refs field on M001 by matching a row with no inner `}`; the comment
+  // there predicted that a real refs on M001 would break the anchor LOUDLY. It did not: when the
+  // sources pass gave M001 refs on 2026-09-16 the pattern stopped at the inner `}`, injected
+  // somewhere harmless, and both checks silently stopped firing. BASE_MECHS precedes BASE_GAMES,
+  // so the first match is always a row's ref, never a game's `like` entry.
   { name: "ref with a non-https or unlisted host", expect: /refs .*not an allowed https host/,
-    apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"javascript:alert(1)",t:"x"}]}', "ref with an unlisted host") },
+    apply: s => replaceFirst(s, /u:"https:\/\/[^"]+",t:"/, 'u:"javascript:alert(1)",t:"', "ref with an unlisted host") },
   { name: "ref with an empty label", expect: /refs .*empty label/,
-    apply: s => replaceFirst(s, /(\{id:"M001",[^}]*)\}/, '$1,refs:[{u:"https://gamefaqs.gamespot.com/ps/1-x/faqs/1",t:""}]}', "ref with an empty label") },
+    apply: s => replaceFirst(s, /\{u:"https:\/\/[^"]+",t:"[^"]+"\}/, '{u:"https://gamefaqs.gamespot.com/ps/1-x/faqs/1",t:""}', "ref with an empty label") },
   // The script-owned game fields. Anchors are the literal forms game_rows.mjs writes
   // (bare keys, no spaces), so each lands on the first harvested row in the file.
   { name: "gf with a key outside the whitelist", expect: /gf: unknown key "blurb"/,
