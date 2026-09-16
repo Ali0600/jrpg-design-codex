@@ -43,7 +43,7 @@ line per chain.
 - A new verb reopens old ground · loop · `revisit old regions with new reach`
 
 ### M057 — Unique Monsters (named world bosses)
-- Named monsters as landmarks · how · `Named elite monsters with bespoke titles roam fixed spots`
+- Named monsters as landmarks · how · `Unique Monsters carry their own names and stand at fixed spots`
 
 ### M064 — Monster mounts (enemies as traversal keys)
 - A new verb reopens old ground · loop · `previously teasing ledges/cracks open`

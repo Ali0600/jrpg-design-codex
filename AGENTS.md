@@ -303,7 +303,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
   (like CATS). Mechanics carry an optional `verbs:[...]`; **86 of 294 rows are tagged**
-  (105 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
+  (104 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
   writer of `verbs`, and the validator holds the page and the ledger equal, so a tag cannot
@@ -487,10 +487,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **91 of 294 mechanics and 60 of 103 minigames carry `refs`**, and every row without them
+  **98 of 294 mechanics and 60 of 103 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
-  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 25 carry `digest`)
+  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 26 carry `digest`)
   — `gf`, `cover`, `wp`, `wd`, `infobox`, `wpcats` and `digest` on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
   written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
   writer replace a line and copy every other line of the row byte for byte. `gf` is the

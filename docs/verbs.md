@@ -96,17 +96,16 @@ category and for every row the digest tagged.
 - none · leisure activities raise combat stats; nothing is found
 
 ### M051 — Exploration EXP (discovering places levels you)
-- none · discovery pays EXP directly; the row names no way the places are found, guarded or gated
+- none · discovery pays Bonus EXP; the row names no way the places are found, guarded or gated
 
 ### M052 — Hero Quests (people are unlockables)
-- none · heroes are found by markers and questlines; recruiting one changes the party, not the world
+- none · heroes come through their Hero Quests; recruiting one changes the party, not the world
 
 ### M054 — Traversal skills taught by Heroes
 - Tool-gated · how · `Terrain throughout the world is gated by them`
-- Visible but unreachable · how · `containers and paths visibly tease locked routes`
 
 ### M057 — Unique Monsters (named world bosses)
-- Guarded · how · `Named elite monsters with bespoke titles roam fixed spots`
+- Guarded · how · `Unique Monsters carry their own names and stand at fixed spots`
 
 ### M059 — Recipe books hidden in the world
 - none · recipes are found items; the player applies nothing they read
