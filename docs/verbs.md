@@ -49,14 +49,14 @@ category and for every row the digest tagged.
 - none · a regional quest chain feeding one global prize; the row names no way the relics are found
 
 ### M020 — Mogstools / Moogle Emporium
-- Shop stock · how · `Each clear raises your Emporium level, unlocking new stock`
+- Shop stock · how · `each clear raises your Emporium level, unlocking new stock`
 
 ### M021 — Chocobo Intel (regional mounts with unique traversal)
-- Tool-gated · how · `a region-specific traversal power (gliding, wall-climbing, water-walking) required to reach that region's secrets`
+- Tool-gated · how · `a region-specific traversal power (gliding, cliff-climbing, jetting up off water, sliding along branches) that reaches places the others cannot`
 - Visible but unreachable · loop · `previously visible-but-unreachable places open up`
 
 ### M024 — Queen's Blood (collectible card game)
-- none · cards come from shops, quests and opponents, but the row names no rotating stock or guarded prize
+- none · cards come from opponents and Costa del Sol's challenges, but the row names no rotating stock or guarded prize
 
 ### M025 — Gold Saucer & minigame economy (GP)
 - none · a hub of minigames paying a dedicated currency; nothing escalates, hides or rotates
@@ -74,7 +74,7 @@ category and for every row the digest tagged.
 - Latent geometry · how · `Some walls are fake and hide rooms, sometimes chaining multiple layers deep`
 
 ### M034 — Chadley Combat Simulator (VR arena)
-- Challenge gauntlet · how · `endgame Brutal Challenges (full-party gauntlets) and Legendary Bouts (solo trials)`
+- Challenge gauntlet · how · `then endgame Brutal Challenges and Legendary Bouts`
 
 ### M038 — Celestial Weapons + world challenges
 - none · each weapon's keys hide behind a spread of minigames; the row names no arena ladder, guard or tool
