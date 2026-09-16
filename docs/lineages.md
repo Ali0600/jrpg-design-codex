@@ -58,7 +58,7 @@ line per chain.
 - Named monsters as landmarks · how · `Named unique monsters hide across every region`
 
 ### M080 — Timed hits + Live Mana
-- The timing lineage · how · `Pressing attack at the moment of impact deals bonus damage and feeds resources`
+- The timing lineage · how · `Pressing the button at the moment an attack lands adds bonus damage`
 
 ### M082 — Rainbow Conches → tiered trade-in
 - A collection you cash in with someone · how · `handing them to a collector NPC pays out escalating reward tiers`

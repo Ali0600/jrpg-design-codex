@@ -148,7 +148,7 @@ category and for every row the digest tagged.
 - none · found plans and recruits build a home base; no one is helped and nothing outside the base changes
 
 ### M084 — Falcon-Eyed Parrot (earned completion tracker)
-- Mastery reveal · how · `A relic earned via conch trade-ins adds a parrot to the world map that reports which collectibles remain`
+- Mastery reveal · how · `A relic earned via conch trade-ins puts a treasure-hunting parrot on the Vespertine, which hints at collectibles left to find`
 
 ### M085 — Solstice Shrines + day/night as a verb
 - Latent geometry · loop · `Use your unique power on the world itself → environments reconfigure`
