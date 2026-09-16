@@ -176,6 +176,9 @@ any later duplicate.
 **Status:** B `rejected — the owner preferred the batch order`. C `rejected — it would leave about
 140 rows unsourced`. **Revisit hook:** none; the pass runs to the end.
 
+**Built:** batch 1, the original nine games (M001–M085), landed on 2026-09-16 as #83–#93. Batch 2, the
+PS1 Squaresoft/Enix catalog and The Witcher 3, is next.
+
 ## 2026-09-14 — Where the UI Gallery's screenshots come from, now that Fandom blocks scripts
 
 **Fork:** `scripts/fetch_ui_shots.py` took every gallery image from a game's Fandom wiki. On

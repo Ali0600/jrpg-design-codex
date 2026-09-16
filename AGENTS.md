@@ -181,6 +181,18 @@ backup; the HTML file is the source of truth and is more up to date.
   from its categories (`wpcats`, picked by the page's `CATEGORY_FACETS`), and every row carries
   its Wikidata id (`wd`). The same day's audit of unused research data offered three more
   options; the owner declined them on 2026-09-14 (recorded as rejected in `docs/DECISIONS.md`).
+  Plus the **sources pass, batch 1** (2026-09-16, PRs #83–#93): the original nine games' 85 mechanics
+  rows (M001–M085) were each checked against two sources and given `refs`, with one digest per game.
+  Each row was rewritten in place to what its sources support. Claims no second source backed were cut
+  and recorded in the digest's Unverified section: Elden Ring's "no quest markers", Xenoblade 3's 250%
+  Unique Monster EXP (the wiki gives it to Elite Monsters), Dragon Quest XI's mounts guarding treasure,
+  Chained Echoes' deals naming where their loot drops. Two rows lost a discovery-verb tag whose quote no
+  source supported (M054 *Visible but unreachable*, M068 *The wanderer*), and Chained Echoes' M073 and
+  M078 were renamed. Where a game's wiki and Game8 ran thin, the second source was a GameFAQs guide
+  (Dragon Quest XI, Persona 5 Royal, Tears of the Kingdom's counts), or Game Rant, TheGamer and Steam
+  Community guides (Chained Echoes, Sea of Stars). Those three hosts are outside `REF_HOSTS`, so they
+  are cited in the digests only, and Chained Echoes' M075–M077 render a single link. Batch 2, the PS1
+  Squaresoft/Enix catalog and The Witcher 3, is next.
 - **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
