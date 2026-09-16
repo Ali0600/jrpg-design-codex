@@ -114,7 +114,7 @@ category and for every row the digest tagged.
 - A second layer · how · `unlock quests inside 2D retro recreations of past Dragon Quest games`
 
 ### M064 — Monster mounts (enemies as traversal keys)
-- Tool-gated · how · `each needed to reach specific treasures in that zone`
+- Tool-gated · how · `each is needed to reach specific places in that zone`
 - Visible but unreachable · loop · `previously teasing ledges/cracks open`
 
 ### M065 — Shrines → Lights of Blessing economy
