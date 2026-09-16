@@ -136,9 +136,9 @@ category and for every row the digest tagged.
 - none · an achievements board that pays for discoveries rather than hiding any
 
 ### M076 — Sky Armor (mechs as traversal + second combat layer)
-- Tool-gated · how · `gains a flying mech: fast overworld traversal, access to new areas`
+- Tool-gated · how · `fly across gaps into whole areas that are Sky Armor territory`
 
-### M078 — Unique monster hunts + guild payoff
+### M078 — Unique monster hunts (board tasks and guild hints)
 - Guarded · how · `Named unique monsters hide across every region`
 
 ### M082 — Rainbow Conches → tiered trade-in
