@@ -243,5 +243,6 @@ pointers: [wiki:finalfantasy.fandom.com/Auction House (Final Fantasy VI)] [web:w
 
 ## Codex delta
 - g005–g008 (all four Final Fantasy VI minigames) sourced in place on 2026-09-14; the opera (g005) pays no prize and has no table.
-- 2026-09-15: the Most Recommended walkthrough, 20665, read under the owner's rule. It agrees with g007's banquet rewards and g008's two esper prices, which now cite it. It also agrees with g006's Shadow wager, but g006 is already named in the 2026-09-15 entry, so its citation waits for a later day.
+- 2026-09-15: the Most Recommended walkthrough, 20665, read under the owner's rule. It agrees with g007's banquet rewards and g008's two esper prices, which now cite it. It also agrees with g006's Shadow wager, but g006 was already named in the 2026-09-15 entry, so its citation waited for a later day.
+- 2026-09-16: g006 now cites 20665 for the Shadow wager, logged in that day's entry.
 - g081 was the same coliseum, from the popular-classics batch. On 2026-09-15 it was retired into g006, which took its lesson (preparation is the whole play); the id is never reused.
