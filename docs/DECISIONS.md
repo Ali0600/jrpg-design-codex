@@ -14,8 +14,8 @@ rejected options still offer.
   `scripts/splice_rows.mjs` (placeholder ids bind rows to digest candidates; dry run by
   default; 18 checks, each mutation-proven).
 - **An at-least-three gate on discovery verbs** (from the verb-evidence fork, 2026-09-13) —
-  revisit hook: once research adds rows whose own text brings *The fleeing rare* (1 today)
-  and *Vista sketch* (2) to three mechanics each, add the rule to `validate()` beside the
+  revisit hook: once research adds rows whose own text brings *The fleeing rare* (1 today),
+  *Vista sketch* (2) and *The wanderer* (2 since 2026-09-16) to three mechanics each, add the rule to `validate()` beside the
   ledger checks, with one sabotage that inserts an unused verb into `VERBS`.
 - **Wikidata ids for facets** (from the facet-vocabulary fork, 2026-09-13) — revisit hook:
   every row carries its `wd` since 2026-09-13, so what remains is fetching each item's platform
