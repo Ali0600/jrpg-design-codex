@@ -479,3 +479,19 @@ The data now ships `want:""` and `rating:0` on every row, and the validator refu
 **Takeaway:** ship user-decision fields empty and gate that they stay empty; put an inference in a
 field named for what it is, and never quote a stored choice back as someone's preference without
 knowing who wrote it.
+
+## A sabotage anchored on a field's absence rots the day the field arrives
+A mutation test that BUILDS the fault it wants to catch — by matching a shape that exists only
+while some field is missing — stops testing anything once that field exists, and it does not
+necessarily say so.
+
+**Why it came up:** two validator sabotages injected a `refs` field into M001 with the pattern
+`{id:"M001",[^}]*}`, which matches only while the row has no nested braces. The comment above them
+stated that a real `refs` on M001 would break the anchor LOUDLY, as a parse error. On 2026-09-16 the
+sources pass gave M001 its refs; the pattern stopped at the inner brace, the injected text landed
+somewhere harmless, and both checks passed while proving nothing. What caught it was `--selftest`
+counting the checks that fired: "2 check(s) did not fire — the gate is weaker than it looks".
+
+**Takeaway:** mutate what the data HAS rather than what it lacks, and trust a mutation suite only as
+far as its count of checks that actually fired — a prediction in a comment about how an anchor will
+fail is itself untested.
