@@ -19,6 +19,9 @@ guide and Game8, with the wiki where it has the fact.
 | web | 3D Brawler, Piano, Fort Condor and Queen's Blood player pages | Game8 | — | — | game8.co | — | https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/445507 |
 | wiki | Folio | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Folio |
 | web | Folio Skill Trees, Materia, Best Materia, Weapon Abilities and Proficiency Bonuses | Game8 | — | — | game8.co | — | https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees |
+| wiki | Final Fantasy VII Rebirth battle system | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Final_Fantasy_VII_Rebirth_battle_system |
+| wiki | Stagger (VII Rebirth); World Intel | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Stagger_(VII_Rebirth) |
+| web | Battle System, Pressure and Stagger, Synergy Skills, Synergy Abilities, World Intel, Protorelic Locations, Gilgamesh | Game8 | — | — | game8.co | — | https://game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System |
 
 Coverage 81141: a chaptered guide. The index page (6,171 chars; one grep, 6 hits) and four chapters: 3D Brawler
 (16,568 chars, 259 lines; one grep, 36 hits, then lines 126–259 read), Piano Recital (9,243 chars, 153 lines; one grep,
@@ -32,6 +35,11 @@ sections; one grep, 28 hits). Weapons (76,736 chars, 1,679 lines, 63 sections; o
 and the Weapon Skills section read). Folios & Manuscripts (4,664 chars, 137 lines, 13 sections; one grep). Unread:
 the 49 individual weapon sections of the Weapons chapter, roughly 1,300–1,600 chars each, and the per-character folio
 tables, which the author has not written yet. The chapter slug `folios-manuscripts` 404s; it is `folios-and-manuscripts`.
+
+Coverage on 2026-09-16 for the combat and World Intel rows: no new GameFAQs pages. Uta's guide documents equipment
+and content, not the battle system, so those twelve rows rest on the wiki — which does have `Final Fantasy VII Rebirth
+battle system`, `Stagger (VII Rebirth)` and `World Intel`, where it has no Rebirth pages at all for materia or weapons —
+and on Game8's battle, pressure and stagger, synergy skill, synergy ability, world intel, protorelic and Gilgamesh pages.
 
 ## Triage
 
@@ -91,6 +99,94 @@ row: M006
 - A manuscript grants +10 SP to the character it names [gf:81141 §Weapon Level, Uta v0.8.6]
 - Six per character below Hard Mode, with about twenty more from Hard Mode and the legendary combat-simulator challenges, so a folio cannot be filled without Hard Mode [gf:81141 §Weapon Level, Uta v0.8.6] [wiki:finalfantasy.fandom.com/Folio]
 - Uta's chapter names each volume's source: quest rewards, the Moogle Emporium at 6 Moogle Medals and a merchant rank, the Gold Saucer's GP exchanges at 100 GP, and colosseum or battleground prizes [gf:81141 §Folios & Manuscripts, Uta v0.8.6]
+
+### M008 ATB Hybrid Combat
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System]
+row: M008
+- Real-time combat fused with ATB: each party member starts with two gauges, filled by attacking and by blocking, and spent on items, abilities and spells [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System]
+- Opening the commands menu enters Tactical Mode, where time is slowed and ATB can be spent; the commands are Abilities, Magic, Item, Summon and Limit [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system]
+- Most abilities cost one charge, some two, and an interrupted cast loses the charge anyway [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system]
+- The post-game Extra Settings let a player reduce Tactical Mode's slowdown, which is the slowdown named as a setting [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth]
+
+### M009 Pressure & Stagger
+pointers: [wiki:finalfantasy.fandom.com/Stagger (VII Rebirth)] [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/How-to-Pressure-and-Stagger-Enemies]
+row: M009
+- Every enemy has its own means of being pressured, and a pressured enemy's stagger gauge fills significantly quicker [wiki:finalfantasy.fandom.com/Stagger (VII Rebirth)]
+- A staggered enemy is stunned and takes increased damage, beginning at 160% [wiki:finalfantasy.fandom.com/Stagger (VII Rebirth)]
+- Assess, one ATB charge, prints the pressure strategy as yellow text under the enemy's description, and the page can be reopened later without re-scanning [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/How-to-Pressure-and-Stagger-Enemies]
+- Bosses most notably carry discrete body parts with their own health bars; crippling one pressures the enemy and can stop it using certain abilities [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system]
+
+### M010 Synergy Skills & Abilities
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Skills] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Abilities]
+row: M010
+- Synergy skills are two-character team-ups that cost no ATB charge, and using one raises ATB for both characters involved [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Skills]
+- They need no synergy charge either, and are held on a button rather than chosen from the commands menu [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Skills]
+- A synergy ability is the other half: the character's synergy gauge, five segments under their name, fills only by using attacks that consume ATB [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Abilities]
+- Each carries a bonus effect, among them a temporary three-charge ATB gauge and temporary unlimited MP [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees-Synergy-Abilities]
+
+### M011 Switchable 3-character party
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System]
+row: M011
+- The player controls one of up to three frontliners and can switch between them; Rebirth adds a backline that cannot be controlled [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system]
+- Switching is encouraged mechanically: it is the most efficient way to build ATB across the party and to use more synergy abilities [wiki:finalfantasy.fandom.com/Final Fantasy VII Rebirth battle system]
+- Characters are switched on the directional pad, and each has its own abilities and fighting style [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Battle-System]
+
+### M012 World Intel (umbrella checklist)
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M012
+- The categories are towers (Activation), lifesprings (Expedition), fiend hunts, sanctuaries (Divine), digs (Excavation), moogles, protorelics (Phenomenon), classified bosses and chocobos [wiki:finalfantasy.fandom.com/World Intel]
+- Completing any type pays regional Data Points, the currency for developing new materia with Chadley [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Data Points are region-locked: those earned in the Grasslands do not carry to Junon, and each region develops its own materia [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- World Intel also pays Party EXP, which is what raises party level [wiki:finalfantasy.fandom.com/Folio]
+
+### M013 Remnawave Towers
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M013
+- Towers reveal nearby intel objectives on the map and serve as fast-travel points [wiki:finalfantasy.fandom.com/World Intel]
+- They are typically guarded: enemies at the base must be beaten before the lever is pulled [wiki:finalfantasy.fandom.com/World Intel]
+- Activating the first tower, after the Chapter 2 chocobo ranch, is what unlocks World Intel [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+
+### M014 Lifesprings + Springseeker Owls
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M014
+- Owls, a different colour per region, alert the player to a lifespring's vicinity [wiki:finalfantasy.fandom.com/World Intel]
+- Finding one unlocks Region Intel: readable lore about the area and its points of interest [wiki:finalfantasy.fandom.com/World Intel]
+- Scanning every lifespring in a region unlocks all of that region's Excavation and Classified Intel [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+
+### M015 Fiend Intel (elite hunts with bonus objectives)
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M015
+- Fiend Intel battles are minibosses against rare fiends, often harder versions of the enemies around them [wiki:finalfantasy.fandom.com/World Intel]
+- Each battle carries three objectives, and fulfilling them is how the fight pays the most [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Beating one unlocks its battle in Chadley's combat simulator, and pays further intel and party EXP [wiki:finalfantasy.fandom.com/World Intel]
+
+### M016 Classified Intel (regional secret boss)
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M016
+- Each region has a single Classified Intel: a boss battle against a more powerful fiend [wiki:finalfantasy.fandom.com/World Intel]
+- It becomes available once that region's Expedition Intel — its lifesprings — are done [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Defeating it unlocks a combat-simulator battle where new Enemy Skill moves can be learned, and pays rewards found nowhere else [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+
+### M017 Summon Sanctuaries (Divine Intel)
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M017
+- Divine Intel is finding the sanctuaries of the deity behind that region's summoning materia [wiki:finalfantasy.fandom.com/World Intel]
+- Solving a sanctuary offers lower difficulties for that summon's fight in the combat simulator [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+- Completing all three sanctuaries of a summon grows its materia to a maximum of ★4 on its own, unlocking new abilities for it [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+
+### M018 Excavation Intel (chocobo digging)
+pointers: [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
+row: M018
+- Excavation Intel marks spots where a chocobo can dig for treasure [wiki:finalfantasy.fandom.com/World Intel]
+- Unlike ordinary hidden treasure, an excavation pays Transmuter Chips, which unlock crafting recipes for the Item Transmuter [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel] [wiki:finalfantasy.fandom.com/World Intel]
+
+### M019 Protorelic questlines
+pointers: [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel-Protorelics] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh] [wiki:finalfantasy.fandom.com/World Intel]
+row: M019
+- Protorelics, filed as Phenomenon Intel, are short quests unique to each region, taken in order: completing one unlocks the next [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel-Protorelics]
+- They are tied to a secret boss, Gilgamesh, and further a subplot across the regions [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel-Protorelics] [wiki:finalfantasy.fandom.com/World Intel]
+- Collecting the protorelics of all six regions makes a new Phenomenon Intel appear, leading to Gilgamesh Island [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
+- That fight also asks for every summon materia from the combat simulator, and for the summon bosses to be beaten again on the island [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
 
 ### M007 Party Level / Party EXP
 pointers: [wiki:finalfantasy.fandom.com/Folio] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees]
@@ -174,6 +270,8 @@ pointers: [gf:81141 §3D Brawler, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-
 - **Weapon levels granting extra materia slots.** M002 claimed it. Uta's weapon chapter gives a level stat boosts and Weapon Skill slots only, so the clause was dropped [gf:81141 §Weapon Level, Uta v0.8.6] [gf:81141 §Weapon Skills, Uta v0.8.6]
 - **Party level from pooled SP.** M005 claimed the party's combined SP set party level; both the wiki and Game8 make it a Party EXP track, and the row was corrected [wiki:finalfantasy.fandom.com/Folio] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees]
 - **The cores' colours.** The wiki calls synergy cores red and ability cores purple; Game8 calls the synergy icon orange [wiki:finalfantasy.fandom.com/Folio] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Skill-Trees]
+- **A four-stage protorelic chain, and a secret summon.** M019 claimed both. Game8's protorelic pages show a chain taken in order without naming a fixed length — Corel's third asks for the previous two — and the payoff is the Gilgamesh boss on Gilgamesh Island, not a summon; the row was corrected to what the sources say [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel-Protorelics] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/Bosses-Gilgamesh]
+- **A materials cache from a lifespring.** M014 claimed one. The wiki and Game8 give a lifespring Region Intel lore and, once a region's set is complete, its Excavation and Classified Intel; no source pays materials, and the clause was dropped [wiki:finalfantasy.fandom.com/World Intel] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/World-Intel]
 - **Who else can play the piano.** Uta says Tifa, Aerith and Yuffie once all six songs are done; Game8 names Yuffie and Aerith [gf:81141 §Standard Songs, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-VII-Rebirth/archives/443879]
 
 ## Codex rows
@@ -183,9 +281,15 @@ pointers: [gf:81141 §3D Brawler, Uta v0.8.6] [web:game8.co/games/Final-Fantasy-
 // and g022's and g023's reward lines were corrected. Logged in CHANGES as updated.
 // 2026-09-16: M001–M007 edited in place too — all seven gained `refs`, and M002, M004, M005, M006 and M007
 // had claims corrected against the sources. Logged in the 2026-09-16 entry as updated.
+// 2026-09-16: M008–M019 as well — the four combat rows and the eight World Intel rows, all sourced, with M009,
+// M011, M012, M014 and M019 sharpened or corrected. Logged in the same entry.
 ```
 
 ## Codex delta
 - g020–g023 (all four Final Fantasy VII Rebirth minigames) sourced in place on 2026-09-14; Fort Condor (g022) has no item table.
 - 2026-09-16: M001–M007, the progression cluster, sourced. M001 and M003 stood as written; M002, M004, M005, M006 and M007
-  were corrected. The remaining 25 Rebirth rows (M008–M027, M032–M036) wait for the next PRs of batch 1.
+  were corrected.
+- 2026-09-16: M008–M019 sourced as well — ATB, pressure and stagger, synergy, party switching, and the eight World Intel
+  rows. M009 gained the 160%% stagger figure, M012 the region-locked Data Points, M011 the backline; M014 lost a materials
+  cache no source gives, and M019's four-stage chain and secret summon were corrected to the Gilgamesh Island boss.
+  Rebirth's last 13 rows (M020–M027, M032–M036) wait for the third PR.

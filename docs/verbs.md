@@ -28,22 +28,22 @@ category and for every row the digest tagged.
 - none · a payout spine shared by every activity type; the row names how exploring pays, not how anything is found
 
 ### M013 — Remnawave Towers
-- Guarded · how · `Climbable towers (guarded by enemies)`
+- Guarded · how · `Climbable towers, usually guarded by enemies at the base`
 
 ### M014 — Lifesprings + Springseeker Owls
 - none · glowing owls lead the player by sight to a hidden spring, and no verb names following a creature
 
 ### M015 — Fiend Intel (elite hunts with bonus objectives)
-- Guarded · how · `Rare elite monster variants roam the overworld`
+- Guarded · how · `Rare fiends roam each region as miniboss versions of the enemies`
 
 ### M016 — Classified Intel (regional secret boss)
-- Guarded · how · `reveals a hidden legendary monster. It drops materials found nowhere else`
+- Guarded · how · `one boss fight against a far stronger fiend, paying rewards found nowhere else`
 
 ### M017 — Summon Sanctuaries (Divine Intel)
-- Mastery reveal · how · `levels up the summon materia — finding all 3 maxes it at ★4 with a new ability`
+- Mastery reveal · how · `clearing all three grows the summon's materia to ★4 on its own, with new abilities`
 
 ### M018 — Excavation Intel (chocobo digging)
-- Heard, not seen · how · `ride a chocobo that sniffs out buried treasure`
+- Heard, not seen · how · `where your chocobo sniffs out buried treasure`
 
 ### M019 — Protorelic questlines
 - none · a regional quest chain feeding one global prize; the row names no way the relics are found

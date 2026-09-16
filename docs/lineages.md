@@ -28,7 +28,7 @@ quoted for the chain it fails. Entries run in id order, and a mechanic in two ch
 line per chain.
 
 ### M015 — Fiend Intel (elite hunts with bonus objectives)
-- Named monsters as landmarks · how · `Rare elite monster variants roam the overworld`
+- Named monsters as landmarks · how · `Rare fiends roam each region as miniboss versions of the enemies around them`
 
 ### M020 — Mogstools / Moogle Emporium
 - The shop that has upgrades too · how · `Each clear raises your Emporium level, unlocking new stock`
