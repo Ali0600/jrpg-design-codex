@@ -177,7 +177,7 @@ category and for every row the digest tagged.
 - none · the player builds the map by placing found artifacts, a shape none of the 15 verbs names
 
 ### M120 — Bincho rescue (town rebuilt person by person)
-- Consequence · how · `Each rescued citizen returns to town and reopens something`
+- Consequence · how · `Each one freed returns to the castle to help`
 
 ### M122 — Shard hunting (exploration assembles the world)
 - A second layer · how · `materialize entire new islands (in the past), whose stories then restore those islands in the present`
