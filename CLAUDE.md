@@ -191,8 +191,18 @@ backup; the HTML file is the source of truth and is more up to date.
   M078 were renamed. Where a game's wiki and Game8 ran thin, the second source was a GameFAQs guide
   (Dragon Quest XI, Persona 5 Royal, Tears of the Kingdom's counts), or Game Rant, TheGamer and Steam
   Community guides (Chained Echoes, Sea of Stars). Those three hosts are outside `REF_HOSTS`, so they
-  are cited in the digests only, and Chained Echoes' M075–M077 render a single link. Batch 2, the PS1
-  Squaresoft/Enix catalog and The Witcher 3, is next.
+  are cited in the digests only, and Chained Echoes' M075–M077 render a single link.
+  Plus the **sources pass, batch 2** (2026-09-17, PRs #94–#101): the PS1 Squaresoft/Enix catalog and The Witcher 3's
+  Gwent, 43 mechanics rows (M086–M114, M119–M132) and Final Fantasy IX's nine tabled minigames (g027–g035), with nine new
+  digests and blocks added to five existing ones. Several PS1-era wikis have no pages for the systems (SaGa Frontier, Brave
+  Fencer Musashi, Valkyrie Profile, Xenogears), so those rows rest on two GameFAQs authors; Gwent's second source is Game8.
+  Corrections that changed what a row says: Stellazzio's verses lead only to the thirteenth coin; the Ragtime Mouse quizzes
+  on Final Fantasy IX's own world; Final Fantasy VIII's Weapons Monthly issues are optional (M096 renamed); Musashi holds
+  one stolen technique at a time and his rescued palace members help from the castle rather than reopening shops;
+  Valkyrie Profile's crystal shot makes footholds, not frozen-enemy platforms. Three rows were renamed for claims no second
+  source backed (M111's 68 events, M114's "no levels") or that were wrong (M096). The Ragtime Mouse's prize, whether
+  Valkyrie Profile's sent warriors return and Master Hunter's type are recorded as contradictions. Batch 3, the PS1 cult
+  classics (M133–M159, g055–g067), is next.
 - **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business

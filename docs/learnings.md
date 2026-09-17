@@ -495,3 +495,20 @@ counting the checks that fired: "2 check(s) did not fire — the gate is weaker 
 **Takeaway:** mutate what the data HAS rather than what it lacks, and trust a mutation suite only as
 far as its count of checks that actually fired — a prediction in a comment about how an anchor will
 fail is itself untested.
+
+## The flourishes in a description are where it goes wrong
+A summary written from memory usually gets a system's core right and its decorations wrong: the
+superlative, the universal and the vivid example are the most specific claims in it and the least
+checked.
+
+**Why it came up:** batch 2 of the sources pass checked 43 mechanics rows written in July against two
+sources each. The core of almost every row held: Final Fantasy VII's mastered materia does copy itself,
+Chrono Cross does grow by boss stars. What failed were the flourishes: "the game's best materia",
+"famously breaks the game", "a pop idol", "heavy hidden RNG", "running is always allowed", "each rescue
+reopens shops", and enemies frozen into platforms. Three rows had to be renamed because the claim sat
+in the title.
+
+**Takeaway:** when verifying a description, split out every superlative ("best", "famously"), every
+universal ("every", "always", "only", "no levels") and every concrete example, and give each its own
+two sources. Keep a name to what the core claim supports, since a flourish in a title takes a rename to
+remove.
