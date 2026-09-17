@@ -889,8 +889,8 @@ Owner-chosen order for the next sessions (AskUserQuestion, 2026-09-07), planned 
    sabotages. GitHub shows #29 CLOSED, not merged: its merge call returned 502 after moving
    `main`, so the content is squash `e5143de` and the deploy ran by `workflow_dispatch`.
    **PR 3, pillar coverage, landed as #33 (2026-09-14)**, completing Direction A: owner-judged
-   pillar chips on the My Game board, counted there and on the Design Pillars tab. The two thin verbs (*The fleeing rare*,
-   *Vista sketch*) are research targets for whoever next picks a game.
+   pillar chips on the My Game board, counted there and on the Design Pillars tab. The thin verbs (*The fleeing rare*,
+   *Vista sketch*, and since 2026-09-16 *The wanderer*) are research targets for whoever next picks a game.
    **Facets came first, at the owner's request (2026-09-13)**: PR 1 made every platform, genre,
    studio, series and year a filter over the data the rows already hold (#30). PR 2 added the
    script-owned `infobox` field from each game's Wikipedia infobox, bringing every platform and
@@ -916,6 +916,9 @@ Standing, not yet scheduled:
   Persona 5 Royal), so this needs curation, not a mechanical top-5.
 - Two open research threads: a third way to cue timing; a sibling for KH2's
   "transformations that pay permanent traversal".
+- Offered, not decided (2026-09-16): widen `REF_HOSTS` to gamerant.com, thegamer.com and
+  steamcommunity.com, so the second sources batch 1 cited in digests (Chained Echoes, Sea of Stars)
+  can render as links; Chained Echoes' M075–M077 show one link today.
 - Deferred in `docs/DECISIONS.md`: dual scores (original + best remaster);
   user-defined My Game buckets; private repo + Cloudflare Pages.
 
