@@ -19,12 +19,13 @@ Codex: `Xenogears` (1998, PlayStation) · GameFAQs: `/ps/199365-xenogears` confi
 Coverage 4414: single page, 14,553 chars, 40 sections — 3 read at 100% (Introduction, the
 Character DeathBlows rules block, Fei's list); greps: learn, combo, Gear/fuel, Ether, Gear
 Options. Unread: the per-character Deathblow lists and the Gear Options catalogue, which are
-enumerations, not rules.
+enumerations, not rules. **2026-09-17:** I. Introduction and the legend under III. Chatacter DeathBlows re-read for M104.
 
 Coverage 46377: single page, 27,778 chars, 14 sections — the preamble (54%) and the Basics
 rules block (52%); greps: percent, numbered rules. Unread: Appendix 1's 11.7K
 move-combination chart and the experience tables — player optimisation aids, not design
-material.
+material. **2026-09-17:** the contents list, 2.1 Japanese Version and 2.0 Patch (the AP per button) and Appendix 4 (Gear
+Deathblow Learning Correlations) read.
 
 Coverage 58934: single page, 77,952 chars, 166 sections — 3 read at 100% (Gear Parameters,
 Gear Commands, Hyper Mode Mechanics) plus the Charger table; grep: fuel. Unread: the
@@ -167,6 +168,20 @@ row: M278
 - The walkthrough confirms the player-facing side: build to Attack Level 3 and read the Hyper Mode percentage shown on the right of the battle screen; it also notes Ether attacks work as the AL-preserving action [gf:50268 §FAQ, Shotgunnova]
 - Weltall-2's System Id ability puts it into the mode at once, and the later Xenogears mech keeps a permanent 99% chance; in the mode fuel charges at ten times the normal rate, Chargers included, so a Gear with a Z Charger can refill 5,000 fuel in one turn [gf:50268 §TH' BASICS, Shotgunnova] [gf:58934 §Hyper Mode Mechanics, ForteGSOmega v0.8]
 
+### M104 Deathblows learned by doing
+pointers: [gf:4414 §III. Chatacter DeathBlows, Ranma v1.2] [gf:46377 §2.1 Japanese Version and 2.0 Patch, fidormula 3rd ed.] [gf:46377 §Basics, fidormula 3rd ed.]
+row: M104
+- Triangle, Square and X are the weak, medium and fierce attacks, costing 1, 2 and 3 AP [gf:4414 §III. Chatacter DeathBlows, Ranma v1.2] [gf:46377 §2.1 Japanese Version and 2.0 Patch, fidormula 3rd ed.]
+- A Deathblow is learned by using its component moves in ordinary fighting, which fills its percentage to 100 [gf:46377 §Basics, fidormula 3rd ed.] [gf:4414 §III. Chatacter DeathBlows, Ranma v1.2]
+- Some learned Deathblows wait for 7 AP a turn or a character level before they can be used [gf:4414 §III. Chatacter DeathBlows, Ranma v1.2] [gf:46377 §2.1 Japanese Version and 2.0 Patch, fidormula 3rd ed.]
+
+### M105 Gears (mech scale with its own economy)
+pointers: [gf:58934 §Gear Parameters, ForteGSOmega v0.8] [gf:58934 §Gear Commands, ForteGSOmega v0.8] [gf:50268 §TH' BASICS, Shotgunnova] [gf:46377 §Appendix 4, fidormula 3rd ed.]
+row: M105
+- A Gear's Engine, Frame and Armor are parts bought and swapped, alongside accessories [gf:58934 §Gear Parameters, ForteGSOmega v0.8] [gf:50268 §TH' BASICS, Shotgunnova] [gf:50268 §Kislev Battling, Shotgunnova]
+- Gear combat spends Fuel: Booster drains it each round and Charge restores it [gf:58934 §Gear Commands, ForteGSOmega v0.8] [gf:50268 §TH' BASICS, Shotgunnova]
+- On-foot Deathblows open the Gear's: each conventional Deathblow learned unlocks a Gear Deathblow, and a Gear's Attack Levels open as its pilot learns more on foot [gf:46377 §Appendix 4, fidormula 3rd ed.] [gf:50268 §TH' BASICS, Shotgunnova]
+
 ## Minigame candidates
 
 ### The Kislev Battling arena (a real-time fighting ladder paid by speed and cleanliness)
@@ -205,7 +220,8 @@ Nothing further read this pass; the walkthrough's shop appendix was not opened.
 ## Unverified or contradicted
 - **The two "Battling" things are not the same thing.** Guide 4408 documents an unlockable versus mode — Player vs Com, Player vs Player, a Com-vs-Com demo, match counts, difficulty and a Rubber Band setting — with no money anywhere in its 54KB. The story arena in Kislev, with the purses above, is a separate sidequest documented in the walkthrough. Do not let the name merge them [gf:4408 §Special Mode 1, Dan_GC v1.2] [gf:50268 §Kislev Battling, Shotgunnova]
 - The purse and bonus figures come from one guide; no second source was found tabulating them, and the bonus is quoted as a range rather than a formula [gf:50268 §Kislev Battling, Shotgunnova]
-- The learning guide's Appendix 4 asserts a correlation between on-foot and Gear Deathblow learning (TT teaches TX, TS teaches TTX); only its heading and first lines were read and nothing confirms it [gf:46377 §Appendix 4, fidormula 3rd ed.]
+- The learning guide's Appendix 4 asserts a correlation between on-foot and Gear Deathblow learning (TT teaches TX, TS teaches TTX). On 2026-09-17 it was read whole, and the walkthrough's Attack Level rule agrees in kind, so M105 states the link generally and leaves out the per-string table [gf:46377 §Appendix 4, fidormula 3rd ed.] [gf:50268 §TH' BASICS, Shotgunnova]
+- **Cut from M104 and M105 on 2026-09-17.** M104's "the move AWAKENS mid-fight" and an invisible bar (the status screen shows each Deathblow's percentage), and M105's fuel budget forced by dungeon design, which no source read describes [gf:46377 §Basics, fidormula 3rd ed.] [gf:58934 §Gear Commands, ForteGSOmega v0.8]
 - The Xeno-series wiki (`xenosaga.fandom.com`) has a Gear page, but it is lore — origin, history, Omnigears — and carries none of the stat or fuel mechanics, so it could not serve as a cross-check [wiki:xenosaga.fandom.com/Gear]
 
 ## Codex rows
@@ -217,8 +233,10 @@ Nothing further read this pass; the walkthrough's shop appendix was not opened.
 // M277  Gears: a machine whose stats are parts, and whose fuel is a turn you choose not to attack  Progression & Upgrades
 // M278  Hyper Mode: the odds of your best state rise as your health falls                          Combat
 // g096  The Kislev Battling arena (a real-time fighting ladder paid by speed and cleanliness)      rt: 9 rows
+// 2026-09-17: M104–M105, the original PS1 batch's rows, edited in place and given `refs` (the blocks above M276).
 ```
 
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 50268, read under the owner's rule; its Coverage line says what was read. It adds the Combo command's AP cap, how Gear Attack Levels open Deathblows, the mode's special cases and a badge trade. No row was edited.
+- 2026-09-17: the sources pass. M104–M105 sourced from Ranma's and fidormula's Deathblow guides, ForteGSOmega's Battle Mechanics FAQ and Shotgunnova's walkthrough, all already in this digest.
