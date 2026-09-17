@@ -162,10 +162,10 @@ category and for every row the digest tagged.
 - Traded · how · `Turning coins in to Queen Stella pays escalating rewards`
 
 ### M092 — Triple Triad + regional rules + Card Mod
-- none · a card game against any NPC whose collection refines into items; no verb names how cards are found
+- none · a card game against characters across the world whose collection refines into items; no verb names how cards are found
 
-### M096 — Weapon remodeling via magazines
-- none · found magazines unlock upgrades at a shop; the recipe is an item, not a rule the player applies
+### M096 — Weapon remodeling from parts (magazines as guides)
+- none · gathered items unlock upgrades at a shop, and found magazines only list them; no verb names that
 
 ### M098 — Chocobo catching, racing & breeding
 - Tool-gated · how · `Each color reaches otherwise-inaccessible caves holding the game's best materia`
