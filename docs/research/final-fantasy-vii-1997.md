@@ -45,6 +45,9 @@ the Battle Square (128 hits), chocobo racing (13), Fort Condor (40), snowboardin
 submarine (42), the Wonder Square and GP (56), the piano (19) and the flyers (20). Largest unread: two enemy
 skill and monster chapters (49,207 and 29,932 chars), Inside Shinra HQ (27,949) and a 21,004-char section
 the probe heads "Please take note". Fort Condor, snowboarding, the submarine and the flyers were not read.
+**2026-09-17**, for the mechanics rows: `lines()` windows 7300–7340 ((I) Breeding Chocobos, the four colours), 7508–7524
+((J) Chocobo-Only Areas) and 8882–8890 ((U) Return to Cosmo Canyon, the mastered copy); greps for mastering (105 hits),
+the copy, the four cave materia, the colours (33), nuts (59), rank (22) and catching chocobos.
 
 ## Triage
 
@@ -137,7 +140,22 @@ lists every guide in the table.
 
 ## Mechanics candidates
 
-None. This pass edits existing minigame rows only.
+No new rows. On 2026-09-17 the sources pass (plan section R, batch 2) sourced the two mechanics rows, M097–M098, from the
+Final Fantasy Wiki and the walkthrough 2376; both are edited in place.
+
+### M097 Materia mastery births new materia
+pointers: [wiki:finalfantasy.fandom.com/Materia (Final Fantasy VII)] [gf:2376 §(U) Return to Cosmo Canyon, Kao_Megura v2.2]
+row: M097
+- Materia levels up with AP, and a mastered materia creates a copy of itself [wiki:finalfantasy.fandom.com/Materia (Final Fantasy VII)] [gf:2376 §(U) Return to Cosmo Canyon, Kao_Megura v2.2]
+- The copy starts from the beginning, at level 0 or its initial AP [wiki:finalfantasy.fandom.com/Materia (Final Fantasy VII)] [gf:2376 §(U) Return to Cosmo Canyon, Kao_Megura v2.2]
+
+### M098 Chocobo catching, racing & breeding
+pointers: [wiki:finalfantasy.fandom.com/Chocobo breeding] [wiki:finalfantasy.fandom.com/Chocobo (Final Fantasy VII)] [wiki:finalfantasy.fandom.com/Materia Cave] [gf:2376 §(I) Breeding Chocobos, Kao_Megura v2.2]
+row: M098
+- Wild chocobos are caught on chocobo tracks and kept in stables at the Chocobo Farm [wiki:finalfantasy.fandom.com/Chocobo breeding] [gf:2376 §GETTING A BLUE AND/OR GREEN CHOCOBO, Kao_Megura v2.2]
+- Racing at the Gold Saucer raises a chocobo's class, C to S, and better-ranked parents improve the odds of the offspring wanted [wiki:finalfantasy.fandom.com/Chocobo Racing (Final Fantasy VII)] [gf:2376 §(I) Breeding Chocobos, Kao_Megura v2.2]
+- Pairs are bred with nuts such as the Carob Nut; blue chocobos cross rivers, green ones mountains, black ones both and gold ones the ocean [wiki:finalfantasy.fandom.com/Chocobo (Final Fantasy VII)] [gf:2376 §(I) Breeding Chocobos, Kao_Megura v2.2]
+- Four caves reachable only by these chocobos hold the Quadra Magic, Mime, HP<->MP and Knights of Round materia [wiki:finalfantasy.fandom.com/Materia Cave] [gf:2376 §(J) Chocobo-Only Areas, Kao_Megura v2.2]
 
 ## Minigame candidates
 
@@ -248,6 +266,7 @@ pointers: [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 �
 - Battles 14 to 18 happen while the party is captive, and count as won when the fort has been given at least 15,000 gil [gf:45511 §{M3} Fort Condor, AbsoluteSteve] [gf:19004 §When do all the battles take place, Master_Epyon v3.0]
 
 ## Unverified or contradicted
+- **"The game's best materia" and breeding full loadouts.** M098 called the cave materia the game's best, and M097 said players breed full loadouts. The wiki calls Knights of Round the ultimate summon and each cave materia one found nowhere else; the walkthrough ranks neither. Both rows now name what the sources state, and M098's Tool-gated quote is re-taken [wiki:finalfantasy.fandom.com/Materia Cave] [gf:2376 §(J) Chocobo-Only Areas, Kao_Megura v2.2]
 - **How many flyers there are.** The wiki counts six; Xenomic's Power Source entry says seven [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 §C) Other Items, Xenomic v3]
 - **What the flyers pay.** The wiki lists all six Sources and a Megalixir; Xenomic names only the Megalixir and a Power Source [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 §A) Perishable Items, Xenomic v3] [gf:42714 §C) Other Items, Xenomic v3]
 - **When the submarine prizes come.** The wiki gives them for the first to fifth wins at any level; the Gold Saucer FAQ ties each to one level, from the Undersea Mako Reactor battle to Level 4 [wiki:finalfantasy.fandom.com/Submarine Game] [gf:45511 §{M1.1} Wonder Square, AbsoluteSteve]
@@ -262,8 +281,10 @@ pointers: [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 �
 ```js
 // No new rows. g009–g016 were edited in place: each gained an `rt` table and `refs`, and the
 // summaries of g011, g012, g013 and g016 were corrected. Logged in CHANGES as updated.
+// 2026-09-17: M097–M098 were edited in place and gained `refs`, logged in that day's entry as updated.
 ```
 
 ## Codex delta
 - g009–g016 (all eight Final Fantasy VII minigames) tabled and sourced in place on 2026-09-14.
 - 2026-09-15: the Most Recommended walkthrough, 2376, read under the owner's rule. g009, g010, g013, g014 and g015 cite it. **g013 sharpened**: the G-Bike's 2 GP starts at 5,000 points, where the wiki and the walkthrough agree against the Gold Saucer FAQ. **g010 sharpened**: Sprint Shoes move from S class to A, where the wiki and the walkthrough agree. All five are in the 2026-09-15 entry's `updated`.
+- 2026-09-17: the sources pass. M097–M098 sourced from the Final Fantasy Wiki and Kao_Megura's walkthrough; M098 names the four cave materia instead of calling them the game's best.

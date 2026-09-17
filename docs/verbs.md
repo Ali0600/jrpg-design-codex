@@ -168,7 +168,7 @@ category and for every row the digest tagged.
 - none · gathered items unlock upgrades at a shop, and found magazines only list them; no verb names that
 
 ### M098 — Chocobo catching, racing & breeding
-- Tool-gated · how · `Each color reaches otherwise-inaccessible caves holding the game's best materia`
+- Tool-gated · how · `Each color reaches otherwise-inaccessible caves holding four materia`
 
 ### M099 — Home / Another World (mirrored dual dimensions)
 - A second layer · how · `Two versions of the same archipelago exist`
