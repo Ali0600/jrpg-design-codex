@@ -9,6 +9,10 @@ digest started 2026-09-14
 A reward-table pass (the plan's Section F) for Final Fantasy VIII's three minigame rows. No new rows; g024–g026
 are edited in place.
 
+On 2026-09-17 the sources pass (plan section R, batch 2) added a block for each of the five mechanics rows, M092–M096,
+from the Final Fantasy Wiki, Split_Infinity's walkthrough (the pick, 50775) and Kasket_Darkfyre's Card FAQ (4903). No new
+rows; all five are edited in place.
+
 ## Sources
 
 | id | title | author | version | updated | category | KB | url |
@@ -19,8 +23,9 @@ are edited in place.
 | 50775 | Guide and Walkthrough | Split_Infinity | — | — | Full Game Guides | 1556 | https://gamefaqs.gamespot.com/ps/197343-final-fantasy-viii/faqs/50775 |
 
 Coverage 4903: single page, 22,491 chars, 1,215 lines, 36 sections — one grep for the card-mod items (10 hits), then
-lines 819–900 read, the player cards. Unread: the rules (3,089 chars), the Level 9 card locations (1,959) and the Level 10
-player card locations (1,498).
+lines 819–900 read, the player cards. **2026-09-17:** Triple Triad Rules (3,089 chars) and Side Quest 1: The Queen of
+Cards read, with greps for regions and the Card Mod. Unread: the Level 9 card locations (1,959) and the Level 10 player
+card locations (1,498).
 
 Coverage 6959: single page, 16,581 chars, 467 lines, 17 sections — one grep for the exclusive items and Koko (9 hits), then
 lines 236–315 (the A- and B-rank finds) and 406–421 (Coco's Effect) read. Unread: The Game (2,463 chars), the C Rank list
@@ -32,7 +37,10 @@ running 200 lines from its start: 8128 (the Chocobo Forests and the card mods ad
 summon and Balamb Garden's MD Level). Greps: card mods and their items (151 hits), the Chocobo Forests (26), Chocobo World
 and the PocketStation (47), the Card Club (2) and card-mod results (12). Largest unread: a section headed CHART SAMPLE
 (66,931 chars), a magic question headed "Is the magic reflectable?" (16,194), the Eden card section (14,259) and the
-harmful status effects (12,518).
+harmful status effects (12,518). **2026-09-17:** for the mechanics rows, the table of contents, the openings of 10.)
+Junction Effects, 11.) Cards Information, 14.) Guardian Forces, 17.) Refinement Charts, 19.) SeeD Test Answers and 21.)
+Weapon Remodeling, the SeeD report lines and the Weapons Monthly March lines in the walkthrough; greps for magazines (91
+hits), junk shops (20), salary (1), SeeD tests and rank, Card Mod (45), stocking, draw points, GF levels and casting.
 
 ## Triage
 
@@ -147,7 +155,42 @@ listing, which still lists every guide in the table.
 
 ## Mechanics candidates
 
-None. This pass edits existing minigame rows only.
+No new rows. The blocks below source the five existing mechanics rows, each edited in place on 2026-09-17.
+
+### M092 Triple Triad + regional rules + Card Mod
+pointers: [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [wiki:finalfantasy.fandom.com/Card Mod] [gf:4903 §Triple Triad Rules, Kasket_Darkfyre v1.2] [gf:50775 §11.) CARDS INFORMATION - G1100, Split_Infinity]
+row: M092
+- Cards come from defeated enemies, from the Card command, from characters and from winning games against them [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [gf:50775 §11.) CARDS INFORMATION - G1100, Split_Infinity]
+- Each region has its own special rules, and a game played in a new region can carry the last region's rules there; players are advised to keep a rule such as Random from spreading [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [gf:4903 §Triple Triad Rules, Kasket_Darkfyre v1.2]
+- Quezacotl's Card Mod turns cards into items, which the sources call hard or best to get any other way [wiki:finalfantasy.fandom.com/Card Mod] [gf:50775 §11.) CARDS INFORMATION - G1100, Split_Infinity]
+
+### M093 Junction system (magic as equippable resource)
+pointers: [wiki:finalfantasy.fandom.com/Junction system] [wiki:finalfantasy.fandom.com/Draw (Final Fantasy VIII)] [gf:50775 §10.) JUNCTION EFFECTS - G1000, Split_Infinity] [gf:50775 §17.) REFINEMENT CHARTS - G1700, Split_Infinity]
+row: M093
+- Magic is stocked up to 100 of each spell, drawn from enemies and draw points or refined from items [wiki:finalfantasy.fandom.com/Junction system] [wiki:finalfantasy.fandom.com/Draw (Final Fantasy VIII)] [gf:50775 §FOREWORD, Split_Infinity] [gf:50775 §17.) REFINEMENT CHARTS - G1700, Split_Infinity]
+- A Guardian Force's junction abilities let stocked magic be attached to stats, and each spell adds a set amount to each stat at 100 units [wiki:finalfantasy.fandom.com/Junction system] [gf:50775 §10.) JUNCTION EFFECTS - G1000, Split_Infinity] [gf:50775 §14.) GUARDIAN FORCES - G1400, Split_Infinity]
+- Casting a stocked spell uses it up; the walkthrough notes one limit break as the exception [wiki:finalfantasy.fandom.com/Draw (Final Fantasy VIII)] [gf:50775 §RINOA HEARTILLY - ANGEL WING, Split_Infinity]
+
+### M094 GF ability learning + refinement web
+pointers: [wiki:finalfantasy.fandom.com/Guardian Force] [wiki:finalfantasy.fandom.com/Refine] [gf:50775 §14.) GUARDIAN FORCES - G1400, Split_Infinity] [gf:50775 §17.) REFINEMENT CHARTS - G1700, Split_Infinity]
+row: M094
+- Guardian Forces level up on their own experience and learn abilities with AP from battle, and the player can pick what each learns next [wiki:finalfantasy.fandom.com/Guardian Force] [gf:50775 §14.) GUARDIAN FORCES - G1400, Split_Infinity] [gf:50775 §BATTLE PROCEDURE WITH MANY AP, Split_Infinity]
+- Their abilities give characters battle commands, stat junctions and support abilities [wiki:finalfantasy.fandom.com/Guardian Force] [gf:50775 §14.) GUARDIAN FORCES - G1400, Split_Infinity]
+- Refine abilities learned from GFs turn items into magic, magic into stronger magic and items into other items, and Card Mod turns cards into items [wiki:finalfantasy.fandom.com/Refine] [gf:50775 §17.) REFINEMENT CHARTS - G1700, Split_Infinity] [gf:50775 §11.) CARDS INFORMATION - G1100, Split_Infinity]
+
+### M095 SeeD rank salary (tested knowledge as income)
+pointers: [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §WARNING - MISSABLE THING COMING UP, Split_Infinity] [gf:50775 §19.) SEED TEST ANSWERS - G1900, Split_Infinity]
+row: M095
+- A salary is paid at regular intervals, its size set by SeeD rank [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §WARNING - MISSABLE THING COMING UP, Split_Infinity]
+- Written tests raise the rank; one is open for each of Squall's levels, and every answer must be right [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §19.) SEED TEST ANSWERS - G1900, Split_Infinity]
+- Actions in battle and in the field raise the rank, and some lower it [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §WARNING - MISSABLE THING COMING UP, Split_Infinity]
+
+### M096 Weapon remodeling from parts (magazines as guides)
+pointers: [wiki:finalfantasy.fandom.com/Weapons Monthly] [wiki:finalfantasy.fandom.com/Final Fantasy VIII weapons] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
+row: M096
+- Weapons are upgraded at junk shops, each upgrade costing gil and a set of items [wiki:finalfantasy.fandom.com/Final Fantasy VIII weapons] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
+- Weapons Monthly issues, found around the world, list the items each upgrade needs [wiki:finalfantasy.fandom.com/Weapons Monthly] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
+- Reading them is optional: holding the right items is enough for the upgrade to appear in the shop [wiki:finalfantasy.fandom.com/Weapons Monthly] [wiki:finalfantasy.fandom.com/Final Fantasy VIII weapons] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
 
 ## Minigame candidates
 
@@ -211,6 +254,9 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo World] [gf:6959 §A Rank, Saturn
 - A ChocoZiner used on a wrong spot is stolen, and Chocoboy sells a replacement for 700 gil [wiki:finalfantasy.fandom.com/Chocobo Forest (Final Fantasy VIII)]
 
 ## Unverified or contradicted
+- **Magazines as required recipes.** M096 said every upgrade needs a Weapons Monthly recipe. Both sources say the magazines only list the items and the upgrade appears once the items are held, so the row, its name and its notes are rewritten, and its `docs/verbs.md` entry is re-headed [wiki:finalfantasy.fandom.com/Weapons Monthly] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
+- **Lore exams.** M095 called the SeeD tests lore exams answerable anytime. Neither source says what the questions cover, and both limit the tests to Squall's level, so the row says "written tests" [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §19.) SEED TEST ANSWERS - G1900, Split_Infinity]
+- **Cut for one source or none.** M092's "almost any NPC" and rules being abolished (wiki only); M093's casting spending stat fuel (neither says a cast weakens the junctioned stat); M096's monster parts (the walkthrough's items include screws and pipes); the wiki's note that each salary payment costs SeeD experience [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [wiki:finalfantasy.fandom.com/SeeD] [gf:50775 §21.) WEAPON REMODELING - G2100, Split_Infinity]
 - **Boko's first star.** The wiki says rescuing Koko at level 50 gives it; Saturnyne says each of Coco's later kisses gives a star, and spells the third summon Choco Buckle [wiki:finalfantasy.fandom.com/Chocobo World] [gf:6959 §7. Coco's Effect, Saturnyne]
 - **The Forest of Solitude's dig.** Jegged adds five Gysahl Greens to the Protect Stone and Meteor Stone; the wiki does not [wiki:finalfantasy.fandom.com/Chocobo Forest (Final Fantasy VIII)] [web:jegged.com/Games/Final-Fantasy-VIII/Side-Quests/Chocobo-Forest.html]
 
@@ -218,8 +264,10 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo World] [gf:6959 §A Rank, Saturn
 
 ```js
 // No new rows. g024–g026 were edited in place: each gained an `rt` table and `refs`. Logged in CHANGES as updated.
+// 2026-09-17: M092–M096 were edited in place and gained `refs`; M096 renamed. Logged in that day's entry as updated.
 ```
 
 ## Codex delta
 - g024–g026 (all three Final Fantasy VIII minigames) tabled and sourced in place on 2026-09-14.
 - 2026-09-15: the Most Recommended walkthrough, 50775, read under the owner's rule. It agrees with g025's six forest digs and its sanctuary card, and with five of g024's eleven card mods, and both rows cite it, logged in the 2026-09-15 entry. It adds nothing checkable to g026's Chocobo World finds.
+- 2026-09-17: the sources pass. M092–M096 sourced from the Final Fantasy Wiki, Split_Infinity's walkthrough and Kasket_Darkfyre's Card FAQ. M096 corrected and renamed: the magazines only list an upgrade's items.
