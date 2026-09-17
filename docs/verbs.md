@@ -186,7 +186,7 @@ category and for every row the digest tagged.
 - none · invited settlers grow a town; the row names recruiting, not helping, so Consequence does not apply
 
 ### M130 — Photon-crystal platforming dungeons
-- Latent geometry · how · `freeze enemies into solid crystal — which become platforms, weights for switches, and stepping stones`
+- Latent geometry · how · `forms crystals on solid surfaces, which she can stand on to reach higher places`
 
 ### M131 — Tetra Master (card collection without conversion)
 - none · the collection never converts, and no verb names how cards are found

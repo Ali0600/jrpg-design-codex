@@ -12,7 +12,8 @@ lists are identical) · digest started 2026-09-06
 | id | title | author | version | updated | category | KB | url |
 |---|---|---|---|---|---|---|---|
 | 71896 | Guide and Walkthrough | sokkus | 0.90 | 01/22/2017 | Full Game Guides | 939 | https://gamefaqs.gamespot.com/pc/699808-the-witcher-3-wild-hunt/faqs/71896 |
-| wiki | Place of Power · Griffin School Gear · Viper School Gear | — | — | — | witcher.fandom.com | — | https://witcher.fandom.com/wiki/Place_of_Power |
+| wiki | Place of Power · Griffin School Gear · Viper School Gear · Gwent · Collect 'Em All | — | — | — | witcher.fandom.com | — | https://witcher.fandom.com/wiki/Place_of_Power |
+| web | Gwent Guide · Gwent Player and Vendor Locations · How to Get The Best Gwent Cards | Game8 | — | — | game8.co | — | https://game8.co/games/Witcher3/archives/275443 |
 
 Coverage 71896: **a formatted, 19-page guide** — pages 1 and 8 opened of 19. On those two
 pages, 4 sections read of 128 (Gathering Experience and Levelling Up 100%, Skill Points and
@@ -102,6 +103,15 @@ row: M269
 - The wiki adds that the number of Places of Power is limited, that finding them matters because Skill Points are finite, and that each is tied to one of the five Signs and increases that Sign's intensity when drawn from [wiki:witcher.fandom.com/Place of Power]
 - Skill Points feed four trees — Combat, Signs, Alchemy and General Skills — each of which also grants a passive bonus (Adrenaline gain, Stamina regeneration, Potion duration respectively) [gf:71896 §Skill Points and Skill Trees, sokkus v0.90]
 
+### M132 Gwent (shop-hunted deck building)
+pointers: [wiki:witcher.fandom.com/Gwent] [wiki:witcher.fandom.com/Collect 'Em All] [web:game8.co/games/Witcher3/archives/275443] [web:game8.co/games/Witcher3/archives/282396]
+row: M132
+- Added 2026-09-17 by the sources pass (plan section R, batch 2). No GameFAQs guide covers Gwent's cards, so the second source is Game8 [web:game8.co/games/Witcher3/archives/275443] [wiki:witcher.fandom.com/Collect 'Em All]
+- Gwent is a card game of rows and rounds: a match is won two rounds out of three, on total unit strength [wiki:witcher.fandom.com/Gwent] [web:game8.co/games/Witcher3/archives/275443]
+- Cards come from buying them from merchants, from beating players, and from Gwent quests [wiki:witcher.fandom.com/Collect 'Em All] [web:game8.co/games/Witcher3/archives/275443] [web:game8.co/games/Witcher3/archives/276249]
+- Innkeepers are among the sellers; Game8 names Elsa of the White Orchard tavern for the Decoy and an Urialla Harbor innkeeper for Scorch [web:game8.co/games/Witcher3/archives/282396] [wiki:witcher.fandom.com/Collect 'Em All]
+- Named opponents in Gwent quests and tournaments give particular cards, while ordinary players give random ones, and beating enough generic merchants stops paying new cards [wiki:witcher.fandom.com/Collect 'Em All] [web:game8.co/games/Witcher3/archives/282396]
+
 ## Minigame candidates
 
 None harvested this pass. Gwent is already in the codex as a mechanic (M132) and its
@@ -125,6 +135,7 @@ Nothing read this pass — the guide's shop and merchant material sits in the 17
 
 ## Unverified or contradicted
 - The guide's contents list exactly one Scavenger Hunt (Viper), while the wiki documents several school sets including Griffin and Manticore with their own hunts — the guide is version 0.90 and its walkthrough is incomplete, so treat 1 as that guide's coverage and not the game's total [gf:71896 §Table of Contents, sokkus v0.90] [wiki:witcher.fandom.com/Griffin School Gear]
+- **2026-09-17, Gwent's starting deck and every shop's stock.** M132 called the starting deck deliberately weak and said checking every shop's card stock becomes second nature. Neither the wiki nor Game8 says so, and both are cut from the row [wiki:witcher.fandom.com/Gwent] [web:game8.co/games/Witcher3/archives/275443]
 - Gwent's rewards for beating each opponent were not harvested; the 5 "Gwent:" quests in the contents are player-hunt quests, and no card-by-card payout table was read. A minigame row with an `rt` table needs a dedicated pass [gf:71896 §Table of Contents, sokkus v0.90]
 - The 32 / 27 / 5 / 1 category counts are ToC entry counts from one guide, not official quest totals [gf:71896 §Table of Contents, sokkus v0.90]
 
@@ -142,3 +153,4 @@ Nothing read this pass — the guide's shop and merchant material sits in the 17
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Triage record added. `pick()` returns nothing because every Full Game Guide is HTML, so the owner's rule reads no walkthrough here, and no row was edited.
+- 2026-09-17: M132 (Gwent, from the original PS1-era batch) sourced from the Witcher Wiki and Game8, since no GameFAQs guide covers its cards; the claims of a deliberately weak starting deck and of checking every shop were cut.
