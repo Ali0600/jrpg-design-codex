@@ -204,7 +204,7 @@ category and for every row the digest tagged.
 - Mastery reveal · how · `mastering two elements together unlocks combined magic`
 
 ### M141 — The Adventure Ethos: A World Built to Reward Exploration
-- Latent geometry · how · `you must physically turn it to reveal hidden items and passages`
+- Latent geometry · how · `you must turn it to find some of what is hidden`
 
 ### M147 — Genesis Trees & Mist De-fogging
 - Consequence · how · `Reviving a region's dormant Genesis Tree purges the Mist there, turns Seru-monsters back into people`
