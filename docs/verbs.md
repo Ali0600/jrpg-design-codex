@@ -216,7 +216,7 @@ category and for every row the digest tagged.
 - Consequence · loop · `save (or fail to save) a named person → each dive advances the town's unfolding fate`
 
 ### M153 — Puzzle-Box Dungeons (Platforming + Logic as Content)
-- Inscription deduction · how · `demonstrates a solution in one room and demands its mirror or inversion in another`
+- none · the "demonstrate a solution, then demand its mirror" pattern the tag quoted is in no source; what the row now describes is difficulty, precise platforming and terrain the upgrades unlock, which no discovery verb names
 
 ### M157 — Minion Capture (Cocoon Master)
 - Mastery reveal · how · `species that shrug off your flute early become catchable once your rank climbs`
