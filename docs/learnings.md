@@ -512,3 +512,20 @@ in the title.
 universal ("every", "always", "only", "no levels") and every concrete example, and give each its own
 two sources. Keep a name to what the core claim supports, since a flourish in a title takes a rename to
 remove.
+
+## A citation format with a length limit silently rewards the sources whose headings are short
+A pointer grammar that caps a section name will not fail on a long one — it stops matching, so the
+pointer either disappears from the check or parses as a different, shorter section.
+
+**Why it came up:** batch 3 of the sources pass hit it in three games out of nine. A_I_e_x's Legend
+of Legaia guide heads its six top-level sections with 78-character rules; PhamtonPain's Alundra
+lists use 92; a Final Fantasy Tactics table's own column row is 49. The digest linter's pointer
+regex allows a section of 1 to 40 characters, so a 69-character heading — "CHARACTERS: HUAN,
+LEKNAAT, LUC, VIKTOR, …" — still matched, by reading "CHARACTERS: HUAN" as the section and the rest
+as the author. It looked like a valid citation and pointed at nothing.
+
+**Takeaway:** when a citation format bounds a field, check what a too-long value does — dropped,
+truncated, or re-parsed as the next field — and make the tool say which. Until it does, cite the
+facts to whichever source's headings fit and record in the coverage note that the other one
+corroborates but cannot be pointed at; never shorten a heading to make it fit, because a shortened
+name is a name that does not exist.

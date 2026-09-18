@@ -178,7 +178,8 @@ any later duplicate.
 
 **Built:** batch 1, the original nine games (M001–M085), landed on 2026-09-16 as #83–#93. Batch 2, the
 PS1 Squaresoft/Enix catalog and The Witcher 3 (M086–M132, g027–g035), landed on 2026-09-17 as #94–#101. Batch 3,
-the PS1 cult classics, is next.
+the PS1 cult classics (M133–M159, g055–g067), landed on 2026-09-18 as #102–#110. Batch 4, Clair Obscur:
+Expedition 33 (M160–M162), is next.
 
 ## 2026-09-14 — Where the UI Gallery's screenshots come from, now that Fandom blocks scripts
 

@@ -201,8 +201,20 @@ backup; the HTML file is the source of truth and is more up to date.
   one stolen technique at a time and his rescued palace members help from the castle rather than reopening shops;
   Valkyrie Profile's crystal shot makes footholds, not frozen-enemy platforms. Three rows were renamed for claims no second
   source backed (M111's 68 events, M114's "no levels") or that were wrong (M096). The Ragtime Mouse's prize, whether
-  Valkyrie Profile's sent warriors return and Master Hunter's type are recorded as contradictions. Batch 3, the PS1 cult
-  classics (M133–M159, g055–g067), is next.
+  Valkyrie Profile's sent warriors return and Master Hunter's type are recorded as contradictions. Plus the **sources pass, batch 3** (2026-09-18, PRs #102–#110): the PS1 cult classics, 27 mechanics rows (M133–M159)
+  and 13 minigames (g055–g067) across nine games, with nine new digests. Every game's own wiki answered except Legend of
+  Legaia's and Alundra's, which have no pages for the Muscle Dome, the disco or the Riverside pub's rooms, so those minigames
+  rest on two or three GameFAQs authors. Corrections that changed what a row says: a Legend of Dragoon Addition levels every
+  20 completions, not at 20 and 80; its Dragoon Level is not a choice between transforming and banking, since every SP counts
+  either way; Suikoden II's unite attacks run from two characters to six, not pairs and trios, and its cook-off judges score
+  1 to 5; Grandia has six weapon skills and its moves unlock at thresholds rather than being bought; Breath of Fire IV's
+  fishing points cannot buy dragon upgrades; Wild ARMs' Cecilia has no Rod; Final Fantasy Tactics units have five ability
+  slots and poaching a Wild Boar pays its Ribbon as the COMMON result. Reward tables that rested on no source were cut
+  (Breath of Fire IV's fish payouts, the Muscle Dome's Expert and Master purses, Jade Cocoon's level-54 merge cap), and two
+  claims took a verb tag with them: Alundra's "demonstrate, then invert" (M153 lost *Inscription deduction*) and Grandia's
+  camera, re-quoted to what the guides show. Contradictions recorded: the Speed Chain's effect, the dance score that pays it,
+  what Master strips in the Muscle Dome, and who waits on the Deep Dungeon's tenth floor. Batch 4, Clair Obscur: Expedition
+  33 (M160–M162), is next, and the PS2 batch (M163–M191, g068–g079) after it.
 - **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
