@@ -213,8 +213,25 @@ backup; the HTML file is the source of truth and is more up to date.
   (Breath of Fire IV's fish payouts, the Muscle Dome's Expert and Master purses, Jade Cocoon's level-54 merge cap), and two
   claims took a verb tag with them: Alundra's "demonstrate, then invert" (M153 lost *Inscription deduction*) and Grandia's
   camera, re-quoted to what the guides show. Contradictions recorded: the Speed Chain's effect, the dance score that pays it,
-  what Master strips in the Muscle Dome, and who waits on the Deep Dungeon's tenth floor. Batch 4, Clair Obscur: Expedition
-  33 (M160–M162), is next, and the PS2 batch (M163–M191, g068–g079) after it.
+  what Master strips in the Muscle Dome, and who waits on the Deep Dungeon's tenth floor.
+  Plus the **PS1 expansion** (2026-09-21, PRs #111–#114, at the owner's request "expand on the PS1 games"): eight new
+  mechanics rows (M295–M302) on five of the 23 PS1 games, added only where two sources already supported one — no floor
+  per game, and no new games (the AskUserQuestion is in `docs/DECISIONS.md`). Threads of Fate gained Tonio's bracer and
+  belt ladder, whose tiers replace rather than stack, and the three one-off treasures each of which two NPCs want (one
+  pays something permanent, the trader pays gold). Final Fantasy VII, the thinnest game on the roster at two rows, gained
+  the Level 4 Limit manuals — learned by killing and by using, except the last, which is an item hidden in the world that
+  refuses to work until everything below it has been used — and the trade every weapon and armour makes between attack
+  power and the growth rate that multiplies materia AP. Suikoden II gained a weapon system with no loot in it at all: one
+  weapon per character, sharpened a level at a time to 16, with four found hammers raising how far the castle smith can
+  go. Wild ARMs gained Rudy's eight ARMs, each waiting in a dungeon and upgraded on three axes to its own ceiling. Final
+  Fantasy Tactics gained Move-Find Item, whose odds on the rare item are 100 minus the unit's Brave — so the unit made
+  worst at fighting is the one who finds the treasure — and Propositions, the bench earning gil and the JP the job system
+  runs on. Four games were probed and came back thin, each recorded in its own digest's Codex delta so the next pass does
+  not redo them: Parasite Eve (its Chrysler Building facts are inside M116, and the wiki's shooting gallery is the
+  sequel's), Breath of Fire IV (every lead already inside g060, M142 or M143), Grandia (Parm's four legendary treasures
+  failed a second source; the wiki's Arm Wrestling and Arrange Dice belong to Grandia II and III) and Jade Cocoon (the
+  wiki's silk pages are empty stubs and its Battle Arena has no payouts anywhere). Batch 4 of the sources pass, Clair
+  Obscur: Expedition 33 (M160–M162), is next, and the PS2 batch (M163–M191, g068–g079) after it.
 - **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business

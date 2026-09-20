@@ -125,6 +125,7 @@ row: g059
 - **Five weapon types.** M139 listed sword, mace, axe, whip and knife. Tricrokra's table has six, adding Throw [gf:13587 §Introduction, Tricrokra v1.01]
 - **A camera that "fully rotates".** M141 said so. Both walkthroughs say rotation is unavailable in some rooms, and Shotgunnova notes it is disabled for the whole End of the World dungeon [gf:6812 §Exploring, Dalez v2.25] [gf:63755 §21) END OF THE WORLD (WK21), Shotgunnova]
 - **A Critical that knocks the enemy icon far back.** M140 said a cancel knocks the icon far back along the bar. Both the cancel and Counter damage are confirmed, but no source read here quantifies or even describes the knockback, so the row says the turn is cancelled and leaves the distance out [gf:6812 §Issuing Commands, Dalez v2.25]
+- **Parm's four legendary treasures.** Dalez opens the Town of Parm with a dare to find four "legendary treasures" hidden around the town, clued by an NPC. Shotgunnova's walkthrough, grepped on 2026-09-21, has no hit for the phrase at all, so the hunt rests on one guide and M141 does not name it [gf:6812 §a. Town of Parm, Dalez v2.25] [gf:63755 §21) END OF THE WORLD (WK21), Shotgunnova]
 
 ## Codex rows
 
@@ -134,3 +135,4 @@ row: g059
 
 ## Codex delta
 - 2026-09-18: M139–M141 and g059, all four Grandia rows, sourced from the Grandia Wiki and three GameFAQs authors; M139, M140 and M141 corrected.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The Mana Egg trade is already in M139, the camera and the End of the World in M141, and Parm's four legendary treasures failed a second source (recorded above). The Grandia Wiki is series-wide: its Arm Wrestling page is Grandia II's minigame, Arrange Dice is Grandia III's, and the Adventurer's Society page carries only story.

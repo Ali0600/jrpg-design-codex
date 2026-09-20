@@ -116,3 +116,4 @@ None. Jade Cocoon has no minigame rows.
 
 ## Codex delta
 - 2026-09-18: M157–M159, all three Jade Cocoon rows, sourced from the Jade Cocoon Wiki and three GameFAQs authors; M158's level-cap claim cut.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. Silk as the economy, the one lead left here, still rests on MindWandererB alone: the Jade Cocoon Wiki's silk pages (Cloud, Angelwing, Pearl, Thunder, Lily, Moonlight, First Snow) are empty stubs pointing back at a consumables list. The wiki also shows a Battle Arena, which Mu and Ra preside over, but it has no page of its own and no payouts anywhere, so no minigame row could be written either.

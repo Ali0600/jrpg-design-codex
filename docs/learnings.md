@@ -529,3 +529,23 @@ truncated, or re-parsed as the next field — and make the tool say which. Until
 facts to whichever source's headings fit and record in the coverage note that the other one
 corroborates but cannot be pointed at; never shorten a heading to make it fit, because a shortened
 name is a name that does not exist.
+
+## A reference that covers every edition of a thing answers about the newest one
+A wiki article, a manual or a docs page that spans all versions of its subject will quietly answer
+with the newest version's names and behaviour, because that is the version its editors are playing.
+
+**Why it came up:** the PS1 expansion pass wrote two Final Fantasy Tactics rows from the Final
+Fantasy Wiki, which now documents the 2025 remaster on the same pages. Move-Find Item is filed
+under Treasure Hunter, Propositions under Errands, and the Brave Story under Chronicles, and the
+mechanics sections mix in behaviour that exists only in the remaster: chemists with the ability
+innately, cancelling a move after a find, enemy chemists taking the treasure first. A row written
+from that page alone would have described a game released twenty-eight years after the one in the
+codex, under names no PlayStation player has seen. The same shape, one game earlier: the Suikoden
+Wiki's Weapons page is series-wide, so its account of the four hammers and the level-16 ceiling is
+written across six games, with the exceptions belonging to the first one.
+
+**Takeaway:** when a source covers several editions, treat every name and number in it as
+belonging to the newest until an edition-specific source confirms otherwise — and make the
+edition-specific source the one that sets the vocabulary, not just the one that checks the facts.
+The tell is cheap to look for: a page that names a release you are not researching anywhere in its
+text is covering that release everywhere in its text.

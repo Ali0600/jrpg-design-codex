@@ -178,3 +178,4 @@ row: g061
 
 ## Codex delta
 - 2026-09-18: M142–M144, g060 and g061, all five Breath of Fire IV rows, sourced from the Breath of Fire Wiki and three GameFAQs authors; M143, g060 and g061 corrected.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. Every lead left in this digest is already inside a row — the Manillo fish traders and the fishing-point tiers are g060's table, the masters at "?" spots are M142, the six found summons and the Game Point thresholds are M143, and the faerie skills are split between M142 and g061. The Breath of Fire Wiki's Fishing System page is series-wide and its Breath of Fire IV section is a list of spots and fish, which g060 already carries.

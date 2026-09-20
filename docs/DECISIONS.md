@@ -161,6 +161,33 @@ vanish or be reused.
 silently point at another minigame`. **Revisit hook:** none; the `RETIRED` map is the pattern for
 any later duplicate.
 
+## 2026-09-21 — How far to expand the PS1 games
+
+**Fork:** the owner asked to "expand on the PS1 games". Measured the same day: 23 of the 72 roster games are PS1
+(their `gf.u` sits under `/ps/`), 17 of them carried three or fewer mechanics rows — Final Fantasy VII (1997) carried
+two, the fewest on the roster — and ten had no minigame row. Every one already had a digest and two-source `refs` from
+the sources pass, so their digests' recorded facts and Unverified sections were a standing list of leads.
+
+- **A: more rows per game, only where the sources lead** *(chosen by the owner, AskUserQuestion 2026-09-21)*. No floor:
+  a row is written only where two distinct sources already support one, and a game whose sources support nothing is
+  recorded as thin in its own digest.
+- **B: a floor of five mechanics per game.** Rejected by the owner: the games with three rows have three systems, so a
+  floor is an instruction to pad.
+- **C: a floor of seven, matching the original nine games.** Rejected for the same reason at twice the browser cost.
+- **D: more PS1 games instead.** Not chosen: GameFAQs suggests 17 unrostered PS1 titles (SaGa Frontier 2, Parasite Eve
+  II, Suikoden, Breath of Fire III, Tactics Ogre, Front Mission 3 and others), each needing the whole pipeline — brief,
+  GameFAQs harvest, cover, infobox, vocabulary, digest, rows, scores.
+
+**Status:** A `built — 2026-09-21` (#111–#114: eight rows across five games; four games probed and recorded thin).
+B and C `rejected by the owner — a floor is an instruction to pad`. D `deferred — worth trying: the 17 suggested PS1
+titles are already ranked in the Games tab's candidates panel`. **Revisit hook:** the research queue, empty since
+2026-08-12, is where a new game enters; the candidates panel's Queue-it button writes to it.
+
+**What the pass taught, for the next one:** a game's own digest is the cheapest lead list, because its Unverified
+section records exactly which claims failed a second source and its fact sections hold what no row used. After that,
+listing a wiki's page titles through `action=query&list=allpages` is free and shows un-rowed systems immediately — it
+is how Final Fantasy Tactics' Move-Find Item and Propositions were found. Both beat re-reading guides.
+
 ## 2026-09-14 — The order of the sources pass
 
 **Fork:** 253 mechanics and 44 minigames, every row written before the GameFAQs pilot, carry no
