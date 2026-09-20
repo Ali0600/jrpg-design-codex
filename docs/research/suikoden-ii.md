@@ -17,13 +17,15 @@ walkthrough, which `pick()` names, and Godhand's Cooking FAQ. Ruk_Chan's Endings
 | 8064 | Guide and Walkthrough | CCajes | 2.0 | 08/31/2000 | Full Game Guides | 707 | https://gamefaqs.gamespot.com/ps/198844-suikoden-ii/faqs/8064 |
 | 6289 | Cooking FAQ | Godhand | 3.1 | 09/23/2000 | In-Depth Guides | 71 | https://gamefaqs.gamespot.com/ps/198844-suikoden-ii/faqs/6289 |
 | 6813 | Endings Guide | Ruk_Chan | 2.3 | 01/08/2001 | In-Depth Guides | 13 | https://gamefaqs.gamespot.com/ps/198844-suikoden-ii/faqs/6813 |
-| wiki | Suikoden II; 108 Stars of Destiny; Dunan Castle; Unite Attack; Suikoden II - Unite attacks list; Chinchirorin; Army Battle | — | — | — | suikoden.fandom.com | — | https://suikoden.fandom.com/wiki/Suikoden_II |
+| wiki | Suikoden II; 108 Stars of Destiny; Dunan Castle; Unite Attack; Suikoden II - Unite attacks list; Chinchirorin; Army Battle; Weapons; Blacksmith | — | — | — | suikoden.fandom.com | — | https://suikoden.fandom.com/wiki/Suikoden_II |
 
 Coverage 8064: single page, 708,066 chars, 16,372 lines, 1,707 sections. Read: the castle-level recruit lists (lines
 10380–10434), the Chinchirorin entry (11415–11449), the opening of the unite-combo tables (10120–10159), the cooking contest block (11448–11495) and the first
 ending (6773–6812). Greps: castle level (6 hits), 108 (16), Unite (21), the higher combination levels and Knight ATK (4),
 endings (48), cooking (19), judge (5), popularity and restaurant (5). Largest unread: RESULTS OF SCULPTURES (19,823 chars),
 the full unite tables (10,290) and the item list (10,189).
+Read again on 2026-09-21 for the expansion pass: `lines()` windows 11220–11259 (the castle blacksmith and Tessai's hammer
+locations) and 8316–8337 (the head of the per-character weapon tables); greps hammer (27 hits) and level 16 (70).
 
 Coverage 6289: single page, 70,912 chars, 1,847 lines, 66 sections. Read: IV.RULES, VIII.JUDGES and the Challenger
 Descriptions. Largest unread: IX.MENU (21,525 chars), SORTED BY NUMBERS (2,659) and RED PEPPER (2,053) — the recipe and
@@ -114,6 +116,20 @@ row: M138
 - Some carry a cost to the pair: the wiki's Warrior Attack (Tengaar and Hix) does 2x damage and hurts Hix; CCajes's Family Attack does 2x and leaves Nanami unbalanced [wiki:suikoden.fandom.com/Suikoden II - Unite attacks list] [gf:8064 §LEVEL 2 COMBINATION COMBO, CCajes v2.0]
 - The wiki says unites are diverse in look, power and, in some cases, drawbacks [wiki:suikoden.fandom.com/Unite Attack]
 
+### One weapon per character, sharpened to a ceiling you raise yourself
+cat: Progression & Upgrades
+how: Nobody in Suikoden II ever finds a better weapon. Each character carries one weapon that cannot be removed, and the only way it grows is a blacksmith sharpening it a level at a time to a maximum of 16, with the weapon's name changing at a few of those levels. What exploration pays out is the CEILING: a town blacksmith will only sharpen so far, while Tessai, the smith who moves into your castle, goes further with every hammer you bring him — iron from an armour shop in Forest Village, copper from a man in a room at Gregminster Castle, silver from the blacksmith room of Greenhill's academy once a particular recruit joins, and gold from a village's rare-finds stock.
+loop: Bring your one weapon to a smith → pay for the next level → then find a hammer out in the world → the cap moves, and every character's weapon can climb again.
+notes: The owner's pillar turned inside out: there is no loot to make gear obsolete, so the upgrade track IS the equipment system, and what the world hands you is not a weapon but permission to keep upgrading. Two pieces worth stealing separately — a personal weapon nobody can replace makes each character feel authored rather than equipped, and a cap raised by four found items turns a gold sink into an exploration reward. Note where the hammers sit: a shop, a man in a room, a recruit's academy and a rare-finds list, four different kinds of place, so the hunt is never one checklist. The castle smith himself is one of the recruits (M136, M137).
+pointers: [wiki:suikoden.fandom.com/Weapons] [gf:8064 §TESSAI'S HAMMER UPGRADE LOCATIONS, CCajes v2.0] [gf:8064 §GOLDEN HAMMER 6500, CCajes v2.0]
+row: M299
+- Each character has their own weapon that cannot be removed; sharpening raises it a level at a time, each level adding a fixed amount of attack power [wiki:suikoden.fandom.com/Weapons] [gf:8064 §HERO (TONFAR), CCajes v2.0]
+- A weapon's name changes at certain levels — the hero's runs Twin Fang at 1, Twin Heaven Fang at 6, Twin Destiny Fang at 13 — and 16 is the last level for every character [wiki:suikoden.fandom.com/Weapons] [gf:8064 §HERO (TONFAR), CCajes v2.0]
+- Town blacksmiths each stop at a level of their own; the castle smith's reach is raised by hammers, of which there are four: iron, copper, silver and gold [wiki:suikoden.fandom.com/Weapons] [gf:8064 §TESSAI'S HAMMER UPGRADE LOCATIONS, CCajes v2.0]
+- The hammers: iron from the man in Forest Village's armour shop, copper from the man in the first room on the right at Gregminster Castle, silver from the blacksmith room inside Greenhill academy once Jude joins, and gold from the Rare Finds stock in Sajah village [gf:8064 §TESSAI'S HAMMER UPGRADE LOCATIONS, CCajes v2.0]
+- The golden hammer is what takes a weapon to level 16, and the guide prices it at 6,500 [gf:8064 §GOLDEN HAMMER 6500, CCajes v2.0]
+- Each weapon also has a range — short, medium or long — which decides the rows it can attack from and reach [wiki:suikoden.fandom.com/Weapons] [gf:8064 §HERO (TONFAR), CCajes v2.0]
+
 ## Minigame candidates
 
 No new rows. Both existing rows are edited in place on 2026-09-18.
@@ -176,12 +192,23 @@ row: g058
 - **Surprise dishes and completion as scoring factors.** g057 listed them. Godhand's rules give the judges' tastes and the three courses, plus a speed bar that the player hammers a button to fill; nothing about surprise or completion. Cut [gf:6289 §IV.RULES, Godhand v3.1]
 - **Unites as pairs or trios.** M138 said pairs or trios. Both sources go further: the wiki groups them 2, 3 and 4-5 characters and says up to 6 on rare occasions, and CCajes tables levels 2 through 5 [wiki:suikoden.fandom.com/Unite Attack] [wiki:suikoden.fandom.com/Suikoden II - Unite attacks list] [gf:8064 §LEVEL 5 COMBINATION COMBO, CCajes v2.0]
 - **One recruit filling every role at once.** M136's note said the same recruit is at once a party member, a combo piece, an army unit and a shopkeeper. The wiki divides recruits into combatants and non-combatants, so the note now says a recruit can be any of these [wiki:suikoden.fandom.com/Suikoden II]
+- **Where the wiki's weapon rules stop being about this game.** `Weapons` is a series-wide page: its account of sharpening, the four hammers and the level-16 ceiling is written across the series, and it says the hammer system was adopted after the first game. CCajes confirms all three for Suikoden II itself — Tessai, the four hammers by location, and 16 as every character's last level — so the row rests on the two together [wiki:suikoden.fandom.com/Weapons] [gf:8064 §TESSAI'S HAMMER UPGRADE LOCATIONS, CCajes v2.0]
+- **What a sharpening costs.** The guide's section heads carry prices (sharpening to level 4 for 1,500, the golden hammer at 6,500), but no second source gives a price list, so the row names no cost [gf:8064 §GOLDEN HAMMER 6500, CCajes v2.0]
 
 ## Codex rows
 
-```js
+```text
 // No new rows. M136–M138, g057 and g058 were edited in place on 2026-09-18 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M299  One weapon per character, sharpened to a ceiling you raise yourself  Progression & Upgrades
 ```
 
 ## Codex delta
 - 2026-09-18: M136–M138, g057 and g058, all five Suikoden II rows, sourced from the Suikoden Wiki and three GameFAQs authors; M138 and g057 corrected.
+- 2026-09-21: the expansion pass adds M299 (one weapon per character, sharpened to a ceiling raised by four found hammers), from the Suikoden Wiki's Weapons page and two further sections of CCajes's walkthrough. Suikoden II goes from 3 mechanics / 2 minigames to 4 / 2.
