@@ -426,3 +426,9 @@ category and for every row the digest tagged.
 ### M297 — Level 4 Limits (the last technique is an item you find)
 - Guarded · how · `Red XIII's waits behind the boss in the Shinra Mansion's safe`
 - Tool-gated · how · `Cid's lies in a crashed plane that only the submarine reaches`
+
+### M301 — Move-Find Item (the least brave unit is the best treasure hunter)
+- Tool-gated · how · `they exist only for a unit carrying Move-Find Item, the Chemist's movement ability`
+
+### M302 — Propositions (the units you never field go out earning)
+- none · the expedition happens off-screen and returns pay, or a paragraph of lore; the player finds nothing in the world themselves

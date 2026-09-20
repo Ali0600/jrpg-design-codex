@@ -18,11 +18,16 @@ now describe the remasters as well as the original, so where a name differs the 
 | 30113 | Guide and Walkthrough | BoardFourSixNineFour | 87 | 08/14/2004 | Full Game Guides | 1246 | https://gamefaqs.gamespot.com/ps/197339-final-fantasy-tactics/faqs/30113 |
 | 3880 | Deep Dungeon Guide | JArtanto | 1.1 | 07/28/2003 | In-Depth Guides | 36 | https://gamefaqs.gamespot.com/ps/197339-final-fantasy-tactics/faqs/3880 |
 | 3884 | Poaching List | MHobbs | 1.3 | 10/08/1998 | In-Depth Guides | 11 | https://gamefaqs.gamespot.com/ps/197339-final-fantasy-tactics/faqs/3884 |
-| wiki | Final Fantasy Tactics; Final Fantasy Tactics jobs; Poach; Midlight's Deep (Tactics) | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Final_Fantasy_Tactics |
+| wiki | Final Fantasy Tactics; Final Fantasy Tactics jobs; Poach; Midlight's Deep (Tactics); Treasure Hunter (Tactics); Errands | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Final_Fantasy_Tactics |
 
 Coverage 30113: single page, 1,247,462 chars, 28,897 lines, 6,171 sections. Read: the ability-slot explanation (lines
 149–160) and XIV. Zodiac Compatability (14,177–14,333). Greps: zodiac and compatibility (8 hits), the ability slots (6),
 Elidibus (0). Largest unread: the walkthrough itself, which runs to most of the guide's 1.2 MB.
+Read again on 2026-09-21 for the expansion pass: the `lines()` window 13696–13740 (IX. Propositions and the head of X.
+Brave and Faith, including what Brave does to Move-Find Item); greps Move-Find Item (72 hits), Proposition (8) and the
+ability's cost (2). The guide's own Move-Find Item chapter heads itself `XVII. Move-Find Item and Area Maps [17.0]`,
+which is 41 characters once the brackets become parentheses — one over what a pointer's section may hold — so the facts
+here cite the Brave and Faith section and the item-table legend instead.
 
 Coverage 3880: single page, 36,864 chars, 780 lines, 40 sections. Read: the 10th floor entry (lines 206–221) and the
 poaching table (316–341). Greps: the boss, the crystals and Byblos (12 hits). The table's own heading runs to 49 characters,
@@ -156,6 +161,31 @@ row: M156
 - Sex decides which end of the strongest pairing you get: across the square, same sex is Worst and different sex is Best; monsters have no sex, so that pairing becomes Bad [gf:30113 §XIV. Zodiac Compatability (14.0), BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Final Fantasy Tactics]
 - The wiki gives the same rule in one line: a male Pisces and a female Virgo hurt each other badly, a male Pisces and a male Virgo much less [wiki:finalfantasy.fandom.com/Final Fantasy Tactics]
 
+### Move-Find Item (the least brave unit is the best treasure hunter)
+cat: Exploration & Rewards
+how: Battle maps hide items under particular squares, and nothing on screen marks them: they exist only for a unit carrying Move-Find Item, the Chemist's movement ability, which any job can equip once it has been bought. A square can hold two items, a common one and a rare one, and the unit's Brave decides which appears — the chance of the rare is 100 minus Brave, so the least courageous unit in the party is the best treasure hunter, though Brave is also what makes reaction abilities fire. Each hidden item can be taken once, and several of the best sit on maps that are one-time battles.
+loop: Buy a movement ability that shows nothing by itself → walk a low-Brave unit across the likely squares → a weapon no shop sells appears under one of them → and on a story map, the chance leaves with the chapter.
+notes: One stat pulling in two directions is the idea worth stealing: Brave decides how often a unit's reactions trigger AND, inverted, how often it finds the rare item, so somebody in the party has to be made worse at fighting to be good at looking. Note also what the secret is hidden behind — not a puzzle but an ABILITY, so the reward for equipping it is that the whole world quietly has more in it, on maps you have already walked across.
+verbs: Tool-gated
+pointers: [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)] [gf:30113 §X. Brave and Faith (10.0), BoardFourSixNineFour v87] [gf:30113 §M - Move-Find Item, BoardFourSixNineFour v87]
+row: M301
+- The chance of the rare item on a two-item square is 100 minus the unit's Brave, so low Brave finds rare items more often [gf:30113 §X. Brave and Faith (10.0), BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)]
+- It is the Chemist's movement ability, and once learned it can be equipped by other jobs; the wiki prices it at 100 JP [gf:30113 §M - Move-Find Item, BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)]
+- Brave also governs how often reaction abilities trigger, and the damage of bare hands, knight swords and katanas, so lowering it for treasure costs elsewhere [gf:30113 §X. Brave and Faith (10.0), BoardFourSixNineFour v87]
+- Every combat map holds at least one hidden item, none can be taken twice, and the wiki calls Move-Find Item the only reason to want a low-Brave unit [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)]
+- The guide's own item tables mark which items can be found this way, the ones no shop sells by the level they sit on [gf:30113 §M - Move-Find Item, BoardFourSixNineFour v87]
+
+### Propositions (the units you never field go out earning)
+cat: Side Content & Minigames
+how: From Chapter II every bar posts Propositions: short expeditions you send generic units on for a run of days. They cannot fight while they are away, and they come back with gil and with Job Points — the same currency the job system runs on, so the bench funds the jobs the party is learning. Some expeditions instead turn up treasures and hidden lands, which pay nothing at all and exist only as a paragraph added to the Brave Story.
+loop: Send the units you are not fielding out for a few days → keep playing without them → collect gil and JP that go straight into the job tree → and now and then read about somewhere nobody will ever visit.
+notes: Idle content that pays into the MAIN progression rather than a side currency: the JP lands in the same pool the job system spends (M154, M155), so a roster bigger than the party stops being dead weight. Two things to weigh before copying it. It quietly rewards recruiting broadly, which suits a game about collecting people. And it is honest that its lore prizes are only lore — a clean separation of collectible from power, which reads either as respect for the player's time or as a wasted slot, depending on who is holding the controller.
+pointers: [wiki:finalfantasy.fandom.com/Errands] [gf:30113 §IX. Propositions (9.0), BoardFourSixNineFour v87]
+row: M302
+- Propositions appear in bars from Chapter II, take generic units, and pay gold and Job Points; a unit away cannot fight [gf:30113 §IX. Propositions (9.0), BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Errands]
+- The treasures and hidden lands they turn up have no effect on play; they are a paragraph in the Brave Story, which the remaster renames Chronicles [gf:30113 §IX. Propositions (9.0), BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Errands]
+- The wiki adds the detail the guide leaves out: one to three generic humans per expedition, never Ramza, story characters or monsters; a small fee to accept; the reward scaling with the days chosen; bonus tiers rolled at the report; "skill saver" jobs that raise the odds; and a failed expedition repeatable after a month [wiki:finalfantasy.fandom.com/Errands]
+
 ## Minigame candidates
 
 No new rows. Both existing rows are edited in place on 2026-09-18.
@@ -210,12 +240,24 @@ row: g067
 - **The Wild Boar's Ribbon as a rare.** The Ribbon is the common result and the FS Bag the rare one, and the monster cannot be met in the wild at all — it has to be bred from a Uribo or a Porky [gf:3884 §(preamble), MHobbs v1.3] [gf:3880 §b. The World of Poaching, JArtanto v1.1]
 - **"The game never displays any of this."** M156 said the PlayStation original never shows compatibility. Neither source read here says so; what they do say is that the table is fixed and worth examining, and the wiki describes the effect without mentioning any in-game display. The row now says the game does not spell the table out rather than claiming it is never shown [gf:30113 §XIV. Zodiac Compatability (14.0), BoardFourSixNineFour v87] [wiki:finalfantasy.fandom.com/Final Fantasy Tactics]
 - **Poaching "any monster you finish with a normal Attack".** The wiki describes poaching the remains of slain monsters and notes a weapon whose secondary magick lands the killing blow leaves the target merely KO'd. The row keeps the point that the kill has to come from the poacher's own attack and drops the claim that any monster qualifies — stronger enemies and all bosses are immune [wiki:finalfantasy.fandom.com/Poach]
+- **What the wiki calls things now.** `Errands` is the remaster's name for Propositions, `Chronicles` for the Brave Story, and its Treasure Hunter page is the remaster's name for Move-Find Item; the page also describes remaster-only behaviour (innate Treasure Hunter on chemists, cancelling a move, enemy chemists taking treasure). The rows use the PlayStation names and only the behaviour the PlayStation guide confirms [wiki:finalfantasy.fandom.com/Errands] [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)] [gf:30113 §IX. Propositions (9.0), BoardFourSixNineFour v87]
+- **The 100 JP price, the one-to-three party size and the bonus tiers.** Each rests on the wiki alone; the guide gives the ability's owner and the propositions' pay without the numbers. They are recorded here and left out of the rows [wiki:finalfantasy.fandom.com/Treasure Hunter (Tactics)] [wiki:finalfantasy.fandom.com/Errands]
 
 ## Codex rows
 
-```js
+```text
 // No new rows. M154–M156, g066 and g067 were edited in place on 2026-09-18 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds two rows:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M301  Move-Find Item (the least brave unit is the best treasure hunter)  Exploration & Rewards
+// M302  Propositions (the units you never field go out earning)            Side Content & Minigames
 ```
 
 ## Codex delta
 - 2026-09-18: M154–M156, g066 and g067, all five Final Fantasy Tactics rows, sourced from the Final Fantasy Wiki and three GameFAQs authors; M155, M156 and g066 corrected.
+- 2026-09-21: the expansion pass adds M301 (Move-Find Item, whose rare-item odds are 100 minus Brave) and M302 (Propositions, the bench earning gil and JP), from the wiki's Treasure Hunter and Errands pages and two further sections of the walkthrough. Final Fantasy Tactics goes from 3 mechanics / 2 minigames to 5 / 2.
