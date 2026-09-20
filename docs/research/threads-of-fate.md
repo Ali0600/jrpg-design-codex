@@ -14,7 +14,7 @@ digest started 2026-09-05
 | 38095 | Power-Up/Item FAQ | SIMSteven | 1.0 | 07/26/2005 | In-Depth Guides | 29 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/38095 |
 | 8585 | Secrets Guide | d0wner | 1.1 | 02/11/2001 | Codes and Secrets | 30 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/8585 |
 | 8509 | Guide and Walkthrough | krystalklyr | 1.3 | 06/25/2002 | Full Game Guides | 380 | https://gamefaqs.gamespot.com/ps/197110-threads-of-fate/faqs/8509 |
-| wiki | Threads of Fate · Rue · Arc Edge · Dual Rings | — | — | — | threadsoffate.fandom.com | — | https://threadsoffate.fandom.com/wiki/Threads_of_Fate |
+| wiki | Threads of Fate · Rue · Arc Edge · Dual Rings · Carona | — | — | — | threadsoffate.fandom.com | — | https://threadsoffate.fandom.com/wiki/Threads_of_Fate |
 
 Triage (2026-09-05, `__gf.triage()` on 10 guides): Power-Up/Item FAQ 10 · Secrets Guide 6 ·
 Rue Walkthrough / Mint Mini-FAQ 4 · the three full walkthroughs (380/132/138KB) kept for
@@ -31,6 +31,10 @@ threshold (131 hits), rewards (47), hidden (83), upgrades (118), economy (444), 
 wine (54) and minigame (27). The 2026-09-05 pass had cited its magic primer, Town of Carona, Mel's
 Atelier and Arena I. Largest unread: 2. Mid-level Elevation (16,261 chars), the Cursed Crossways
 chapters (9,610 and 6,908), the Magic List (6,590) and the Ghost Temple (6,074).
+Read again on 2026-09-21 for the expansion pass: `lines()` windows 8960–8999 (the per-hero item
+checklists), 9040–9084 (the town's shops, the non-stacking note and the bracer/belt table) and
+2858–2869 (Rod and the book); greps Bracer (30 hits), Brooch (8), Marcum (3), Last Hero (13) and
+Mysterious Statue (11). Largest unread is unchanged.
 
 ## Triage
 
@@ -105,6 +109,34 @@ row: M265
 - The walkthrough's own magic primer lists the same seven effects and says effects come from chests and events while colours come from the story [gf:8509 §Magic, krystalklyr v1.3]
 - Effects: Normal and Wide at the start; Super behind the three ice blocks (with the Rare Wine); Power on Skull Beast's body at the bottom of the spiral staircase after returning to the Underground Ruins; Circle in a chest under a cliff rock on the Carona Forest descent, blown up with Graviton, then a jump with almost no margin; Hyper from a rematch with Wygraf on Raging Mountain after the Tower of Maya and before Valen's Fortress; Cosmos from the story [gf:8585 §Magic Colors/Effects, d0wner v1.1]
 - Rue's abilities (monster forms) are never hidden; his campaign gets item sidequests instead — the Star Stone behind a rock (Bubba to smash, Stinger to crawl, then kill the Little Bats) and the Moon Stone up the Ootang's tree [gf:8585 §Rue's Sidequests, d0wner v1.1]
+
+### Bracers and belts (the shop IS the equipment ladder)
+cat: Progression & Upgrades
+how: Each hero carries one weapon for the whole game — Rue's Arc Edge, Mint's Dual Rings — and its attack power rises only by buying bracers in Carona. Tonio's shop sells those bracers for Strength and matching belts for Defense in six tiers that appear as the story advances, from the +4 pair at 1,000 G to a Brave Bracer and a Black Belt at +24 for 6,500 G, and he buys your monster coins, stones and rare finds across the same counter. A tier REPLACES the last rather than adding to it — buy the +8 bracer over the +4 and the bonus is +8, not +12 — and the models you have outgrown drop off his list.
+loop: Sell your coins and finds at Tonio's counter → buy the tier the story has just opened → the weapon you have carried since the first hour hits harder → and what you outgrew leaves the list, so the next rung is the only thing in view.
+notes: The tidiest form of "everything has upgrades": the weapon never changes, so every point of attack and defence the player can feel is something a merchant sold them, and story progress is what widens the stock. Two details worth stealing — replacing rather than stacking keeps the numbers legible with no inventory screen to manage, and retiring the inferior models turns a price list into a progress bar. Each shop in town owns one kind of growth: Tonio the gear ladder, Hobbs the base stats (M262, M264), Jergen the meals (M263).
+verbs: Shop stock
+pointers: [gf:38095 §Tonio's Armor, SIMSteven v1.0] [gf:8509 §Item | Cost | Description, krystalklyr v1.3] [wiki:threadsoffate.fandom.com/Carona] [wiki:threadsoffate.fandom.com/Arc Edge]
+row: M295
+- Both heroes have one weapon all game, and each wiki page says its attack power is raised by buying bracers in Carona [wiki:threadsoffate.fandom.com/Arc Edge] [wiki:threadsoffate.fandom.com/Dual Rings]
+- The walkthrough's own table gives the same six tiers as the item FAQ: Bronze +4 1,000 G, Silver +8 3,000 G, Gold +12 3,500 G, Platinum +16 4,500 G, Mythril +20 5,500 G, Brave Bracer / Black Belt +24 6,500 G, bracers for Strength and belts for Defense [gf:8509 §Item | Cost | Description, krystalklyr v1.3] [gf:38095 §Tonio's Armor, SIMSteven v1.0]
+- The bonuses do not add up: buying the +8 bracer after the +4 leaves the bonus at +8 [gf:8509 §Donation | Coins | Description, krystalklyr v1.3]
+- Once a tier is bought, every inferior model is dropped from the shop's list [wiki:threadsoffate.fandom.com/Carona]
+- The later tiers turn up as the story moves: the Gold pair back in Carona, the Platinum pair by Raging Mountain, the Mythril pair at Maya's arrival and the Brave Bracer and Black Belt last [gf:8509 §Item | Cost | Description, krystalklyr v1.3] [gf:38095 §Tonio's Armor, SIMSteven v1.0]
+- The same counter buys monster coins, stones and rare finds [gf:8509 §Donation | Coins | Description, krystalklyr v1.3] [wiki:threadsoffate.fandom.com/Carona]
+
+### One-off treasures with two buyers (keep the gain or take the gold)
+cat: Exploration & Rewards
+how: Three treasures exist once each, and each hides a different way: The Last Hero, a book at the end of a dream (sleep at the hotel, watch an Ootang jump into a hollow stump, then find that stump in Carona Forest), which either hero can reach; the Mysterious Statue, in a room that only opens once Rue has cleared the Ghost Temple; and the Brooch, at the end of a Gamul Forest lever puzzle where Mint loses it for good by hitting the wrong switch. Each has someone who wants it and pays in something permanent — Rod hands over four Strength Ups for the book, Klaus gives Max MP +10 for the statue, Annette cuts the tavern's drinks from 50 / 120 / 220 G to 10 / 30 / 50 G for the brooch — and the trader Marcum will instead buy the statue or the brooch for 4,000 G, or 6,000 G if his first offer is refused once, and no more.
+loop: Find a treasure that exists once → learn that two people want it → take the permanent stat, the standing discount, or the gold you need now → the choice is the reward, and it is made once.
+notes: Three items, three kinds of search — a dream to interpret, a room that has changed since you were last in it, and a puzzle that can be failed permanently — which is the variety of discovery the owner asked for at the smallest possible scale. Each one then prices a permanent gain against cash with no take-backs, the same teeth the Rare Wine has (M264). For our own version: make the trader's offer genuinely tempting early, and have the NPC who wants it say what they mean to do with it, so the player is choosing between two futures rather than between a number and a number.
+verbs: Traded, Vista sketch
+pointers: [gf:38095 §Unique Items, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1] [gf:8585 §The Dream Sequence, d0wner v1.1] [gf:8509 §Mint, krystalklyr v1.3]
+row: M296
+- The book is on both heroes' lists, and Rod pays for it with four Strength Ups he had bought from Hobbs, raising base Strength by 4 [gf:8509 §'Town of Carona', krystalklyr v1.3] [gf:38095 §Unique Items, SIMSteven v1.0]
+- The walkthrough's per-hero checklist writes each treasure's two payoffs as one line: the statue as "+10 MP / 6,000 G" and the Brooch as "Discount at the Tavern / 6,000 G" [gf:8509 §Mint, krystalklyr v1.3]
+- Klaus takes the Mysterious Statue for Max MP +10, and the statue is Rue's alone [gf:8509 §Mint, krystalklyr v1.3] [gf:38095 §Unique Items, SIMSteven v1.0]
+- In Gamul Forest's two-switch room only the left switch may be hit; hitting the right one puts the Brooch out of reach, and Annette gives the discount for it at the tavern [gf:8509 §2 Switch Area Map, krystalklyr v1.3] [gf:8509 §Dragon battle, krystalklyr v1.3]
 
 ## Minigame candidates
 
@@ -182,10 +214,13 @@ row: g092
 - The Valen's Fortress arena timer PERCENTAGES have one source; the walkthrough confirms a tiered Gold / Silver / Bronze Coin at each arena exit but not the cut-offs [gf:38095 §Coins, SIMSteven v1.0] [gf:8509 §Arena I, krystalklyr v1.3]
 - **What Hobbs's stat items add.** The walkthrough gives +1 base Strength and +1 base Defense but +10 max HP and MP, while this digest's shop line, citing the item FAQ and the secrets guide, says +10 for each [gf:8509 §Town of Carona, krystalklyr v1.3] [gf:38095 §Rare Wine, SIMSteven v1.0] [gf:8585 §Useless/Useful Items, d0wner v1.1]
 - **Whether a sold coin still transforms Rue.** The item FAQ and the secrets guide key each form to its coin, while the walkthrough says a monster once killed stays a form Rue can take even with its coins sold, up to four forms held at a time [gf:8509 §Transform, krystalklyr v1.3] [gf:38095 §Stones, SIMSteven v1.0] [gf:8585 §Rue's Sidequests, d0wner v1.1]
+- **The Platinum pair's price.** The item FAQ prices the Platinum Bracer and Belt at 3,500 G, the same as the Gold pair; the walkthrough gives 4,500 G in four separate places, including two of its own tables. The row names the ladder's ends (1,000 G for the +4 pair, 6,500 G for the +24) and leaves the middle prices to this digest [gf:38095 §Tonio's Armor, SIMSteven v1.0] [gf:8509 §Item | Cost | Description, krystalklyr v1.3]
+- **The Silver bracer's loyalty discount.** The item FAQ prices the Silver pair at 3,000 G, or 2,500 G for an owner of the Bronze; the walkthrough gives 3,000 G flat in every table. The row gives neither figure as a discount [gf:38095 §Tonio's Armor, SIMSteven v1.0] [gf:8509 §Item | Cost | Description, krystalklyr v1.3]
+- **No levels, and max HP rising with damage taken.** The walkthrough states both — there is no experience, max HP grows with the amount of damage taken and max MP with casting. It is the only source read that says so (its own FAQ section repeats it, same author), so the claim stays out of the bracers row, which says only what two sources carry [gf:8509 §Increasing Parameters, krystalklyr v1.3]
 
 ## Codex rows
 
-```js
+```text
 // Spliced straight into JRPG_Design_Codex.html on 2026-09-05 (the rows there are the
 // source of truth; this block is the map from candidate to row).
 // M262  Monster coins: one drop, three uses            Economy & Currency      refs: gf:38095 gf:8585
@@ -199,6 +234,16 @@ row: g092
 // M118  (existing) notes sharpened + refs: wiki, gf:38095, gf:8585
 ```
 
+The 2026-09-21 expansion pass adds two rows:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M295  Bracers and belts (the shop IS the equipment ladder)                Progression & Upgrades
+// M296  One-off treasures with two buyers (keep the gain or take the gold)  Exploration & Rewards
+```
+
 ## Codex delta
 - 2026-09-05: M262–M265 and g090–g092 added; M117 and M118 given `refs` and a sharper note. Threads of Fate goes from 2 mechanics / 0 minigames to 6 / 3.
 - 2026-09-15: the largest plain-text walkthrough, 8509, read under the owner's rule (the listing flags no guide); its Coverage line says what was read. It confirms three facts as a third author, adds how parameters grow without levels, and disagrees on two points recorded above. No row was edited.
+- 2026-09-21: the expansion pass adds M295 (Tonio's bracer and belt ladder) and M296 (the three one-off treasures with two buyers each). The walkthrough was read again for both; it gives the whole equipment ladder as a second author, states that the tiers do not stack, and lists each treasure's two payoffs on one line. Threads of Fate goes from 6 mechanics / 3 minigames to 8 / 3.

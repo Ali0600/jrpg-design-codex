@@ -415,3 +415,10 @@ category and for every row the digest tagged.
 
 ### M294 — Part-Time Hero (a city quest board whose ranks pay gear)
 - none · requests are posted on a board and at kiosks and pay on completion; nothing is hidden, guarded or gated
+
+### M295 — Bracers and belts (the shop IS the equipment ladder)
+- Shop stock · how · `six tiers that appear as the story advances`
+
+### M296 — One-off treasures with two buyers (keep the gain or take the gold)
+- Traded · how · `Each has someone who wants it and pays in something permanent`
+- Vista sketch · how · `sleep at the hotel, watch an Ootang jump into a hollow stump, then find that stump in Carona Forest`
