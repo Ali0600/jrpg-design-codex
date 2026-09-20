@@ -18,9 +18,11 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
 
-Every entry was checked against at least two wiki sources when it was written. Reward
-details are never written from memory. A plausible but wrong item name is worse than
-none, because it reads as verified.
+Every entry was checked against at least two sources. A pass through the older rows is
+putting those links in the data itself, game by game, and cutting any claim only one
+source backed — what it cut is recorded in that game's digest. Reward details are never
+written from memory. A plausible but wrong item name is worse than none, because it
+reads as verified.
 
 ### Features
 
