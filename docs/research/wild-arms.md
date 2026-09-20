@@ -15,12 +15,14 @@ locations, the Crest Graph grids and the arena's prizes, so every row is the wik
 | id | title | author | version | updated | category | KB | url |
 |---|---|---|---|---|---|---|---|
 | 21324 | Guide and Walkthrough | DavidK5 | 9.0 | 12/18/2011 | Full Game Guides | 276 | https://gamefaqs.gamespot.com/ps/199299-wild-arms/faqs/21324 |
-| wiki | Tools; Radar; Crest Sorcery; Fast Draw; Ancient Arena | — | — | — | wildarms.fandom.com | — | https://wildarms.fandom.com/wiki/Tools |
+| wiki | Tools; Radar; Crest Sorcery; Fast Draw; Ancient Arena; List of ARMs (Wild Arms) | — | — | — | wildarms.fandom.com | — | https://wildarms.fandom.com/wiki/Tools |
 
 Coverage 21324: single page, 277,682 chars, 5,024 lines, 112 sections. Read: 5. TOOLS (lines 3848–3907), the head of
 8. FAST DRAW LIST (4053–4072), A. Crest Graph Charts (4166–4210), A. Battle Arena (4310–4349) and the Boomerang Flash boss
 entry. Greps: Fast Draw (8 hits), Crest and the magic guilds (8), the tools (8), hint locations (16), the arena, Pegucci,
 Saber Fang, Duplicator and Divine Blade (10). Largest unread: the walkthrough's dungeon chapters and the spell list.
+Read again on 2026-09-21 for the expansion pass: the `lines()` window 3975–4034 (7. ARMS LIST, six of the eight ARMs with
+their locations and ceilings) and greps for meister (2 hits) and the stat names (33).
 
 ## Triage
 
@@ -80,6 +82,18 @@ row: M150
 - Worked locations: a gust of wind on the Mountain Pass gives Sonic Buster; watching boulders fall on Mount Zenom gives Meteor Dive; lighting two torches by a monument in the Sand River gives Heal Blade [gf:21324 §Mountain Pass, DavidK5 v9.0] [gf:21324 §Mount Zenom, DavidK5 v9.0] [gf:21324 §Sand River, DavidK5 v9.0]
 - Accepting a warrior statue's challenge at the Tripillar and winning three fights gives Divide Shot; a swordsman in Adlehyde trades Soul Breaker; three machines exploding in the Epitaph Sea give Blast Charge [gf:21324 §Tripillar, DavidK5 v9.0] [gf:21324 §Exploring the Inner Sea, DavidK5 v9.0] [gf:21324 §Epitaph Sea, DavidK5 v9.0]
 
+### ARMs: eight guns found in dungeons, each with its own upgrade ceiling
+cat: Progression & Upgrades
+how: Rudy is the one who can fire an ARM, and he begins with a single gun, the Hand Cannon. Seven more wait in dungeons across the game — the Cage Tower, the Volcannon Trap, the Photosphere, Demon's Lab, Gemini's Corpse — and each fires its own way, at one enemy or at the whole group. An ARM meister, found upstairs in a shop in most towns, upgrades them for a fee along three separate axes: attack power, hit rate and how many bullets the gun holds. Each ARM caps differently on all three, so the group-hitting guns stop far lower in power while the heaviest hitters stop lower in accuracy and ammunition.
+loop: Clear a dungeon and come out with a gun nobody sells → pay a meister to raise its power, its aim or its magazine → discover where that particular gun stops → keep a spread of ARMs rather than one upgrade path.
+notes: An upgrade system where the thing you upgrade is itself the exploration reward, and where "better" is three numbers instead of one — so a gun found later can still be the wrong tool. For our own version, the transferable trick is the per-item ceiling: it lets a starting weapon stay worth carrying without any rebalancing, because the player is investing in a profile rather than climbing a ladder. Compare the other two heroes, whose systems the codex already holds: Cecilia's Crest Graphs are authored (M149) and Jack's Fast Draws are hunted (M150), so each of the three grows a different way.
+pointers: [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Adlehyde, DavidK5 v9.0] [gf:21324 §Hand Cannon, DavidK5 v9.0]
+row: M300
+- An ARM meister upgrades Rudy's ARMs for a fee, and most towns have one; the first is upstairs in Emma's shop at Adlehyde [gf:21324 §Adlehyde, DavidK5 v9.0] [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)]
+- Upgrades are bought separately for damage, hit rate and bullets [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Hand Cannon, DavidK5 v9.0]
+- Rudy starts with the Hand Cannon and finds the rest through the game; both lists give the same locations — Cage Tower, Volcannon Trap, Photosphere, Demon's Lab and Gemini's Corpse among them [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Prism Ray, DavidK5 v9.0]
+- The ceilings differ per gun and both lists agree on them: the group-firing Prism at 70 attack, the Rocket Launcher at 250 with 89% hit and 12 bullets, the Bazooka at 200 with 84%, and the Phaser at 315 with 99% and 15 [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Prism Ray, DavidK5 v9.0]
+
 ## Minigame candidates
 
 No new rows. The existing row is edited in place on 2026-09-18.
@@ -116,12 +130,23 @@ row: g064
 - **Who the Divine Blade belongs to.** g064 gave it to Jack. DavidK5 calls it Rudy's best weapon; the wiki names the prize without an owner. The row now names the weapon and not its owner [gf:21324 §Boomerang Flash, DavidK5 v9.0] [wiki:wildarms.fandom.com/Ancient Arena]
 - **Seventeen Fast Draws.** The wiki lists seventeen techniques; DavidK5's list carries a hint location for sixteen. The row gives no count [wiki:wildarms.fandom.com/Fast Draw] [gf:21324 §Arch Smash, DavidK5 v9.0]
 - **Tools sending you back over old ground.** M148's note already flagged this as the game's weak spot. What both sources do support is narrower: the Radar detects items, Gella and locations on the world map, which is the retroactive part [wiki:wildarms.fandom.com/Radar] [gf:21324 §The Final Confrontation, DavidK5 v9.0]
+- **The Hand Cannon's attack ceiling, and the ARMs' names.** The wiki caps it at 99 attack and the walkthrough at 90; every other figure in the two lists matches. The two also spell three ARMs differently (Prism Laser against Prism Ray, Phazer against Phaser, Demon's Lab against Demon Lab). The row gives no figure for the Hand Cannon and uses the wiki's spellings [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Hand Cannon, DavidK5 v9.0]
+- **How alike the two lists are.** Both carry the same Description / Location / Max ATP / Max Hit Rate / Max Bullets shape, and the description lines are nearly word for word ("Laser emitter / group", "Auto attack orbs / single (based on Luck)"), which reads as both quoting the game's own item text rather than one copying the other — the disagreement over the Hand Cannon is the evidence they are not copies. Treated as two sources for the structure and the locations, which they were checked against each other on [wiki:wildarms.fandom.com/List of ARMs (Wild Arms)] [gf:21324 §Hand Cannon, DavidK5 v9.0]
 
 ## Codex rows
 
-```js
+```text
 // No new rows. M148–M150 and g064 were edited in place on 2026-09-18 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M300  ARMs: eight guns found in dungeons, each with its own upgrade ceiling  Progression & Upgrades
 ```
 
 ## Codex delta
 - 2026-09-18: M148–M150 and g064, all four Wild ARMs rows, sourced from the Wild Arms Wiki and DavidK5's walkthrough; M148 and g064 corrected.
+- 2026-09-21: the expansion pass adds M300 (Rudy's eight ARMs and their per-gun upgrade ceilings), from the wiki's List of ARMs page and the walkthrough's own ARMs list. Wild ARMs goes from 3 mechanics / 1 minigame to 4 / 1.

@@ -156,3 +156,4 @@ than padded.
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 13947, read under the owner's rule; its Coverage line says what was read. It gives the junk secret a second author and adds the Tune-Up rules, survival armour's slots and the EX Game's shape. No row was edited.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The digest's un-rowed facts are already inside the four rows — the Chrysler Building's re-rolling layouts and once-rolled armories are in M116's notes, the Tool and slot rules in M115, the rare-card counter in M280 — and the survival-armour trade and Parasite Energy charging by fighting each rest on the walkthrough alone. The Parasite Eve Wiki was read for the first time: its shooting gallery, M.I.S.T. Headquarters and Parasite Energy pages describe Parasite Eve II, not this game, so it offers no second source here.
