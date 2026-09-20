@@ -48,6 +48,10 @@ the probe heads "Please take note". Fort Condor, snowboarding, the submarine and
 **2026-09-17**, for the mechanics rows: `lines()` windows 7300–7340 ((I) Breeding Chocobos, the four colours), 7508–7524
 ((J) Chocobo-Only Areas) and 8882–8890 ((U) Return to Cosmo Canyon, the mastered copy); greps for mastering (105 hits),
 the copy, the four cave materia, the colours (33), nuts (59), rank (22) and catching chocobos.
+**2026-09-21**, for the expansion pass: `lines()` windows 12575–12609 (LEARNING LIMIT BREAKS) and 12680–12734 (LIMIT
+BREAK MANUAL LOCATIONS, into the start of the Limit Break list); greps for Omnislash (13 hits), Cosmo Memory (8), Great
+Gospel (11), Level 4 Limit (2), materia growth (1), Ultimate Weapon (33), the ultimate weapons by name (22) and the
+slotless weapons (14).
 
 ## Triage
 
@@ -142,6 +146,8 @@ lists every guide in the table.
 
 No new rows. On 2026-09-17 the sources pass (plan section R, batch 2) sourced the two mechanics rows, M097–M098, from the
 Final Fantasy Wiki and the walkthrough 2376; both are edited in place.
+On 2026-09-21 the PS1 expansion pass added the two blocks at the end of this section: the game's two mechanics rows had
+left its Limit Break and equipment systems unrecorded.
 
 ### M097 Materia mastery births new materia
 pointers: [wiki:finalfantasy.fandom.com/Materia (Final Fantasy VII)] [gf:2376 §(U) Return to Cosmo Canyon, Kao_Megura v2.2]
@@ -156,6 +162,34 @@ row: M098
 - Racing at the Gold Saucer raises a chocobo's class, C to S, and better-ranked parents improve the odds of the offspring wanted [wiki:finalfantasy.fandom.com/Chocobo Racing (Final Fantasy VII)] [gf:2376 §(I) Breeding Chocobos, Kao_Megura v2.2]
 - Pairs are bred with nuts such as the Carob Nut; blue chocobos cross rivers, green ones mountains, black ones both and gold ones the ocean [wiki:finalfantasy.fandom.com/Chocobo (Final Fantasy VII)] [gf:2376 §(I) Breeding Chocobos, Kao_Megura v2.2]
 - Four caves reachable only by these chocobos hold the Quadra Magic, Mime, HP<->MP and Knights of Round materia [wiki:finalfantasy.fandom.com/Materia Cave] [gf:2376 §(J) Chocobo-Only Areas, Kao_Megura v2.2]
+
+### Level 4 Limits (the last technique is an item you find)
+cat: Exploration & Rewards
+how: Every character learns Limit Breaks by fighting: the first technique of a level arrives after that character has personally killed enough enemies, and the second after using the first one enough times. Level 4 is different — one technique each, taught by a manual item, and only once every other Limit has been learned, so finding the manual early does nothing. The manuals are scattered across the world and none of them says whose it is: Red XIII's waits behind the boss in the Shinra Mansion's safe, Cloud's is a price on the Battle Square's list, Yuffie's is what clearing the Wutai pagoda pays, Cid's lies in a crashed plane that only the submarine reaches, Vincent's appears at a waterfall after two separate visits, and Aeris's starts with a lump of Mythril from a sleeping man who hands it over only when your battle count ends in the right two digits.
+loop: Fight with a character and their techniques grow → use those techniques and the next one arrives → then go looking for the one item that finishes the set → the strongest thing they can do turns out to be something the world was hiding.
+notes: The design worth stealing is the double lock: the manual is hidden out in the world AND refuses to work until the character has actually used everything below it, so exploration and practice gate each other. Note the range of hiding places — a safe, an arena price list, a questline boss, a sunken plane, a ghost you have to visit twice and a counter you cannot see — which is the owner's "variety of discovery" spent on a single reward type. And a manual never says whose it is, which turns each one into a small puzzle rather than an inventory line.
+verbs: Guarded, Tool-gated
+pointers: [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §LEARNING LIMIT BREAKS, Kao_Megura v2.2] [gf:2376 §LIMIT BREAK MANUAL LOCATIONS, Kao_Megura v2.2]
+row: M297
+- The first Limit of a level comes from kills the character makes; the second from using that first Limit a set number of times; the Level 4 Limit needs every other Limit learned, and then the manual [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §LEARNING LIMIT BREAKS, Kao_Megura v2.2]
+- Vincent has one Limit per level and Cait Sith only two in all, so neither follows the two-per-level shape [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §LEARNING LIMIT BREAKS, Kao_Megura v2.2]
+- Red XIII's Cosmo Memory comes from the boss behind the Shinra Mansion safe, Cid's Highwind from the sunken Gelnika, Yuffie's from Godo at the end of the Wutai pagoda and Vincent's Chaos from a second visit to Lucrecia's waterfall [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §LIMIT BREAK MANUAL LOCATIONS, Kao_Megura v2.2]
+- Aeris's Great Gospel is a two-step chain: Mythril from the sleeping man in the cave north of Junon, then the right compartment in the blacksmith's cabin between the Gold Saucer and Gongaga [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §(T) The Tiny Bronco, Kao_Megura v2.2]
+- Cloud's Omnislash is bought at the Battle Square for 51,200 BP, falling to 32,000 BP once the Highwind is yours [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)]
+- Using the wrong manual, or the right one too early, gets a line of dialogue instead of a technique [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)]
+
+### Weapons and armour as a materia growth dial
+cat: Progression & Upgrades
+how: Every weapon and piece of armour carries materia slots, some of them linked, and a growth rate that multiplies the AP the materia sitting in them earn. So the newest weapon is not automatically the best one: a piece with double growth levels your materia twice as fast, while the piece with the highest attack may hold fewer orbs or grow them slower. Choosing gear is a standing trade between damage now and materia later, and the ultimate weapons sit at the far end of it — every one of them but Aeris's has no materia growth at all.
+loop: Take the weapon that hits hardest, or the one that grows what is slotted in it → fight the same battles either way → your orbs level at the rate the gear sets → the choice pays out in a dungeon you have not reached yet.
+notes: The cleanest example of an upgrade with a real cost: "better" is not a single axis, so a shop visit is a decision instead of a purchase. It is also the cheapest way to make gear interesting without inventing another stat — give the upgrade currency a multiplier and let the flashiest item carry the worst one. Note the price FF7 accepts at the end, though: an ultimate weapon grows nothing, so the last hours stop paying into the system the whole game was teaching.
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VII weapons] [gf:2376 §(Q) Cosmo Canyon, Kao_Megura v2.2] [gf:2376 §(M) Mt. Corel, Kao_Megura v2.2] [gf:2376 §(T) The Tiny Bronco, Kao_Megura v2.2]
+row: M298
+- Every character has at least two weapons with double materia growth, and Cloud and Cid each have one with triple [wiki:finalfantasy.fandom.com/Final Fantasy VII weapons]
+- All ultimate weapons except Aeris's Princess Guard have zero materia growth, and each has its own damage formula [wiki:finalfantasy.fandom.com/Final Fantasy VII weapons]
+- The walkthrough's advice at Cosmo Canyon is to skip the weapons on sale there if materia growth matters more than attack power [gf:2376 §(Q) Cosmo Canyon, Kao_Megura v2.2]
+- Armour makes the same trade: the Platinum Bangle has a double growth rate but holds only two materia and defends poorly, while Rune Armlets are the pick for anyone serious about mastering materia [gf:2376 §(M) Mt. Corel, Kao_Megura v2.2] [gf:2376 §(T) The Tiny Bronco, Kao_Megura v2.2]
+- Three ultimate weapons are found rather than bought: Tifa's Premium Heart from a terminal in Wall Market, Barret's Missing Score from a Midgar stairwell chest that only appears when Barret is in the party, and Cid's Venus Gospel from the Rocket Town old man on the third conversation [gf:2376 §(W) Return to Midgar City, Kao_Megura v2.2] [gf:2376 §(T) Huge Materia at Rocket Town, Kao_Megura v2.2]
 
 ## Minigame candidates
 
@@ -275,16 +309,30 @@ pointers: [wiki:finalfantasy.fandom.com/Turtle's Paradise sidequest] [gf:42714 �
 - **Fort Condor's numbering.** Both FAQs number the prizes by battle, and the wiki by battle level; Xenomic ties the Megalixir to the fourth battle, which agrees with the FAQs [wiki:finalfantasy.fandom.com/Condor War] [gf:19004 §When do all the battles take place, Master_Epyon v3.0] [gf:45511 §{M3} Fort Condor, AbsoluteSteve] [gf:42714 §A) Perishable Items, Xenomic v3]
 - **Chocobo racing's A and B lists.** The wiki puts Sprint Shoes in the A-class list and Ice Crystal only in A and S; the Gold Saucer FAQ omits Sprint Shoes from A and lists Ice Crystal in B [wiki:finalfantasy.fandom.com/Chocobo Square (Final Fantasy VII)] [gf:45511 §{M1.4} Chocobo Square, AbsoluteSteve]. The walkthrough read on 2026-09-15 sides with the wiki on both, so g010 now lists Sprint Shoes at A. It also lists Enemy Away at B, which the wiki allows only once the Gold Saucer reopens, and it lists no Potion and puts Ether at A and B only, where the wiki and the Gold Saucer FAQ both start C with a Potion and an Ether; C stays as it was [gf:2376 §(Q) More Item Hunting, Kao_Megura v2.2]
 - **The final Fort Condor battle.** Master_Epyon says losing to CMD. Grand Horn there shuts the fort for good; the Gold Saucer FAQ says beating him still gives the Phoenix and Huge Materia [gf:19004 §When do all the battles take place, Master_Epyon v3.0] [gf:45511 §{M3} Fort Condor, AbsoluteSteve]
+- **What the sleeping man wants.** The wiki says he gives the Mythril when the total battle count ends in two matching odd numbers or zeros (11, 255, 200); the walkthrough says when the last two digits are odd (99, 255). Both make the last two digits the condition, which is all the row says [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §(T) The Tiny Bronco, Kao_Megura v2.2]
+- **What Yuffie's manual is called.** The wiki calls it All Creation; the walkthrough, written against an earlier translation, files it as IRRECONCILABLE. The row names neither, only where it comes from [wiki:finalfantasy.fandom.com/Limit (Final Fantasy VII)] [gf:2376 §LIMIT BREAK MANUAL LOCATIONS, Kao_Megura v2.2]
+- **The slotless "joke" weapons.** The wiki says each character has one weapon with no materia slots that is nonetheless stronger than anything else available at that point (Cloud's Nail Bat, Cid's Mop, Aeris's Umbrella). The walkthrough sells the Nail Bat in Junon and has the old man give away the Yoshiyuki without mentioning slots either way, so the claim rests on the wiki and stays out of the row [wiki:finalfantasy.fandom.com/Final Fantasy VII weapons] [gf:2376 §(H) Shopping List, Kao_Megura v2.2]
+- **Each ultimate weapon's own damage formula.** Only the wiki says so; the walkthrough describes where the weapons are, not how they calculate. The row carries the zero growth, which both the wiki states and the walkthrough's growth advice assumes, and not the formulas [wiki:finalfantasy.fandom.com/Final Fantasy VII weapons]
 
 ## Codex rows
 
-```js
+```text
 // No new rows. g009–g016 were edited in place: each gained an `rt` table and `refs`, and the
 // summaries of g011, g012, g013 and g016 were corrected. Logged in CHANGES as updated.
 // 2026-09-17: M097–M098 were edited in place and gained `refs`, logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds two rows:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M297  Level 4 Limits (the last technique is an item you find)  Exploration & Rewards
+// M298  Weapons and armour as a materia growth dial              Progression & Upgrades
 ```
 
 ## Codex delta
 - g009–g016 (all eight Final Fantasy VII minigames) tabled and sourced in place on 2026-09-14.
 - 2026-09-15: the Most Recommended walkthrough, 2376, read under the owner's rule. g009, g010, g013, g014 and g015 cite it. **g013 sharpened**: the G-Bike's 2 GP starts at 5,000 points, where the wiki and the walkthrough agree against the Gold Saucer FAQ. **g010 sharpened**: Sprint Shoes move from S class to A, where the wiki and the walkthrough agree. All five are in the 2026-09-15 entry's `updated`.
 - 2026-09-17: the sources pass. M097–M098 sourced from the Final Fantasy Wiki and Kao_Megura's walkthrough; M098 names the four cave materia instead of calling them the game's best.
+- 2026-09-21: the expansion pass adds M297 (the Level 4 Limit manuals) and M298 (gear as a materia growth dial), from the wiki's Limit and weapons pages and two sections of the walkthrough. Final Fantasy VII (1997) goes from 2 mechanics / 8 minigames to 4 / 8.

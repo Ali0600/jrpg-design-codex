@@ -422,3 +422,7 @@ category and for every row the digest tagged.
 ### M296 — One-off treasures with two buyers (keep the gain or take the gold)
 - Traded · how · `Each has someone who wants it and pays in something permanent`
 - Vista sketch · how · `sleep at the hotel, watch an Ootang jump into a hollow stump, then find that stump in Carona Forest`
+
+### M297 — Level 4 Limits (the last technique is an item you find)
+- Guarded · how · `Red XIII's waits behind the boss in the Shinra Mansion's safe`
+- Tool-gated · how · `Cid's lies in a crashed plane that only the submarine reaches`
