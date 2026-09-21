@@ -542,10 +542,14 @@ innately, cancelling a move after a find, enemy chemists taking the treasure fir
 from that page alone would have described a game released twenty-eight years after the one in the
 codex, under names no PlayStation player has seen. The same shape, one game earlier: the Suikoden
 Wiki's Weapons page is series-wide, so its account of the four hammers and the level-16 ceiling is
-written across six games, with the exceptions belonging to the first one.
+written across six games, with the exceptions belonging to the first one. A third case the same day showed the drift
+breaks search as well as naming: the Dragon Quest Wiki lists Dragon Quest VII's "mini medal" prizes under the 3DS remake's
+names, and a grep of the PlayStation walkthrough for "mini medal" returned nothing at all, because that release calls them
+TinyMedals. Zero hits read like "this guide does not cover it" until the old edition's own word was tried.
 
 **Takeaway:** when a source covers several editions, treat every name and number in it as
 belonging to the newest until an edition-specific source confirms otherwise — and make the
 edition-specific source the one that sets the vocabulary, not just the one that checks the facts.
 The tell is cheap to look for: a page that names a release you are not researching anywhere in its
-text is covering that release everywhere in its text.
+text is covering that release everywhere in its text. And when a search of the older source comes back empty, search it again in its own
+vocabulary before recording an absence.

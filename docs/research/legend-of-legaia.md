@@ -170,3 +170,4 @@ row: g063
 
 ## Codex delta
 - 2026-09-18: M145–M147, g062 and g063, all five Legend of Legaia rows, sourced from the Legaia Wiki and three GameFAQs authors; M145, g062 and g063 corrected.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The Legaia Wiki's War God Icon page ties the accessory to the Muscle Dome's Master Course (g062) and says nothing of Sol's fishing exchange, whose prices still rest on meth962 alone; NPCs teaching Arts is already in M145.

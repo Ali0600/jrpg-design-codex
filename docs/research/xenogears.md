@@ -240,3 +240,4 @@ Nothing further read this pass; the walkthrough's shop appendix was not opened.
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 50268, read under the owner's rule; its Coverage line says what was read. It adds the Combo command's AP cap, how Gear Attack Levels open Deathblows, the mode's special cases and a badge trade. No row was edited.
 - 2026-09-17: the sources pass. M104–M105 sourced from Ranma's and fidormula's Deathblow guides, ForteGSOmega's Battle Mechanics FAQ and Shotgunnova's walkthrough, all already in this digest.
+- 2026-09-21: the PS1 expansion pass added no row. Its one un-rowed lead, three badges traded to the old Chu-Chu for a Charger A and a Power Ring S, rests on Shotgunnova alone, and the Xeno wikis were already recorded as lore-only, so no second source was open to it.

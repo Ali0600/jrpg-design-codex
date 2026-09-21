@@ -23,6 +23,7 @@ talents tip at the start (lines 355–378), the first Private Action note (831�
 the closing note on endings (7166–7171) and the item creation specialties and super specialties in the skill-point chapter
 (17110–17203). Greps: super specialties (18 hits), Bunny Call (0), Orchestra (10), talents (143), Private Actions (297),
 endings (10), item creation (24), rabbits and the world map. Largest unread: nearly all of it.
+Read again on 2026-09-21 for the expansion pass: greps for the arena (81 hits), ranks and the survival battle (21), Fun City (145) and prize (9), and the `lines()` window 21844–21913 (14.17 Fun City, which is its pickpocketing table); the arena's own prize list was not found.
 
 Coverage 4645: single page, 316,227 chars, 7,148 lines, 254 sections. Read: two passages on learning talents with the
 Orchestra (lines 6820–6861). Greps: Orchestra (16 hits), Bunny (8, all Bunny Shoes), Reverse Side (2), super specialties
@@ -151,3 +152,4 @@ None. The codex has no Star Ocean: The Second Story minigame rows.
 
 ## Codex delta
 - 2026-09-17: M125–M127, all three Star Ocean: The Second Story rows, sourced from the Star Ocean Wiki, A_I_e_x's walkthrough and Aya_Brea's Skill/Talent FAQ; M127 drops Bunny Call.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The Star Ocean Wiki confirms Fun City's arena — solo, team and a 50-enemy survival mode, ranks E to A, 2,000 Fol to enter, sets of items as prizes — but has no page for its prizes, and A_I_e_x's walkthrough gives only two scattered rewards (the Fortune accessory for the Survival Battle, an item for Claude's Duel Rank A), so no minigame row could carry a table. The wiki's Bunny Racing page covers Star Ocean 3 onward, not this game.

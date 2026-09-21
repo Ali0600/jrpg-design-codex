@@ -178,7 +178,7 @@ the sources pass, so their digests' recorded facts and Unverified sections were 
   II, Suikoden, Breath of Fire III, Tactics Ogre, Front Mission 3 and others), each needing the whole pipeline — brief,
   GameFAQs harvest, cover, infobox, vocabulary, digest, rows, scores.
 
-**Status:** A `built — 2026-09-21` (#111–#114: eight rows across five games; four games probed and recorded thin).
+**Status:** A `built — 2026-09-21` (#111–#116: twelve mechanics rows and one minigame across ten games, two rows sharpened, and the other eleven games probed and recorded thin).
 B and C `rejected by the owner — a floor is an instruction to pad`. D `deferred — worth trying: the 17 suggested PS1
 titles are already ranked in the Games tab's candidates panel`. **Revisit hook:** the research queue, empty since
 2026-08-12, is where a new game enters; the candidates panel's Queue-it button writes to it.

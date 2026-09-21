@@ -137,3 +137,4 @@ None. Legend of Mana has no minigame rows.
 
 ## Codex delta
 - 2026-09-17: M109–M111, all three Legend of Mana rows, sourced from the Mana Wiki and three GameFAQs guides; M111 renamed "Non-linear events (a web of self-contained stories)".
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. Its one lead, New Game+ keeping the Cactus Diary, items, levels, workshops, corral and orchard, still rests on zykeeper alone: the Mana Wiki's New Game Plus page covers only Trials of Mana. The home's workshops are already M110.

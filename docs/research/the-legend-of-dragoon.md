@@ -184,3 +184,4 @@ row: g056
 
 ## Codex delta
 - 2026-09-18: M133–M135, g055 and g056, all five Legend of Dragoon rows, sourced from the Legend of Dragoon Wiki and four GameFAQs authors; M134 and g055 corrected.
+- 2026-09-21: the PS1 expansion pass reached no new source here. The one lead, the Lohan arena's four games, rests on the wiki alone (recorded above); the other guides in this digest were already checked for the arena in batch 3 without finding its games.

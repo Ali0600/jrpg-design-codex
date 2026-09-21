@@ -32,6 +32,7 @@ X)The Ragtime Mouse and Completing The Ragtime Mouse Quest, V)Treno Auction Hous
 Excalibur, and the opening lines of II)Tetra Master and VI)Chocobo Hot and Cold Game, which point to other guides.
 Largest unread: the Update log (11,391 chars), the Tetra Master card list (7,400) and IV)Stiltzkin's Cheap Combo Offer
 (4,263).
+**2026-09-21**, for the expansion pass: the `lines()` window 1450–1539 (IX)Friendly Monsters, its table, reward note and Ozma note) and a grep for friendly (36 hits).
 
 Coverage 9771: single page, 218,609 chars, 4,258 lines, 109 sections. Read on 2026-09-17: III)What's Chocographs?, the
 Healing Shore, Dawn Lagoon, Green Plains, Mist Ocean and Outer Island entries of VIII)Chocograph List, IX)Chocobo's
@@ -338,6 +339,26 @@ pointers: [wiki:finalfantasy.fandom.com/Blackjack (Final Fantasy IX)] [gf:9946 �
 - It opens only after watching the whole ending, by entering a button code on the final screen and pressing Start [wiki:finalfantasy.fandom.com/Blackjack (Final Fantasy IX)] [gf:9946 §VII)Blackjack, YSF v9.5a]
 - The walkthrough read on 2026-09-15 has the same secret, a button code entered on "The End" that opens a game of blackjack, and it names no prize either [gf:29957 §7.17 - Blackjack, Andrew_Testa v96]
 
+### Friendly monsters
+p: Nine friendly monsters turn up in ordinary random battles on the world map, announced by a gentler battle theme, and ask for a gem instead of a fight. Attack one and it flees; hand over what it wants and it pays AP and an item — and from the fifth on, the item is the gem the next one wants, so the chain leads across the map. The ninth, the Friendly Yan on Vile Island, takes its Diamond only once the other eight have been satisfied.
+r: 10 to 50 AP and an item from each of the nine, from a Potion up to a Rosetta Ring, and no EXP or gil; satisfying all nine lets physical attacks reach the superboss Ozma.
+l: An encounter table turned into a quest line: the reward for noticing the music is a trade, and each trade's prize is the next trade's key, so a random-battle system becomes a guided tour of the world. The last payout is the one to copy — nine small favours change how the hardest fight in the game plays.
+pointers: [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §IX)Friendly Monsters, YSF v9.5a] [gf:9946 §Things To Take Note, YSF v9.5a]
+row: g105
+
+| at | get | src |
+|---|---|---|
+| Mu — 1 Ore | 10 AP, Potion | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Ghost — 1 Ore | 10 AP, Hi-Potion | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Ladybug — 2 Ore | 20 AP, Ether | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Yeti — 2 Ore | 20 AP, Elixir | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Nymph — 3 Ore | 30 AP, Emerald | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Jabberwock — Emerald | 40 AP, Moonstone | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Feather Circle — Moonstone | 30 AP, Lapis Lazuli | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Garuda — Lapis Lazuli | 40 AP, Diamond | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| Yan — Diamond, once the other eight are satisfied | 50 AP, Rosetta Ring | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §Things To Take Note, YSF v9.5a] |
+| all nine satisfied | physical attacks can reach Ozma | [wiki:finalfantasy.fandom.com/Friendly monsters] [gf:9946 §What's The Reward, YSF v9.5a] |
+
 ## Exploration & upgrade facts
 
 ### Hidden
@@ -363,14 +384,26 @@ pointers: [wiki:finalfantasy.fandom.com/Blackjack (Final Fantasy IX)] [gf:9946 �
 - **The Ragtime Mouse's prize.** The wiki gives the Protect Ring for a right last answer, YSF for finishing all sixteen, Shotgunnova for three or fewer wrong, and 29957 for all correct. For a perfect run, the wiki and YSF give 59,630 gil and Shotgunnova 50,000–89,445; the wiki gives 23,852 EXP, which is 5,963 for each of four members, matching Shotgunnova's 5,963, while YSF gives 22,852 and 29957 about 20,000 [wiki:finalfantasy.fandom.com/Ragtime Mouse] [gf:9946 §Completing The Ragtime Mouse Quest, YSF v9.5a] [gf:47344 §IV. Sidequests + Minigames, Shotgunnova] [gf:29957 §7.11 - Ragtime Mouse, Andrew_Testa v96]
 - **The code's first four buttons.** YSF and the wiki give R2, L1, R2, R2; the walkthrough gives R2, R1, L2, R2, and has X pressed after a chime where the digest's other two sources have Start. The remaining twelve buttons agree across all three [gf:9946 §VII)Blackjack, YSF v9.5a] [wiki:finalfantasy.fandom.com/Blackjack (Final Fantasy IX)] [gf:29957 §7.17 - Blackjack, Andrew_Testa v96]
 
+- **What the blessing does beyond physical attacks.** The wiki adds that Ozma turns weak to shadow instead of absorbing it, that the gems are limited so spending them early can make the quest impossible, and that the Yan can instead be beaten, repeatedly, for 50 AP and a Rosetta Ring; YSF says none of these, so the row names only what both carry [wiki:finalfantasy.fandom.com/Friendly monsters]
+- **Where the Jabberwock is.** YSF puts it in the forest east of Oeilvert and needs the airship or a red chocobo; the wiki says evening areas north of Oeilvert. The row names no location [gf:9946 §Things To Take Note, YSF v9.5a] [wiki:finalfantasy.fandom.com/Friendly monsters]
+
 ## Codex rows
 
-```js
+```text
 // No new rows. g036 was edited in place: it gained `refs` and no table, since neither source names a prize.
 // 2026-09-17: M086–M091, M131 and g027–g035 were edited in place and gained `refs`, logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one minigame row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// g105  Friendly monsters  rt: 10 rows
 ```
 
 ## Codex delta
 - g036 (Final Fantasy IX's post-credits blackjack) sourced in place on 2026-09-14; it pays no prize and has no table.
 - 2026-09-15: the Most Recommended walkthrough, 29957, read under the owner's rule for its blackjack section. It agrees with g036, which cites it (logged in the 2026-09-15 entry), and it disagrees on the code's first four buttons, recorded under Unverified.
 - 2026-09-17: the sources pass. M086–M091, M131 and g027–g035 sourced from the Final Fantasy Wiki and GameFAQs (29957, YSF's 9946 and 9771, Shotgunnova's 47344). Corrected: the Stellazzio verses, the Ragtime Mouse's questions, the golden frog and where the auction's key items resell; the claims cut for one source are listed under Unverified.
+- 2026-09-21: the expansion pass adds g105 — the nine friendly monsters, each wanting a gem and paying AP plus the next one's gem, with Ozma opened to physical attacks at the end — from the wiki's Friendly monsters page and YSF's own section, whose tables agree on all nine. Final Fantasy IX goes from 7 mechanics / 10 minigames to 7 / 11.
