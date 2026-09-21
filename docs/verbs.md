@@ -233,8 +233,8 @@ category and for every row the digest tagged.
 - none · photographing the world banks ideas for crafting; Vista sketch runs the other way, from a picture to the place
 
 ### M170 — Monster Arena (Infamous Monster Recruitment)
-- Guarded · how · `Roaming 'Infamous Monsters' are the only special visible encounters in the world; defeat one and you recruit that species`
-- Challenge gauntlet · how · `climb ranked cups G → S, each rank granting a fixed equipment prize plus a permanent perk`
+- Guarded · how · `Roaming 'Infamous Monsters' stand visible on the overworld map; defeat one and you recruit that species`
+- Challenge gauntlet · how · `climb ranked cups G → S, winning three fights in a row for each and a prize at every rank`
 
 ### M173 — Quarries / Bounty Hunting (Hunter Rank)
 - Guarded · how · `beating it drops rare gear plus a large pile of Hunter Points`
