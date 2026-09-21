@@ -230,3 +230,9 @@ line per chain.
 
 ### M281 — Trade that widens its own catalogue
 - The shop that has upgrades too · how · `sell enough of the cheap staples and the trade shops begin stocking their refined counterparts`
+
+### M303 — Legendary Armour (a traversal set found disguised as junk)
+- A new verb reopens old ground · how · `the L-Shoes a grip on icy ledges that are closed to him until they are found`
+
+### M306 — TinyMedals (a hidden-medal ladder whose prizes reach other systems)
+- A collection you cash in with someone · how · `the Medal King's castle trades them for a fixed ladder of prizes`

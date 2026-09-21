@@ -432,3 +432,9 @@ category and for every row the digest tagged.
 
 ### M302 — Propositions (the units you never field go out earning)
 - none · the expedition happens off-screen and returns pay, or a paragraph of lore; the player finds nothing in the world themselves
+
+### M303 — Legendary Armour (a traversal set found disguised as junk)
+- Tool-gated · how · `the L-Shoes a grip on icy ledges that are closed to him until they are found`
+
+### M306 — TinyMedals (a hidden-medal ladder whose prizes reach other systems)
+- Traded · how · `the Medal King's castle trades them for a fixed ladder of prizes`

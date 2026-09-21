@@ -16,13 +16,14 @@ Warrior VII); Evanidus's Immigrant Town FAQ is the second.
 |---|---|---|---|---|---|---|---|
 | 14558 | Guide and Walkthrough | Shdwwrym | 4.0 | 03/06/2002 | Full Game Guides | 705 | https://gamefaqs.gamespot.com/ps/197152-dragon-warrior-vii/faqs/14558 |
 | 15425 | Immigrant Town FAQ | Evanidus | 1.6 | 04/29/2002 | In-Depth Guides | 25 | https://gamefaqs.gamespot.com/ps/197152-dragon-warrior-vii/faqs/15425 |
-| wiki | Dragon Quest VII; Vocation; Alltrades Abbey; Immigrant Town | — | — | — | dragonquest.fandom.com | — | https://dragonquest.fandom.com/wiki/Dragon_Quest_VII |
+| wiki | Dragon Quest VII; Vocation; Alltrades Abbey; Immigrant Town; Mini medal | — | — | — | dragonquest.fandom.com | — | https://dragonquest.fandom.com/wiki/Dragon_Quest_VII |
 
 Coverage 14558: single page, 710,665 chars, 11,571 lines, 920 sections. Read: the openings of 4J. Human Classes (lines
 8985–9018), 4K. Monster Classes (9458–9477) and 5A. Shards (10225–10242), and 5D. Immigrant Town from its opening through
 the final town (11092–11232). Greps: shards (319 hits), pedestals (138), classes (57), Dharma and mastering (56), hearts
 (55), immigrants (24). Largest unread: the chapter walkthroughs (2K. Classes Are In Session alone is 53,514 chars) and the
 item and shop tables.
+Read again on 2026-09-21 for the expansion pass: the `lines()` window 10593–10662 (5B. TinyMedals, the prize list and the first nine medal locations) and greps for mini medal (0 hits — the PlayStation release says TinyMedal) and TinyMedal (259).
 
 Coverage 15425: single page, 25,362 chars, 618 lines, 13 sections. Read: Section 1 (general information), Section 3: Town
 phases and the opening of Section 5: Possible Final Forms (to the Farm). Grep: final forms and shops (16 hits). Unread:
@@ -86,6 +87,20 @@ row: M124
 - The town changes form as its population passes set numbers, gaining a name, houses, shops, an inn and a church [gf:14558 §5D. Immigrant Town, Shdwwrym v4.0] [gf:15425 §Section 3: Town phases, Evanidus v1.6]
 - From 35 residents it reaches a final form, which differs with the kinds of people invited [gf:14558 §5D. Immigrant Town, Shdwwrym v4.0] [gf:15425 §Section 5: Possible Final Forms, Evanidus v1.6]
 
+### TinyMedals (a hidden-medal ladder whose prizes reach other systems)
+cat: Exploration & Rewards
+how: TinyMedals are hidden all over the world, in dressers, barrels, vases and chests, and the Medal King's castle trades them for a fixed ladder of prizes: a Poison Dagger at 45 medals, a Wind Wand at 50, a Miracle Sword at 65, a SageRock at 83, a MetlKing Shield at 90, an Ultimate Whip at 105 and a PlatKing Heart at 110. Two rungs reach into other systems: one is a shard for the pedestals that restore the world's islands (M122), and the last is a monster heart, the kind the class system turns into a monster vocation (M123).
+loop: Search every dresser and barrel → bank the medals → cross the next threshold at the Medal King's castle → and two of the prizes open doors in systems that have nothing to do with medals.
+notes: The classic hidden-coin ladder, worth copying for one detail: its prizes are not all gear. A rung that pays a piece of the main progression (a shard) and a rung that pays a new class tie the smallest collectible in the game to its two biggest systems, so searching a barrel is never beneath the player. The thresholds are also public, so the player always knows how far the next reward is — the opposite of a hidden counter.
+verbs: Traded
+pointers: [wiki:dragonquest.fandom.com/Mini medal] [gf:14558 §5B. TinyMedals, Shdwwrym v4.0]
+row: M306
+- The Medal King's castle trades TinyMedals for prizes at fixed totals; both lists agree on 45, 50, 58, 65, 75, 83, 90, 95, 105 and 110 [gf:14558 §5B. TinyMedals, Shdwwrym v4.0] [wiki:dragonquest.fandom.com/Mini medal]
+- The walkthrough's prizes, in the PlayStation names: Poison Dagger, Wind Wand, Sacrific Ring, Miracle Sword, BluePrint, SageRock, MetlKing Shield, Bolero Robe, a ? Shard at 100, Ultimate Whip and PlatKing Heart [gf:14558 §5B. TinyMedals, Shdwwrym v4.0]
+- Medals are found in dressers, barrels, vases and chests, in both the past and the present [gf:14558 §5B. TinyMedals, Shdwwrym v4.0] [wiki:dragonquest.fandom.com/Mini medal]
+- The shard completes a pedestal: the walkthrough's bonus dungeon notes that trading 100 medals for it finishes one [gf:14558 §3G. Wrath of God: The First Bonus Dungeon, Shdwwrym v4.0] [wiki:dragonquest.fandom.com/Mini medal]
+- One medal is a reward rather than a find: returning a lost Button to a boy outside Engow's tavern [gf:14558 §5B. TinyMedals, Shdwwrym v4.0]
+
 ## Minigame candidates
 
 None. Dragon Quest VII has no minigame rows.
@@ -104,11 +119,23 @@ None. Dragon Quest VII has no minigame rows.
 - **Exclusive shops and items.** M124 said the final form's shops and items are exclusive. Evanidus says the final forms give some of the best items; Shdwwrym's section stops before describing them, so the row says only that the final form differs with who was invited [gf:15425 §Section 3: Town phases, Evanidus v1.6] [gf:14558 §5D. Immigrant Town, Shdwwrym v4.0]
 - **Rare foes granting monster classes.** M123 said defeated rare foes grant monster vocations. The walkthrough gives chests and monster drops, and the wiki names hearts without saying where they come from, so the row names hearts found in chests or dropped [gf:14558 §4K. Monster Classes, Shdwwrym v4.0] [wiki:dragonquest.fandom.com/Dragon Quest VII]
 
+- **The names, and the shard's price.** The Dragon Quest Wiki's list is the 3DS remake's: its prizes at the same totals are a poison needle, a staff of divine wrath, a kamikazee bracer, a miracle sword, an enclosure plan, a sage's stone, a metal king shield, a glombolero, a gringham whip and a Platinum King Heart, and it prices the shard (a Mysterious Fragment) at 85 where the PlayStation walkthrough prices it at 100 and says so twice. The row uses the walkthrough's names and gives the shard no price [wiki:dragonquest.fandom.com/Mini medal] [gf:14558 §5B. TinyMedals, Shdwwrym v4.0] [gf:14558 §3G. Wrath of God: The First Bonus Dungeon, Shdwwrym v4.0]
+- **What the BluePrint and the heart do.** The wiki says the enclosure plan is used in the Monster Park and that the Platinum King Heart turns a character into a Platinum King Jewel at the Alltrades Abbey; the walkthrough's list names both without saying. The row says only that the heart is a monster heart, which M123's own sources tie to the monster classes [wiki:dragonquest.fandom.com/Mini medal]
+
 ## Codex rows
 
-```js
+```text
 // No new rows. M122–M124 were edited in place on 2026-09-17 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M306  TinyMedals (a hidden-medal ladder whose prizes reach other systems)  Exploration & Rewards
 ```
 
 ## Codex delta
 - 2026-09-17: M122–M124, all three Dragon Quest VII rows, sourced from the Dragon Quest Wiki, Shdwwrym's walkthrough and Evanidus's Immigrant Town FAQ.
+- 2026-09-21: the expansion pass adds M306 — TinyMedals and the Medal King's prize ladder — from the Dragon Quest Wiki's mini medal page and the walkthrough's own TinyMedals chapter; the wiki's names are the 3DS remake's, so the row takes the PlayStation walkthrough's. Dragon Quest VII goes from 3 mechanics to 4.

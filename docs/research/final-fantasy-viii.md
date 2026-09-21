@@ -197,7 +197,7 @@ row: M096
 None new. The tables below are written into the existing rows g024–g026.
 
 ### g024 Triple Triad
-pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VIII Triple Triad cards] [gf:4903 §8 7 (21 entries), Kasket_Darkfyre v1.2]
+pointers: [wiki:finalfantasy.fandom.com/Final Fantasy VIII Triple Triad cards] [gf:4903 §8 7 (21 entries), Kasket_Darkfyre v1.2] [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [web:jegged.com/Games/Final-Fantasy-VIII/Side-Quests/Card-Club-CC-Group.html]
 
 | at | get | src |
 |---|---|---|
@@ -247,7 +247,7 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo World] [gf:6959 §A Rank, Saturn
 - Catching a mother chocobo makes Chocoboy hand over the small chocobo summoned with Gysahl Greens, whose attack is ChocoFire and which levels up only through the PocketStation; the walkthrough also prices the greens at 600 gil [gf:50775 §Unjunctionable Guardian Force - Chocobo, Split_Infinity] [gf:50775 §Sidequest - Chocobo Forests, Split_Infinity]
 
 ### Upgrades
-- Once the Card Club side quest is done, its members aboard the Ragnarok give back every Level 8–10 card the collection lacks, refined ones included [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [web:jegged.com/Games/Final-Fantasy-VIII/Side-Quests/Card-Club-CC-Group.html]
+- Once the Card Club side quest is done — before the point of no return — its members reappear aboard the Ragnarok playing any Level 8–10 card the collection lacks, refined ones included, so those cards can be won back; re-read on 2026-09-21, when "give back" in this line was corrected to "play, to be won back" [wiki:finalfantasy.fandom.com/Triple Triad (Final Fantasy VIII)] [web:jegged.com/Games/Final-Fantasy-VIII/Side-Quests/Card-Club-CC-Group.html]
 - The walkthrough's card mods agree with g024 on the five player cards it names: Quistis into 3 Samantha Souls, Rinoa into 3 Magic Armlets, Irvine into 3 Rocket Engines, Kiros into 3 Accelerators and Selphie into 3 Element Guards; among other cards it turns Angelo into 100 Elixirs, MiniMog into 100 Pet Houses and Quezacotl into 100 Dynamo Stones [gf:50775 §Advice on great character set-up, Split_Infinity] [gf:50775 §Advice on getting some good magic, Split_Infinity] [gf:50775 §Triple Triad - Angelo card, Split_Infinity]
 
 ### Shops & exchange
@@ -271,3 +271,4 @@ pointers: [wiki:finalfantasy.fandom.com/Chocobo World] [gf:6959 §A Rank, Saturn
 - g024–g026 (all three Final Fantasy VIII minigames) tabled and sourced in place on 2026-09-14.
 - 2026-09-15: the Most Recommended walkthrough, 50775, read under the owner's rule. It agrees with g025's six forest digs and its sanctuary card, and with five of g024's eleven card mods, and both rows cite it, logged in the 2026-09-15 entry. It adds nothing checkable to g026's Chocobo World finds.
 - 2026-09-17: the sources pass. M092–M096 sourced from the Final Fantasy Wiki, Split_Infinity's walkthrough and Kasket_Darkfyre's Card FAQ. M096 corrected and renamed: the magazines only list an upgrade's items.
+- 2026-09-21: the PS1 expansion pass sharpened g024 with the Card Club's safety net — its members return aboard the Ragnarok playing any rare card you refined away — from the wiki's Triple Triad page and Jegged's CC Group walkthrough, both re-read that day. No new row.

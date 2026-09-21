@@ -10,7 +10,7 @@ The main artifact is `JRPG_Design_Codex.html` — a single-file, fully-offline w
 backup; the HTML file is the source of truth and is more up to date.
 
 ## Current contents (as of handoff)
-- **302 mechanics** (`BASE_MECHS` array, M001-M302) across **72 researched games**: FF7 Rebirth,
+- **306 mechanics** (`BASE_MECHS` array, M001-M306) across **72 researched games**: FF7 Rebirth,
   Elden Ring, FFX, Persona 5 Royal, Xenoblade Chronicles 3, DQ11, Tears of the Kingdom,
   Chained Echoes, Sea of Stars, the PS1 Squaresoft/Enix catalog (FF7/8/9, Chrono Cross,
   Xenogears, Vagrant Story, Legend of Mana, SaGa Frontier, Parasite Eve, Threads of
@@ -294,7 +294,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   - `cat` must be a key of CATS. Every base row ships `want:""` and `rating:0`, and the validator
     refuses anything else: a decision ("Yes" | "Maybe" | "No") and a rating are the owner's, saved in
     their browser.
-  - IDs are sequential: mechanics M001-M302, minigames g001-g104, skipping a retired id. Continue the
+  - IDs are sequential: mechanics M001-M306, minigames g001-g104, skipping a retired id. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -353,8 +353,8 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   counted by `creditTally(mechs, gameOf)` in the data region. A name counts once per GAME, so
   one game with many shortlisted rows is not a pattern. The panel body is built only while open.
 - **`VERBS`** — the 15 discovery verbs from GAME_PROMPT_V2 §3, keyed by display name
-  (like CATS). Mechanics carry an optional `verbs:[...]`; **89 of 302 rows are tagged**
-  (108 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
+  (like CATS). Mechanics carry an optional `verbs:[...]`; **91 of 306 rows are tagged**
+  (110 tags). **Every tag is justified in `docs/verbs.md`**, where it quotes a verbatim span
   of the row's own `how`/`loop`/`notes`, and every row in the three discovery categories has
   an entry there — its tags, or `none` with the reason. `scripts/verb_tags.mjs` is the only
   writer of `verbs`, and the validator holds the page and the ledger equal, so a tag cannot
@@ -366,7 +366,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   targets — the owner chose (2026-09-13) to ship without an at-least-three gate rather than
   stretch a quote; the gate waits in `docs/DECISIONS.md`'s backlog.
 - **`LINEAGES`** — chains of mechanics that share one design shape, `{name, ids, best,
-  counter?, note}`; **12 lineages** covering 65 mechanics. Rendered under the Design Pillars
+  counter?, note}`; **12 lineages** covering 67 mechanics. Rendered under the Design Pillars
   tab with each node's release year; clicking a node jumps to that mechanic. `ids` run in
   RELEASE ORDER (ties allowed) — the page says so, and the older copy's "each game answers
   the one before it" was an influence claim no row can support. `best` is REQUIRED and
@@ -540,7 +540,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **204 of 302 mechanics and 82 of 103 minigames carry `refs`**, and every row without them
+  **208 of 306 mechanics and 82 of 103 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
   `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 47 carry `digest`)
