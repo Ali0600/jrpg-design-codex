@@ -31,7 +31,9 @@ grep hits, which is answer and calendar data rather than rules.
 Coverage 60532: grep only — 622,021 chars, 11,603 lines, 151 sections, 0 sections read. Three greps
 (the sixteen prize names, 27 hits with 3 cut by the size cap; selling materials to the smith, 3;
 August's and December's prizes, 2) plus `lines()` reads at its May and September trade lists.
-Largest unread: a 176,467-char appendix section and the day-by-day chapters.
+Largest unread: a 176,467-char appendix section and the day-by-day chapters. **2026-09-21:** three more greps for the sources
+pass (Shuffle Time and Arcana Chance, 12 hits; fog, forecasts and deadlines, 12; failed rescues and bad endings, 12) and
+`lines()` reads at 1180–1197 (the shuffle types) and 1843–1852 (a failed rescue).
 
 Coverage 65252: grep only — 536,349 chars, 6,889 lines, 277 sections, 0 sections read. One grep for
 the disputed prize names (13 hits), used only to settle their spellings. Everything else unread,
@@ -46,7 +48,8 @@ carry over (7). The 2026-09-14 pass had grepped Daidara (236), the old man and t
 Shuffle Time (3) and fog and forecast (8), and read the smithy's town-guide entry, the weapon
 chapter's opening and the fishing chapter with its Fish Exchange table through `lines()`. Largest
 unread: Name Found Effect (5,136 chars) and [PM10] March 2012 (3,582), then the day-by-day chapters
-and the Persona and enemy tables beyond the grep hits.
+and the Persona and enemy tables beyond the grep hits. **2026-09-21:** greps for a missed rescue and game over (9 hits) and
+Shuffle Time or Arcana Chance (9), and `lines()` 740–753, 952–965 and 4518–4531 (the last day of rain), for the sources pass.
 
 ## Triage
 
@@ -56,7 +59,8 @@ before any guide was opened; a plan that changes is recorded here. Two walkthrou
 skipped to grep only: neoXsaga's, to cross-check the old man's prize table from a second author,
 and KADFC's, to settle the item names those two disagreed on. On 2026-09-15 `__gf.pick()` named Zoel's
 walkthrough, 53550 (Most Recommended, plain text, no guide on the listing is HTML), so it moved from
-grep only to read under the owner's rule; the flags column copies the listing on that day.
+grep only to read under the owner's rule; the flags column copies the listing on that day. On 2026-09-21 the sources pass
+drew on Zoel's and neoXsaga's walkthroughs again, by grep and `lines()`, for M188 and M189; neither decision changes.
 
 | id | title | author | category | KB | score | decision | flags |
 |---|---|---|---|---|---|---|---|
@@ -107,6 +111,25 @@ row: M283
 - The first ema request unlocks on 5/6, and each finished one is reported back at Tatsuhime Shrine to raise the rank [gf:56627 §Quests, ssk9716757 v1.01]
 - The last wish, request No. 48, needs every earlier rank-up done, a Huge Fish traded to the old man at the river for a better fishing set, and the river Guardian, which bites only on rainy days or in December [gf:56627 §Quests, ssk9716757 v1.01]
 - With every wish granted, the offerings pay to restore the shrine, and the fox gives a Gratitude Ema that enables the fusion of Ongyo-Ki [wiki:megamitensei.fandom.com/Fox] [wiki:megamitensei.fandom.com/Social Link/Fox]
+
+On 2026-09-21 the sources pass (plan section R, batch 5) sourced M188 and M189 from the Megami Tensei Wiki and the two
+walkthroughs; both rows were edited in place.
+
+### M188 Midnight Channel Weather Deadline
+pointers: [wiki:megamitensei.fandom.com/Weather] [wiki:megamitensei.fandom.com/Midnight Channel] [gf:53550 §April 29, Zoel v0.65] [gf:53550 §Today is the last day of Rain, Zoel v0.65] [gf:60532 §B. Symphonic Band, neoXsaga v2.2] [gf:60532 §1. Classroom Building, neoXsaga v2.2]
+row: M188
+- A victim inside the TV is safe from its Shadows until the fog there lifts, which happens when fog comes to the town; then the Shadows kill anyone trapped [wiki:megamitensei.fandom.com/Midnight Channel] [wiki:megamitensei.fandom.com/Weather]
+- So each rescue has a deadline in the forecast: Zoel's calendar marks the last day of rain as the last day to rescue Nanako [gf:53550 §Today is the last day of Rain, Zoel v0.65] [wiki:megamitensei.fandom.com/Weather]
+- The forecast can be checked days ahead, on the TV at home among other places; neoXsaga says a week ahead [wiki:megamitensei.fandom.com/Weather] [gf:60532 §1. Classroom Building, neoXsaga v2.2] [gf:60532 §C. Beginner, neoXsaga v2.2]
+- Missing a rescue deadline ends the game [gf:53550 §April 29, Zoel v0.65] [gf:60532 §B. Symphonic Band, neoXsaga v2.2]
+
+### M189 Shuffle Time (Post-Battle Card Draw)
+pointers: [wiki:megamitensei.fandom.com/Shuffle Time] [gf:53550 §Battle Related, Zoel v0.65] [gf:53550 §(PGS4) Arcana Chance Cards, Zoel v0.65] [gf:60532 §3. Junes Department Store, Inaba Branch, neoXsaga v2.2] [gf:60532 §C. Matching Shuffle, neoXsaga v2.2]
+row: M189
+- In Persona 4 a Shuffle Time's only prize is a Persona; there are no Minor Arcana cards [wiki:megamitensei.fandom.com/Shuffle Time] [gf:53550 §Battle Related, Zoel v0.65]
+- Besides Persona cards there is a Blank card that gives nothing and a card that voids the battle's rewards: the wiki's Penalty card, which costs its EXP, money and items, and Zoel's Nothing card, after which nothing is received [wiki:megamitensei.fandom.com/Shuffle Time] [gf:53550 §Battle Related, Zoel v0.65]
+- The cards are shuffled in several ways, among them a memory match with at most five tries and a slot machine [wiki:megamitensei.fandom.com/Shuffle Time] [gf:60532 §C. Matching Shuffle, neoXsaga v2.2]
+- After a Persona or a Blank card there is a random chance of an Arcana Chance, whose card lands Upright or Reverse with a good or bad effect [wiki:megamitensei.fandom.com/Shuffle Time] [gf:60532 §3. Junes Department Store, Inaba Branch, neoXsaga v2.2] [gf:53550 §(PGS4) Arcana Chance Cards, Zoel v0.65]
 
 ## Minigame candidates
 
@@ -184,6 +207,11 @@ row: g097
 - May's Falcon Eye costs 3 Amber Seema in Zoel's table and 1 in neoXsaga's; the codex row gives both [gf:53550 §Fish Exchange, Zoel v0.65] [gf:60532 §Walkthrough, neoXsaga v2.2]
 - **Aiya's special ramen.** The walkthrough's Knowledge list credits the 3,000 yen special with +3 Knowledge, while its town guide says the rainy-day special raises three random status parameters. Both readings kept [gf:53550 §KNOWLEDGE, Zoel v0.65] [gf:53550 §Shopping District, North, Zoel v0.65]
 - August's two prizes, Cutie Action for 6 Red Goldfish and Red Battle Clothes for 2 Huge Fish, appear only in Zoel's table, and the wiki has no page for either [gf:53550 §Fish Exchange, Zoel v0.65] [wiki:megamitensei.fandom.com/Fishing]
+- **Shuffle Time after an All-Out Attack.** M189 said an All-Out Attack guarantees a Shuffle Time. The wiki says so of Persona 3, and no source read says it of Persona 4. Cut [wiki:megamitensei.fandom.com/Shuffle Time]
+- **Personas you already own.** The wiki says a Persona already in your stock is never dealt; no second source read says so. Cut from the row [wiki:megamitensei.fandom.com/Shuffle Time]
+- **Back a week.** neoXsaga says a failed rescue offers a return to a week earlier; Zoel says only that the game is over. The row says the game is over [gf:60532 §B. Symphonic Band, neoXsaga v2.2] [gf:53550 §April 29, Zoel v0.65]
+- **Rain, then fog.** M188 gave the forecast as rain tomorrow and fog the day after; no source read states that pattern as a rule. Cut [wiki:megamitensei.fandom.com/Weather]
+- **Persona 5 without Shuffle Time.** M189's notes said Persona 5 removed it. The wiki's page has sections for Persona 3, Persona 4 and Persona 5: The Phantom X but none for Persona 5, and no other source read covers it; the notes now say only that none of the codex's Persona 5 Royal rows has a post-battle draw [wiki:megamitensei.fandom.com/Shuffle Time]
 
 ## Codex rows
 
@@ -199,3 +227,4 @@ row: g097
 - M282 (the smithy), M283 (the fox) and g097 (fishing, 18 table rows), spliced 2026-09-14 and logged in their own changelog entry.
 - M188 (the weather deadline) and M189 (Shuffle Time) were not re-sourced this pass: the walkthroughs touch both, but not every claim in those rows.
 - 2026-09-15: the Most Recommended walkthrough, 53550, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.
+- 2026-09-21: the sources pass. M188 and M189 sourced from the Megami Tensei Wiki and the Zoel and neoXsaga walkthroughs. M188 lost its rain-then-fog pattern and the week's rollback, M189 its All-Out Attack guarantee and the rule about Personas already owned, each resting on one source.

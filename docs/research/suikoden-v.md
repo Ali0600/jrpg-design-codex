@@ -14,6 +14,7 @@ Codex: `Suikoden V` (2006, PlayStation 2) · GameFAQs: `/ps2/929668-suikoden-v` 
 | 60774 | Guide and Walkthrough (grep only) | 29_Rooks | — | — | Full Game Guides | 764 | https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/60774 |
 | 42169 | Character Recruitment Guide | yangxu | 1.0 | 03/21/2008 | In-Depth Guides | 50 | https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/42169 |
 | 42244 | Guide and Walkthrough | Cyril | 1.41 | 07/08/2007 | Full Game Guides | 416 | https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/42244 |
+| 43075 | Army Battles Guide | Captain_K | 1.0 | — | In-Depth Guides | 33 | https://gamefaqs.gamespot.com/ps2/929668-suikoden-v/faqs/43075 |
 
 Coverage 42465: single page, 35,475 chars, 287 sections — 1 read (Build Up Your
 Achievements, 100%, which carries the unlock chain, the rumour-event list and the median
@@ -36,7 +37,12 @@ page, 418,166 chars, 8,807 lines, 157 sections. `lines()` windows: 273–304 (th
 threshold (3 hits), rewards (198), hidden (94), upgrades (55), economy (335), trade (41), castle and
 headquarters (184), and war battles and formations (107). Largest unread: Waterfall Basin (36,627
 chars), War Battles (21,696, whose first window was read), Recruitable Stars of Destiny (19,988) and
-the author's Lym Points FAQ (10,066).
+the author's Lym Points FAQ (10,066). **2026-09-21:** grepped for Victory+ for the sources pass (12 hits, one reward line per war
+battle).
+
+Coverage 43075: **read on 2026-09-21 for the sources pass** — single page, 33,711 chars, 26 sections. Read: 1) INTRODUCTION,
+2) HOW TO BATTLE, 3) UNIT TYPES and the reward note in 4) BATTLES. Greps: Victory+, Potch and reward (14 hits), the unit types
+(10). Largest unread: 5) CHARACTERS (6,271 chars) and 6) SPECIAL ABILITIES (2,645).
 
 Triage (2026-09-06, `__gf.triage()` on 35 guides): an Armor Guide, a Bestiary, a Level 60
 Character Database, a Character Evaluation Guide, a Newspaper Guide, a Recruitment Guide, a
@@ -53,6 +59,7 @@ Full Game Guides Most Recommended**, both plain text: Cyril's 42244, listed firs
 60774, which the 2026-09-06 pass grepped. `pick()` takes the first in listing order, so 42244 is read
 and 60774 stays grep only, and the table keeps that order for the two rows tied on score. The
 2026-09-06 pass predates this record, so its decisions come from its Sources table and summary above.
+On 2026-09-21 the sources pass read Captain_K's Army Battles Guide (43075), skipped until then, for M186's war battles.
 
 | id | title | author | category | KB | score | decision | flags |
 |---|---|---|---|---|---|---|---|
@@ -65,7 +72,7 @@ and 60774 stays grep only, and the table keeps that order for the two rows tied 
 | 54430 | Newspaper Guide | blazefeeler | In-Depth Guides | 54 | 4 | skipped — not about trading, formations or the castle | — |
 | 42169 | Character Recruitment Guide | yangxu | In-Depth Guides | 50 | 4 | grep only | — |
 | 42465 | Trading Guide | popemobile | In-Depth Guides | 35 | 4 | read | — |
-| 43075 | Army Battles Guide | Captain_K | In-Depth Guides | 33 | 4 | skipped — war battles, whose first fight the walkthrough read covers | — |
+| 43075 | Army Battles Guide | Captain_K | In-Depth Guides | 33 | 4 | read | — |
 | 42599 | Rune/Orb Guide | blazefeeler | In-Depth Guides | 33 | 4 | skipped — a rune list | — |
 | 43372 | Old Book Guide | blazefeeler | In-Depth Guides | 31 | 4 | skipped — not about trading, formations or the castle | — |
 | 42244 | Guide and Walkthrough | Cyril | Full Game Guides | 416 | 3 | read | Most Recommended |
@@ -98,6 +105,21 @@ row: M281
 - Median prices across the country give a quick cheap-or-dear reference: sugar 70, salt 200, soybeans 360, vegetables 640, fruit 1,600 [gf:42465 §Build Up Your Achievements, popemobile v0.98]
 - Rumour events temporarily move prices, and trading more opens up more profitable ones; the listed events include price drops on iron and on gold and silver in Dwarf Camp, on pearls in Estrise, and booms on tea in Beaver Lodge, spices in Sable, handicrafts on Nirva Island and coffee in Sauronix [gf:42465 §Build Up Your Achievements, popemobile v0.98]
 - The guide's author reports never seeing the gold rumour event in 110 hours of play, and passes on a reader's report that asking Sairoh after a "no rumour" result can produce one putting gold and silver at 900k in Haud [gf:42465 §Build Up Your Achievements, popemobile v0.98]
+
+On 2026-09-21 the sources pass (plan section R, batch 5) sourced M186 from the Suikoden Wiki, Captain_K's Army Battles
+Guide and Cyril's walkthrough; the row was edited in place.
+
+### M186 Real-Time War Battles
+pointers: [wiki:suikoden.fandom.com/Army Battle] [wiki:suikoden.fandom.com/War Abilities (S5)] [gf:43075 §2) HOW TO BATTLE, Captain_K v1.0] [gf:43075 §3) UNIT TYPES, Captain_K v1.0] [gf:43075 §4) BATTLES, Captain_K v1.0] [gf:42244 §Raftfleet, Cyril v1.41]
+row: M186
+- Army battles are fought in real time, as a simplified strategy game [wiki:suikoden.fandom.com/Army Battle] [gf:43075 §2) HOW TO BATTLE, Captain_K v1.0]
+- A unit's first character, its general, sets the unit's type, and the second and third add their abilities and bonuses [wiki:suikoden.fandom.com/Army Battle] [wiki:suikoden.fandom.com/War Abilities (S5)] [gf:43075 §2) HOW TO BATTLE, Captain_K v1.0]
+- On land, infantry beats archers, archers beat cavalry and cavalry beats infantry [wiki:suikoden.fandom.com/Army Battle] [gf:43075 §3) UNIT TYPES, Captain_K v1.0] [gf:42244 §War Battles, Cyril v1.41]
+- Some battles are fought at sea, with ship units [wiki:suikoden.fandom.com/Army Battle] [gf:43075 §3) UNIT TYPES, Captain_K v1.0]
+- A win can be a Victory+, which pays more Potch and an item [gf:43075 §4) BATTLES, Captain_K v1.0] [gf:42244 §Raftfleet, Cyril v1.41]
+- The Hatred Fortress Siege's Victory+ pays 12,000 Potch and the Thunder Helm [gf:43075 §HATRED FORTRESS SIEGE, Captain_K v1.0] [gf:42244 §Raftfleet, Cyril v1.41] [wiki:suikoden.fandom.com/Thunder Helm]
+- The New Queen's Campaign's pays 20,000 Potch and the Spun Silver Armor [gf:43075 §NEW QUEEN'S CAMPAIGN, Captain_K v1.0] [gf:42244 §The Queen's Campaign, Cyril v1.41] [wiki:suikoden.fandom.com/Spun Silver Armor]
+- Destroyed enemy units can drop items of their own [gf:43075 §4) BATTLES, Captain_K v1.0] [wiki:suikoden.fandom.com/Useful tips - Suikoden V]
 
 ## Minigame candidates
 
@@ -137,6 +159,9 @@ casino, arena or fishing game appears anywhere in the 35-guide list. Recorded, n
 - The Lym Points that choose between the two good endings are the author's own speculation: a scale from 0 on which 12 points lets the player choose, where unkind answers earn nothing rather than cost a point, charted to 23 of the 25 points the author believes exist [gf:42244 §Speculation: Lym Point Guide, Cyril v1.41]
 - Two rumour events — a sweets boom in Rainwall and a gold and silver boom in Haud Village — are marked unconfirmed by the guide's own author [gf:42465 §Build Up Your Achievements, popemobile v0.98]
 - The Suikoden wiki's Trading page covers Suikoden, Suikoden II and Tierkreis but has no Suikoden V section at all, so it could not serve as a cross-check; the second source is a second GameFAQs author instead [wiki:suikoden.fandom.com/Trading]
+- **Two series firsts.** M186 called Suikoden V the first entry to go fully real-time and the only one with both land and naval battles. Captain_K says the real-time element is new in this game, and the wiki alone says it is the only one with both; each rests on one source. Cut from the row [gf:43075 §1) INTRODUCTION, Captain_K v1.0] [wiki:suikoden.fandom.com/Army Battle]
+- **What earns a Victory+.** M186 defined it as wiping out every regular enemy unit before finishing the main target. No source read defines it: the wiki advises destroying every enemy unit before the goal for their drops, which can beat a Victory+'s reward, and Cyril lists each battle's goal beside its Victory+ reward. Cut [wiki:suikoden.fandom.com/Useful tips - Suikoden V] [gf:42244 §Raftfleet, Cyril v1.41]
+- Captain_K says three defence battles seem to allow no Victory+ at all; no second source read says so [gf:43075 §LELCAR DEFENSE CAMPAIGN, Captain_K v1.0]
 
 ## Codex rows
 
@@ -149,3 +174,4 @@ casino, arena or fishing game appears anywhere in the 35-guide list. Recorded, n
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 42244, read under the owner's rule; GameFAQs flags a second one, 60774, which stays grep only. It gives formations found in chests and attack ranges a second author, and adds what war battles cost, the endings' Star counts and two partial answers to the castle-facility question. No row was edited.
+- 2026-09-21: the sources pass. M186 sourced from the Suikoden Wiki, Captain_K's Army Battles Guide (now read) and Cyril's walkthrough. It now names two Victory+ prizes, and loses its definition of a Victory+ and its two series firsts, which rested on one source each.

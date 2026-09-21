@@ -247,7 +247,7 @@ category and for every row the digest tagged.
 - none · a deadline read off the weather; it paces dungeon clearing rather than leading to a reward
 
 ### M191 — Search System (clue-gated world-map discovery)
-- Inscription deduction · how · `First you must obtain a CLUE to a location (from NPCs or by examining signposts); only then do you travel to the spot`
+- Inscription deduction · how · `First you must obtain a CLUE to a location, usually from the people who talk about it; only then does pressing Square near the right spot`
 
 ### M192 — Endgame sidequest chains (story and gear in one)
 - A second layer · how · `leave the dormant Moon Stone in a shrine in 65,000,000 B.C., then collect it in the present`
