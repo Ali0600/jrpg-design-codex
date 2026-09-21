@@ -39,7 +39,7 @@ jobs:
       # Offline: the GameFAQs probe against synthetic fixtures, the row writers, the facet and
       # board logic, and the digest linter's own rules.
       - name: Probe tests + splicer tests + row-writer tests + cover-fetch tests + verb-ledger tests
-        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs scripts/fetch_covers.test.mjs scripts/verb_tags.test.mjs scripts/facets.test.mjs scripts/fetch_infobox.test.mjs scripts/mygame.test.mjs scripts/digest_lint.test.mjs scripts/dates.test.mjs scripts/fetch_catalogue.test.mjs
+        run: node --test scripts/gf_probe.test.mjs scripts/splice_rows.test.mjs scripts/check_changes.test.mjs scripts/game_rows.test.mjs scripts/splice_game.test.mjs scripts/fetch_covers.test.mjs scripts/verb_tags.test.mjs scripts/facets.test.mjs scripts/fetch_infobox.test.mjs scripts/mygame.test.mjs scripts/digest_lint.test.mjs scripts/dates.test.mjs scripts/fetch_catalogue.test.mjs scripts/catalogue.test.mjs
 
       # The committed research digests: every fact carries a pointer, every cited guide is in
       # Sources, and each digest records which guides it read (docs/research/README.md).

@@ -569,3 +569,19 @@ flag went; the retry on 429 and 5xx stayed.
 **Takeaway:** before letting an opt-in safety or courtesy flag gate a job, read what it actually
 measures — it can couple you to a system you chose not to use. And a guard that "waits for X"
 should print which X, or the wait reads as the wrong outage.
+
+## A stable external id stored early makes a later join exact
+Every roster row has carried its Wikidata item (`wd`) since the facets work, harvested from the
+article's page properties with no consumer in sight. When the platform catalogue arrived — 1,027
+games from Wikidata — matching it to the roster was a `Map` lookup: zero title logic, zero
+fuzzy matching, and the one case that would have defeated a title match (Wikidata calls Dark
+Cloud 2 "Dark Chronicle") came through correctly on the first run.
+
+**Why it came up:** the old candidate list (GameFAQs' "Games You May Like") matches by exact
+normalised title because it has nothing else, and its misses are invisible. The catalogue's
+known-positive guard could count 53 of 54 roster games found only because the join key was
+already there to count with.
+
+**Takeaway:** when a source hands you a canonical id (a Wikidata item, an ISBN, a MusicBrainz
+id), store it with the record even if nothing reads it yet. A join you can do by id later is
+one you will never have to do by name.

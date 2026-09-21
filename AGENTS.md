@@ -480,7 +480,23 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   1980–2035, every `plat` a listed console in list order, `genre` non-empty, every string under 120
   characters, the order, and that a row matching a roster game names the roster's `wp`. 53 of the
   54 roster games on these consoles are in it; Alundra is not, because Wikidata files it as an
-  action-adventure game. The Games-tab panel that shows the catalogue is the next PR.
+  action-adventure game.
+  **The panel** (`#catalogue`, a collapsed `verb-box` on the Games tab under "Suggested by
+  GameFAQs"): its summary line is set on every `renderGames`, its body only while open (the
+  Browse pattern). Console chips (`All consoles`, then each console with *not yet / all*), genre
+  chips counted over the chosen console, a filter box over title, studio and publisher, a
+  "show the games already in the codex" switch (off), a count line — and, for a console
+  `FACET_VOCAB.platform` knows, a link to the roster's own games on it — then a table: title
+  (→ Wikipedia through `wpUrl`), year, developer, genre, and *✓ in the codex* (a `#game=` link to
+  the game's page), *queued*, or **Queue it**. The pure part lives in the data region after
+  `creditTally`, so the validator and `scripts/catalogue.test.mjs` run the page's copy:
+  `catalogueMatch(catalogue, games)` (a roster row by `wd`, a custom game — which has none — by
+  normalised title, with `queued` read from its status), `catalogueCounts(rows, platforms)`,
+  `catalogueFilter(rows, state)` and `catalogueGenres(rows, plat)`. `catalogueState` ({plat,
+  genre, q, showAll}) is in memory like `openBrowseGroups`, never in `store`. Typing redraws
+  only the list, so the box keeps its caret. **Queue it** goes through `queueGame({title, year,
+  dev, why})`, the one writer of a custom game row that the GameFAQs panel's `queueCandidate`
+  also calls; the catalogue's brief names the console, year and studio.
 - **The game page** (added 2026-09-07) — `#gamePage`, a sibling of `#gamesList` inside the
   Games view, rendered by `renderGamePage(title)`: cover, GameFAQs details and ratings,
   the brief, every mechanic and minigame as compact `.gp-row` buttons (never full
@@ -1023,8 +1039,9 @@ Standing, not yet scheduled:
   GameFAQs-suggested titles with a Queue-it button, but nothing is rostered, and the
   leaders include remakes and siblings of games already researched (Persona 5 vs
   Persona 5 Royal), so this needs curation, not a mechanical top-5. Since 2026-09-21 the
-  platform catalogue (`CATALOGUE`) lists every RPG on 13 consoles with the roster's 53 marked,
-  974 not, so the queue can be filled from it once its Games-tab panel lands.
+  platform catalogue panel on the Games tab lists every RPG on 13 consoles with the roster's 53
+  hidden and 974 not yet researched, each with a Queue-it button, so the queue can be filled
+  from it console by console.
 - Two open research threads: a third way to cue timing; a sibling for KH2's
   "transformations that pay permanent traversal".
 - Offered, not decided (2026-09-16): widen `REF_HOSTS` to gamerant.com, thegamer.com and
