@@ -17,6 +17,7 @@ from the link above, or clone the repo and double-click `JRPG_Design_Codex.html`
 | **104 minigames** | 101 carry concrete reward tables — the exact item at the exact threshold, not "prizes and gil" |
 | **72 games** | PS1 cult classics through to Clair Obscur and Metaphor, with Metacritic critic + user scores |
 | **5 design pillars** | Each with a test question to judge a mechanic against |
+| **1,027 RPGs** on **13 consoles** | The platform catalogue: every RPG Wikidata files under PS1, PS2, PS3, PSP, GameCube, SNES, N64, Saturn, Dreamcast, GBA, DS, Xbox or Wii with an English Wikipedia article, matched to the roster by Wikidata id — 53 are in the codex, the rest are what it has not researched yet |
 
 Every entry was checked against at least two sources. A pass through the older rows is
 putting those links in the data itself, game by game, and cutting any claim only one
@@ -198,13 +199,14 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Built a 2-job GitHub Actions CI/CD pipeline: a validation gate that blocks the deploy on
   failure, with SHA-pinned third-party actions and least-privilege job permissions
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
-  injects 104 sabotages and fails the build unless every one is caught, and every
+  injects 118 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  214-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  229-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
-- Built fail-closed data harvesters over Fandom wikis, Wikipedia and Metacritic: host
-  allowlists, range checks, retry with backoff on 429/5xx, and a harvest that writes nothing if
-  any of 72 records fails a check. Also an in-page probe that caps results at 12KB, so a
-  1.4MB Cloudflare-gated guide is never fetched whole
+- Built fail-closed data harvesters over Fandom wikis, Wikipedia, Wikidata and Metacritic: host
+  allowlists, range checks, retry with backoff on 429/5xx, a known-positive guard that refuses an
+  answer holding none of 54 known records, and a harvest that writes nothing if any of 1,027
+  records fails a check. Also an in-page probe that caps results at 12KB, so a 1.4MB
+  Cloudflare-gated guide is never fetched whole
 - Treated docs as code: CI checks that the figures quoted in the README and the agent docs
   still match the data; the README check caught a real 2-batch drift the day it was added

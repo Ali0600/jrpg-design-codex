@@ -72,6 +72,11 @@ const STATUS = new Set(["Researched", "Researching", "To Research"]);
 const GF_KEYS = new Set(["u", "plat", "genre", "dev", "pub", "rel", "fr", "aka", "also", "rating", "diff", "len", "like", "note", "at"]);
 const GF_PATH = /^\/[a-z0-9-]+\/\d+-[a-z0-9-]+$/;
 const GF_MAX_TEXT = 120;
+const WD_ID = /^Q[1-9]\d*$/;
+/** The platform catalogue (fetch_catalogue.mjs writes it; the script holds the same lists). */
+const CAT_ROW_KEYS = ["wd", "t", "y", "plat", "genre", "dev", "pub", "wp"];
+const CAT_PLATFORM_KEYS = ["name", "wd", "label"];
+const CAT_YEAR_MIN = 1980, CAT_YEAR_MAX = 2035;
 const GF_YEAR_WINDOW = 2;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 /**
@@ -502,7 +507,7 @@ function checkCategoryFacets({ CATEGORY_FACETS, FACET_KINDS, facetsOf, facetNorm
 function checkWikiMeta(g, label, errors, wdRefs) {
   if (g.wd != null) {
     if (!isText(g.wp)) errors.push(`${label}: has a wd but no wp — the Wikidata item is read from its Wikipedia article`);
-    if (!/^Q[1-9]\d*$/.test(String(g.wd))) errors.push(`${label}: wd must be a Wikidata item id (Q and digits), got ${JSON.stringify(g.wd)}`);
+    if (!WD_ID.test(String(g.wd))) errors.push(`${label}: wd must be a Wikidata item id (Q and digits), got ${JSON.stringify(g.wd)}`);
     else if (wdRefs.has(g.wd)) errors.push(`${label}: wd ${g.wd} is also claimed by ${JSON.stringify(wdRefs.get(g.wd))}`);
     else wdRefs.set(g.wd, g.title);
   }
@@ -548,6 +553,9 @@ export function validate(html, docs = {}) {
         " FACET_TABLE: typeof FACET_TABLE === 'undefined' ? null : FACET_TABLE," +
         " FACET_KINDS: typeof FACET_KINDS === 'undefined' ? null : FACET_KINDS," +
         " CATEGORY_FACETS: typeof CATEGORY_FACETS === 'undefined' ? null : CATEGORY_FACETS," +
+        " CATALOGUE: typeof CATALOGUE === 'undefined' ? null : CATALOGUE," +
+        " CATALOGUE_PLATFORMS: typeof CATALOGUE_PLATFORMS === 'undefined' ? null : CATALOGUE_PLATFORMS," +
+        " CATALOGUE_META: typeof CATALOGUE_META === 'undefined' ? null : CATALOGUE_META," +
         " facetFns: {" + ["facetNorm", "facetLookup", "canonFacet", "categoryFacet", "facetSources", "facetsOf", "parseGameQuery", "matchesFacets"]
           .map(n => `${n}: typeof ${n} === 'undefined' ? null : ${n}`).join(", ") + "}};"
     )();
@@ -557,7 +565,8 @@ export function validate(html, docs = {}) {
   }
 
   const { CATS, BASE_MECHS, BASE_GAMES, PILLARS, MINIGAMES, LINEAGES, VERBS, SHOTS, SHOT_TYPES,
-          CHANGES, expandIds, RETIRED, FACET_VOCAB, FACET_TABLE, FACET_KINDS, CATEGORY_FACETS, facetFns } = data;
+          CHANGES, expandIds, RETIRED, FACET_VOCAB, FACET_TABLE, FACET_KINDS, CATEGORY_FACETS,
+          CATALOGUE, CATALOGUE_PLATFORMS, CATALOGUE_META, facetFns } = data;
   for (const [name, arr] of [
     ["BASE_MECHS", BASE_MECHS], ["BASE_GAMES", BASE_GAMES],
     ["MINIGAMES", MINIGAMES], ["PILLARS", PILLARS],
@@ -927,6 +936,81 @@ export function validate(html, docs = {}) {
     }
   }
 
+  // --- the platform catalogue: script-owned rows, one per game, matched to the roster by wd.
+  // Present or absent, never half-checked: a page that ships the array ships every rule below.
+  if (CATALOGUE) {
+    const plats = Array.isArray(CATALOGUE_PLATFORMS) ? CATALOGUE_PLATFORMS : [];
+    if (!plats.length) errors.push("CATALOGUE exists but CATALOGUE_PLATFORMS is missing or empty");
+    const order = new Map(), platIds = new Set();
+    plats.forEach((p, i) => {
+      const label = `catalogue platform ${JSON.stringify(p.name ?? `#${i}`)}`;
+      checkFields(p, label, CAT_PLATFORM_KEYS, errors);
+      for (const k of Object.keys(p)) if (!CAT_PLATFORM_KEYS.includes(k)) errors.push(`${label}: unknown key ${JSON.stringify(k)}`);
+      if (!WD_ID.test(String(p.wd))) errors.push(`${label}: wd must be a Wikidata item id (Q and digits), got ${JSON.stringify(p.wd)}`);
+      if (order.has(p.name)) errors.push(`${label}: listed twice`);
+      if (platIds.has(p.wd)) errors.push(`${label}: wd ${p.wd} is also another platform's`);
+      order.set(p.name, i);
+      platIds.add(p.wd);
+      // A console the vocabulary knows must be spelled as the vocabulary spells it, so the
+      // catalogue's chip and the platform filter name one thing.
+      const hit = facetFns.facetLookup ? facetFns.facetLookup("platform", p.name) : null;
+      if (hit && hit.via != null && hit.canon !== p.name) errors.push(`${label}: FACET_VOCAB.platform spells it ${JSON.stringify(hit.canon)} — use that name, so the catalogue's chip and the platform filter agree`);
+    });
+    const meta = CATALOGUE_META && typeof CATALOGUE_META === "object" ? CATALOGUE_META : null;
+    if (!meta) errors.push("CATALOGUE exists but CATALOGUE_META is missing");
+    else {
+      if (meta.source !== "wikidata") errors.push(`CATALOGUE_META.source must be "wikidata", got ${JSON.stringify(meta.source)}`);
+      if (!WD_ID.test(String(meta.genre))) errors.push("CATALOGUE_META.genre must be the Wikidata item every catalogued genre sits under");
+      if (!ISO_DATE.test(String(meta.at))) errors.push("CATALOGUE_META.at must be the ISO harvest date");
+    }
+    const rosterByWd = new Map(BASE_GAMES.filter(g => g.wd != null).map(g => [g.wd, g]));
+    const seenWd = new Set();
+    let prev = null;
+    CATALOGUE.forEach((r, i) => {
+      const label = `catalogue row ${r.wd ?? `#${i}`}`;
+      checkFields(r, label, ["wd", "t", "wp"], errors);
+      for (const k of Object.keys(r)) if (!CAT_ROW_KEYS.includes(k)) errors.push(`${label}: unknown key ${JSON.stringify(k)}`);
+      if (!WD_ID.test(String(r.wd))) errors.push(`${label}: wd must be a Wikidata item id (Q and digits), got ${JSON.stringify(r.wd)}`);
+      if (seenWd.has(r.wd)) errors.push(`${label}: duplicate wd — one row per game, its consoles in plat`);
+      seenWd.add(r.wd);
+      if (!(r.y === null || (Number.isInteger(r.y) && r.y >= CAT_YEAR_MIN && r.y <= CAT_YEAR_MAX))) {
+        errors.push(`${label}: y must be null or a year from ${CAT_YEAR_MIN} to ${CAT_YEAR_MAX}, got ${JSON.stringify(r.y)}`);
+      }
+      if (!Array.isArray(r.plat) || !r.plat.length) errors.push(`${label}: plat must list at least one console`);
+      else {
+        let last = -1;
+        for (const p of r.plat) {
+          if (!order.has(p)) { errors.push(`${label}: platform ${JSON.stringify(p)} is not in CATALOGUE_PLATFORMS`); continue; }
+          if (order.get(p) <= last) errors.push(`${label}: plat must follow CATALOGUE_PLATFORMS order without repeats`);
+          last = order.get(p);
+        }
+      }
+      if (!Array.isArray(r.genre) || !r.genre.length) errors.push(`${label}: genre must list at least one label — every row got in through one`);
+      const strings = [["t", r.t], ["wp", r.wp]];
+      for (const k of ["genre", "dev", "pub"]) {
+        if (r[k] === undefined) continue;
+        if (!Array.isArray(r[k])) { errors.push(`${label}: ${k} must be a list`); continue; }
+        for (const s of r[k]) {
+          if (!isText(s)) errors.push(`${label}: ${k} must hold non-empty text, got ${JSON.stringify(s)}`);
+          strings.push([k, s]);
+        }
+      }
+      for (const [k, s] of strings) {
+        if (typeof s === "string" && s.length > GF_MAX_TEXT) errors.push(`${label}: ${k} holds a ${s.length}-char string — longer than ${GF_MAX_TEXT}, and prose is not stored`);
+      }
+      if (prev && !(prev.t < r.t || (prev.t === r.t && prev.wd < r.wd))) {
+        errors.push(`${label}: out of order — rows run by title then wd, and only fetch_catalogue.mjs writes them`);
+      }
+      prev = r;
+      // The row's article and the roster's came from Wikipedia by different roads (the sitelink,
+      // pageimages resolution); a disagreement is a finding about one of them, never waived.
+      const g = rosterByWd.get(r.wd);
+      if (g && isText(g.wp) && g.wp !== r.wp) {
+        errors.push(`${label}: names the article ${JSON.stringify(r.wp)}, but roster row ${JSON.stringify(g.title)} carries wp ${JSON.stringify(g.wp)} — both came from Wikipedia and must agree`);
+      }
+    });
+  }
+
   // --- the restore contract: every slot the schema declares is defaulted on load
   checkStoreSchema(script, errors);
 
@@ -948,6 +1032,17 @@ export function validate(html, docs = {}) {
     minigameRefs: MINIGAMES.filter(m => (m.refs ?? []).length).length,
     shotGames: new Set((SHOTS ?? []).map(s => s.game)).size,
     digestRows: BASE_GAMES.filter(g => g.digest != null).length,
+    catalogue: (CATALOGUE ?? []).length,
+    cataloguePlatforms: (CATALOGUE_PLATFORMS ?? []).length,
+  };
+  // "**1,026 RPGs** on **13 consoles**" in both docs; the comma is for the reader.
+  const catalogueClaim = (text, doc) => {
+    if (!CATALOGUE) return;
+    const m = text.match(/\*\*([\d,]+) RPGs\*\* on \*\*(\d+) consoles\*\*/);
+    if (!m) errors.push(`${doc}: could not find the \`**N RPGs** on **N consoles**\` line — update the validator or the doc`);
+    else if (Number(m[1].replace(/,/g, "")) !== stats.catalogue || Number(m[2]) !== stats.cataloguePlatforms) {
+      errors.push(`${doc} says ${m[1]} RPGs on ${m[2]} consoles, the catalogue has ${stats.catalogue} on ${stats.cataloguePlatforms}`);
+    }
   };
 
   if (docs.claude != null) {
@@ -1006,6 +1101,7 @@ export function validate(html, docs = {}) {
     const ddig = docs.claude.match(/(\d+) carry `digest`/);
     if (!ddig) errors.push("CLAUDE.md: could not find the `N carry `digest`` count");
     else if (Number(ddig[1]) !== stats.digestRows) errors.push(`CLAUDE.md says ${ddig[1]} game rows carry digest, the file has ${stats.digestRows}`);
+    catalogueClaim(docs.claude, "CLAUDE.md");
   }
   if (docs.readme != null) {
     const cell = (re, what) => {
@@ -1035,6 +1131,7 @@ export function validate(html, docs = {}) {
     if (rg != null && rg !== stats.minigames) errors.push(`README.md says ${rg} minigames, file has ${stats.minigames}`);
     if (rt != null && rt !== stats.games) errors.push(`README.md says ${rt} games, file has ${stats.games}`);
     if (rr != null && rr !== stats.rewardTables) errors.push(`README.md says ${rr} reward tables, file has ${stats.rewardTables}`);
+    catalogueClaim(docs.readme, "README.md");
     const intro = docs.readme.match(/(\d+) mechanics across (\d+) games, (\d+) minigames/);
     if (!intro) errors.push("README.md: could not find the intro sentence `N mechanics across N games, N minigames`");
     else if (Number(intro[1]) !== stats.mechanics || Number(intro[2]) !== stats.games || Number(intro[3]) !== stats.minigames) {
@@ -1342,6 +1439,34 @@ const SABOTAGES = [
     apply: s => replaceFirst(s, 'const RETIRED = {g081:"g006"};', 'const RETIRED = {g081:"g999"};', "a retired id mapped to a row that does not exist") },
   { name: "a retired id no changelog entry names", expect: /g081 is retired but no CHANGES entry names it/,
     apply: s => replaceFirst(s, 'retired:["g081"]', 'retired:[]', "a retired id no changelog entry names") },
+
+  // The platform catalogue. A synthetic row goes in at the top of the block: "!" sorts before
+  // every real title (".hack//Link" is first), so the row itself keeps the order and only the
+  // rule it breaks fires. Q1 is no game, and no roster row, so the article cross-check stays quiet.
+  { name: "a catalogue game listed twice", expect: /catalogue row Q1: duplicate wd/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!dup a",y:null,plat:["PlayStation"],genre:["x"],wp:"!dup a"},\n{wd:"Q1",t:"!dup b",y:null,plat:["PlayStation"],genre:["x"],wp:"!dup b"},\n', "a catalogue game listed twice") },
+  { name: "a catalogue row on a console the catalogue does not list", expect: /catalogue row Q1: platform "Lantern Box" is not in CATALOGUE_PLATFORMS/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!p",y:null,plat:["Lantern Box"],genre:["x"],wp:"!p"},\n', "a catalogue row on a console the catalogue does not list") },
+  { name: "a catalogue row whose consoles repeat or run out of order", expect: /catalogue row Q1: plat must follow CATALOGUE_PLATFORMS order without repeats/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!r",y:null,plat:["PlayStation 2","PlayStation"],genre:["x"],wp:"!r"},\n', "a catalogue row whose consoles repeat or run out of order") },
+  { name: "a catalogue row dated before the consoles", expect: /catalogue row Q1: y must be null or a year from 1980 to 2035, got 1979/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!y",y:1979,plat:["PlayStation"],genre:["x"],wp:"!y"},\n', "a catalogue row dated before the consoles") },
+  { name: "a catalogue row with no genre", expect: /catalogue row Q1: genre must list at least one label/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!g",y:null,plat:["PlayStation"],genre:[],wp:"!g"},\n', "a catalogue row with no genre") },
+  { name: "prose stored in the catalogue", expect: /catalogue row Q1: dev holds a 121-char string/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", `\nconst CATALOGUE = [\n{wd:"Q1",t:"!d",y:null,plat:["PlayStation"],genre:["x"],dev:["${"x".repeat(121)}"],wp:"!d"},\n`, "prose stored in the catalogue") },
+  { name: "a catalogue row without its article", expect: /catalogue row Q1: field `wp` is missing or empty/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"!w",y:null,plat:["PlayStation"],genre:["x"]},\n', "a catalogue row without its article") },
+  { name: "catalogue rows out of order", expect: /out of order — rows run by title then wd/,
+    apply: s => replaceFirst(s, "\nconst CATALOGUE = [\n", '\nconst CATALOGUE = [\n{wd:"Q1",t:"zzz",y:null,plat:["PlayStation"],genre:["x"],wp:"zzz"},\n', "catalogue rows out of order") },
+  { name: "a catalogue row naming another article than its roster game", expect: /catalogue row Q3106064: names the article "Radiata Stories \(video game\)", but roster row "Radiata Stories" carries wp "Radiata Stories"/,
+    apply: s => replaceFirst(s, 'wp:"Radiata Stories"}', 'wp:"Radiata Stories (video game)"}', "a catalogue row naming another article than its roster game") },
+  { name: "a catalogue console spelled unlike the vocabulary", expect: /catalogue platform "Super Nintendo": FACET_VOCAB\.platform spells it "SNES"/,
+    apply: s => replaceFirst(s, '{name:"SNES", wd:"Q183259"', '{name:"Super Nintendo", wd:"Q183259"', "a catalogue console spelled unlike the vocabulary") },
+  { name: "two catalogue consoles sharing one Wikidata item", expect: /catalogue platform "Wii": wd Q8079 is also another platform's/,
+    apply: s => replaceFirst(s, '{name:"Xbox", wd:"Q132020"', '{name:"Xbox", wd:"Q8079"', "two catalogue consoles sharing one Wikidata item") },
+  { name: "a catalogue harvest with no ISO date", expect: /CATALOGUE_META\.at must be the ISO harvest date/,
+    apply: s => replaceFirst(s, 'genre:"Q744038", at:"', 'genre:"Q744038", at:"day ', "a catalogue harvest with no ISO date") },
 ];
 
 /** Markdown has no data region, so these skip that guard — but still must apply. */
@@ -1445,6 +1570,10 @@ const DOC_SABOTAGES = [
     apply: d => ({ ...d, readme: replaceInDoc(d.readme, /\d+(-case\s+offline\s+suite)/, "999$1", "README.md offline-suite count drift") }) },
   { name: "a test file dropped from the workflow's node --test line", expect: /README\.md says a \d+-case offline suite, the workflow's node --test line runs \d+ cases/,
     apply: d => ({ ...d, workflow: replaceInDoc(d.workflow ?? "", / scripts\/dates\.test\.mjs/, "", "a test file dropped from the workflow's node --test line") }) },
+  { name: "CLAUDE.md catalogue count drift", expect: /CLAUDE\.md says 999 RPGs/,
+    apply: d => ({ ...d, claude: replaceInDoc(d.claude, /\*\*[\d,]+ RPGs\*\*/, "**999 RPGs**", "CLAUDE.md catalogue count drift") }) },
+  { name: "README.md catalogue count drift", expect: /README\.md says 999 RPGs/,
+    apply: d => ({ ...d, readme: replaceInDoc(d.readme, /\*\*[\d,]+ RPGs\*\*/, "**999 RPGs**", "README.md catalogue count drift") }) },
 ];
 
 /**
