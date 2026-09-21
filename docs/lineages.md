@@ -146,8 +146,8 @@ line per chain.
 ### M173 — Quarries / Bounty Hunting (Hunter Rank)
 - Named monsters as landmarks · how · `Quarries are unique super-boss hunts`
 
-### M183 — 176-NPC World Recruitment (Friends List)
-- A cast you recruit · how · `Exactly 176 named NPCs living across Radiata City and its world can be recruited`
+### M183 — Recruiting 170-odd NPCs (Friends List)
+- A cast you recruit · how · `More than 170 named NPCs living across Radiata City and its world can be recruited`
 
 ### M191 — Search System (clue-gated world-map discovery)
 - The world is the answer key · how · `First you must obtain a CLUE to a location`
