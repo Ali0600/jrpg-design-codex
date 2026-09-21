@@ -16,7 +16,7 @@ Nefdar's walkthrough, which `pick()` names, and Zaraktheus's Data/Mechanics Guid
 |---|---|---|---|---|---|---|---|
 | 4143 | Guide and Walkthrough | Nefdar | 11 | 11/30/1998 | Full Game Guides | 390 | https://gamefaqs.gamespot.com/ps/198537-saga-frontier/faqs/4143 |
 | 58412 | Data/Mechanics Guide | Zaraktheus | 015 | 08/02/2019 | In-Depth Guides | 1558 | https://gamefaqs.gamespot.com/ps/198537-saga-frontier/faqs/58412 |
-| wiki | SaGa Frontier; Riki; Emelia; T260G | — | — | — | saga.fandom.com | — | https://saga.fandom.com/wiki/SaGa_Frontier |
+| wiki | SaGa Frontier; Riki; Emelia; T260G; Robots | — | — | — | saga.fandom.com | — | https://saga.fandom.com/wiki/SaGa_Frontier |
 
 Coverage 4143: single page, 391,963 chars, 8,133 lines, 58 sections. Read: the opening on system data and the seven
 characters (lines 96–107), the after-battle lines in 7. Save (296–309) and, under the section the probe heads "8. Notice the
@@ -90,12 +90,13 @@ row: M113
 - Main characters appear in each other's scenarios, except Blue and Red [wiki:saga.fandom.com/SaGa Frontier]
 
 ### M114 Growth by race (each race grows its own way)
-pointers: [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015] [wiki:saga.fandom.com/Riki]
+pointers: [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015] [wiki:saga.fandom.com/Riki] [wiki:saga.fandom.com/Robots]
 row: M114
 - The races gain strength in completely different ways [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015]
 - Humans may gain stats after each battle, and a stronger enemy makes an increase likelier [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015]
 - Mystics gain only a few stats from battle and the rest by absorbing monsters into their mystic weapons [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015]
 - Monsters absorb defeated monsters, taking their abilities and forms [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [wiki:saga.fandom.com/Riki]
+- Mecs take their stats from what they equip and learn programs from the enemy robots they defeat; the wiki adds Memory Boards, which raise a mec's stats and its number of skill slots (sharpened into M114 on 2026-09-21) [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [wiki:saga.fandom.com/Robots]
 
 ## Minigame candidates
 
@@ -116,7 +117,7 @@ None. SaGa Frontier has no minigame rows.
 - **A pop idol.** M113 named one protagonist a pop idol. The SaGa Wiki calls Emelia a former fashion model, and no protagonist is a pop idol in either source, so the row names the monster and the robot only [wiki:saga.fandom.com/Emelia] [wiki:saga.fandom.com/SaGa Frontier]
 - **No experience levels, and which attacks raise which stats.** M114 said there are no levels and that sword use raises sword skill and taking hits raises HP. Nefdar lists stats by attack type, and the mechanics guide describes after-battle checks without an experience system, but neither says there are no levels or that taking hits raises HP. The row names only what both say, and is renamed [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Human and Mystic After-Battle Stat Growth, Zaraktheus v015]
 - **Spark odds and enemy strength.** M112 tied spark odds to enemy strength. Nefdar ties stat growth to enemy strength but not sparks, so the row names only the technique used [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [gf:58412 §Sparking, Zaraktheus v015]
-- **Mecha growth.** Only Nefdar was read on mecha, so M114 does not describe it [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11]
+- **Mecha growth.** Only Nefdar was read on mecha on 2026-09-17, so M114 did not describe it. On 2026-09-21 the SaGa Wiki's Robots page gave the second source — stats from equipment, programs from defeated robots — and M114 now names mecs [gf:4143 §8. Notice the enemy's facing direction, Nefdar v11] [wiki:saga.fandom.com/Robots]
 
 ## Codex rows
 
@@ -126,3 +127,4 @@ None. SaGa Frontier has no minigame rows.
 
 ## Codex delta
 - 2026-09-17: M112–M114, all three SaGa Frontier rows, sourced from the SaGa Wiki, Nefdar's walkthrough and Zaraktheus's Data/Mechanics Guide; M114 renamed "Growth by race (each race grows its own way)".
+- 2026-09-21: the PS1 expansion pass sharpened M114 with the fourth race's rule — mecs grow by equipment and by programs taken from defeated robots — once the SaGa Wiki's Robots page gave the second source. No new row.

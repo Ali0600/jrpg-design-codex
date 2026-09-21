@@ -16,7 +16,7 @@ Daredevil3181's Recruitment FAQ.
 |---|---|---|---|---|---|---|---|
 | 48347 | Guide and Walkthrough | Shotgunnova | — | — | Full Game Guides | 770 | https://gamefaqs.gamespot.com/ps/196917-chrono-cross/faqs/48347 |
 | 27055 | Recruitment FAQ | Daredevil3181 | 4.1 | 04/14/2004 | In-Depth Guides | 109 | https://gamefaqs.gamespot.com/ps/196917-chrono-cross/faqs/27055 |
-| wiki | Element; Innate; Another World; Home World; Opassa Beach; Astral Amulet; List of Chrono Cross characters; New Game+; Chrono Cross | — | — | — | chrono.fandom.com | — | https://chrono.fandom.com/wiki/Element |
+| wiki | Element; Innate; Another World; Home World; Opassa Beach; Astral Amulet; List of Chrono Cross characters; New Game+; Chrono Cross; Smithy; Smith Spirit | — | — | — | chrono.fandom.com | — | https://chrono.fandom.com/wiki/Element |
 
 Coverage 48347: single page, 776,114 chars, 12,527 lines, 176 sections; the page shows no version or date. Read: II. TH'
 BASICS from the Element Grid through the Field Effect (lines 292–420), the Star Levels note (584–597), the battle menu and
@@ -25,6 +25,7 @@ grid note (7028–7039) and the opening of the level-up stars list (10128–1013
 the field effect (50), fleeing (26), Opassa (15), the two worlds (306), recruiting (21), New Game+ (19) and summons (38).
 Largest unread: nearly all of it, including the 114,525-char section the probe heads "2) Shiny material…" and Mt. Pyre
 (34,593).
+Read again on 2026-09-21 for the expansion pass: greps for disassembling and dismantling (8 hits), the Smith Spirit, Rainbow Shells and forging (110) and Zappa (14). The walkthrough's rainbow-equipment chapter heads itself `09) RAINBOW EQUIPMENT [Various] [BACKLINK: OP21][SH09]`, past what a pointer's section may hold, so its facts cite the Termina chapters instead.
 
 Coverage 27055: single page, 109,728 chars, 1,992 lines, 12 sections. Read: the opening of III. Recruiting Characters and
 Level 7 Techs (lines 114–153), the note on the three-way choice (244–257) and the opening of VII. Character Relations
@@ -142,6 +143,19 @@ row: M103
 - Those colors strengthen characters and Elements of the same color and weaken the opposite ones [wiki:chrono.fandom.com/Element] [gf:48347 §II. TH' BASICS, Shotgunnova]
 - A field that is all one color allows that color's summons [wiki:chrono.fandom.com/Element] [wiki:chrono.fandom.com/Chrono Cross] [gf:48347 §II. TH' BASICS, Shotgunnova]
 
+### Forging and dismantling (every piece of gear is also its raw materials)
+cat: Progression & Upgrades
+how: Weapons and armour come from a smith, who forges them from raw materials, and anything whose components are listed can be taken apart again for them — so a find is worth either what it does or what it is made of. The Profiteer Purse, hidden under a staircase in Termina, is the sharpest case: broken down, it gives the Iron to forge a steel weapon early. The top tier needs Rainbow Shells and their shiny components, and the smith who forges it can join the party, handing over a Smith Spirit that summons a forge on the world map or at any save point — though the rainbow gear waits until he has met his counterpart from the other dimension.
+loop: Break down what you find → carry the materials to a smith, or summon one → forge the piece you actually want → and the best tier waits on a smith meeting himself across two worlds.
+notes: Dismantling makes every find a double reward — use it, or turn it into the gear you would rather have — which is the owner's "everything has upgrades" applied to the loot table itself. The Profiteer Purse is the lesson in miniature: the player who works out that its components beat its effect gets steel a dungeon early. Steal the portable forge too: a recruited craftsman who becomes an item you use anywhere keeps crafting from turning into a trip back to town, and tying his best work to the other dimension (M099) makes the two worlds matter to the equipment screen.
+pointers: [wiki:chrono.fandom.com/Smithy] [wiki:chrono.fandom.com/Smith Spirit] [gf:48347 §07) Termina (Another World) (D-07), Shotgunnova] [gf:48347 §17) Termina (Home World) (D-23), Shotgunnova]
+row: M305
+- The smith forges armour, swords, shields and helmets from raw materials, and items can be dismantled for their materials [wiki:chrono.fandom.com/Smithy] [gf:48347 §HOLY BEAST FORM, Shotgunnova]
+- Equipment that does not list its components cannot be disassembled; those are story items or otherwise special [gf:48347 §HOLY BEAST FORM, Shotgunnova]
+- The Profiteer Purse, in a hidden chest under the stairway of Van's house, is worth more disassembled: its Copper and Iron make a Steel Swallow early [gf:48347 §07) Termina (Another World) (D-07), Shotgunnova] [wiki:chrono.fandom.com/Smithy]
+- Invite Zappa into the party and he hands over the Smith Spirit, which allows forging on the world map or at save points [gf:48347 §17) Termina (Home World) (D-23), Shotgunnova] [wiki:chrono.fandom.com/Smith Spirit]
+- Rainbow and spectral equipment need Zappa to meet his counterpart from the other dimension with a Rainbow Shell in hand [wiki:chrono.fandom.com/Smithy] [gf:48347 §17) Termina (Home World) (D-23), Shotgunnova]
+
 ## Minigame candidates
 
 None. Chrono Cross has no minigame rows.
@@ -163,11 +177,23 @@ None. Chrono Cross has no minigame rows.
 - **Endings and accents.** M102 said every recruit adds to the endings and has a personal accent. Neither source says so, and both are cut; so is "New Game+ exists partly so you can recruit the ones you missed", which states an intent [gf:27055 §IV. Endings, New Game/Continue+, Daredevil3181 v4.1] [wiki:chrono.fandom.com/New Game+]
 - **Enemies changing the field.** M103 said casts by anyone, enemies included, tint the field. Neither source says enemy casts count, so the row does not either [wiki:chrono.fandom.com/Element] [gf:48347 §II. TH' BASICS, Shotgunnova]
 
+- **The Rainbow Axe and the Master Hammer.** The wiki has the two Zappas forge the Rainbow Axe together, a key item the Spectra Swallow needs; the walkthrough has the meeting open rainbow forging only with the Master Hammer and a Rainbow Shell, and adds that the Rainbow Axe is not received. Both agree the meeting and a Rainbow Shell are required, which is all the row says [wiki:chrono.fandom.com/Smithy] [gf:48347 §17) Termina (Home World) (D-23), Shotgunnova]
+- **Gold, and tiers that come and go with the story.** The wiki says forging costs gold as well as materials, that bronze goods appear after the S.S. Invincible and that iron and bronze stop being forged after the Dead Sea; no second source read says so [wiki:chrono.fandom.com/Smithy]
+
 ## Codex rows
 
-```js
+```text
 // No new rows. M099–M103 were edited in place on 2026-09-17 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M305  Forging and dismantling (every piece of gear is also its raw materials)  Progression & Upgrades
 ```
 
 ## Codex delta
 - 2026-09-17: M099–M103, all five Chrono Cross rows, sourced from the Chrono Wiki, Shotgunnova's walkthrough and Daredevil3181's Recruitment FAQ.
+- 2026-09-21: the expansion pass adds M305 — forging from raw materials and dismantling gear back into them, with the Smith Spirit as a portable forge — from the wiki's Smithy and Smith Spirit pages and the walkthrough. Chrono Cross goes from 5 mechanics to 6.

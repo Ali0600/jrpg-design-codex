@@ -14,13 +14,14 @@ Risk, Battle Abilities and weapons pages. The second source is ZNicholson's walk
 | id | title | author | version | updated | category | KB | url |
 |---|---|---|---|---|---|---|---|
 | 7745 | Guide and Walkthrough | ZNicholson | 1.3 | 06/18/2000 | Full Game Guides | 348 | https://gamefaqs.gamespot.com/ps/914326-vagrant-story/faqs/7745 |
-| wiki | Vagrant Story; Risk; Chain Abilities (Battle Abilities); Vagrant Story weapons | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Vagrant_Story |
+| wiki | Vagrant Story; Risk; Chain Abilities (Battle Abilities); Vagrant Story weapons; Break Arts | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Vagrant_Story |
 
 Coverage 7745: single page, 348,630 chars, 8,492 lines, 233 sections. Read: the weapon chapter's experience system and
 Basic and Advanced Weapon Dedication (lines 4820–4895), 7. RISK's opening (5210–5235), 12. THE WORKSHOP's locations
 (6798–6823) and 13. COMBINATION, FORGING AND REFORGING's opening (6905–6952). Greps: affinity and class (216 hits), workshops
 (29), combining (83), chains (129), Risk (139) and gems (87). Largest unread: The Great Cathedral (12,794 chars), (c) Sorcery
 (11,563) and the Wine Cellar walkthrough (11,185).
+Read again on 2026-09-21 for the expansion pass: the `lines()` window 5318–5367 (8. BREAK ARTS, its HP-cost table and the start of its Break Art / Heal trick) and a grep for Break Art (55 hits).
 
 ## Triage
 
@@ -100,6 +101,18 @@ row: M108
 - Pressing a battle ability as the exclamation mark appears chains another attack, or triggers a defense ability when being hit [wiki:finalfantasy.fandom.com/Chain Abilities] [gf:7745 §7. RISK, ZNicholson v1.3]
 - Chaining raises Risk, which lowers hit and evasion and raises the damage taken [wiki:finalfantasy.fandom.com/Risk] [gf:7745 §7. RISK, ZNicholson v1.3]
 
+### Break Arts (techniques learned by the killing blow, paid for in HP)
+cat: Progression & Upgrades
+how: Each weapon class has four Break Arts of its own, and any weapon in that class can perform them. They are learned by finishing enemies: each kill counts toward the class of weapon that landed the killing blow, and enough of them teach that class its next Art. A Break Art costs no MP — it takes Ashley's own HP, more for each higher Art.
+loop: Pick the weapon class you want to grow → finish enemies with it → it learns its next Art → then spend your own health on the move, so a fight you are winning pays for the technique that ends it sooner.
+notes: Two ideas that work separately. Learning by the killing blow rather than by use makes the player decide which weapon finishes a fight, not just which one fights — a small, legible choice every battle. And paying in HP instead of MP puts the strongest moves on the same meter as survival, which sits naturally beside Vagrant Story's Risk (M108): the resource that powers the flourish is the one the enemy is trying to take. Compare Grandia's weapon skills (M139), which level by any use at all.
+pointers: [wiki:finalfantasy.fandom.com/Break Arts] [gf:7745 §8. BREAK ARTS, ZNicholson v1.3]
+row: M304
+- Each weapon class has four Break Arts, and any weapon in the class can perform them [wiki:finalfantasy.fandom.com/Break Arts] [gf:7745 §8. BREAK ARTS, ZNicholson v1.3]
+- They are learned by kills credited to the weapon type that landed the finishing blow [gf:7745 §8. BREAK ARTS, ZNicholson v1.3] [wiki:finalfantasy.fandom.com/Break Arts]
+- They drain Ashley's HP; the guide tables the cost as 25, 40, 55 and 75 for the first to fourth [wiki:finalfantasy.fandom.com/Break Arts] [gf:7745 §8. BREAK ARTS, ZNicholson v1.3]
+- The wiki counts forty in all, bare hands included, and puts the first at 30 experience, one earned per battle won [wiki:finalfantasy.fandom.com/Break Arts]
+
 ## Minigame candidates
 
 None. Vagrant Story has no minigame rows.
@@ -119,11 +132,22 @@ None. Vagrant Story has no minigame rows.
 - **Risk and damage dealt.** The wiki says higher Risk raises critical hits; the walkthrough says it lowers damage inflicted. The row names only what both say, lower accuracy and more damage taken [wiki:finalfantasy.fandom.com/Risk] [gf:7745 §7. RISK, ZNicholson v1.3]
 - **Chains without end, gems in battle, Bronze and Iron making Hagane.** "Indefinitely" is in neither source (the walkthrough says Risk exists so chains cannot run on); gems swapped even in battle is on the wiki alone; the metal recipes are in the walkthrough alone. All are cut from the rows [wiki:finalfantasy.fandom.com/Vagrant Story] [gf:7745 §13. COMBINATION, FORGING AND REFORGING, ZNicholson v1.3]
 
+- **What a Break Art's success depends on.** The walkthrough says high Risk lowers a Break Art's hit rate like any attack, and that the right affinity can make a first-level Art beat a fourth; the wiki says neither, so the row leaves both out [gf:7745 §8. BREAK ARTS, ZNicholson v1.3]
+
 ## Codex rows
 
-```js
+```text
 // No new rows. M106–M108 were edited in place on 2026-09-17 and gained `refs`; logged in that day's entry as updated.
+```
+
+The 2026-09-21 expansion pass adds one row:
+
+```js
+// Spliced into JRPG_Design_Codex.html on 2026-09-21 by
+// scripts/splice_rows.mjs (the rows there are the source of truth; this is the map).
+// M304  Break Arts (techniques learned by the killing blow, paid for in HP)  Progression & Upgrades
 ```
 
 ## Codex delta
 - 2026-09-17: M106–M108, all three Vagrant Story rows, sourced from the Final Fantasy Wiki and ZNicholson's walkthrough.
+- 2026-09-21: the expansion pass adds M304 — Break Arts, learned by the killing blow and paid for in HP — from the wiki's Break Arts page and the walkthrough's own chapter on them. Vagrant Story goes from 3 mechanics to 4.
