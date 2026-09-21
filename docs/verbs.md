@@ -226,8 +226,8 @@ category and for every row the digest tagged.
 - Visible but unreachable · how · `each converts water or sky you had only been able to look at into somewhere you can now go`
 
 ### M166 — Georama (town-building)
-- Consequence · how · `satisfy each one's demand (a botanist wants trees nearby, a baker wants bread delivered)`
-- A second layer · how · `restores that town's ruined FUTURE 100 years on`
+- Consequence · how · `satisfy each one's condition for moving in (one wants a tree beside his house, the baker a cart outside hers)`
+- A second layer · how · `because the town is rebuilt in the past, the rebuild restores its ruined FUTURE`
 
 ### M168 — Invention (photograph -> Ideas -> build)
 - none · photographing the world banks ideas for crafting; Vista sketch runs the other way, from a picture to the place
