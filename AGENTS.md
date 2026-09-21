@@ -241,7 +241,20 @@ backup; the HTML file is the source of truth and is more up to date.
   sections live inside the Act pages (`/faqs/82352/act-1-gustave`), so guessing a place's slug 404s. Corrections: a
   character carries only three Pictos, and mastery shares the passive, never the stats; M161's "expedition counter" rests
   on the wiki alone and was cut; Esquie has a FOURTH rock, Urrie (diving), a relationship favour rather than a story beat;
-  and the flight rock goes unnamed, since only the wiki calls it Soarrie. The PS2 batch (M163–M191, g068–g079) is next.
+  and the flight rock goes unnamed, since only the wiki calls it Soarrie.
+  Plus the **sources pass, batch 5** (2026-09-21, PRs #119–#125): the PS2 batch for ten of its eleven games, 25 mechanics
+  rows and 11 minigames (M163–M173, M177–M186, M188–M191, g068–g075, g077–g079), with eight new digests and blocks added to
+  Suikoden V's and Persona 4's. Three sources describe another edition (Dragon Quest VIII's wiki the 3DS release, Odin
+  Sphere's wiki the remake Leifthrasir, a Star Ocean 3 FAQ the Japanese original), so only what holds for the PlayStation 2
+  release is used. Corrections that changed what a row says: Dragon Quest VIII's casinos have no poker; Odin Sphere's
+  Alchemy row described the remake (in the PS2 game a Material's number picks the potion, not its strength) and was renamed;
+  Star Ocean 3's best weapons are dropped, not invented; Dark Cloud 2's residents' demands were wrong; Radiata Stories'
+  recruit count is 176 or 177 by source, so M183 was renamed; Suikoden V lost a definition of the Victory+ no source gives;
+  Persona 4's Shuffle Time lost an All-Out Attack guarantee that belongs to Persona 3; and Wild ARMs 3's EX File Key buys
+  extras, not a New Game+. Tables now list every prize for Shadow Hearts: Covenant's nineteen trials, Dragon Quest VIII's
+  twelve casino prizes, Star Ocean 3's arena and bunny races and Wild ARMs 3's 20 Millennium Puzzles. Shin Megami Tensei:
+  Nocturne (M174–M176, g076) is left: M176 was already edited under the 2026-09-21 entry (#118), so it waits for a new
+  day's entry.
 - **104 minigames** (`MINIGAMES` array, g001-g105; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
