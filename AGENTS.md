@@ -464,6 +464,23 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   The validator skips a retired id in the sequence and refuses a retired id that still has a row,
   a successor with no row and a retired id no entry lists; `scripts/check_changes.mjs` refuses a
   deleted row `RETIRED` does not name, and a retirement no NEW entry lists.
+- **`CATALOGUE`** (added 2026-09-21; the owner: "a list of all the RPGs on PS1, PS2, PS3, PSP,
+  GameCube, the big old retro consoles, so I can quickly see which haven't been ingested yet") —
+  the platform catalogue: **1,027 RPGs** on **13 consoles** (PlayStation, PlayStation 2,
+  PlayStation 3, PSP, GameCube, SNES, Nintendo 64, Sega Saturn, Dreamcast, Game Boy Advance,
+  Nintendo DS, Xbox, Wii), every game Wikidata files as a video game on one of them with a genre
+  under *role-playing video game* and an English Wikipedia article (178 without one are left out,
+  at the owner's choice). One row per game, `{wd, t, y, plat[], genre[], dev[], pub[], wp}`, in
+  title-then-id order, one per line, matched to the roster by `wd` — never by title (Wikidata calls
+  Dark Cloud 2 "Dark Chronicle"). `CATALOGUE_PLATFORMS` lists each console's `name` (the codex's
+  spelling, held to `FACET_VOCAB.platform`'s canonical where the vocabulary has it; Nintendo 64 and
+  Xbox have no roster game and are catalogue-only names), its Wikidata `wd` and the `label` it was
+  resolved from; `CATALOGUE_META` the genre root and the harvest date. Written only by
+  `scripts/fetch_catalogue.mjs` (below). The validator holds the key lists, the id shapes, `y` in
+  1980–2035, every `plat` a listed console in list order, `genre` non-empty, every string under 120
+  characters, the order, and that a row matching a roster game names the roster's `wp`. 53 of the
+  54 roster games on these consoles are in it; Alundra is not, because Wikidata files it as an
+  action-adventure game. The Games-tab panel that shows the catalogue is the next PR.
 - **The game page** (added 2026-09-07) — `#gamePage`, a sibling of `#gamesList` inside the
   Games view, rendered by `renderGamePage(title)`: cover, GameFAQs details and ratings,
   the brief, every mechanic and minigame as compact `.gp-row` buttons (never full
@@ -734,6 +751,26 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   a truncated category list (`continue` in the answer), a missing Wikidata item, zero categories,
   a category over 120 characters and a redirected title. It stores every category and never reads
   `CATEGORY_FACETS`, so re-curating is a page edit, never a re-harvest.
+- `scripts/fetch_catalogue.mjs [--write] [--only "<console>"…] [--today <date>]` harvests
+  `CATALOGUE` from Wikidata's own API (`www.wikidata.org`) and never its query service. It verifies
+  every console id against its label (`en`, or `mul` — a label the same in every language now lives
+  there alone, six of the thirteen), walks the genre subtree by `haswbstatement:P279=` through the
+  search index (42 items), searches each console (`haswbstatement:P31=Q7889 P400=<console>
+  P136=<any of the 42>`, 50 hits a page in creation order, because relevance order shifts between
+  pages when every hit scores the same and Nintendo DS came back 186 over 187), reads each game once
+  with `wbgetentities` (deprecated statements skipped; the earliest P577 year; P400 ∩ the consoles;
+  P136 ∩ the subtree; P178; P123; the enwiki sitelink) and names the studios and genres in a second
+  batch pass — about 80 calls and 50 MB a full run. A 429 or 5xx is retried with `Retry-After` else
+  backoff; an API error, a non-JSON body, a search whose pages do not add up to its hit count, a year
+  out of range or a string over 120 characters refuses, and nothing is written on any refusal. The
+  known-positive guard looks the roster up in the answer and refuses when nothing folds onto any
+  console (a broken fold once made it pass on "0 of 0") or nothing expected is found; the games it
+  misses are printed. It carries no `maxlag`: on Wikidata that parameter also defers to the query
+  service's lag (measured 91 s while every database replica sat at 0.5 s), which is the dependency
+  the script exists to avoid — the query service timed out on the largest console four times running
+  on 2026-09-21 and took 89 s over a three-item query while the search index answered in 0.3 s. A
+  re-run whose only difference is the date writes nothing. `scripts/fetch_catalogue.test.mjs` drives
+  it offline with `scripts/fixtures/wikidata.mjs`.
 - `scripts/splice_game.mjs --game "<title>" <game.json> [--write]` turns a saved
   `__gf.game()` result into the row's `gf`. It is the strict side of the harvest: an unseen
   Game Detail label is a refusal that PRINTS the label (extend `LABELS` deliberately — an
@@ -800,7 +837,11 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   whitelist and the same cap, with `plat` and `at` required and never without `wp`; `wd` a
   unique Wikidata id and `wpcats` a list of bare category names under the cap, both never without
   `wp`; `CATEGORY_FACETS` kinds in FACET_KINDS, no category under two labels, every category
-  carried by some game, and every label on two or more games);
+  carried by some game, and every label on two or more games); **the catalogue**
+  (`CATALOGUE_PLATFORMS` entries and rows against their key lists, unique well-formed ids, a
+  console name the vocabulary spells otherwise, `y` in range, `plat` listed consoles in list
+  order, `genre` non-empty, the 120-char cap, title-then-id order, and a row's `wp` equal to its
+  roster game's);
   **the changelog** (ISO dates strictly decreasing, every range parseable by the page's
   own `expandIds`, no id added twice, the union of every `added` list EQUAL to the full
   M/g id set — membership, so both a missing row and a phantom one are caught — every
@@ -827,7 +868,7 @@ gated on `needs: validate`, so nothing unvalidated ever ships. Actions are SHA-p
   make the doc drift that bit us before into a build failure — README sat at 243/87 for
   two batches before its check existed — so when counts change, update CLAUDE.md and
   README.md and re-copy AGENTS.md in the SAME commit or CI goes red.
-- `--selftest` mutates the data in memory and requires all **104** sabotages to fire.
+- `--selftest` mutates the data in memory and requires all **118** sabotages to fire.
   Two fixture rules learned the hard way. (1) A sabotage must land INSIDE the data
   region — an early `/us:\d+/` fixture matched `border-radius:4px` in the CSS, changed
   the bytes, threw nothing, and tested nothing; `replaceFirst` now refuses a match
@@ -981,7 +1022,9 @@ Standing, not yet scheduled:
 - Refill the research queue — EMPTY since 2026-08-12. The Games tab now ranks 158
   GameFAQs-suggested titles with a Queue-it button, but nothing is rostered, and the
   leaders include remakes and siblings of games already researched (Persona 5 vs
-  Persona 5 Royal), so this needs curation, not a mechanical top-5.
+  Persona 5 Royal), so this needs curation, not a mechanical top-5. Since 2026-09-21 the
+  platform catalogue (`CATALOGUE`) lists every RPG on 13 consoles with the roster's 53 marked,
+  974 not, so the queue can be filled from it once its Games-tab panel lands.
 - Two open research threads: a third way to cue timing; a sibling for KH2's
   "transformations that pay permanent traversal".
 - Offered, not decided (2026-09-16): widen `REF_HOSTS` to gamerant.com, thegamer.com and

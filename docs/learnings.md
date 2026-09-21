@@ -553,3 +553,19 @@ edition-specific source the one that sets the vocabulary, not just the one that 
 The tell is cheap to look for: a page that names a release you are not researching anywhere in its
 text is covering that release everywhere in its text. And when a search of the older source comes back empty, search it again in its own
 vocabulary before recording an absence.
+
+## A courtesy parameter can carry a dependency its name does not mention
+Wikidata's API takes `maxlag=5`, the politeness flag its guidance recommends for bots: "do
+nothing if the database replicas are more than five seconds behind". On Wikidata the same
+parameter also defers to the *query service's* update lag: the answer read "Waiting for
+wdqs1013: 91.25 seconds lagged" while every database replica sat under a second.
+
+**Why it came up:** the platform catalogue's harvester had just been rewritten to avoid the query
+service, which was timing out on every shape of query that afternoon, in favour of the search
+index and `wbgetentities`. It then refused every call anyway, eight five-second waits at a time,
+because the polite flag was waiting for the very service it had been built to do without. The
+flag went; the retry on 429 and 5xx stayed.
+
+**Takeaway:** before letting an opt-in safety or courtesy flag gate a job, read what it actually
+measures — it can couple you to a system you chose not to use. And a guard that "waits for X"
+should print which X, or the wait reads as the wrong outage.

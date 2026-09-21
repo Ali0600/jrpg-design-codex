@@ -34,6 +34,47 @@ rejected options still offer.
   Suikoden, Breath of Fire III, Tactics Ogre, Front Mission 3 and others), already ranked in the Games tab's
   candidates panel, whose Queue-it button writes to the research queue. Each needs the whole new-game pipeline
   (brief, GameFAQs harvest, cover, infobox and vocabulary, digest, rows, scores).
+- **Japan-only titles in the platform catalogue (178 of 1,204)** (from the catalogue fork, 2026-09-21) —
+  revisit hook: `recordOf` in `scripts/fetch_catalogue.mjs` leaves out an entity with no enwiki sitelink;
+  keep it instead, make `wp` optional in the row and in the validator's catalogue block, and give the panel a
+  "no English article" mark, because the sources pass has nothing English to read for them.
+- **A Catalogue tab** (from the catalogue fork, 2026-09-21) — revisit hook: the panel's body is one render
+  into `#catBody`; a tab is a `<section class="view">` around the same call, worth it only if the panel
+  outgrows the Games tab.
+
+---
+
+## 2026-09-21 — Where the platform catalogue comes from, and where it lives
+
+**The fork:** the owner wants every RPG on PS1, PS2, PS3, PSP, GameCube and the older consoles, marked by
+whether the codex has researched it. Four questions: the source, the place in the app, what "RPG" means, and
+the games with no English article.
+
+**Source.**
+- **Wikidata, through its own API** — chosen. The search index answers "video game ∧ on this console ∧
+  genre in the role-playing subtree" in 0.3 s (`haswbstatement:P31=Q7889 P400=<console> P136=<any of 42>`),
+  `wbgetentities` gives the rest, and every roster row already carries `wd`, so the match is an exact join
+  (Wikidata calls Dark Cloud 2 "Dark Chronicle"; a title match would have missed it).
+- **Wikidata's query service (SPARQL)** — the first draft. One query per console did the whole job in the
+  morning's probe (PS2: 223, all 14 roster games back under their `wd`); by the afternoon it timed out on
+  PlayStation four times running and took 89 s over a three-item `VALUES` query. `rejected — the same data
+  reaches the regular API, which answered in under a second all day`. Its `maxlag` politeness flag turned out
+  to defer to the query service's lag as well, so the script carries none.
+- **GameFAQs' genre listings** — Cloudflare-gated, browser-pane only, hundreds of pages, no id to join on.
+  `rejected — cost, and no join key`.
+- **Wikipedia's platform lists** — no genre column, no id. `rejected — no join key`.
+
+**Place.** A collapsed panel on the Games tab beside "Suggested by GameFAQs" — chosen: the same job (what to
+research next) and the same Queue-it. A Catalogue tab: `deferred — worth trying` (backlog). Under the
+platform facet, so `platform:PS2` shows the roster's PS2 games and then the unrostered ones:
+`rejected — no single view across consoles`.
+
+**Scope.** The whole role-playing subtree, each game's own labels shown as chips — chosen. Wikidata tags 3 of
+223 PS2 RPGs "JRPG" (139 plain RPG, 59 action, 38 tactical), so a JRPG-only filter would be a fiction. Dropping
+MMORPGs and roguelikes: `rejected — two games each on PS2, not worth a rule`.
+
+**Japan-only titles.** 178 of 1,204 have no English article; left out at the owner's choice (the sources pass
+cannot read them). `deferred — worth trying` (backlog).
 
 ---
 
