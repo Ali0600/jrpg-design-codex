@@ -234,8 +234,14 @@ backup; the HTML file is the source of truth and is more up to date.
   Ivalice Chronicles, Dragon Quest VII's 3DS release), and the PlayStation guide set the names instead. Eleven games were
   probed and came back thin, each recorded in its own digest's Codex delta so the next pass does not redo them: Parasite
   Eve, Breath of Fire IV, Grandia, Jade Cocoon, Legend of Mana, Valkyrie Profile, Xenogears, Legend of Legaia, The Legend
-  of Dragoon, Alundra and Star Ocean: The Second Story (its Fun City arena is real, but no source tables the prizes). Batch 4 of the sources pass, Clair
-  Obscur: Expedition 33 (M160–M162), is next, and the PS2 batch (M163–M191, g068–g079) after it.
+  of Dragoon, Alundra and Star Ocean: The Second Story (its Fun City arena is real, but no source tables the prizes).
+  Plus the **sources pass, batch 4** (2026-09-21, PR #117): Clair Obscur: Expedition 33's three rows (M160–M162), against
+  the Clair Obscur Wiki, Game8, chris-williams's formatted GameFAQs walkthrough and a CNET tips article, with a new digest.
+  Both of the game's Full Game Guides are HTML, so `pick()` names none; the walkthrough was read by chapter, and its
+  sections live inside the Act pages (`/faqs/82352/act-1-gustave`), so guessing a place's slug 404s. Corrections: a
+  character carries only three Pictos, and mastery shares the passive, never the stats; M161's "expedition counter" rests
+  on the wiki alone and was cut; Esquie has a FOURTH rock, Urrie (diving), a relationship favour rather than a story beat;
+  and the flight rock goes unnamed, since only the wiki calls it Soarrie. The PS2 batch (M163–M191, g068–g079) is next.
 - **104 minigames** (`MINIGAMES` array, g001-g105; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
@@ -544,10 +550,10 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **208 of 306 mechanics and 83 of 104 minigames carry `refs`**, and every row without them
+  **211 of 306 mechanics and 83 of 104 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
-  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 47 carry `digest`)
+  `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 48 carry `digest`)
   — `gf`, `cover`, `wp`, `wd`, `infobox`, `wpcats` and `digest` on a `BASE_GAMES` row, each on ITS OWN LINE, LAST in the row, in that fixed order, and
   written only by `scripts/game_rows.mjs`, never by hand. That invariant is what lets the
   writer replace a line and copy every other line of the row byte for byte. `gf` is the
