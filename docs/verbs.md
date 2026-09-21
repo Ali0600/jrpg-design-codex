@@ -237,7 +237,7 @@ category and for every row the digest tagged.
 - Challenge gauntlet · how · `climb ranked cups G → S, winning three fights in a row for each and a prize at every rank`
 
 ### M173 — Quarries / Bounty Hunting (Hunter Rank)
-- Guarded · how · `beating it drops rare gear plus a large pile of Hunter Points`
+- Guarded · how · `beating it pays a large pile of Hunter Points`
 - Inscription deduction · how · `a 'thinking circle' hints which item you must present as BAIT to lure the beast out`
 
 ### M184 — Simulated Day/Night NPC Schedules
