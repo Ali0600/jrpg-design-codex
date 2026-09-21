@@ -68,6 +68,13 @@ reads as verified.
   the same words, answered through each row's game, plus `cat:`, `verb:`, `want:` and `table:no`
 - **Covers** — a box-art thumbnail beside every game. Each comes from Wikipedia at
   thumbnail size, with its source recorded and a Wikipedia link on the page
+- **Platform catalogue** — every RPG Wikidata files under PS1, PS2, PS3, PSP, GameCube, SNES,
+  N64, Saturn, Dreamcast, GBA, DS, Xbox and Wii, 1,027 games with an English Wikipedia article,
+  in a panel on the Games tab. Pick a console and see what the codex has not researched yet:
+  the games it has are matched by Wikidata id (never by title) and hidden until you show them,
+  a queued one is marked, and each row links to Wikipedia and offers *Queue it*. Chips narrow to
+  a genre (action, tactical…), a box filters by title, studio or publisher, and a console the
+  roster knows links to the codex's own games on it
 - **GameFAQs suggestions** — the games GameFAQs lists beside the codex's own, ranked by
   how many codex games point at each. One click on *Queue it* adds a game to your
   research queue
@@ -201,7 +208,7 @@ design commentary. Each one's Wikipedia article and `File:` page are recorded in
 - Checked the data with a zero-dependency validator that proves it can fail: a self-check
   injects 118 sabotages and fails the build unless every one is caught, and every
   classification tag must quote a verbatim span of the record it labels. Backed by a
-  229-case offline suite and a CI diff gate that fails a PR on any unlogged edit
+  234-case offline suite and a CI diff gate that fails a PR on any unlogged edit
 - Deployed the 1-file static site to GitHub Pages, triggered only after checks pass
 - Built fail-closed data harvesters over Fandom wikis, Wikipedia, Wikidata and Metacritic: host
   allowlists, range checks, retry with backoff on 429/5xx, a known-positive guard that refuses an

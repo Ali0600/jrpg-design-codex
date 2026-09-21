@@ -343,6 +343,20 @@
   .wn-date{font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); flex:none;}
   .wn-title{font-weight:600; color:#eef3ff;}
   .wn-note{font-size:12.5px; color:var(--ink-dim); margin:4px 0 7px;}
+  /* the platform catalogue */
+  .cat-tools{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+  .cat-tools input[type=search]{flex:1 1 220px; min-width:0;}
+  .cat-show{font-size:12.5px; color:var(--ink-dim); display:inline-flex; gap:6px; align-items:center;}
+  .cat-table{width:100%; border-collapse:collapse; margin-top:6px; font-size:13px;}
+  .cat-table th{text-align:left; font-weight:600; font-size:11.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; padding:4px 10px 4px 0;}
+  .cat-table td{border-top:1px solid var(--line-soft); padding:6px 10px 6px 0; vertical-align:top; color:var(--ink);}
+  .cat-table td:last-child{white-space:nowrap; text-align:right; padding-right:0;}
+  .cat-table a.wbtn{text-decoration:none; display:inline-block;}
+  .cat-table td > a:not(.wbtn){color:var(--ink); text-decoration:none; border-bottom:1px dotted color-mix(in srgb, currentColor 55%, transparent);}
+  .cat-table td > a:not(.wbtn):hover{color:var(--gold); border-bottom-color:var(--gold);}
+  .cat-plat{display:block; font-size:11px; color:var(--ink-faint);}
+  .cat-q{color:var(--gold); font-size:12.5px;}
+  @media (max-width:640px){ .cat-table .cat-opt{display:none;} }
   .wn-ids{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
   .idchip{
     font-size:11.5px; font-family:ui-monospace, "SF Mono", Menlo, monospace;
@@ -642,6 +656,11 @@
       <summary>Suggested by GameFAQs, not in the codex <span class="vhint" id="gfCandSummary"></span></summary>
       <p class="wn-note">The games GameFAQs lists beside the codex's own, ranked by how many codex games point at each. <b>Queue it</b> adds one to your research queue (saved in this browser, like any custom entry).</p>
       <div id="gfCandBody"></div>
+    </details>
+    <details class="verb-box" id="catalogue">
+      <summary>Platform catalogue <span class="vhint" id="catSummary"></span></summary>
+      <p class="wn-note">Every RPG Wikidata files under thirteen consoles with an English Wikipedia article, matched to the roster by its Wikidata id. Games already in the codex stay hidden unless you show them; <b>Queue it</b> adds one to your research queue (saved in this browser, like any custom entry).</p>
+      <div id="catBody"></div>
     </details>
    </div>
    <div id="gamePage" hidden></div>
@@ -5547,6 +5566,60 @@ function creditTally(mechs, gameOf, min = 2){
   return {names, belowFloor: all.length - names.length};
 }
 
+/* ---- the platform catalogue against the roster. Pure, in the data region, so the validator
+   and scripts/catalogue.test.mjs run this copy. ---- */
+/** Each catalogue row with `in` (the roster title it matches, or null) and `queued` (that game
+    waits in the research queue). A roster row matches by `wd`, the join every base row carries;
+    a custom game (Queue it writes one) has no wd and matches by normalised title, and only a
+    custom game does — a catalogue item titled like a base row is a different game. */
+function catalogueMatch(catalogue, games){
+  const byWd = new Map(), byTitle = new Map();
+  (Array.isArray(games) ? games : []).forEach(g=>{
+    if(!g || typeof g.title !== "string") return;
+    if(typeof g.wd === "string" && g.wd) byWd.set(g.wd, g);
+    else byTitle.set(facetNorm(g.title), g);
+  });
+  return (Array.isArray(catalogue) ? catalogue : []).map(r=>{
+    const g = byWd.get(r.wd) || byTitle.get(facetNorm(r.t)) || null;
+    return {...r, in: g ? g.title : null, queued: !!g && g.status === "To Research"};
+  });
+}
+/** Per console and in total: every game, the ones in the codex (on the roster past the queue)
+    and the ones queued. A game on two consoles counts once for each and once in the total. */
+function catalogueCounts(rows, platforms){
+  const per = {}, total = {all:0, in:0, queued:0};
+  (Array.isArray(platforms) ? platforms : []).forEach(p=> per[p.name] = {all:0, in:0, queued:0});
+  const tally = (c, r)=>{ c.all++; if(r.queued) c.queued++; else if(r.in) c.in++; };
+  (Array.isArray(rows) ? rows : []).forEach(r=>{
+    tally(total, r);
+    (r.plat || []).forEach(p=>{ if(per[p]) tally(per[p], r); });
+  });
+  return {per, total};
+}
+/** The rows the panel draws for `state` = {plat, genre, q, showAll}: on the console, with the
+    genre, matching the words over title, developers and publishers, and — unless showAll — not
+    already in the codex (a queued game stays visible, marked). Earliest year first, unknown
+    years last, then title. */
+function catalogueFilter(rows, state){
+  const s = state || {}, q = facetNorm(s.q);
+  return (Array.isArray(rows) ? rows : []).filter(r=>
+      (!s.plat || (r.plat || []).includes(s.plat)) &&
+      (!s.genre || (r.genre || []).includes(s.genre)) &&
+      (s.showAll || r.queued || !r.in) &&
+      (!q || [r.t, ...(r.dev || []), ...(r.pub || [])].some(x=> facetNorm(x).includes(q))))
+    .sort((a, b)=> (a.y ?? 1e4) - (b.y ?? 1e4) || a.t.localeCompare(b.t));
+}
+/** The genre labels on a console's rows (every console when `plat` is empty) with their counts,
+    most common first, then A–Z. */
+function catalogueGenres(rows, plat){
+  const m = new Map();
+  (Array.isArray(rows) ? rows : []).forEach(r=>{
+    if(plat && !(r.plat || []).includes(plat)) return;
+    (r.genre || []).forEach(g=> m.set(g, (m.get(g) || 0) + 1));
+  });
+  return [...m].sort((a, b)=> b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+
 /* ============================= STATE ============================= */
 const LS_KEY = "jrpg_codex_v1";
 let store = {overrides:{}, customMechs:[], customGames:[], gameStatus:{}, minigameFavs:{}, myGame:{assign:{}, notes:{}, pillars:{}}, seen:""};
@@ -6198,6 +6271,9 @@ function renderGames(){
   });
   renderGameFacets(all, q);
   renderCandidates();
+  renderCatalogueSummary();
+  // A queued game changes a row's mark: rebuilt only while the panel is open, like Browse.
+  if($("#catalogue").open) renderCatalogue();
 }
 /* The facet links on a card and a page. `base` is the list's current query: a click from a
    card NARROWS it, and null (the game page, the Browse panel) starts a new one. */
@@ -6293,15 +6369,100 @@ function renderCandidates(){
   }).join("");
   box.querySelectorAll("[data-queue]").forEach(b=> b.addEventListener("click", ()=> queueCandidate(b.dataset.queue)));
 }
-function queueCandidate(t){
-  if(allGames().some(g=> normTitle(g.title) === normTitle(t))){ flashSave(`${t} is already on the roster`); return; }
-  const c = likeIndex && [...likeIndex.candidates.values()].find(x=>x.t===t);
-  const by = c ? [...c.by] : [];
-  store.customGames.push({title:t, year:"—", dev:"—", status:"To Research",
-    why:`BRIEF: GameFAQs pairs it with ${by.join(", ") || "a codex game"} — what does it do that they don't?`});
+/* One writer for the research queue: a custom game row (the five keys the add-game form writes),
+   refused when the title is already on the roster. The GameFAQs panel and the catalogue both
+   call it, so the two cannot drift. */
+function queueGame({title, year, dev, why}){
+  if(allGames().some(g=> normTitle(g.title) === normTitle(title))){ flashSave(`${title} is already on the roster`); return false; }
+  store.customGames.push({title, year: year ?? "—", dev: dev || "—", status:"To Research", why});
   persist(); renderGames(); buildFilters(); renderStats();
   if(openGameTitle) renderGamePage(openGameTitle);
-  flashSave(`${t} queued for research`);
+  flashSave(`${title} queued for research`);
+  return true;
+}
+function queueCandidate(t){
+  const c = likeIndex && [...likeIndex.candidates.values()].find(x=>x.t===t);
+  const by = c ? [...c.by] : [];
+  queueGame({title:t, year:"—", dev:"—", why:`BRIEF: GameFAQs pairs it with ${by.join(", ") || "a codex game"} — what does it do that they don't?`});
+}
+
+/* ---- the platform catalogue: which of a console's RPGs the codex has not researched ---- */
+/* The chosen console and genre, the words typed, and the show-all switch. In memory like
+   openBrowseGroups, never in the store. */
+const catalogueState = {plat:"", genre:"", q:"", showAll:false};
+const CATALOGUE_ROWS = typeof CATALOGUE === "undefined" ? [] : CATALOGUE;
+const CATALOGUE_CONSOLES = typeof CATALOGUE_PLATFORMS === "undefined" ? [] : CATALOGUE_PLATFORMS;
+const thousands = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function catalogueRows(){ return catalogueMatch(CATALOGUE_ROWS, allGames()); }
+/* The summary line is set on every renderGames, like the Browse summary; the body only while open. */
+function renderCatalogueSummary(){
+  const sum = $("#catSummary");
+  if(!sum) return;
+  if(!CATALOGUE_ROWS.length){ sum.textContent = "— empty: run scripts/fetch_catalogue.mjs"; return; }
+  const {total} = catalogueCounts(catalogueRows(), CATALOGUE_CONSOLES);
+  sum.textContent = `— ${thousands(total.all)} RPGs on ${CATALOGUE_CONSOLES.length} consoles · ${total.in} in the codex · ${total.queued} queued · ${thousands(total.all - total.in - total.queued)} not yet`;
+}
+function catalogueTableHTML(shown){
+  if(!shown.length) return `<p class="wn-note">Nothing matches.</p>`;
+  return `<table class="cat-table"><thead><tr><th>Game</th><th>Year</th><th class="cat-opt">Developer</th><th class="cat-opt">Genre</th><th></th></tr></thead><tbody>${shown.map(r=> `<tr>
+      <td><a href="${esc(wpUrl(r.wp))}" target="_blank" rel="noopener" title="Wikipedia: ${esc(r.wp)}">${esc(r.t)}</a><span class="cat-plat">${r.plat.map(esc).join(" · ")}</span></td>
+      <td>${r.y ?? "—"}</td>
+      <td class="cat-opt">${(r.dev || []).map(esc).join(", ") || "—"}</td>
+      <td class="cat-opt">${r.genre.map(esc).join(", ")}</td>
+      <td>${r.queued ? `<span class="cat-q" title="waiting in your research queue">queued</span>`
+           : r.in ? `<a class="wbtn" href="#game=${encodeURIComponent(r.in)}" title="Open ${esc(r.in)}">✓ in the codex</a>`
+           : `<button class="wbtn" data-queue-wd="${esc(r.wd)}">Queue it</button>`}</td>
+    </tr>`).join("")}</tbody></table>`;
+}
+function renderCatalogue(){
+  const box = $("#catBody");
+  if(!box) return;
+  if(!CATALOGUE_ROWS.length){ box.innerHTML = `<p class="wn-note">The catalogue is empty.</p>`; return; }
+  const st = catalogueState, rows = catalogueRows();
+  const {per, total} = catalogueCounts(rows, CATALOGUE_CONSOLES);
+  if(st.plat && !per[st.plat]) st.plat = "";
+  const chip = (v, label, c, on)=> `<button class="chip${on ? " on" : ""}" data-plat="${esc(v)}" title="${c.in} in the codex, ${c.queued} queued, ${c.all} in all">${esc(label)} <span class="fn">${c.all - c.in - c.queued}/${c.all}</span></button>`;
+  const plats = chip("", "All consoles", total, !st.plat) + CATALOGUE_CONSOLES.map(p=> chip(p.name, p.name, per[p.name], st.plat === p.name)).join("");
+  const genres = catalogueGenres(rows, st.plat);
+  if(st.genre && !genres.some(([g])=> g === st.genre)) st.genre = "";
+  const genreChips = genres.map(([g, c])=> `<button class="chip${st.genre === g ? " on" : ""}" data-genre="${esc(g)}" title="${c} on ${st.plat ? esc(st.plat) : "every console"}">${esc(g)} <span class="fn">${c}</span></button>`).join("");
+  const c = st.plat ? per[st.plat] : total;
+  // A console the vocabulary knows links to the roster's own games on it (Nintendo 64 and Xbox have none).
+  const roster = st.plat && Object.hasOwn(FACET_VOCAB.platform, st.plat)
+    ? ` · <a class="facet" href="${esc(gamesHash(facetToken("platform", st.plat)))}">the codex's ${esc(st.plat)} games</a>` : "";
+  box.innerHTML = `
+    <div class="browse-chips">${plats}</div>
+    <div class="browse-chips">${genreChips}</div>
+    <div class="cat-tools">
+      <input id="catQ" type="search" placeholder="Filter by title, studio or publisher…" value="${esc(st.q)}" aria-label="Filter the catalogue">
+      <label class="cat-show"><input type="checkbox" id="catShowAll"${st.showAll ? " checked" : ""}> show the games already in the codex</label>
+    </div>
+    <p class="wn-note" id="catCount"></p>
+    <div id="catList"></div>`;
+  const draw = ()=>{
+    const shown = catalogueFilter(rows, st);
+    $("#catCount").textContent = `${thousands(shown.length)} shown · ${c.in} in the codex · ${c.queued} queued · ${thousands(c.all - c.in - c.queued)} not yet${st.plat ? ` on ${st.plat}` : ""}`;
+    if(roster) $("#catCount").insertAdjacentHTML("beforeend", roster);
+    $("#catList").innerHTML = catalogueTableHTML(shown);
+  };
+  draw();
+  box.querySelectorAll("[data-plat]").forEach(b=> b.addEventListener("click", ()=>{ st.plat = b.dataset.plat; renderCatalogue(); }));
+  box.querySelectorAll("[data-genre]").forEach(b=> b.addEventListener("click", ()=>{ st.genre = st.genre === b.dataset.genre ? "" : b.dataset.genre; renderCatalogue(); }));
+  $("#catShowAll").addEventListener("change", e=>{ st.showAll = e.target.checked; draw(); });
+  // Typing redraws only the list, so the box keeps its focus and caret.
+  $("#catQ").addEventListener("input", e=>{ st.q = e.target.value; draw(); });
+  box.addEventListener("click", e=>{
+    const b = e.target.closest("[data-queue-wd]");
+    if(b) queueCatalogue(b.dataset.queueWd);
+  });
+}
+function queueCatalogue(wd){
+  const r = CATALOGUE_ROWS.find(x=> x.wd === wd);
+  if(!r) return;
+  const on = r.plat.join(", "), dev = (r.dev || [])[0];
+  if(queueGame({title:r.t, year:r.y ?? "—", dev: dev || "—",
+      why:`BRIEF: on the ${on} RPG catalogue (${r.y ?? "year unknown"}, ${dev || "studio unknown"}) — what does it do that the codex's ${on} games don't?`})
+     && $("#catalogue").open) renderCatalogue();
 }
 
 /* ---- the game page: everything the codex holds on one game ---- */
@@ -6412,6 +6573,7 @@ function renderGamePage(title){
 }
 $("#gameSort").addEventListener("change", renderGames);
 $("#gameBrowse").addEventListener("toggle", ()=>{ if($("#gameBrowse").open) renderBrowse(); });
+$("#catalogue").addEventListener("toggle", ()=>{ if($("#catalogue").open) renderCatalogue(); });
 // "+N more" and "fewer" re-render the body in place. The panel's own <details> is never re-created, so
 // it stays open; folding a long group scrolls its heading back into view if it went above the nav.
 $("#gameBrowseBody").addEventListener("click", e=>{
