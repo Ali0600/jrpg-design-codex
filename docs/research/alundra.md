@@ -120,3 +120,4 @@ row: g065
 
 ## Codex delta
 - 2026-09-18: M151–M153 and g065, all four Alundra rows, sourced from the Alundra Wiki and two GameFAQs walkthroughs; M151, M153 and g065 corrected, and M153 loses a verb tag.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The Alundra Wiki's 183 pages hold nothing mechanical beyond what M151–M153 and g065 cover — its Elemental Rings page is a stub, and the rest are characters, places and equipment lists.

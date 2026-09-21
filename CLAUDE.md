@@ -214,25 +214,29 @@ backup; the HTML file is the source of truth and is more up to date.
   claims took a verb tag with them: Alundra's "demonstrate, then invert" (M153 lost *Inscription deduction*) and Grandia's
   camera, re-quoted to what the guides show. Contradictions recorded: the Speed Chain's effect, the dance score that pays it,
   what Master strips in the Muscle Dome, and who waits on the Deep Dungeon's tenth floor.
-  Plus the **PS1 expansion** (2026-09-21, PRs #111–#114, at the owner's request "expand on the PS1 games"): eight new
-  mechanics rows (M295–M302) on five of the 23 PS1 games, added only where two sources already supported one — no floor
-  per game, and no new games (the AskUserQuestion is in `docs/DECISIONS.md`). Threads of Fate gained Tonio's bracer and
-  belt ladder, whose tiers replace rather than stack, and the three one-off treasures each of which two NPCs want (one
-  pays something permanent, the trader pays gold). Final Fantasy VII, the thinnest game on the roster at two rows, gained
-  the Level 4 Limit manuals — learned by killing and by using, except the last, which is an item hidden in the world that
-  refuses to work until everything below it has been used — and the trade every weapon and armour makes between attack
-  power and the growth rate that multiplies materia AP. Suikoden II gained a weapon system with no loot in it at all: one
-  weapon per character, sharpened a level at a time to 16, with four found hammers raising how far the castle smith can
-  go. Wild ARMs gained Rudy's eight ARMs, each waiting in a dungeon and upgraded on three axes to its own ceiling. Final
-  Fantasy Tactics gained Move-Find Item, whose odds on the rare item are 100 minus the unit's Brave — so the unit made
-  worst at fighting is the one who finds the treasure — and Propositions, the bench earning gil and the JP the job system
-  runs on. Four games were probed and came back thin, each recorded in its own digest's Codex delta so the next pass does
-  not redo them: Parasite Eve (its Chrysler Building facts are inside M116, and the wiki's shooting gallery is the
-  sequel's), Breath of Fire IV (every lead already inside g060, M142 or M143), Grandia (Parm's four legendary treasures
-  failed a second source; the wiki's Arm Wrestling and Arrange Dice belong to Grandia II and III) and Jade Cocoon (the
-  wiki's silk pages are empty stubs and its Battle Arena has no payouts anywhere). Batch 4 of the sources pass, Clair
+  Plus the **PS1 expansion** (2026-09-21, PRs #111–#116, at the owner's request "expand on the PS1 games"): twelve new
+  mechanics rows (M295–M306) and one minigame (g105) on ten of the 23 PS1 games, and two rows sharpened, added only where
+  two sources already supported them — no floor per game and no new games (the AskUserQuestion is in `docs/DECISIONS.md`).
+  Threads of Fate gained Tonio's bracer and belt ladder, whose tiers replace rather than stack, and the one-off treasures
+  that two NPCs each want (one pays something permanent, the trader pays gold). Final Fantasy VII, the thinnest game on the
+  roster at two rows, gained the Level 4 Limit manuals — hidden in the world and refusing to work until everything below
+  them has been used — and the trade every weapon and armour makes between attack power and materia growth. Suikoden II
+  gained a weapon system with no loot in it: one weapon per character, sharpened to 16, with four found hammers raising how
+  far the castle smith can go. Wild ARMs gained Rudy's eight ARMs, each upgraded on three axes to its own ceiling. Final
+  Fantasy Tactics gained Move-Find Item, whose odds on the rare item are 100 minus the unit's Brave, and Propositions, the
+  bench earning the JP the job system runs on. Brave Fencer Musashi gained its Legendary Armour, movement verbs that arrive
+  as unappraised junk; Vagrant Story its Break Arts, learned by the killing blow and paid for in HP; Chrono Cross its forge,
+  where every piece of gear is also its raw materials and the smith becomes a portable Smith Spirit; Dragon Quest VII its
+  TinyMedals, a public prize ladder with a shard and a monster heart on its rungs; and Final Fantasy IX its nine friendly
+  monsters (g105), each paying AP and the next one's gem, with Ozma opened to physical attacks at the end. M114 now covers
+  SaGa Frontier's mecs, and g024 Final Fantasy VIII's Card Club, whose members return playing every rare card you refined
+  away. M303 and M306 joined two lineages. Twice the wiki had moved to a remaster's vocabulary (Final Fantasy Tactics' The
+  Ivalice Chronicles, Dragon Quest VII's 3DS release), and the PlayStation guide set the names instead. Eleven games were
+  probed and came back thin, each recorded in its own digest's Codex delta so the next pass does not redo them: Parasite
+  Eve, Breath of Fire IV, Grandia, Jade Cocoon, Legend of Mana, Valkyrie Profile, Xenogears, Legend of Legaia, The Legend
+  of Dragoon, Alundra and Star Ocean: The Second Story (its Fun City arena is real, but no source tables the prizes). Batch 4 of the sources pass, Clair
   Obscur: Expedition 33 (M160–M162), is next, and the PS2 batch (M163–M191, g068–g079) after it.
-- **103 minigames** (`MINIGAMES` array, g001-g104; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
+- **104 minigames** (`MINIGAMES` array, g001-g105; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business
   sims; FF6's Colosseum, g081, was a copy of g006 and is retired), each with a highlighted Rewards field and a
@@ -294,7 +298,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   - `cat` must be a key of CATS. Every base row ships `want:""` and `rating:0`, and the validator
     refuses anything else: a decision ("Yes" | "Maybe" | "No") and a rating are the owner's, saved in
     their browser.
-  - IDs are sequential: mechanics M001-M306, minigames g001-g104, skipping a retired id. Continue the
+  - IDs are sequential: mechanics M001-M306, minigames g001-g105, skipping a retired id. Continue the
     sequences when adding entries; never reuse an ID (user edits are keyed to them).
     NEVER RENUMBER. If a later pass improves an existing game's entry, REPLACE that
     row's content in place and APPEND any extra rows at the end of the array — the
@@ -540,7 +544,7 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   the page); the validator READS that regex out of the file, so there is one allowlist
   and the gate cannot drift from the renderer. A URL outside it renders as plain text,
   never an href — imported backups flow through the same renderer.
-  **208 of 306 mechanics and 82 of 103 minigames carry `refs`**, and every row without them
+  **208 of 306 mechanics and 83 of 104 minigames carry `refs`**, and every row without them
   predates the GameFAQs pilot (2026-09-05); the validator holds that figure to the data.
 - **Script-owned game-row fields** (added 2026-09-07; every one of the 72 rows carries `gf`,
   `cover` and `wp` as of that day, all 72 carry `wd`, `infobox` and `wpcats` since 2026-09-13, 47 carry `digest`)

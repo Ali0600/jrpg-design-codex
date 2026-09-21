@@ -114,3 +114,4 @@ None. Valkyrie Profile has no minigame rows.
 
 ## Codex delta
 - 2026-09-17: M128–M130, all three Valkyrie Profile rows, sourced from the Valkyrie Profile Wiki and Captain_K's and SBruck's walkthroughs; M130 corrected.
+- 2026-09-21: the PS1 expansion pass probed this game and added no row. The Valkyrie Profile Wiki's Sacred Phase page confirms Freya's trait requests for the transferred Einherjar and the Materialize Points and artifacts paid at each chapter's end, which M128 and M129 already carry.
