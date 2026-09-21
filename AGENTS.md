@@ -653,7 +653,13 @@ Single file: CSS + HTML + vanilla JS. No build step, no dependencies, no server.
   `title` and `note`**: the merge keeps the FIRST title, so a second game spliced the same
   day lands under a heading that no longer describes it (wave 2's rows merged into an entry
   titled "GameFAQs rollout, wave 1"). Retitle it by hand. It also stamps
-  `digest:"<slug>"` on every game row the splice touched.
+  `digest:"<slug>"` on every game row the splice touched. **A second splice from a digest already
+  spliced once** (the PS1 expansion did it ten times, 2026-09-21): the first run replaced its ```js block
+  with a comment map, and the splicer reads the FIRST ```js fence under `## Codex rows` and refuses one
+  holding no rows. Change that old fence to ```text, keeping it as history, and add a fresh ```js fence
+  below it; its rows are comma-separated (they are read as one array), and `M+n` counts position among
+  ALL the `###` blocks in the section, the already-spliced ones included, so read the dry run's
+  `M+n → Mnnn <name>` lines before `--write` — nothing stops a placeholder naming an old candidate.
 - `scripts/game_rows.mjs` is the ONLY writer of the script-owned game-row fields:
   `--game "<title>" --set wp="…" --set digest=… --unset cover [--write]`. Rows are paired
   POSITIONALLY with the evaluated roster (two rows use `title:FF`/`title:ER`, so a textual

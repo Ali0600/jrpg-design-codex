@@ -29,6 +29,11 @@ rejected options still offer.
   writes into `#gameBrowseBody`, so moving that body into a `<dialog>` opened from the Browse summary is
   one element plus an open and close pair (Escape, a click outside, focus back to the opener). Worth it
   if the panel gets used mostly on a phone, where the games list moving down costs the most.
+- **New PS1 games, rather than more rows on the ones rostered** (from the PS1-expansion fork, 2026-09-21) —
+  revisit hook: GameFAQs pairs 17 unrostered PS1 titles with codex games (SaGa Frontier 2, Parasite Eve II,
+  Suikoden, Breath of Fire III, Tactics Ogre, Front Mission 3 and others), already ranked in the Games tab's
+  candidates panel, whose Queue-it button writes to the research queue. Each needs the whole new-game pipeline
+  (brief, GameFAQs harvest, cover, infobox and vocabulary, digest, rows, scores).
 
 ---
 
