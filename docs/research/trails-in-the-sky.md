@@ -12,6 +12,7 @@ confirmed 2026-09-14 (the row's harvested `gf.u`: the 2011 PSP release, the firs
 |---|---|---|---|---|---|---|---|
 | 62079 | Guide and Walkthrough | Berserker_Blade | 1.10 | 05/27/2011 | Full Game Guides | 210 | https://gamefaqs.gamespot.com/psp/933329-the-legend-of-heroes-trails-in-the-sky/faqs/62079 |
 | 70899 | Quartz/Arts Guide (grep only) | KholdStareMud | 1.0 | 12/22/2014 | In-Depth Guides | 35 | https://gamefaqs.gamespot.com/psp/933329-the-legend-of-heroes-trails-in-the-sky/faqs/70899 |
+| wiki | Orbment · Bracer Guild · List of quests (Sky FC) | — | — | — | kiseki.fandom.com | — | https://kiseki.fandom.com/wiki/Orbment |
 | 62082 | Guide and Walkthrough (grep only) | yangxu | 1.37 | 06/08/2011 | Full Game Guides | 319 | https://gamefaqs.gamespot.com/psp/933329-the-legend-of-heroes-trails-in-the-sky/faqs/62082 |
 
 Coverage 62079: a formatted guide over 4 pages (51,726, 52,748, 52,929 and 31,498 chars), no whole
@@ -29,6 +30,9 @@ Coverage 62082: grep only — 318,821 chars, 7,862 lines, 516 sections, 0 sectio
 recipes (48 hits), hidden quests (39), casino (none). Everything else unread, including its item,
 book and quartz lists.
 
+
+On 2026-09-28 the sources pass read 62079's page 1 again for M219 (Slots and lines, 257–293) and 70899 by grep for lines, slots and
+sepith (Zeiss Central Factory, Mistwald (Final), Ravennue).
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 13 guides listed (6 Full Game Guides, 3 In-Depth Guides, 4 under
@@ -75,6 +79,22 @@ row: M285
 - New sidequests usually appear just before a main job is reported, and every entry in the walkthrough carries a timeframe and the story step it expires after [gf:62079 §Sidequests, Berserker_Blade v1.10]
 - Two prologue jobs show the pay: Find the Shiny Rock pays 30 mira, 2 BP and 5 Drill Meatballs, whose recipe comes with them, and Orbment Replacement pays 600 mira and 3 BP, plus a bonus point and an Impede 2 quartz for sending Joshua and entering the lamp's code correctly [gf:62079 §Sidequests, Berserker_Blade v1.10] [gf:62079 §Recipes, Berserker_Blade v1.10]
 
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the two older mechanics rows, M219–M220, each edited in place.
+
+### M219 Orbment & Quartz (a spatial spell-loadout)
+pointers: [wiki:kiseki.fandom.com/Orbment] [gf:62079 §Slots and lines, Berserker_Blade v1.10] [gf:70899 §Zeiss Central Factory, KholdStareMud v1.0] [gf:70899 §Mistwald (Final), KholdStareMud v1.0]
+row: M219
+- Each character's orbment has its own slots and lines; slots are unlocked with sepith, and some accept only one element's quartz [wiki:kiseki.fandom.com/Orbment] [gf:62079 §Slots and lines, Berserker_Blade v1.10] [gf:70899 §Mistwald (Final), KholdStareMud v1.0]
+- Quartz is synthesized from sepith [gf:70899 §Mistwald (Final), KholdStareMud v1.0] [gf:62079 §Slots and lines, Berserker_Blade v1.10]
+- Each quartz adds elemental values to its line, the central slot's to both lines, and the arts available follow each line's totals [wiki:kiseki.fandom.com/Orbment] [gf:62079 §Slots and lines, Berserker_Blade v1.10]
+- A short line limits the arts: Agate's longest line has three slots, too few for Napalm Breath [gf:70899 §Zeiss Central Factory, KholdStareMud v1.0] [wiki:kiseki.fandom.com/Orbment]
+
+### M220 Bracer Guild rank ladder
+pointers: [wiki:kiseki.fandom.com/Bracer Guild] [gf:62079 §Sidequests, Berserker_Blade v1.10] [gf:70899 §Malga Mine, KholdStareMud v1.0] [gf:70899 §IMPORTANT, KholdStareMud v1.0]
+row: M220
+- Jobs are taken at a guild branch and reported back, paying mira and Bracer Points [gf:62079 §Sidequests, Berserker_Blade v1.10] [gf:70899 §IMPORTANT, KholdStareMud v1.0]
+- Junior bracers climb from 9th Class to 1st, and each class reached pays a reward, such as an Impede 2 quartz at rank 7 [wiki:kiseki.fandom.com/Bracer Guild] [gf:70899 §Malga Mine, KholdStareMud v1.0]
+
 ## Minigame candidates
 
 None with defined payouts. Fishing exists only at one lakeshore on a borrowed rod and yields recipe
@@ -117,6 +137,9 @@ location in a job and as a place to taste two dishes. Recorded, not padded.
 - Town shops sell the basic ingredients: 4 mira for Milled Flour, Maple Sugar or Kibbled Salt, 10 for Fresh Eggs, 100 for Marbled Steak, 300 for Vintage Wine or Aged Miso in Bose [wiki:kiseki.fandom.com/List of shops (Sky FC)/Bose]
 
 ## Unverified or contradicted
+- **Six slots and no duplicates.** M219 gave the Sky FC orbment six slots and barred two copies of one quartz; only the wiki says either. Cut from the row [wiki:kiseki.fandom.com/Orbment]
+- **Transfers.** M220 said a bracer can transfer between branches and countries; only the wiki says so. Cut [wiki:kiseki.fandom.com/Bracer Guild]
+- **Chapter audits.** M220 said the rank held at each chapter's audit pays reward packages; the sources say each class reached pays a reward, without an audit. The row says each class [wiki:kiseki.fandom.com/Bracer Guild]
 - Two guides tie an Impede 2 quartz to different prologue rewards: the walkthrough to the Orbment Replacement job done with Joshua and the right code, the arts guide to reaching rank 7 with every side quest done. Both may be true [gf:62079 §Sidequests, Berserker_Blade v1.10] [gf:70899 §Malga Mine, KholdStareMud v1.0]
 - The Lavantar Casino & Bar turns up in a job only as a clue location (a roulette wheel to examine) and as a place to taste two dishes; no gambling minigame was found in this pass [gf:62079 §Candelabrium Theft, Berserker_Blade v1.10] [gf:62079 §Recipes, Berserker_Blade v1.10]
 - The walkthrough calls the Black Notebook job the hidden mission of Chapter 2, while the wiki lists it among Chapter 1's hidden jobs [gf:62079 §Sky Bandit's hideout, Berserker_Blade v1.10] [wiki:kiseki.fandom.com/List of quests (Sky FC)/Chapter 1]
@@ -136,3 +159,4 @@ location in a job and as a place to taste two dishes. Recorded, not padded.
 - M284 (the cookbook) and M285 (the hidden jobs), spliced 2026-09-14 into that day's wave 3 changelog entry, retitled to name both games.
 - M219 (orbments) and M220 (the Bracer rank) were not edited: the arts guide touches M219's slots, and M220's reward-package claim is recorded under Unverified.
 - No minigame: fishing and the casino came back thin.
+- 2026-09-28: the sources pass. M219–M220 sourced from the Kiseki Wiki and the Berserker_Blade and KholdStareMud guides. M219 lost the six slots and the duplicate rule; M220 lost the chapter audits and the transfers.

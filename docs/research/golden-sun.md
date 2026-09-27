@@ -14,7 +14,7 @@ digest started 2026-09-06
 | 18461 | Artifacts Guide | RocketTrekkieEvoli | 1.6 | 02/09/2003 | In-Depth Guides | 22 | https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/18461 |
 | 31453 | Guide and Walkthrough | ElectroSpecter | 1.0 | 04/13/2008 | Full Game Guides | 306 | https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/31453 |
 | 28673 | Guide and Walkthrough (grep only) | BF_Gamer | 1.0 | 05/06/2004 | Full Game Guides | 294 | https://gamefaqs.gamespot.com/gba/468548-golden-sun/faqs/28673 |
-| wiki | Artifact · Lucky Wheels · Lucky Medal · Lucky Medal Fountains · Game Ticket · Unleash | — | — | — | goldensun.fandom.com | — | https://goldensun.fandom.com/wiki/Artifact |
+| wiki | Artifact · Lucky Wheels · Lucky Medal · Lucky Medal Fountains · Game Ticket · Unleash · Djinn · Psynergy | — | — | — | goldensun.fandom.com | — | https://goldensun.fandom.com/wiki/Artifact |
 
 Coverage 18461: single page, 21,587 chars, 130 sections — 4 read at 100% (Introduction,
 Notes on Artifacts, Weapon Artifacts, Armor Artifacts); greps: Lucky Wheels/Medal, Tolbi
@@ -45,6 +45,9 @@ score above every walkthrough (Djinn/Class Mechanics 93KB, Class Setup 43KB, **A
 22KB**, Djinn Location List). Djinn and its class system are already M212, so this pass took
 the Artifacts guide, which is the one that answers the brief's question about shops.
 
+
+On 2026-09-28 the sources pass read 31453 again: `lines()` 190–241 (Djinn [djn1]); greps for Frost and puddles, Growth and
+sprouts, the Psynergy items, Djinn fights and Standby.
 ## Triage
 
 `__gf.triage()` and `__gf.pick()` on 2026-09-15: 52 guides listed (17 Full Game Guides, 26 In-Depth
@@ -147,6 +150,22 @@ row: M272
 - Cursed items cannot be unequipped until a Sanctum healer removes the curse, and carry a chance of being bound and unable to move for a turn; the Cleric's Ring blocks the binding but not the curse [gf:18461 §Notes on Artifacts, RocketTrekkieEvoli v1.6]
 - Three weapons — Kusanagi, Masamune and Sol Blade — exist in the game's code but cannot be obtained in normal play [gf:18461 §Weapon Artifacts, RocketTrekkieEvoli v1.6]
 
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the two older mechanics rows, M212–M213, both edited in place
+only to gain `refs`: every claim held.
+
+### M212 Djinn (a collection that rewrites your class)
+pointers: [wiki:goldensun.fandom.com/Djinn] [gf:31453 §Djinn (djn1), ElectroSpecter v1.0] [gf:31453 §Zephyr (Jupiter), ElectroSpecter v1.0]
+row: M212
+- Djinn are found across the world; one reached through a hard puzzle usually joins at once, one out in the open usually fights first [gf:31453 §Djinn (djn1), ElectroSpecter v1.0] [gf:31453 §Zephyr (Jupiter), ElectroSpecter v1.0] [wiki:goldensun.fandom.com/Djinn]
+- A Djinni set to an Adept raises that Adept's stats, and the combination of Djinn set decides the class and so the Psynergy [wiki:goldensun.fandom.com/Djinn] [gf:31453 §Djinn (djn1), ElectroSpecter v1.0]
+- Unleashed in battle, a Djinni goes to Standby, taking its stats and perhaps the class with it; Standby Djinn power Summons, after which they recover and set themselves again [wiki:goldensun.fandom.com/Djinn] [gf:31453 §Djinn (djn1), ElectroSpecter v1.0]
+
+### M213 Psynergy as world verbs
+pointers: [wiki:goldensun.fandom.com/Psynergy] [gf:31453 §Spritz (Mercury), ElectroSpecter v1.0] [gf:31453 §Items, ElectroSpecter v1.0] [gf:31453 §Catch, ElectroSpecter v1.0]
+row: M213
+- Utility Psynergy works outside battle on the field: Move shifts objects, Frost freezes a puddle into a pillar to jump from, Growth turns a sprout into climbable ivy and Reveal uncovers what is hidden [wiki:goldensun.fandom.com/Psynergy] [gf:31453 §Spritz (Mercury), ElectroSpecter v1.0] [gf:31453 §Items, ElectroSpecter v1.0]
+- Many utility Psynergies come from items worn, not levels: the Catch Beads, Orb of Force, Frost Jewel, Lifting Gem, Halt Gem, Cloak Ball and Carry Stone [wiki:goldensun.fandom.com/Psynergy] [gf:31453 §Catch, ElectroSpecter v1.0] [gf:31453 §Zephyr (Jupiter), ElectroSpecter v1.0]
+
 ## Minigame candidates
 
 ### Lucky Wheels (the slot machine paid for by shopping)
@@ -209,6 +228,7 @@ row: g094
 - The walkthrough's advice at Tolbi is to sell the surplus prizes from both minigames to the shops for money [gf:31453 §Lucky Wheels, ElectroSpecter v1.0] [gf:31453 §Lucky Fountain, ElectroSpecter v1.0]
 
 ## Unverified or contradicted
+- **Djinn cost you the class.** The row says an unleash costs the class it was granting; the wiki says only that Standby Djinn give no stat boost, and ElectroSpecter that stats drop and possibly the class. Both are kept as written [gf:31453 §Djinn (djn1), ElectroSpecter v1.0] [wiki:goldensun.fandom.com/Djinn]
 - **The brief asked about a forge or crafting economy: this game has none.** No smith, no recipes and no material inputs appear anywhere in the Artifacts guide's explanation of where artifacts come from — the sources are chests, people, the two gambling venues and rare drops. Forging arrives in the sequel and was not researched here [gf:18461 §Notes on Artifacts, RocketTrekkieEvoli v1.6]
 - The wiki's Tolbi Spring prize lists are given per ring without probabilities, and it says the RNG can be manipulated by save-and-reset in the first game; no odds were harvested and none are claimed [wiki:goldensun.fandom.com/Lucky Medal Fountains]
 - The Lucky Wheels prize pool is assembled from the Artifacts guide's per-item source lines rather than from a payout table in the guide; the wiki confirms the Wheels are the main source of Boot, Shirt and Ring artifacts but lists no per-symbol table [gf:18461 §Item Artifacts, RocketTrekkieEvoli v1.6] [wiki:goldensun.fandom.com/Lucky Wheels]
@@ -232,3 +252,4 @@ row: g094
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 31453, read under the owner's rule. **g093 sharpened**: its one consumables row became two, Hearts (Nut, Vial, Potion) and Stars (Elixir, Psy Crystal, Water of Life), and g093 and g094 now cite the walkthrough, which lists the Lucky Fountain's fifteen prizes exactly as g094 has them. Both are in the 2026-09-15 entry's `updated`.
+- 2026-09-28: the sources pass. M212–M213 sourced from the Golden Sun Wiki and ElectroSpecter's walkthrough; both stand as written.

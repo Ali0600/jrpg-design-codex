@@ -14,7 +14,8 @@ remake) · GameFAQs: `/gamecube/920182-paper-mario-the-thousand-year-door` confi
 | 33039 | Badge FAQ | Fullgore_EXE | 8 | 10/26/2004 | In-Depth Guides | 28 | https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/33039 |
 | 34937 | Glitz Pit Guide | MarsJenkar | — | — | In-Depth Guides | 118 | https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/34937 |
 | 33125 | Guide and Walkthrough | DarthMarth | 1.00 | 05/02/2006 | Full Game Guides | 519 | https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/33125 |
-| wiki | Glitz Pit · Charlieton · Star Piece (Paper Mario series) | — | — | — | www.mariowiki.com | — | https://www.mariowiki.com/Glitz_Pit |
+| 38796 | Badge Set-Up FAQ | JPKilla | 1.62 | 12/29/2012 | In-Depth Guides | 105 | https://gamefaqs.gamespot.com/gamecube/920182-paper-mario-the-thousand-year-door/faqs/38796 |
+| wiki | Glitz Pit · Charlieton · Star Piece (Paper Mario series) · Badge · Badge Point · Level up · Audience | — | — | — | www.mariowiki.com | — | https://www.mariowiki.com/Glitz_Pit |
 
 Coverage 33039: single page, 28,477 chars, 31 sections — 2 read at 100% (Reading this FAQ,
 Badge List/Summary); greps: Star Piece, Merlow/Charlieton/Dazzle, BP cost, Trouble Center.
@@ -42,6 +43,12 @@ Triage (2026-09-06, `__gf.triage()` on 49 guides): the strongest In-Depth list o
 so far — an Enemy Item/Badge Drop FAQ scoring 9, a Completion Guide, an Item FAQ, a Glitz Pit
 Guide and two badge guides all above every walkthrough.
 
+
+Coverage 38796: single page, 104,580 chars, 26 sections, all filed under the version heading; grepped on 2026-09-28 for level-ups
+and BP and for stacking.
+
+On 2026-09-28 the sources pass read 33125 again: `lines()` 304–325 (the stage and the audience), 7936–7941 and 8415–8417;
+greps for Stylish, the audience, BP and level-ups, stacking, Ms. Mowz and Triple Dip.
 ## Triage
 
 `__gf.triage()` and `__gf.pick()` on 2026-09-15: 49 guides listed (10 Full Game Guides, 34 In-Depth
@@ -68,7 +75,7 @@ record, so its decisions come from its Sources table and summary above.
 | 33006 | Tattle Guide | FalconPain | In-Depth Guides | 181 | 4 | skipped — Tattle entries | — |
 | 76706 | No Badge/No Shine Sprite Challenge FAQ | Thundaka | In-Depth Guides | 166 | 4 | skipped — a challenge run | — |
 | 34937 | Glitz Pit Guide | MarsJenkar | In-Depth Guides | 118 | 4 | read | — |
-| 38796 | Badge Set-Up FAQ | JPKilla | In-Depth Guides | 105 | 4 | skipped — badge builds | — |
+| 38796 | Badge Set-Up FAQ | JPKilla | In-Depth Guides | 105 | 4 | grep only | — |
 | 32910 | Zess T.'s Cooking Guide | msterchief | In-Depth Guides | 71 | 4 | skipped — cooking | — |
 | 33074 | Special and Partner's Attacks FAQ | scopelenz | In-Depth Guides | 50 | 4 | skipped — attacks | — |
 | 50199 | E-Mail Guide | jelly_soup | In-Depth Guides | 31 | 4 | skipped — e-mails | — |
@@ -142,6 +149,23 @@ row: M275
 - The walkthrough read on 2026-09-15 lists the same kinds of restriction (appealing a set number of times, no jump, hammer, items, Star Powers or attacks, at least one Star Power, taking a set amount of damage, waiting turns before attacking, no partner, no switching partners), says a win that ignores one is void, and advises restarting to get a different one [gf:33125 §Glitzville, DarthMarth v1.00]
 - It also has the fight for 10th place always against the Armored Harriers, two Iron Clefts nothing can hurt at first, so the party runs [gf:33125 §Glitzville, DarthMarth v1.00]
 
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the two older mechanics rows, M217–M218, each edited in place.
+
+### M217 The Badge system (a build inside a budget)
+pointers: [wiki:www.mariowiki.com/Badge] [wiki:www.mariowiki.com/Badge Point] [wiki:www.mariowiki.com/Level up] [gf:33125 §9. The Badges (Thbdg), DarthMarth v1.00] [gf:33125 §ICE SMASH, DarthMarth v1.00] [gf:38796 §V 1.62 : 12/29/12, JPKilla v1.62]
+row: M217
+- Badges are found, bought, dropped by enemies and stolen, and each costs Badge Points to equip [wiki:www.mariowiki.com/Badge] [gf:33125 §9. The Badges (Thbdg), DarthMarth v1.00] [gf:33125 §Abilities, DarthMarth v1.00]
+- Maximum BP rises only at a level-up, when HP, FP or BP must be chosen [wiki:www.mariowiki.com/Level up] [gf:38796 §V 1.62 : 12/29/12, JPKilla v1.62]
+- A second copy of an attack badge makes the move stronger or longer-lasting and doubles its FP cost [wiki:www.mariowiki.com/Badge] [gf:33125 §ICE SMASH, DarthMarth v1.00]
+
+### M218 The audience (performance as a resource)
+pointers: [wiki:www.mariowiki.com/Audience] [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00]
+row: M218
+- Every battle is played on a stage before an audience, which grows with action commands and easy wins and shrinks with misses and heavy hits [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00] [wiki:www.mariowiki.com/Audience]
+- The audience fills Star Power, the fuel for the special moves, more the bigger it is; Appeals and Stylish moves raise the most [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00] [wiki:www.mariowiki.com/Audience]
+- The theatre seats 50 at first and 50 more every ten levels [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00] [wiki:www.mariowiki.com/Audience]
+- Audience members throw things, helpful items or rocks and cans [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00] [wiki:www.mariowiki.com/Audience]
+
 ## Minigame candidates
 
 ### The Glitz Pit (a rank ladder where the purse is tied to the condition)
@@ -184,6 +208,8 @@ row: g095
 - Lumpy, a rat at the harbour, takes investments in hundreds of coins and repays three times as much late in the game [gf:33125 §Rogueport, DarthMarth v1.00]
 
 ## Unverified or contradicted
+- **Pairs that combine.** M217 said some badge pairs combine into an upgraded move; the wiki says two Double Dips make Triple Dip, and no guide read says so. Cut [wiki:www.mariowiki.com/Badge]
+- **The set drops props.** M218 said the set can drop props mid-fight; no source read says so. Cut [gf:33125 §BASIC JUMP ATTACKS, DarthMarth v1.00]
 - The brief asked whether the Trouble Center is a badge source. Only one Trouble Center reference appears in the Badge FAQ (a badge behind a sidequest posted by "???"), and the Trouble Center itself was not researched this pass — treat "badges from Troubles" as unconfirmed [gf:33039 §Entertaining Badges, Fullgore_EXE v8]
 - The walkthrough read on 2026-09-15 answers it for its own list: of thirty Troubles one pays a badge, the Attack FX B Badge, and four pay the cards that open the Pianta Parlor's stock (Special, Silver, Gold, Platinum) [gf:33125 §Trouble Center, DarthMarth v1.00]
 - Enemy badge drops were not harvested. A dedicated Enemy Item/Badge Drop FAQ exists (gf:63451, 38KB, the highest-scoring guide in the list) and is the obvious next read for this game [gf:33039 §Reading this FAQ, Fullgore_EXE v8]
@@ -208,3 +234,4 @@ row: g095
 ## Codex delta
 - (ids after the splice)
 - 2026-09-15: the Most Recommended walkthrough, 33125, read under the owner's rule. It agrees with M273, M274, M275 and g095, which now cite it (g095's GameCube rank drop gains its second source), and it answers the brief's Trouble Center question: one badge in thirty Troubles. Contradicted: Dazzle's one-piece badge (recorded under Unverified; no row names it). The four rows are in the 2026-09-15 entry's `updated`.
+- 2026-09-28: the sources pass. M217–M218 sourced from the Super Mario Wiki, DarthMarth's walkthrough and JPKilla's Badge Set-Up FAQ. M217 lost the badge pairs that combine; M218 gained the theatre's seats and lost the falling props.
