@@ -250,8 +250,8 @@ category and for every row the digest tagged.
 - Inscription deduction · how · `First you must obtain a CLUE to a location, usually from the people who talk about it; only then does pressing Square near the right spot`
 
 ### M192 — Endgame sidequest chains (story and gear in one)
-- A second layer · how · `leave the dormant Moon Stone in a shrine in 65,000,000 B.C., then collect it in the present`
-- Traded · how · `plus Dreamstone taken to its original smith`
+- A second layer · how · `leave it in the Sun Keep in 65,000,000 B.C., and find it stolen`
+- Traded · how · `a woman in the elder's house in 600 A.D. is given Jerky bought in 1000 A.D.`
 
 ### M197 — World of Ruin (an optional second half)
 - A second layer · how · `The world is destroyed at the midpoint and the game reopens as a broken, largely non-linear map`
@@ -262,8 +262,8 @@ category and for every row the digest tagged.
 ### M201 — World Resurrection as the progression track
 - Consequence · how · `frees the giant tree Ra from a parasite, which resurrects every plant on the barren planet`
 
-### M203 — The hollow world (Lightside / Darkside)
-- A second layer · how · `The two worlds mirror and depend on each other`
+### M203 — The inner world (Lightside / Darkside)
+- A second layer · how · `The two worlds mirror each other`
 
 ### M206 — The Hunts (a bounty board as a content spine)
 - Guarded · loop · `hunt a named monster somewhere off the path → LP, gear and loot`

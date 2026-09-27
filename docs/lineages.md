@@ -164,8 +164,8 @@ line per chain.
 ### M201 — World Resurrection as the progression track
 - The place that becomes yours · how · `Continents, flora, birds, animals and finally humanity come back in sequence`
 
-### M203 — The hollow world (Lightside / Darkside)
-- A second map · how · `The planet is a hollow sphere with two faces`
+### M203 — The inner world (Lightside / Darkside)
+- A second map · how · `The planet has two faces, an outer Lightside and an inner Darkside`
 
 ### M206 — The Hunts (a bounty board as a content spine)
 - Named monsters as landmarks · loop · `hunt a named monster somewhere off the path`
