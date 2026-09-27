@@ -252,7 +252,10 @@ is how Final Fantasy Tactics' Move-Find Item and Propositions were found. Both b
 **Built:** batch 1, the original nine games (M001–M085), landed on 2026-09-16 as #83–#93. Batch 2, the
 PS1 Squaresoft/Enix catalog and The Witcher 3 (M086–M132, g027–g035), landed on 2026-09-17 as #94–#101. Batch 3,
 the PS1 cult classics (M133–M159, g055–g067), landed on 2026-09-18 as #102–#110. Batch 4, Clair Obscur:
-Expedition 33 (M160–M162), is next.
+Expedition 33 (M160–M162), landed on 2026-09-21 as #117, and batch 5, the PS2 batch (M163–M191, g068–g079), the same
+day as #119–#125, with Shin Megami Tensei: Nocturne following on 2026-09-28 as #128. Batch 6, the popular classics
+(M192–M223, g080, g082, g083), landed on 2026-09-28 as #129–#134. Batch 7, the modern hits (M225–M243, g084–g087), is
+next, then batch 8, the queue-clearing games (M244–M261, g088–g089).
 
 ## 2026-09-14 — Where the UI Gallery's screenshots come from, now that Fandom blocks scripts
 

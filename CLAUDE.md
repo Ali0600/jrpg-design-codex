@@ -253,8 +253,22 @@ backup; the HTML file is the source of truth and is more up to date.
   Persona 4's Shuffle Time lost an All-Out Attack guarantee that belongs to Persona 3; and Wild ARMs 3's EX File Key buys
   extras, not a New Game+. Tables now list every prize for Shadow Hearts: Covenant's nineteen trials, Dragon Quest VIII's
   twelve casino prizes, Star Ocean 3's arena and bunny races and Wild ARMs 3's 20 Millennium Puzzles. Shin Megami Tensei:
-  Nocturne (M174–M176, g076) is left: M176 was already edited under the 2026-09-21 entry (#118), so it waits for a new
-  day's entry.
+  Nocturne (M174–M176, g076) followed on 2026-09-28 (#128), under a new day's entry since M176 had been edited on the 21st:
+  a dodged or voided attack costs two Press Turn icons and a reflected or absorbed one ends the turn, the bosses' second
+  icon rests on the wiki alone and was cut, and there are 25 Magatama, the other 24 opening the way to Masakados.
+  Plus the **sources pass, batch 6** (2026-09-28, PRs #129–#134): the popular-classics batch, 32 mechanics rows and three
+  minigames (M192–M223, g080, g082, g083) across thirteen games, with six new digests and blocks added to seven existing ones.
+  Several pages file another release beside the original: Chrono Trigger's pick is written for the DS, Skies of Arcadia's for
+  the GameCube's Legends and Dragon Quest V's for the PlayStation 2 remake, and Yakuza 0's page files guides for other games,
+  so each row says only what holds for the release the codex names. Terranigma has no wiki that answers and rests on two
+  GameFAQs authors and the Nintendo Wiki; Yakuza 0's walkthrough is HTML and chaptered, one page per topic. Corrections that
+  changed what a row says: Chrono Trigger's recharged Sun Stone is collected in 2300 A.D., and reforging the Masamune is main
+  story, not Frog's side quest; Dual Techs have formulas of their own, not a sum times a bonus; Skies of Arcadia has 64
+  Discoveries on the Dreamcast, not the 89 of Legends, and no source gives them a decaying value; Terranigma's towns grow one
+  or two levels each, not from villages into cities; Xenoblade's Unique Monsters are not the only source of Affinity Coins.
+  Claims only one wiki makes were cut, among them the 157 Unique Monsters, the Super Famicom wagon's five places and the
+  chapter that opens Real Estate Royale, which the two sources give differently. M203 was renamed The inner world, and the
+  verb and lineage ledgers re-quote M192, M203, M221 and M222.
 - **104 minigames** (`MINIGAMES` array, g001-g105; g081 retired into g006 on 2026-09-15): the Final Fantasy series (g001-g054)
   plus the PS1 batch (g055-g067), PS2 batch (g068-g079) and popular-classics batch
   (g080, g082 and g083: Chrono Trigger's Millennial Fair and Yakuza 0's two business

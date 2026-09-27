@@ -545,7 +545,9 @@ Wiki's Weapons page is series-wide, so its account of the four hammers and the l
 written across six games, with the exceptions belonging to the first one. A third case the same day showed the drift
 breaks search as well as naming: the Dragon Quest Wiki lists Dragon Quest VII's "mini medal" prizes under the 3DS remake's
 names, and a grep of the PlayStation walkthrough for "mini medal" returned nothing at all, because that release calls them
-TinyMedals. Zero hits read like "this guide does not cover it" until the old edition's own word was tried.
+TinyMedals. Zero hits read like "this guide does not cover it" until the old edition's own word was tried. The sources
+pass met it with a number instead of a name: Skies of Arcadia's row counted 89 Discoveries, which is the GameCube
+re-release's count; a Dreamcast-era FAQ, and the wiki's own split of its list by release, give the original the codex names 64.
 
 **Takeaway:** when a source covers several editions, treat every name and number in it as
 belonging to the newest until an edition-specific source confirms otherwise — and make the
