@@ -14,6 +14,9 @@ Codex: `Xenoblade Chronicles` (2010, Wii) · GameFAQs: `/wii/960564-xenoblade-ch
 | 65405 | Gem Guide | zerokid | 1.33 | 03/12/2013 | In-Depth Guides | 78 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/65405 |
 | 64875 | NPC Trading Database | zerokid | 1.12 | 09/24/2013 | In-Depth Guides | 119 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/64875 |
 | 66050 | Guide and Walkthrough | Andrew_Testa | 1.5 | 03/28/2014 | Full Game Guides | 1187 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/66050 |
+| 62860 | Map/Unique Monster Data | Split_Infinity | — | 10/27/2011 | In-Depth Guides | 66 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/62860 |
+| 62870 | Colony 6 Immigrant Guide | yavian2001 | — | 08/26/2011 | In-Depth Guides | 6 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/62870 |
+| 66310 | Skill Guide | zerokid | 1.01 | 06/08/2013 | In-Depth Guides | 68 | https://gamefaqs.gamespot.com/wii/960564-xenoblade-chronicles/faqs/66310 |
 
 Coverage 62859: single page, 24,467 chars, 495 lines, 10 sections — the Collectopaedia section read
 in full (8,406 chars, every area page with its row and page rewards); one grep (reward and complete,
@@ -39,6 +42,16 @@ trade value (248), the development tracks or Reconstruction (26), art book or le
 unread: the 452,082-char walkthrough body, the 58,750-char arts appendix, the 41,793-char trading
 list block and a 21,593-char boss chapter.
 
+
+Coverage 62860: single page, 65,893 chars, 92 sections; read on 2026-09-28: the opening (1–40) and the start of 03.) UNIQUE
+MONSTERS (755–780); greps for the count, coins and levels. Unread: the rest of the monster list and the people list.
+
+Coverage 62870: single page, 6,068 chars, 4 sections; read in full on 2026-09-28 (COLONY 6 IMMIGRANTS).
+
+Coverage 66310: single page, 68,949 chars, 32 sections; grepped on 2026-09-28 for Affinity Coins, which the Affinity Coins section
+answers. Unread: the skill data.
+
+On 2026-09-28 the sources pass also grepped 62859's TRIALS for Colony 6 and 66050 for Colony 6, the quest log and coins.
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 25 guides listed (5 Full Game Guides, 19 In-Depth Guides, 1 under
@@ -57,17 +70,17 @@ listing on that day, when ShulkLink0624's FAQ and the collectable checklist carr
 | 64875 | NPC Trading Database | zerokid | In-Depth Guides | 119 | 4 | read | — |
 | 65254 | Weapon/Armor FAQ | zerokid | In-Depth Guides | 111 | 10 | skipped — equipment stats, not a lead question | — |
 | 70515 | Sidequest Guide | amarise | In-Depth Guides | 336 | 8 | skipped — a per-quest walkthrough; the lead questions sit in narrower guides | Most Recommended |
-| 66310 | Skill Guide | zerokid | In-Depth Guides | 68 | 7 | skipped — character skill trees | — |
+| 66310 | Skill Guide | zerokid | In-Depth Guides | 68 | 7 | grep only | — |
 | 63103 | Collectable Gift FAQ | Daemonhart | In-Depth Guides | 66 | 7 | skipped — which gift each character prefers | — |
 | 74586 | Collectable/Material Checklist | TheRewster | In-Depth Guides | 38 | 7 | skipped — a checklist of the collectables the Collectopaedia list already covers | HTML |
-| 62860 | Map/Unique Monster Data | Split_Infinity | In-Depth Guides | 66 | 6 | skipped — unique monster data, the subject of M222 | Highest Rated |
+| 62860 | Map/Unique Monster Data | Split_Infinity | In-Depth Guides | 66 | 6 | read | Highest Rated |
 | 62871 | Extra Skill Tree Guide | yavian2001 | In-Depth Guides | 5 | 6 | skipped — a 5 KB note on skill trees | — |
 | 65244 | Arts Guide | zerokid | In-Depth Guides | 210 | 5 | skipped — combat arts | Highest Rated |
 | 69620 | Unique Monster Advanced Manual Guide | amarise | In-Depth Guides | 40 | 5 | skipped — unique monster drops, the subject of M222 | — |
 | 73533 | NPC Affinity Link Guide | Stargleam | In-Depth Guides | 225 | 4 | skipped — held in reserve as a cross-check for affinity-gated trades | — |
 | 71514 | Achievement Guide | VyseToPhoenix | In-Depth Guides | 16 | 3 | skipped — achievements, which the Collectopaedia list also covers | — |
 | 64390 | Heart-to-Heart Location Guide | HamsterCheeks | In-Depth Guides | 13 | 3 | skipped — where character scenes happen | — |
-| 62870 | Colony 6 Immigrant Guide | yavian2001 | In-Depth Guides | 6 | 3 | skipped — a 6 KB list on the subject of M221 | — |
+| 62870 | Colony 6 Immigrant Guide | yavian2001 | In-Depth Guides | 6 | 3 | read | — |
 | 62899 | Lockout/Point of No Return Guide | Oyajuu | In-Depth Guides | 6 | 3 | skipped — a 6 KB list of missables | — |
 | 70300 | Game Script | TheRewster | In-Depth Guides | 524 | -1 | skipped — a game script | — |
 | 65146 | Heart-to-Heart Script | Mirinee | In-Depth Guides | 271 | -1 | skipped — a script | — |
@@ -117,6 +130,21 @@ row: M288
 - The guide's overtrade example: for an item worth 4,000 G and a bonus worth 8,000 G the offer must be worth at least 12,000 G, and anything from 4,000 to 11,999 G gets only the item [gf:64875 §Basics, zerokid v1.12]
 - The wiki sets trade values at the sale price for materials and ten times the sale price for weapons, armour and collectables, and notes that a townsperson's stock can change when they move [wiki:xenoblade.fandom.com/Trading]
 
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the two older mechanics rows, M221–M222, each edited in place.
+
+### M221 Colony 6 Reconstruction
+pointers: [wiki:xenoblade.fandom.com/Colony 6 Reconstruction] [gf:62870 §COLONY 6 IMMIGRANTS, yavian2001] [gf:62859 §TRIALS, Split_Infinity] [gf:66050 §Quest: The Gem Man's Invention, Andrew_Testa v1.5]
+row: M221
+- Colony 6 is rebuilt by donating gathered materials across four tracks, Housing, Commerce, Nature and Special, of five levels each, and each level pays rare items [wiki:xenoblade.fandom.com/Colony 6 Reconstruction] [gf:66050 §Quest: The Gem Man's Invention, Andrew_Testa v1.5]
+- People met in other towns can be invited to move there, some only once the colony has grown enough [wiki:xenoblade.fandom.com/Colony 6 Reconstruction] [gf:62870 §COLONY 6 IMMIGRANTS, yavian2001]
+- The population can reach 150, and an achievement marks each of 50, 100 and 150 [gf:62859 §TRIALS, Split_Infinity] [wiki:xenoblade.fandom.com/Colony 6 Reconstruction]
+
+### M222 Unique Monsters as world landmarks
+pointers: [wiki:xenoblade.fandom.com/Unique Monster (XC1)] [wiki:xenoblade.fandom.com/Affinity Coin] [gf:62860 §03.) UNIQUE MONSTERS - G0300, Split_Infinity] [gf:66310 §Affinity Coins, zerokid v1.01]
+row: M222
+- Unique Monsters are one of a kind, stand at set places in each region and have higher stats [wiki:xenoblade.fandom.com/Unique Monster (XC1)] [gf:62860 §03.) UNIQUE MONSTERS - G0300, Split_Infinity]
+- Killing one gives every party member an Affinity Coin, which pays for skill links; a character also earns a coin at each level-up [gf:66310 §Affinity Coins, zerokid v1.01] [wiki:xenoblade.fandom.com/Affinity Coin] [wiki:xenoblade.fandom.com/Unique Monster (XC1)]
+
 ## Minigame candidates
 
 None recorded. The guides this pass read cover collection, crafting and trading, and no minigame with
@@ -145,6 +173,10 @@ defined payouts turned up in them; the triage list has no minigame guide.
 - The walkthrough's trading list gives each trader's place and hour, each item's gem slots and the affinity stars that unlock it, the overtrade item with the gold value that earns it, and whether the trader moves or can join Colony 6; among Colony 9's first entries the overtrade values run from 70 G for Andreas's Filthy Wing to 16,560 G for Desiree's Snowy Striker [gf:66050 §8. NPC Trading List, Andrew_Testa v1.5]
 
 ## Unverified or contradicted
+- **One hundred and fifty-seven.** M222 counted 157 Unique Monsters; only the wiki gives the number, and Split_Infinity's list calls itself incomplete. Cut [wiki:xenoblade.fandom.com/Unique Monster (XC1)]
+- **Far above the area.** M222 said the monsters are often far above the level of the area around them; the sources say only that they are stronger. Cut [wiki:xenoblade.fandom.com/Unique Monster (XC1)]
+- **The only source of coins.** M222 said only Unique Monsters give Affinity Coins; both sources say levelling up gives them too. Corrected [gf:66310 §Affinity Coins, zerokid v1.01]
+- **Outside the quest log.** M221 said the reconstruction sits outside the quest log; only the wiki says so. Cut from the row and the notes [wiki:xenoblade.fandom.com/Colony 6 Reconstruction]
 - **The affinity the Other page's trades need.** The Collectopaedia list gives 4 stars for Sonia's Minute Mantis, 3 for Lupa's Love Beetle and 5 for the other five; the wiki's trade table gives 3 stars for six of them and 5 only for Jer'ell's Love Source. The two also place Rakzet differently, Machina Village in the list and the Fallen Arm on the wiki [gf:62859 §Collectopaedia, Split_Infinity] [wiki:xenoblade.fandom.com/Other Collection]
 - **The walkthrough's trading list is not a second source for trading.** Its key credits zerokid with compiling the data, and zerokid wrote the NPC Trading Database this digest already cites, so the walkthrough's trade figures repeat one reading rather than confirm it [gf:66050 §8. NPC Trading List, Andrew_Testa v1.5] [gf:64875 §Basics, zerokid v1.12]
 
@@ -163,3 +195,4 @@ defined payouts turned up in them; the triage list has no minigame guide.
 - M221 (Colony 6) and M222 (Unique Monsters) were not edited.
 - No minigame recorded.
 - 2026-09-15: the Most Recommended walkthrough, 66050, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.
+- 2026-09-28: the sources pass. M221–M222 sourced from the Xenoblade Wiki and four GameFAQs guides. M221 lost the quest-log note; M222 lost the 157 and "far above the area", and coins come from levelling too.
