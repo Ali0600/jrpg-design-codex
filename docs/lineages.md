@@ -187,7 +187,7 @@ line per chain.
 - The place that becomes yours · loop · `your idle gathering habit rebuilds a civilisation`
 
 ### M222 — Unique Monsters as world landmarks
-- Named monsters as landmarks · how · `157 named, one-of-a-kind monsters stand at fixed spots across the world`
+- Named monsters as landmarks · how · `one-of-a-kind monsters stand at fixed spots across the world`
 
 ### M224 — Norende Village rebuild
 - The place that becomes yours · how · `Tiz's hometown is destroyed in the opening and he is put in charge of rebuilding it`

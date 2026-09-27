@@ -33,6 +33,9 @@ Treasure Key? (47,112) and a 42,314-char Norende section.
 Coverage 68918: page 1 of 18, 47,598 chars, 41 sections — one grep (parts shops, the eggs, a weapon
 and the villager rule), 0 hits. Pages 2–18 not opened.
 
+
+On 2026-09-28 the sources pass grepped 68625 again for Brave Points, Default and enemies' BP, and read the first battle's tutorial
+note (439–454).
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 13 guides listed (5 Full Game Guides, 3 In-Depth Guides, 5 under other
@@ -70,6 +73,15 @@ row: M290
 - The parts shops' modifiers change a move's damage type, the monster family it is strong against, its power boost and the ailment it inflicts; staff and rod moves also take healing and extra-turn modifiers [wiki:bravelydefault.fandom.com/Special (Bravely Default)] [gf:68747 §Cape Parts Shop, silktail] [gf:68747 §Valley Parts Shop, silktail]
 - Using a special move while another is active carries the first move's effects through the second, for as long as the music plays [gf:68625 §Chain Special Moves (0540), vinheim] [wiki:bravelydefault.fandom.com/Special (Bravely Default)]
 - A move's name and what its character shouts can be changed [wiki:bravelydefault.fandom.com/Special (Bravely Default)] [gf:68625 §Rename Your Special Moves (0533), vinheim]
+
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the older mechanics row, M223, edited in place.
+
+### M223 Brave & Default (banking your turns)
+pointers: [wiki:bravelydefault.fandom.com/Bravely Default] [gf:68625 §(0501) Save on the World Map (4 entries), vinheim] [gf:68625 §(0507) Set Job Commands (7 entries), vinheim] [gf:68625 §(0549) Check This World's Shops, vinheim]
+row: M223
+- Default skips a turn to bank a Brave Point, and guarding cuts the damage taken [wiki:bravelydefault.fandom.com/Bravely Default] [gf:68625 §(0507) Set Job Commands (7 entries), vinheim]
+- Brave spends BP to act again in the same turn, up to four actions, and BP can go as low as -4, after which the character waits [wiki:bravelydefault.fandom.com/Bravely Default] [gf:68625 §(0501) Save on the World Map (4 entries), vinheim]
+- Enemies use BP too: bosses Default to bank points and then Brave into a string of attacks, and can be punished while their BP is negative [gf:68625 §(0549) Check This World's Shops, vinheim] [wiki:bravelydefault.fandom.com/Bravely Default]
 
 ## Minigame candidates
 
@@ -111,6 +123,7 @@ recorded below; the listing has no minigame guide.
 - Trader: Potion and Teleport Stone at level 1 (15 minutes) up to Turbo Ether at level 10 (36 hours), then the Knight's Tunic [gf:68747 §Trader, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
 
 ## Unverified or contradicted
+- **The game's own framing.** M223 quoted the game as telling the player to default to store up power and brave to unleash it; no source read carries the line. Cut [wiki:bravelydefault.fandom.com/Bravely Default]
 - **The Combat Item Shop's second level.** silktail gives 1 hour; the wiki and vinheim give 2 hours 30 minutes. The item is Antarctic Wind in silktail and vinheim, and Antarctic Ward on the wiki [gf:68747 §Combat Item Shop, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
 - **The Weapons Shop's fifth level.** 9 hours 30 minutes in silktail and on the wiki, 9 hours in vinheim [gf:68747 §Weapons Shop, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
 - **The Hill Parts Shop's tenth level.** Cure Doom, Doom Res Up and Death Res Up in silktail and on the wiki; vinheim lists Doom Res Down as the third part [gf:68747 §Hill Parts Shop, silktail] [wiki:bravelydefault.fandom.com/Norende Village] [gf:68625 §Norende (0701), vinheim]
@@ -131,3 +144,4 @@ recorded below; the listing has no minigame guide.
 - (ids after the splice)
 - M224 (the Norende rebuild) sharpened in place from this digest's Upgrades and Shops facts: the six blocked areas, eleven shops of eleven levels, time divided by villagers, the eggs, and the bonus equipment at each shop's last level. It gained its first sources. The brief's third question, hidden items with stated stats, was not pursued.
 - 2026-09-15: the Most Recommended walkthrough, 68625, read under the owner's rule; its Coverage line says what was read. Its facts are above, and no row was edited.
+- 2026-09-28: the sources pass. M223 sourced from the Bravely Default Wiki and vinheim's walkthrough; it lost the quoted framing and now says bosses bank and spend BP as the party does.

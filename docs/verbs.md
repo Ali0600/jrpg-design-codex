@@ -285,10 +285,10 @@ category and for every row the digest tagged.
 - none · rare recruits come from ordinary fights, but nothing bolts, so The fleeing rare does not apply
 
 ### M221 — Colony 6 Reconstruction
-- Consequence · how · `its population climbs toward 150 as refugees you have found elsewhere move in`
+- Consequence · how · `its population climbs toward 150 as people you have met elsewhere move in`
 
 ### M222 — Unique Monsters as world landmarks
-- Guarded · how · `visible bosses embedded in ordinary terrain, often far above the level of the area around them`
+- Guarded · how · `visible bosses embedded in ordinary terrain`
 
 ### M228 — Poundmates (a summon roster built from side content)
 - none · side stories pay summonable allies; nothing is hidden, guarded or gated
