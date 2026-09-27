@@ -21,8 +21,12 @@ The 2026-09-14 pass read no GameFAQs guide: the Final Fantasy Wiki and Caves of 
 | web | Colosseum wager list | Caves of Narshe | — | — | cavesofnarshe.com | — | https://www.cavesofnarshe.com/ff6/colosseum.php |
 | web | Colosseum Guide | Caves of Narshe | — | — | cavesofnarshe.com | — | https://www.cavesofnarshe.com/ff6/colosseum-guide.php |
 | web | Walkthrough chapters 1.25, 1.36, 1.39 and 2.13 | Caves of Narshe | — | — | cavesofnarshe.com | — | https://www.cavesofnarshe.com/ff6/walkthrough.php |
-| wiki | Opera House; Dragon's Neck Coliseum; Imperial Palace; Auction House; Tintinnabulum; Charm Bangle; Ichigeki; Zona Seeker (Final Fantasy VI) | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Dragon%27s_Neck_Coliseum |
+| wiki | Opera House; Dragon's Neck Coliseum; Imperial Palace; Auction House; Tintinnabulum; Charm Bangle; Ichigeki; Zona Seeker (Final Fantasy VI); Relic, Magicite, World of Ruin, Ramuh, Ifrit (Final Fantasy VI); Magic Point; Magic AP | — | — | — | finalfantasy.fandom.com | — | https://finalfantasy.fandom.com/wiki/Dragon%27s_Neck_Coliseum |
 | 20665 | Guide and Walkthrough | Atom_Edge | 1.0 | 12/16/2002 | Full Game Guides | 262 | https://gamefaqs.gamespot.com/snes/554041-final-fantasy-iii/faqs/20665 |
+| 18352 | Item FAQ | Atom_Edge | 1.5 | 02/05/2003 | In-Depth Guides | — | https://gamefaqs.gamespot.com/snes/554041-final-fantasy-iii/faqs/18352 |
+| 13573 | Algorithms FAQ | Terii_senshi | 2.3 | 04/17/2004 | In-Depth Guides | — | https://gamefaqs.gamespot.com/snes/554041-final-fantasy-iii/faqs/13573 |
+| web | Relics | Caves of Narshe | — | — | cavesofnarshe.com | — | https://www.cavesofnarshe.com/ff6/relics.php |
+| web | Espers, pages 1–3 | Caves of Narshe | — | — | cavesofnarshe.com | — | https://www.cavesofnarshe.com/ff6/espers.php |
 
 Coverage 20665: **read on 2026-09-15 as `pick()`'s choice** (the first of seven plain-text Most Recommended
 walkthroughs) — single page, 262,560 chars, 5,737 lines, 246 sections. `lines()` windows, each running 200 lines from
@@ -32,6 +36,16 @@ Colosseum and wagers (10 hits), the banquet (25), the auction and Jidoor (11), t
 upgrades (57), economy (215) and the opera (29). The opera's walkthrough section was not opened. Largest unread: VII.
 Spell Listings (12,354 chars), VI. Esper Listings (7,032) and three FAQ answers (6,311, 4,980 and 4,470).
 
+
+On 2026-09-28 the sources pass (plan section R, batch 6) read 20665 again for M195–M197, by `lines()`: VI. Esper Listings'
+Ramuh and Ifrit (3895–3949), The World of Ruin: Information (2463–2492), Morph (160–167) and the Magic Points answer (4774–4785).
+Greps: Magic Points and learn rates, relics, level-up bonuses, the World of Ruin.
+
+Coverage 18352: single page, 338,528 chars, 530 sections; grepped on 2026-09-28 for relic slots and shops. It keeps separate shop
+lists for the World of Balance and the World of Ruin.
+
+Coverage 13573: single page, 99,879 chars, 124 sections; grepped on 2026-09-28 for Magic Points, learning and relics, and 5.0 Relics
+read (2282–2307). It gives no slot count and no learning rule.
 ## Triage
 
 `__gf.triage()` on 2026-09-14: 120 guides listed (32 Full Game Guides, 77 In-Depth Guides, 11 under other headings:
@@ -75,7 +89,7 @@ listing, which shows 192 entries with the maps and still lists every guide in th
 | 5499 | Strategy Guide | CAvery | Full Game Guides | — | — | skipped — a walkthrough; Caves of Narshe and the Final Fantasy Wiki answered first | — |
 | 28879 | 10-hour Challenge Walkthrough | proscientia | In-Depth Guides | — | — | skipped — a challenge or speed run | — |
 | 34167 | 6:30 Speed Walkthrough | BalnabZ | In-Depth Guides | — | — | skipped — a challenge or speed run | Highest Rated |
-| 13573 | Algorithms FAQ | Terii_senshi | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | Highest Rated |
+| 13573 | Algorithms FAQ | Terii_senshi | In-Depth Guides | — | — | grep only | Highest Rated |
 | 21387 | Attack Guide | Master_ZED | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | Highest Rated |
 | 47389 | Attack Guide | Master_ZED | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | — |
 | 46956 | Bestiary FAQ | Lufia_Maxim | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | — |
@@ -107,7 +121,7 @@ listing, which shows 192 entries with the maps and still lists every guide in th
 | 47016 | Game Script | ZFS | In-Depth Guides | — | — | skipped — a game script | — |
 | 70118 | Game Script | tskisoccer | In-Depth Guides | — | — | skipped — a game script | — |
 | 50398 | Gau Rage PAR Codes | uolamer | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | — |
-| 18352 | Item FAQ | Atom_Edge | In-Depth Guides | — | — | skipped — an item list; the four minigames' prizes were already two-sourced | — |
+| 18352 | Item FAQ | Atom_Edge | In-Depth Guides | — | — | grep only | — |
 | 51669 | Item FAQ | Lufia_Maxim | In-Depth Guides | — | — | skipped — an item list; the four minigames' prizes were already two-sourced | — |
 | 47000 | Items FAQ | deathfisaro | In-Depth Guides | — | — | skipped — an item list; the four minigames' prizes were already two-sourced | — |
 | 79569 | Leo Glitch Guide | madg0dsrage0n | In-Depth Guides | — | — | skipped — outside these four minigames' rewards | HTML |
@@ -156,7 +170,32 @@ listing, which shows 192 entries with the maps and still lists every guide in th
 
 ## Mechanics candidates
 
-None. This pass edits existing minigame rows only.
+On 2026-09-28 the sources pass (plan section R, batch 6) sourced the three mechanics rows, M195–M197, each edited in place. Names
+follow the Pixel Remaster translation, as elsewhere in this digest; Atom_Edge's guides use the SNES ones (Coin Toss for Heiji's
+Jitte, GP Rain for Gil Toss, Bolt for Thunder).
+
+### M195 Relics (two slots that rewrite your commands)
+pointers: [wiki:finalfantasy.fandom.com/Relic (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/relics.php] [gf:20665 §Slot, Atom_Edge v1.0] [gf:18352 §(3.2) Shop List (World of Ruin), Atom_Edge v1.5]
+row: M195
+- Each character can equip up to two relics, and two Hero Rings worn together stack [wiki:finalfantasy.fandom.com/Relic (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/relics.php]
+- Some relics change a battle command: the Heiji's Jitte turns Setzer's Slot into Gil Toss, and others turn Steal into Mug, Fight into Jump or Sketch into Control [wiki:finalfantasy.fandom.com/Relic (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/relics.php] [gf:20665 §Slot, Atom_Edge v1.0]
+- Most relics are bought in shops, and several shops change their stock as the game goes on [wiki:finalfantasy.fandom.com/Relic (Final Fantasy VI)] [gf:18352 §(3.2) Shop List (World of Ruin), Atom_Edge v1.5]
+
+### M196 Magicite / Espers (equip to learn, level to sculpt)
+pointers: [wiki:finalfantasy.fandom.com/Magicite (Final Fantasy VI)] [wiki:finalfantasy.fandom.com/Magic AP] [wiki:finalfantasy.fandom.com/Ramuh (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/espers.php?LowLim=14&UpLim=7] [web:www.cavesofnarshe.com/ff6/espers.php?LowLim=7&UpLim=7] [gf:20665 §Morph, Atom_Edge v1.0] [gf:20665 §Q: What level should I be at for ---?, Atom_Edge v1.0]
+row: M196
+- Battles pay Magic Points, which teach the spells of the equipped magicite [gf:20665 §Morph, Atom_Edge v1.0] [wiki:finalfantasy.fandom.com/Magicite (Final Fantasy VI)]
+- The points are multiplied by each spell's learn rate, and at 100% the spell is learned for good [wiki:finalfantasy.fandom.com/Magic AP] [wiki:finalfantasy.fandom.com/Magicite (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/espers.php]
+- Ramuh teaches Thunder at x10 and Thundara at x2 [wiki:finalfantasy.fandom.com/Ramuh (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/espers.php?LowLim=14&UpLim=7]
+- Many espers add a stat each time the wearer levels up, Ramuh +1 Stamina and Ifrit +1 Strength, and some add nothing [wiki:finalfantasy.fandom.com/Ramuh (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/espers.php?LowLim=7&UpLim=7] [gf:20665 §Q: What level should I be at for ---?, Atom_Edge v1.0]
+- Levelling raises only HP and MP; the other stats grow only through an esper's bonus [wiki:finalfantasy.fandom.com/Magic Point] [gf:20665 §Q: What level should I be at for ---?, Atom_Edge v1.0]
+
+### M197 World of Ruin (an optional second half)
+pointers: [wiki:finalfantasy.fandom.com/World of Ruin (Final Fantasy VI)] [gf:20665 §The World of Ruin: Information, Atom_Edge v1.0]
+row: M197
+- The second half opens after the world's end on a largely non-linear map, with the party scattered [gf:20665 §The World of Ruin: Information, Atom_Edge v1.0] [wiki:finalfantasy.fandom.com/World of Ruin (Final Fantasy VI)]
+- To finish, only Edgar and Setzer must be found, Darill's Tomb cleared for the airship, and Kefka's Tower climbed; everyone else is optional [gf:20665 §The World of Ruin: Information, Atom_Edge v1.0] [wiki:finalfantasy.fandom.com/World of Ruin (Final Fantasy VI)]
+- Once the airship flies, the others are found in their own places and stories: Terra at Mobliz, Locke in the Phoenix Cave, Mog and Umaro at Narshe [wiki:finalfantasy.fandom.com/World of Ruin (Final Fantasy VI)] [gf:20665 §The World of Ruin: Information, Atom_Edge v1.0]
 
 ## Minigame candidates
 
@@ -230,6 +269,10 @@ pointers: [wiki:finalfantasy.fandom.com/Auction House (Final Fantasy VI)] [web:w
 - A man hiding in the trees at Tzen sells an esper the guide spells Sraphim for 3,000 GP in the World of Balance; the walkthrough advises waiting for the World of Ruin, where it costs 10 GP [gf:20665 §Imperial Base, Atom_Edge v1.0]
 
 ## Unverified or contradicted
+- **Ramuh's learn rates.** Atom_Edge's listing gives Bolt 2 at x5 and Poison at x1; the wiki and Caves of Narshe give Thundara (Bolt 2) at x2 and Poison at x5. The row follows the two [gf:20665 §VI. Esper Listings, Atom_Edge v1.0] [wiki:finalfantasy.fandom.com/Ramuh (Final Fantasy VI)]
+- **One to ten Magic Points.** The wiki says a battle pays between 1 and 10; Atom_Edge only names a Cactrot as worth 10. The row gives no range [wiki:finalfantasy.fandom.com/Magicite (Final Fantasy VI)]
+- **Best equipment in the World of Ruin.** M197 said the optional characters come with their best equipment; no source read ties them to it. Cut [gf:20665 §The World of Ruin: Information, Atom_Edge v1.0]
+- **Relics defining a character.** M195 said two relics define a character more than a weapon does; that is a judgement, not a source's claim, and left the row for its notes [wiki:finalfantasy.fandom.com/Relic (Final Fantasy VI)]
 - **The Ichigeki without Shadow.** The wiki says the wager falls back to Typhon for an Elixir; Caves of Narshe's list gives Typhon with the Ichigeki as the prize [wiki:finalfantasy.fandom.com/Dragon's Neck Coliseum] [web:www.cavesofnarshe.com/ff6/colosseum.php]
 - **The banquet's top boundary.** The wiki's tiers are 77–89 and 90–93; Caves of Narshe labels them 77–90 and 90–93 [wiki:finalfantasy.fandom.com/Imperial Palace (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/walkthrough.php?chapter=1-39]
 - **Excalipoor at auction.** The wiki says only the Game Boy Advance release sells it (500,000 gil, after an NPC mentions it); Caves of Narshe's Pixel Remaster walkthrough includes it in the World of Ruin script [wiki:finalfantasy.fandom.com/Auction House (Final Fantasy VI)] [web:www.cavesofnarshe.com/ff6/walkthrough.php?chapter=2-13]
@@ -246,3 +289,4 @@ pointers: [wiki:finalfantasy.fandom.com/Auction House (Final Fantasy VI)] [web:w
 - 2026-09-15: the Most Recommended walkthrough, 20665, read under the owner's rule. It agrees with g007's banquet rewards and g008's two esper prices, which now cite it. It also agrees with g006's Shadow wager, but g006 was already named in the 2026-09-15 entry, so its citation waited for a later day.
 - 2026-09-16: g006 now cites 20665 for the Shadow wager, logged in that day's entry.
 - g081 was the same coliseum, from the popular-classics batch. On 2026-09-15 it was retired into g006, which took its lesson (preparation is the whole play); the id is never reused.
+- 2026-09-28: the sources pass. M195–M197 sourced from the Final Fantasy Wiki, Caves of Narshe and Atom_Edge's walkthrough and Item FAQ. M195 names the Heiji's Jitte and its Gil Toss; M196 lost the 1-to-10 range and keeps Ramuh's rates, which Atom_Edge contradicts; M197 lost "best equipment" and names the two characters the ending needs.
